@@ -146,3 +146,15 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 - `lomva-secret.env` 内为公开的开发默认值，**生产部署前必须全部更换**
 - 本清单未配 NetworkPolicy（compose 的网络隔离未翻译到 K8s）；生产建议为
   ssrf-proxy / local-sandbox 增加 NetworkPolicy 限制出向流量
+
+## 待办
+
+- **socket.io 路径收进 `/lomva/`**（2026-08-17 记录，暂未实施）：当前协作 WebSocket 占用共享域名根路径
+  `/socket.io/`（因 socket.io client 的 path 写死，URL 子路径会被当作 namespace）。改为 `/lomva/socket.io/` 需要：
+  1. web 源码 `web/app/components/workflow/collaboration/core/websocket-manager.ts`：
+     `socketOptions.path` 从 `NEXT_PUBLIC_BASE_PATH` 派生（`${BASE_PATH}/socket.io`，basePath 为空时行为与上游一致）
+  2. `overlays/tke/config/nginx/default.conf`：加 `location /lomva/socket.io/`，剥前缀转发
+     `api-websocket:5001/socket.io/`（带 Upgrade 头；服务端零改动）
+  3. `overlays/tke/ingress.yaml`：删除根路径 `/socket.io/` 规则
+  4. `NEXT_PUBLIC_SOCKET_URL` 保持 origin-only（`wss://qa-xai.xingshulin.com`，不能加子路径）
+  5. 重新构建 web 镜像后生效
