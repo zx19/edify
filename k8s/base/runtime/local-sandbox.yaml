@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-sandbox
+  labels:
+    app: local-sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-sandbox
+  template:
+    metadata:
+      labels:
+        app: local-sandbox
+    spec:
+      containers:
+        - name: local-sandbox
+          image: langgenius/dify-agent-local-sandbox
+          env:
+            - name: SHELLCTL_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: lomva-secret
+                  key: DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN
+            - name: SHELLCTL_ENABLE_PATH_ISOLATION
+              value: "true"
+            - name: HTTP_PROXY
+              value: http://agent-ssrf-proxy:3128
+            - name: HTTPS_PROXY
+              value: http://agent-ssrf-proxy:3128
+            - name: NO_PROXY
+              value: localhost,127.0.0.1
+          ports:
+            - containerPort: 5004
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: local-sandbox
+spec:
+  selector:
+    app: local-sandbox
+  ports:
+    - port: 5004
+      targetPort: 5004

@@ -10,6 +10,9 @@ resources:
   - middleware/weaviate.yaml
   - proxy/ssrf-proxy.yaml
   - proxy/agent-ssrf-proxy.yaml
+  - runtime/plugin-daemon.yaml
+  - runtime/sandbox.yaml
+  - runtime/local-sandbox.yaml
 
 configMapGenerator:
   - name: lomva-config
@@ -26,6 +29,9 @@ configMapGenerator:
     files:
       - squid.conf.template=config/squid/agent-squid.conf.template
       - dify_common.conf.template=config/squid/dify_common.conf.template
+  - name: lomva-sandbox-config
+    files:
+      - config.yaml=config/sandbox/config.yaml
 
 secretGenerator:
   - name: lomva-secret
