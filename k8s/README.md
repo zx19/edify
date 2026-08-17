@@ -120,7 +120,7 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 - **TencentDB for PostgreSQL**（首次部署，无数据迁移负担）：
   1. 开通实例（建议 PG 15/16，与 TKE 同 VPC；安全组放行 pod/节点网段）
-  2. 在实例上手动建两个库：`dify`（主库）、`dify_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥）
+  2. 在实例上手动建两个库：`lomva`（主库）、`lomva_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥）
   3. `lomva-config.env`：`DB_HOST`=内网地址、`DB_PORT`（默认 5432）、按需调 `DB_USERNAME`；`lomva-secret.env`：`DB_PASSWORD`
   4. 从 `base/kustomization.yaml` 的 resources 删除 `- middleware/postgres.yaml`（文件可一并删除）
   5. 正常部署即可，api 首次启动会自动在空库上建表（migration）
@@ -134,7 +134,7 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 ## 切换向量库为 pgvector（可选）
 
 1. `lomva-config.env`：`VECTOR_STORE=pgvector`，追加 `PGVECTOR_HOST=pgvector`、`PGVECTOR_PORT=5432`、
-   `PGVECTOR_USER=postgres`、`PGVECTOR_DATABASE=dify`；`lomva-secret.env` 追加 `PGVECTOR_PASSWORD=...`
+   `PGVECTOR_USER=postgres`、`PGVECTOR_DATABASE=lomva`；`lomva-secret.env` 追加 `PGVECTOR_PASSWORD=...`
 2. 仿照 `base/middleware/weaviate.yaml` 新建 `pgvector.yaml`（镜像 `pgvector/pgvector:pg16`，
    端口 5432，PVC 挂 `/var/lib/postgresql/data`），并加入 kustomization resources。
 

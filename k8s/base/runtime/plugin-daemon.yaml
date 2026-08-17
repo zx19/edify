@@ -62,7 +62,7 @@ spec:
                   name: lomva-secret
                   key: PLUGIN_DIFY_INNER_API_KEY
             - name: DB_DATABASE
-              value: dify_plugin
+              value: lomva_plugin
             - name: DB_SSL_MODE
               value: disable
             - name: MAX_PLUGIN_PACKAGE_SIZE

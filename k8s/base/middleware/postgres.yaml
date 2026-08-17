@@ -37,7 +37,7 @@ spec:
                   name: lomva-secret
                   key: DB_PASSWORD
             - name: POSTGRES_DB
-              value: "dify"
+              value: "lomva"
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           command:
@@ -60,7 +60,7 @@ spec:
             - containerPort: 5432
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres", "-d", "dify"]
+              command: ["pg_isready", "-U", "postgres", "-d", "lomva"]
             initialDelaySeconds: 10
             periodSeconds: 5
           volumeMounts:

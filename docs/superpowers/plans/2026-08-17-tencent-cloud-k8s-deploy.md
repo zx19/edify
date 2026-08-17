@@ -139,7 +139,7 @@ DB_TYPE=postgresql
 DB_USERNAME=postgres
 DB_HOST=postgres
 DB_PORT=5432
-DB_DATABASE=dify
+DB_DATABASE=lomva
 SQLALCHEMY_POOL_SIZE=30
 SQLALCHEMY_MAX_OVERFLOW=10
 SQLALCHEMY_POOL_RECYCLE=3600
@@ -391,7 +391,7 @@ spec:
                   name: lomva-secret
                   key: DB_PASSWORD
             - name: POSTGRES_DB
-              value: "dify"
+              value: "lomva"
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
           command:
@@ -414,7 +414,7 @@ spec:
             - containerPort: 5432
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres", "-d", "dify"]
+              command: ["pg_isready", "-U", "postgres", "-d", "lomva"]
             initialDelaySeconds: 10
             periodSeconds: 5
           volumeMounts:
@@ -1037,7 +1037,7 @@ spec:
                   name: lomva-secret
                   key: PLUGIN_DIFY_INNER_API_KEY
             - name: DB_DATABASE
-              value: dify_plugin
+              value: lomva_plugin
             - name: DB_SSL_MODE
               value: disable
             - name: MAX_PLUGIN_PACKAGE_SIZE
