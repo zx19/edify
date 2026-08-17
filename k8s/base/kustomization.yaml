@@ -20,6 +20,7 @@ resources:
   - app/worker-beat.yaml
   - app/web.yaml
   - app/agent-backend.yaml
+  - gateway/nginx.yaml
 
 configMapGenerator:
   - name: lomva-config
@@ -39,6 +40,11 @@ configMapGenerator:
   - name: lomva-sandbox-config
     files:
       - config.yaml=config/sandbox/config.yaml
+  - name: lomva-nginx-config
+    files:
+      - nginx.conf=config/nginx/nginx.conf
+      - proxy.conf=config/nginx/proxy.conf
+      - default.conf=config/nginx/default.conf
 
 secretGenerator:
   - name: lomva-secret
