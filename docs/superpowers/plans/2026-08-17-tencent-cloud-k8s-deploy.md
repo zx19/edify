@@ -2042,6 +2042,12 @@ git commit -m "feat(deploy): add nginx gateway manifests"
 - Create: `k8s/overlays/tke/kustomization.yaml`
 - Create: `k8s/overlays/tke/ingress.yaml`
 
+> **执行后修订（2026-08-17，域名确认后）**：对外地址定为 `https://qa-xai.xingshulin.com/lomva`（子路径部署），overlay 相应增加：
+> - `config/public-urls.env`、`config/web-public.env`：以 `behavior: merge` 覆盖对外 URL 与 `NEXT_PUBLIC_BASE_PATH=/lomva`
+> - `config/nginx/default.conf`：`/lomva` 子路径路由（剥前缀转发 api、保留前缀转发 web、根路径 `/socket.io/` 直通 api-websocket）；`nginx.conf`/`proxy.conf` 为 base 同内容副本，整体 `behavior: replace`
+> - Ingress：host `qa-xai.xingshulin.com`，paths 为 `/lomva/` + `/socket.io/`；nginx readiness 探针 patch 为 `/lomva/`
+> - web 镜像必须 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva` 自建（上游镜像仅支持根路径；socket.io client 的 path 固定 `/socket.io`，URL 子路径会被当作 namespace）
+
 **Interfaces:**
 - Consumes: base 全部资源；Service `nginx:80`。
 - Produces: Ingress `lomva`（TKE CLB Ingress Controller 识别 `kubernetes.io/ingress.class: qcloud`）。

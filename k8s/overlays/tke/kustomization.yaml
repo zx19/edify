@@ -5,7 +5,37 @@ resources:
   - ../../base
   - ingress.yaml
 
+# 覆盖 base 的共享配置：对外 URL 改为 https://qa-xai.xingshulin.com/lomva
+configMapGenerator:
+  - name: lomva-config
+    behavior: merge
+    envs:
+      - config/public-urls.env
+  - name: lomva-web-config
+    behavior: merge
+    envs:
+      - config/web-public.env
+  # 子路径路由需要另一份 default.conf；replace 会替换整个 ConfigMap，
+  # 因此 nginx.conf / proxy.conf 在此各放一份相同副本
+  - name: lomva-nginx-config
+    behavior: replace
+    files:
+      - nginx.conf=config/nginx/nginx.conf
+      - proxy.conf=config/nginx/proxy.conf
+      - default.conf=config/nginx/default.conf
+
+# overlay 的 nginx 配置不监听根路径，readiness 探针改探子路径首页
+patches:
+  - target:
+      kind: Deployment
+      name: nginx
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
+        value: /lomva/
+
 # 自建镜像推 TCR 后，取消注释并把 <tcr-namespace> 换成你的 TCR 命名空间：
+# 注意 web 镜像必须带 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva 构建（见 README）
 # images:
 #   - name: langgenius/dify-api
 #     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api

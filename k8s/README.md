@@ -24,13 +24,17 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 
 打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name lomva`。
 
-## TKE 部署
+## TKE 部署（https://qa-xai.xingshulin.com/lomva）
+
+本 overlay 已按**子路径** `https://qa-xai.xingshulin.com/lomva` 配置好：对外 URL 在
+`overlays/tke/config/public-urls.env` 和 `web-public.env`，子路径路由在
+`overlays/tke/config/nginx/default.conf`（剥前缀转发 api，保留前缀转发 web）。
 
 1. **修改 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
    （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
-2. **修改域名**：编辑 `overlays/tke/ingress.yaml` 的 `host`；同步修改
-   `base/config/lomva-config.env` 中 `TRIGGER_URL`、`ENDPOINT_URL_TEMPLATE` 和
-   `base/config/web-config.env` 中 `NEXT_PUBLIC_SOCKET_URL`（`wss://你的域名`）。
+2. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
+   自建**（上游官方镜像只支持根路径），见下文「自建镜像推 TCR」；完成后取消
+   `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的 TCR 地址。
 3. **部署**：
 
    ```bash
@@ -39,14 +43,21 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
    ```
 
 4. **获取入口**：`kubectl -n qa-ai get ingress lomva` 的 ADDRESS 即 CLB VIP；
-   将域名解析到该 IP。TLS 两种方案：a) 在 TKE 控制台为 CLB 绑定证书（443 转发到 Ingress）；
-   b) 集群内装 cert-manager。配置后把 `lomva-config.env` 的外部 URL 改为 `https://`。
+   将域名解析到该 IP（qa-xai.xingshulin.com 若已解析到现有 CLB，需在该 CLB 上合并
+   `/lomva/` 与 `/socket.io/` 两条转发规则，或不建本 Ingress、由现有网关直接转发到
+   `nginx` Service）。TLS：a) 在 TKE 控制台为 CLB 绑定证书；b) 集群内装 cert-manager。
+   外部链路已是 https，配置无需再改。
 
 ## 修改配置
 
-所有非机密配置在 `base/config/lomva-config.env` / `web-config.env`，机密在
-`base/config/lomva-secret.env`。改完重新 `kubectl apply -k ...` 即可——
-kustomize 会给 ConfigMap/Secret 名加内容 hash，引用它们的 Pod 自动滚动更新。
+- 共享非机密：`base/config/lomva-config.env`（api / worker / api-websocket / plugin-daemon 等共用）
+- 机密：`base/config/lomva-secret.env`
+- web 前端：`base/config/web-config.env`
+- TKE 环境覆盖（对外 URL、子路径）：`overlays/tke/config/*.env`，merge 进同名 ConfigMap
+- 单个组件专属：直接改对应 YAML 里的 `env:` 块
+
+改完重新 `kubectl apply -k ...` 即可——kustomize 会给 ConfigMap/Secret 名加内容 hash，
+引用它们的 Pod 自动滚动更新。
 
 ## 自建镜像推 TCR（部署本仓库改动）
 
@@ -58,7 +69,8 @@ TAG=1.16.1-edify
 
 # 本仓库构建（在仓库根目录执行）
 docker buildx build --platform linux/amd64 -t $TCR/lomva-api:$TAG -f api/Dockerfile api --push
-docker buildx build --platform linux/amd64 -t $TCR/lomva-web:$TAG -f web/Dockerfile web --push
+# 子路径部署必须带 NEXT_PUBLIC_BASE_PATH；若改为根路径部署可去掉该 build-arg
+docker buildx build --platform linux/amd64 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva -t $TCR/lomva-web:$TAG -f web/Dockerfile web --push
 docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-backend:$TAG -f dify-agent/Dockerfile dify-agent --push
 docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-local-sandbox:$TAG -f dify-agent-runtime/docker/Dockerfile dify-agent-runtime --push
 
@@ -104,6 +116,8 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 | 现象 | 排查 |
 |---|---|
+| 页面 404 / 白屏、`_next` 静态资源加载失败 | web 镜像未带子路径构建：必须用 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva` 重新构建 |
+| 工作流协作不生效（多人编辑无同步） | 确认 Ingress/网关已把 `/socket.io/` 路由到 nginx；`kubectl -n qa-ai logs deploy/api-websocket` |
 | Pod `ImagePullBackOff` | TKE 拉 Docker Hub 慢/限流：改用上方 TCR 流程，或为集群配置镜像加速 |
 | PVC 一直 `Pending` | `kubectl get sc` 确认存在 default StorageClass；TKE 默认有 `cbs`，kind 为 `standard` |
 | api 一直 `Init:0/2` | 在等 postgres/redis 就绪或 init-permissions Job：`kubectl -n qa-ai logs job/init-permissions` |

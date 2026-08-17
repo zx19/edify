@@ -99,8 +99,8 @@ worker、worker_beat 与 api 共用 dify-api 镜像（不同启动命令），�
 
 ## 对外暴露
 
-- overlays/tke：Ingress（CLB）暴露 nginx:80，README 说明域名解析与 TLS 选项
-- 快速验证：`kubectl port-forward -n qa-ai svc/nginx 8080:80`，不强制依赖 Ingress Controller
+- overlays/tke：Ingress（CLB）暴露 nginx:80；对外地址 `https://qa-xai.xingshulin.com/lomva`（子路径），对外 URL 与 nginx 子路径路由以 overlay 覆盖（`behavior: merge/replace`）；web 镜像需 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva` 自建
+- 快速验证：`kubectl port-forward -n qa-ai svc/nginx 8080:80`（base，根路径），不强制依赖 Ingress Controller
 
 ## 自建镜像推 TCR（README 内容）
 

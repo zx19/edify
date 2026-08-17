@@ -7,11 +7,19 @@ metadata:
     kubernetes.io/ingress.class: qcloud
 spec:
   rules:
-    # 部署前改为实际域名；改完后同步更新 base/config/lomva-config.env 里的外部 URL 配置
-    - host: lomva.example.com
+    - host: qa-xai.xingshulin.com
       http:
         paths:
-          - path: /
+          # 应用主体（子路径部署）
+          - path: /lomva/
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+          # 协作 WebSocket（socket.io client 固定请求根路径，见 overlay 的 nginx default.conf）
+          - path: /socket.io/
             pathType: Prefix
             backend:
               service:
