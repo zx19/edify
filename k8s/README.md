@@ -33,13 +33,8 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 1. **修改 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
    （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
 2. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
-   自建**（上游官方镜像只支持根路径）。直接用脚本完成 4 构建 + 2 转推 + 推送：
-
-   ```bash
-   TCR_NAMESPACE=ccr.ccs.tencentyun.com/<你的命名空间> ./k8s/scripts/build-images.sh
-   ```
-
-   完成后取消 `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的 TCR 地址。
+   自建**（上游官方镜像只支持根路径）。用 GitHub Actions 推 Docker Hub 或本地脚本推 TCR，
+   见下文「自建镜像推送」；完成后取消 `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的仓库地址。
 3. **部署**（apply + 等待就绪 + 冒烟检查，一条命令）：
 
    ```bash
@@ -66,9 +61,20 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 改完重新 `kubectl apply -k ...` 即可——kustomize 会给 ConfigMap/Secret 名加内容 hash，
 引用它们的 Pod 自动滚动更新。
 
-## 自建镜像推 TCR（部署本仓库改动）
+## 自建镜像推送（部署本仓库改动）
 
-本仓库可构建 4 个组件镜像，另外 2 个直接转推上游镜像。推荐用脚本一次完成：
+本仓库可构建 4 个组件镜像，另外 2 个直接复用上游镜像。两种方式任选：
+
+### 方式 A：GitHub Actions 构建推 Docker Hub（免本地构建）
+
+在仓库 **Settings → Secrets and variables → Actions** 配置 `DOCKERHUB_USER`（Docker Hub 用户名）
+和 `DOCKERHUB_TOKEN`（Access Token），然后 **Actions → Build and Push Lomva Images → Run workflow**
+（tag 默认 `1.16.1-edify`，base_path 默认 `/lomva`）。产出 `<用户名>/lomva-{api,web,agent-backend,agent-local-sandbox}`。
+sandbox / plugin-daemon 已在 Docker Hub 官方仓库（`langgenius/...`），集群直接拉取即可。
+
+> 注意：私有仓库跑 GH-hosted runner 消耗账号的 Actions 分钟数；web 镜像构建约 10~20 分钟。
+
+### 方式 B：本地构建推 TCR
 
 ```bash
 TCR_NAMESPACE=ccr.ccs.tencentyun.com/<你的命名空间> ./k8s/scripts/build-images.sh

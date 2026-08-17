@@ -1,0 +1,95 @@
+name: Build and Push Lomva Images
+
+# 手动触发：Actions → Build and Push Lomva Images → Run workflow
+# 将本仓库 4 个组件镜像构建并推送到 Docker Hub（linux/amd64）。
+# 需要在仓库 Settings → Secrets and variables → Actions 配置：
+#   secrets.DOCKERHUB_USER   Docker Hub 用户名（同时作为镜像命名空间）
+#   secrets.DOCKERHUB_TOKEN  Docker Hub Access Token（Account Settings → Security 生成）
+# 若推送到组织命名空间（如 myorg/lomva-api），改下方 IMAGE_PREFIX 即可。
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 镜像 tag
+        default: 1.16.1-edify
+        required: true
+      base_path:
+        description: web 子路径（NEXT_PUBLIC_BASE_PATH，根路径部署留空）
+        default: /lomva
+        required: false
+
+concurrency:
+  group: lomva-build-${{ github.run_id }}
+  cancel-in-progress: false
+
+env:
+  IMAGE_PREFIX: ${{ secrets.DOCKERHUB_USER }}/lomva
+
+jobs:
+  # api / agent-backend / agent-local-sandbox：无构建参数，走矩阵
+  build-images:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api
+            context: api
+            file: api/Dockerfile
+          - name: agent-backend
+            context: dify-agent
+            file: dify-agent/Dockerfile
+          - name: agent-local-sandbox
+            context: dify-agent-runtime
+            file: dify-agent-runtime/docker/Dockerfile
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}-${{ matrix.name }}:${{ inputs.tag }}
+          cache-from: type=gha,scope=lomva-${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=lomva-${{ matrix.name }}
+
+  # web 单独一个 job：必须注入 NEXT_PUBLIC_BASE_PATH 构建参数
+  build-web:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push web
+        uses: docker/build-push-action@v6
+        with:
+          context: web
+          file: web/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}-web:${{ inputs.tag }}
+          build-args: |
+            NEXT_PUBLIC_BASE_PATH=${{ inputs.base_path }}
+          cache-from: type=gha,scope=lomva-web
+          cache-to: type=gha,mode=max,scope=lomva-web

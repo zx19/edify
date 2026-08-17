@@ -34,7 +34,10 @@ patches:
         path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
         value: /lomva/
 
-# 自建镜像推 TCR 后，取消注释并把 <tcr-namespace> 换成你的 TCR 命名空间：
+# 自建镜像推送后，取消注释并把地址换成你的仓库：
+# - 推 TCR：newName 形如 ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api（见下方注释示例）
+# - 推 Docker Hub（用 .github/workflows/lomva-build-push.yml 构建）：newName 直接写
+#   <dockerhub用户名>/lomva-api，无需 registry 前缀
 # 注意 web 镜像必须带 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva 构建（见 README）
 # images:
 #   - name: langgenius/dify-api
