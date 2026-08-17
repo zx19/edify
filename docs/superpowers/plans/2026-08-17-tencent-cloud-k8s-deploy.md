@@ -40,22 +40,22 @@
 
 | ConfigMap / Secret（generator 名，引用时写原名，kustomize 自动改写成带 hash 的名） | 内容 | 定义于 |
 |---|---|---|
-| `dify-config` (ConfigMap) | 共享非机密 env | Task 1 |
-| `dify-web-config` (ConfigMap) | web 组件 env | Task 1 |
-| `dify-secret` (Secret) | 共享机密 env（dev 默认值） | Task 1 |
-| `dify-ssrf-proxy-config` (ConfigMap) | squid.conf.template + dify_common.conf.template | Task 3 |
-| `dify-agent-ssrf-proxy-config` (ConfigMap) | agent 版 squid 模板 | Task 3 |
-| `dify-sandbox-config` (ConfigMap) | sandbox config.yaml | Task 4 |
-| `dify-nginx-config` (ConfigMap) | nginx.conf / proxy.conf / default.conf | Task 6 |
+| `lomva-config` (ConfigMap) | 共享非机密 env | Task 1 |
+| `lomva-web-config` (ConfigMap) | web 组件 env | Task 1 |
+| `lomva-secret` (Secret) | 共享机密 env（dev 默认值） | Task 1 |
+| `lomva-ssrf-proxy-config` (ConfigMap) | squid.conf.template + dify_common.conf.template | Task 3 |
+| `lomva-agent-ssrf-proxy-config` (ConfigMap) | agent 版 squid 模板 | Task 3 |
+| `lomva-sandbox-config` (ConfigMap) | sandbox config.yaml | Task 4 |
+| `lomva-nginx-config` (ConfigMap) | nginx.conf / proxy.conf / default.conf | Task 6 |
 
 | PVC | 挂载点 | 使用方 |
 |---|---|---|
-| `dify-postgres-data` (10Gi) | /var/lib/postgresql/data | postgres |
-| `dify-redis-data` (2Gi) | /data | redis |
-| `dify-weaviate-data` (10Gi) | /var/lib/weaviate | weaviate |
-| `dify-plugin-storage` (5Gi) | /app/storage | plugin-daemon |
-| `dify-app-storage` (10Gi) | /app/api/storage | api/worker/api-websocket/init-permissions Job |
-| `dify-sandbox-deps` (2Gi) | /dependencies | sandbox |
+| `lomva-postgres-data` (10Gi) | /var/lib/postgresql/data | postgres |
+| `lomva-redis-data` (2Gi) | /data | redis |
+| `lomva-weaviate-data` (10Gi) | /var/lib/weaviate | weaviate |
+| `lomva-plugin-storage` (5Gi) | /app/storage | plugin-daemon |
+| `lomva-app-storage` (10Gi) | /app/api/storage | api/worker/api-websocket/init-permissions Job |
+| `lomva-sandbox-deps` (2Gi) | /dependencies | sandbox |
 
 ---
 
@@ -63,13 +63,13 @@
 
 **Files:**
 - Create: `deploy/kubernetes/base/namespace.yaml`
-- Create: `deploy/kubernetes/base/config/dify-config.env`
-- Create: `deploy/kubernetes/base/config/dify-secret.env`
+- Create: `deploy/kubernetes/base/config/lomva-config.env`
+- Create: `deploy/kubernetes/base/config/lomva-secret.env`
 - Create: `deploy/kubernetes/base/config/web-config.env`
 - Create: `deploy/kubernetes/base/kustomization.yaml`
 
 **Interfaces:**
-- Produces: namespace `qa-ai`；ConfigMap `dify-config`、`dify-web-config`；Secret `dify-secret`（key 见下方文件内容，后续 task 通过 `envFrom` / `secretKeyRef` 引用原名）；`images:` tag 清单。
+- Produces: namespace `qa-ai`；ConfigMap `lomva-config`、`lomva-web-config`；Secret `lomva-secret`（key 见下方文件内容，后续 task 通过 `envFrom` / `secretKeyRef` 引用原名）；`images:` tag 清单。
 
 - [ ] **Step 1: 创建 namespace.yaml**
 
@@ -79,10 +79,10 @@ kind: Namespace
 metadata:
   name: qa-ai
   labels:
-    app.kubernetes.io/name: dify
+    app.kubernetes.io/name: lomva
 ```
 
-- [ ] **Step 2: 创建 config/dify-config.env**
+- [ ] **Step 2: 创建 config/lomva-config.env**
 
 ```bash
 # api / worker / worker-beat / api-websocket / plugin-daemon 共享配置（非机密）
@@ -158,7 +158,7 @@ CELERY_BACKEND=redis
 CELERY_USE_SENTINEL=false
 BROKER_USE_SSL=false
 
-# 对象存储：默认本地卷（dify-app-storage PVC 挂 /app/api/storage）
+# 对象存储：默认本地卷（lomva-app-storage PVC 挂 /app/api/storage）
 STORAGE_TYPE=opendal
 OPENDAL_SCHEME=fs
 OPENDAL_FS_ROOT=storage
@@ -209,13 +209,13 @@ WORKFLOW_MAX_EXECUTION_TIME=1200
 HTTP_REQUEST_NODE_SSL_VERIFY=True
 ```
 
-- [ ] **Step 3: 创建 config/dify-secret.env**
+- [ ] **Step 3: 创建 config/lomva-secret.env**
 
 值为 compose 开发默认值，README 会要求生产部署前全部更换。
 
 ```bash
 # 共享机密（开发默认值，与 docker-compose 一致；生产部署前必须更换）
-# SECRET_KEY 留空时 api 会自动生成并持久化到共享存储（dify-app-storage PVC）
+# SECRET_KEY 留空时 api 会自动生成并持久化到共享存储（lomva-app-storage PVC）
 SECRET_KEY=
 DB_PASSWORD=difyai123456
 REDIS_PASSWORD=difyai123456
@@ -283,18 +283,18 @@ resources:
   - namespace.yaml
 
 configMapGenerator:
-  - name: dify-config
+  - name: lomva-config
     envs:
-      - config/dify-config.env
-  - name: dify-web-config
+      - config/lomva-config.env
+  - name: lomva-web-config
     envs:
       - config/web-config.env
 
 secretGenerator:
-  - name: dify-secret
+  - name: lomva-secret
     type: Opaque
     envs:
-      - config/dify-secret.env
+      - config/lomva-secret.env
 
 images:
   - name: langgenius/dify-api
@@ -326,7 +326,7 @@ images:
 - [ ] **Step 6: 验证构建**
 
 Run: `kubectl kustomize deploy/kubernetes/base | grep -E "^kind:|^  name:" | head -20`
-Expected: 输出包含 `Namespace`、`ConfigMap`（dify-config/dify-web-config，带 hash 后缀）、`Secret`（dify-secret），命令退出码 0。
+Expected: 输出包含 `Namespace`、`ConfigMap`（lomva-config/lomva-web-config，带 hash 后缀）、`Secret`（lomva-secret），命令退出码 0。
 
 - [ ] **Step 7: Commit**
 
@@ -346,8 +346,8 @@ git commit -m "feat(deploy): add k8s base skeleton and shared config"
 - Modify: `deploy/kubernetes/base/kustomization.yaml`（resources 追加 3 个文件）
 
 **Interfaces:**
-- Consumes: Secret `dify-secret` 的 key `DB_PASSWORD`、`REDIS_PASSWORD`、`WEAVIATE_API_KEY`（Task 1）。
-- Produces: Service `postgres:5432`、`redis:6379`、`weaviate:8080/50051`；PVC `dify-postgres-data`、`dify-redis-data`、`dify-weaviate-data`。
+- Consumes: Secret `lomva-secret` 的 key `DB_PASSWORD`、`REDIS_PASSWORD`、`WEAVIATE_API_KEY`（Task 1）。
+- Produces: Service `postgres:5432`、`redis:6379`、`weaviate:8080/50051`；PVC `lomva-postgres-data`、`lomva-redis-data`、`lomva-weaviate-data`。
 
 - [ ] **Step 1: 创建 middleware/postgres.yaml**
 
@@ -355,7 +355,7 @@ git commit -m "feat(deploy): add k8s base skeleton and shared config"
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-postgres-data
+  name: lomva-postgres-data
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -388,7 +388,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: DB_PASSWORD
             - name: POSTGRES_DB
               value: "dify"
@@ -423,7 +423,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: dify-postgres-data
+            claimName: lomva-postgres-data
 ---
 apiVersion: v1
 kind: Service
@@ -443,7 +443,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-redis-data
+  name: lomva-redis-data
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -474,7 +474,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: REDIS_PASSWORD
           command: ["sh", "-c", "redis-server --requirepass \"$REDIS_PASSWORD\""]
           ports:
@@ -490,7 +490,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: dify-redis-data
+            claimName: lomva-redis-data
 ---
 apiVersion: v1
 kind: Service
@@ -512,7 +512,7 @@ env 与 compose `weaviate` 服务逐项对应（`AUTHENTICATION_APIKEY_ALLOWED_K
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-weaviate-data
+  name: lomva-weaviate-data
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -555,7 +555,7 @@ spec:
             - name: AUTHENTICATION_APIKEY_ALLOWED_KEYS
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: WEAVIATE_API_KEY
             - name: AUTHENTICATION_APIKEY_USERS
               value: "hello@dify.ai"
@@ -586,7 +586,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: dify-weaviate-data
+            claimName: lomva-weaviate-data
 ---
 apiVersion: v1
 kind: Service
@@ -640,7 +640,7 @@ git commit -m "feat(deploy): add postgres/redis/weaviate manifests"
 
 **Interfaces:**
 - Consumes: 无（模板内容从 `docker/ssrf_proxy/` 移植）。
-- Produces: Service `ssrf-proxy:3128`、`agent-ssrf-proxy:3128`；ConfigMap `dify-ssrf-proxy-config`、`dify-agent-ssrf-proxy-config`（key：`squid.conf.template`、`dify_common.conf.template`）。
+- Produces: Service `ssrf-proxy:3128`、`agent-ssrf-proxy:3128`；ConfigMap `lomva-ssrf-proxy-config`、`lomva-agent-ssrf-proxy-config`（key：`squid.conf.template`、`dify_common.conf.template`）。
 
 - [ ] **Step 1: 创建 config/squid/dify_common.conf.template**
 
@@ -847,7 +847,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: dify-ssrf-proxy-config
+            name: lomva-ssrf-proxy-config
 ---
 apiVersion: v1
 kind: Service
@@ -915,7 +915,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: dify-agent-ssrf-proxy-config
+            name: lomva-agent-ssrf-proxy-config
 ---
 apiVersion: v1
 kind: Service
@@ -941,11 +941,11 @@ resources 追加：
 configMapGenerator 追加（`key=path` 语法让 ConfigMap 的 key 是 `squid.conf.template` 等模板名）：
 
 ```yaml
-  - name: dify-ssrf-proxy-config
+  - name: lomva-ssrf-proxy-config
     files:
       - squid.conf.template=config/squid/ssrf-squid.conf.template
       - dify_common.conf.template=config/squid/dify_common.conf.template
-  - name: dify-agent-ssrf-proxy-config
+  - name: lomva-agent-ssrf-proxy-config
     files:
       - squid.conf.template=config/squid/agent-squid.conf.template
       - dify_common.conf.template=config/squid/dify_common.conf.template
@@ -954,7 +954,7 @@ configMapGenerator 追加（`key=path` 语法让 ConfigMap 的 key 是 `squid.co
 - [ ] **Step 7: 验证构建**
 
 Run: `kubectl kustomize deploy/kubernetes/base | grep -cE "^kind: (Deployment|Service)$"`
-Expected: `7`（2 Deployment：ssrf-proxy、agent-ssrf-proxy；5 Service：Task 2 的 3 个 + 本 task 的 2 个）；退出码 0。另执行 `kubectl kustomize deploy/kubernetes/base | grep "name: dify-ssrf-proxy-config"` 确认 ConfigMap 已生成。
+Expected: `7`（2 Deployment：ssrf-proxy、agent-ssrf-proxy；5 Service：Task 2 的 3 个 + 本 task 的 2 个）；退出码 0。另执行 `kubectl kustomize deploy/kubernetes/base | grep "name: lomva-ssrf-proxy-config"` 确认 ConfigMap 已生成。
 
 - [ ] **Step 8: Commit**
 
@@ -975,8 +975,8 @@ git commit -m "feat(deploy): add ssrf proxy manifests and squid config"
 - Modify: `deploy/kubernetes/base/kustomization.yaml`
 
 **Interfaces:**
-- Consumes: ConfigMap `dify-config`；Secret `dify-secret` 的 key `PLUGIN_DAEMON_KEY`、`PLUGIN_DIFY_INNER_API_KEY`、`CODE_EXECUTION_API_KEY`、`DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN`；Service `postgres`、`ssrf-proxy`、`agent-ssrf-proxy`。
-- Produces: Service `plugin-daemon:5002`、`sandbox:8194`、`local-sandbox:5004`；PVC `dify-plugin-storage`、`dify-sandbox-deps`；ConfigMap `dify-sandbox-config`（key `config.yaml`）。
+- Consumes: ConfigMap `lomva-config`；Secret `lomva-secret` 的 key `PLUGIN_DAEMON_KEY`、`PLUGIN_DIFY_INNER_API_KEY`、`CODE_EXECUTION_API_KEY`、`DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN`；Service `postgres`、`ssrf-proxy`、`agent-ssrf-proxy`。
+- Produces: Service `plugin-daemon:5002`、`sandbox:8194`、`local-sandbox:5004`；PVC `lomva-plugin-storage`、`lomva-sandbox-deps`；ConfigMap `lomva-sandbox-config`（key `config.yaml`）。
 
 - [ ] **Step 1: 创建 runtime/plugin-daemon.yaml**
 
@@ -986,7 +986,7 @@ git commit -m "feat(deploy): add ssrf proxy manifests and squid config"
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-plugin-storage
+  name: lomva-plugin-storage
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -1018,23 +1018,23 @@ spec:
           image: langgenius/dify-plugin-daemon
           envFrom:
             - configMapRef:
-                name: dify-config
+                name: lomva-config
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: SERVER_PORT
               value: "5002"
             - name: SERVER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: PLUGIN_DAEMON_KEY
             - name: DIFY_INNER_API_URL
               value: http://api:5001
             - name: DIFY_INNER_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: PLUGIN_DIFY_INNER_API_KEY
             - name: DB_DATABASE
               value: dify_plugin
@@ -1084,7 +1084,7 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: dify-plugin-storage
+            claimName: lomva-plugin-storage
 ---
 apiVersion: v1
 kind: Service
@@ -1124,7 +1124,7 @@ proxy:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-sandbox-deps
+  name: lomva-sandbox-deps
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -1154,7 +1154,7 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: CODE_EXECUTION_API_KEY
             - name: GIN_MODE
               value: release
@@ -1185,10 +1185,10 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: dify-sandbox-config
+            name: lomva-sandbox-config
         - name: dependencies
           persistentVolumeClaim:
-            claimName: dify-sandbox-deps
+            claimName: lomva-sandbox-deps
 ---
 apiVersion: v1
 kind: Service
@@ -1228,7 +1228,7 @@ spec:
             - name: SHELLCTL_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: dify-secret
+                  name: lomva-secret
                   key: DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN
             - name: SHELLCTL_ENABLE_PATH_ISOLATION
               value: "true"
@@ -1272,14 +1272,14 @@ resources 追加：
 configMapGenerator 追加：
 
 ```yaml
-  - name: dify-sandbox-config
+  - name: lomva-sandbox-config
     files:
       - config.yaml=config/sandbox/config.yaml
 ```
 
 - [ ] **Step 6: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/dify-base.yaml && grep -cE "^kind: Deployment$" /tmp/dify-base.yaml`
+Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml`
 Expected: `5`（ssrf-proxy、agent-ssrf-proxy、plugin-daemon、sandbox、local-sandbox）；退出码 0。
 
 - [ ] **Step 7: Commit**
@@ -1304,8 +1304,8 @@ git commit -m "feat(deploy): add plugin-daemon/sandbox/local-sandbox manifests"
 - Modify: `deploy/kubernetes/base/kustomization.yaml`
 
 **Interfaces:**
-- Consumes: ConfigMap `dify-config`、`dify-web-config`；Secret `dify-secret`；Service `postgres`/`redis`/`plugin-daemon`/`local-sandbox`。
-- Produces: PVC `dify-app-storage`；Job `init-permissions`；Service `api:5001`、`api-websocket:5001`、`web:3000`、`agent-backend:5050`；Deployment `worker`、`worker-beat`（无 Service）。
+- Consumes: ConfigMap `lomva-config`、`lomva-web-config`；Secret `lomva-secret`；Service `postgres`/`redis`/`plugin-daemon`/`local-sandbox`。
+- Produces: PVC `lomva-app-storage`；Job `init-permissions`；Service `api:5001`、`api-websocket:5001`、`web:3000`、`agent-backend:5050`；Deployment `worker`、`worker-beat`（无 Service）。
 
 设计要点：
 - api/worker/api-websocket 通过两个 initContainer 等待中间件就绪（`nc -z`）和 init-permissions Job 完成（共享存储上的 flag 文件），避免 CrashLoop 噪音。
@@ -1320,7 +1320,7 @@ git commit -m "feat(deploy): add plugin-daemon/sandbox/local-sandbox manifests"
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dify-app-storage
+  name: lomva-app-storage
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
@@ -1360,7 +1360,7 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: dify-app-storage
+            claimName: lomva-app-storage
 ```
 
 - [ ] **Step 2: 创建 app/api.yaml**
@@ -1411,9 +1411,9 @@ spec:
           image: langgenius/dify-api
           envFrom:
             - configMapRef:
-                name: dify-config
+                name: lomva-config
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: MODE
               value: api
@@ -1436,7 +1436,7 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: dify-app-storage
+            claimName: lomva-app-storage
 ---
 apiVersion: v1
 kind: Service
@@ -1500,9 +1500,9 @@ spec:
           image: langgenius/dify-api
           envFrom:
             - configMapRef:
-                name: dify-config
+                name: lomva-config
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: MODE
               value: api
@@ -1533,7 +1533,7 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: dify-app-storage
+            claimName: lomva-app-storage
 ---
 apiVersion: v1
 kind: Service
@@ -1595,9 +1595,9 @@ spec:
           image: langgenius/dify-api
           envFrom:
             - configMapRef:
-                name: dify-config
+                name: lomva-config
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: MODE
               value: worker
@@ -1607,7 +1607,7 @@ spec:
       volumes:
         - name: storage
           persistentVolumeClaim:
-            claimName: dify-app-storage
+            claimName: lomva-app-storage
 ```
 
 - [ ] **Step 5: 创建 app/worker-beat.yaml**
@@ -1647,9 +1647,9 @@ spec:
           image: langgenius/dify-api
           envFrom:
             - configMapRef:
-                name: dify-config
+                name: lomva-config
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: MODE
               value: beat
@@ -1679,7 +1679,7 @@ spec:
           image: langgenius/dify-web
           envFrom:
             - configMapRef:
-                name: dify-web-config
+                name: lomva-web-config
           ports:
             - containerPort: 3000
           readinessProbe:
@@ -1738,7 +1738,7 @@ spec:
           image: langgenius/dify-agent-backend
           envFrom:
             - secretRef:
-                name: dify-secret
+                name: lomva-secret
           env:
             - name: DIFY_AGENT_REDIS_PREFIX
               value: dify-agent
@@ -1796,7 +1796,7 @@ spec:
 
 - [ ] **Step 9: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/dify-base.yaml && grep -cE "^kind: Deployment$" /tmp/dify-base.yaml && grep -cE "^kind: Job$" /tmp/dify-base.yaml`
+Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml && grep -cE "^kind: Job$" /tmp/lomva-base.yaml`
 Expected: Deployment `11`（前序 5 个 + 本 task 6 个）、Job `1`；退出码 0。
 
 - [ ] **Step 10: Commit**
@@ -1819,7 +1819,7 @@ git commit -m "feat(deploy): add api/worker/web/agent-backend manifests"
 
 **Interfaces:**
 - Consumes: Service `api`/`api-websocket`/`web`/`plugin-daemon`。
-- Produces: Service `nginx:80`（唯一对外入口）；ConfigMap `dify-nginx-config`（key：`nginx.conf`、`proxy.conf`、`default.conf`）。
+- Produces: Service `nginx:80`（唯一对外入口）；ConfigMap `lomva-nginx-config`（key：`nginx.conf`、`proxy.conf`、`default.conf`）。
 
 设计要点：compose 的 nginx 用 entrypoint + envsubst 做模板渲染，并依赖 Docker 内嵌 DNS（`resolver 127.0.0.11`）+ 变量间接 upstream。K8s 中 Service ClusterIP 稳定，直接静态渲染好三份配置挂 ConfigMap：去掉 resolver 与变量间接层，`proxy_pass` 直接写 Service 名；去掉 HTTPS/certbot 占位（TLS 在 CLB 层终止，见 README）。
 
@@ -1990,7 +1990,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: dify-nginx-config
+            name: lomva-nginx-config
 ---
 apiVersion: v1
 kind: Service
@@ -2015,7 +2015,7 @@ resources 追加：
 configMapGenerator 追加：
 
 ```yaml
-  - name: dify-nginx-config
+  - name: lomva-nginx-config
     files:
       - nginx.conf=config/nginx/nginx.conf
       - proxy.conf=config/nginx/proxy.conf
@@ -2024,7 +2024,7 @@ configMapGenerator 追加：
 
 - [ ] **Step 6: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/dify-base.yaml && grep -cE "^kind: (Deployment|StatefulSet|Service|Job|PersistentVolumeClaim|ConfigMap|Secret|Namespace)$" /tmp/dify-base.yaml`
+Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: (Deployment|StatefulSet|Service|Job|PersistentVolumeClaim|ConfigMap|Secret|Namespace)$" /tmp/lomva-base.yaml`
 Expected: `43`（12 Deployment、3 StatefulSet、13 Service、1 Job、6 PVC、6 ConfigMap、1 Secret、1 Namespace）；退出码 0。
 
 - [ ] **Step 7: Commit**
@@ -2044,7 +2044,7 @@ git commit -m "feat(deploy): add nginx gateway manifests"
 
 **Interfaces:**
 - Consumes: base 全部资源；Service `nginx:80`。
-- Produces: Ingress `dify`（TKE CLB Ingress Controller 识别 `kubernetes.io/ingress.class: qcloud`）。
+- Produces: Ingress `lomva`（TKE CLB Ingress Controller 识别 `kubernetes.io/ingress.class: qcloud`）。
 
 - [ ] **Step 1: 创建 overlays/tke/kustomization.yaml**
 
@@ -2061,22 +2061,22 @@ resources:
 # 自建镜像推 TCR 后，取消注释并把 <tcr-namespace> 换成你的 TCR 命名空间：
 # images:
 #   - name: langgenius/dify-api
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-api
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api
 #     newTag: 1.16.1-edify
 #   - name: langgenius/dify-web
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-web
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-web
 #     newTag: 1.16.1-edify
 #   - name: langgenius/dify-agent-backend
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-agent-backend
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-backend
 #     newTag: 1.16.1-edify
 #   - name: langgenius/dify-agent-local-sandbox
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-agent-local-sandbox
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-local-sandbox
 #     newTag: 1.16.1-edify
 #   - name: langgenius/dify-sandbox
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-sandbox
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-sandbox
 #     newTag: 0.2.15
 #   - name: langgenius/dify-plugin-daemon
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/dify-plugin-daemon
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-plugin-daemon
 #     newTag: 0.6.10-local
 ```
 
@@ -2086,14 +2086,14 @@ resources:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dify
+  name: lomva
   annotations:
     # TKE CLB Ingress Controller
     kubernetes.io/ingress.class: qcloud
 spec:
   rules:
-    # 部署前改为实际域名；改完后同步更新 base/config/dify-config.env 里的外部 URL 配置
-    - host: dify.example.com
+    # 部署前改为实际域名；改完后同步更新 base/config/lomva-config.env 里的外部 URL 配置
+    - host: lomva.example.com
       http:
         paths:
           - path: /
@@ -2107,7 +2107,7 @@ spec:
 
 - [ ] **Step 3: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/overlays/tke > /tmp/dify-tke.yaml && grep -cE "^kind: Ingress$" /tmp/dify-tke.yaml`
+Run: `kubectl kustomize deploy/kubernetes/overlays/tke > /tmp/lomva-tke.yaml && grep -cE "^kind: Ingress$" /tmp/lomva-tke.yaml`
 Expected: `1`；且输出中包含 base 的全部对象（总数比 Task 6 多 1）。退出码 0。
 
 - [ ] **Step 4: Commit**
@@ -2130,8 +2130,8 @@ git commit -m "feat(deploy): add tke overlay with CLB ingress"
 
 - [ ] **Step 1: 创建 kind 集群**
 
-Run: `kind create cluster --name dify-k8s-verify`
-Expected: `Kind cluster "dify-k8s-verify" created.`
+Run: `kind create cluster --name lomva-k8s-verify`
+Expected: `Kind cluster "lomva-k8s-verify" created.`
 
 - [ ] **Step 2: 部署 base（不含 Ingress，用 port-forward 验证）**
 
@@ -2185,7 +2185,7 @@ Expected: plugin-daemon 无数据库连接错误；sandbox 无 panic；agent-bac
 
 ```bash
 kill %1 2>/dev/null  # 停掉 port-forward
-kind delete cluster --name dify-k8s-verify
+kind delete cluster --name lomva-k8s-verify
 ```
 
 Expected: `Deleted nodes` / `Deleted clusters`。
@@ -2223,20 +2223,20 @@ Expected: `Deleted nodes` / `Deleted clusters`。
 ## 快速验证（本地 kind）
 
 ```bash
-kind create cluster --name dify
+kind create cluster --name lomva
 kubectl apply -k deploy/kubernetes/base
 kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
 kubectl -n qa-ai port-forward svc/nginx 8080:80
 ```
 
-打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name dify`。
+打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name lomva`。
 
 ## TKE 部署
 
-1. **修改 Secret（必须）**：编辑 `base/config/dify-secret.env`，更换所有开发默认密钥
+1. **修改 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
    （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
 2. **修改域名**：编辑 `overlays/tke/ingress.yaml` 的 `host`；同步修改
-   `base/config/dify-config.env` 中 `TRIGGER_URL`、`ENDPOINT_URL_TEMPLATE` 和
+   `base/config/lomva-config.env` 中 `TRIGGER_URL`、`ENDPOINT_URL_TEMPLATE` 和
    `base/config/web-config.env` 中 `NEXT_PUBLIC_SOCKET_URL`（`wss://你的域名`）。
 3. **部署**：
 
@@ -2245,14 +2245,14 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
    kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
    ```
 
-4. **获取入口**：`kubectl -n qa-ai get ingress dify` 的 ADDRESS 即 CLB VIP；
+4. **获取入口**：`kubectl -n qa-ai get ingress lomva` 的 ADDRESS 即 CLB VIP；
    将域名解析到该 IP。TLS 两种方案：a) 在 TKE 控制台为 CLB 绑定证书（443 转发到 Ingress）；
-   b) 集群内装 cert-manager。配置后把 `dify-config.env` 的外部 URL 改为 `https://`。
+   b) 集群内装 cert-manager。配置后把 `lomva-config.env` 的外部 URL 改为 `https://`。
 
 ## 修改配置
 
-所有非机密配置在 `base/config/dify-config.env` / `web-config.env`，机密在
-`base/config/dify-secret.env`。改完重新 `kubectl apply -k ...` 即可——
+所有非机密配置在 `base/config/lomva-config.env` / `web-config.env`，机密在
+`base/config/lomva-secret.env`。改完重新 `kubectl apply -k ...` 即可——
 kustomize 会给 ConfigMap/Secret 名加内容 hash，引用它们的 Pod 自动滚动更新。
 
 ## 自建镜像推 TCR（部署本仓库改动）
@@ -2264,17 +2264,18 @@ TCR=ccr.ccs.tencentyun.com/<你的命名空间>
 TAG=1.16.1-edify
 
 # 本仓库构建（在仓库根目录执行）
-docker buildx build --platform linux/amd64 -t $TCR/dify-api:$TAG -f api/Dockerfile api --push
-docker buildx build --platform linux/amd64 -t $TCR/dify-web:$TAG -f web/Dockerfile web --push
-docker buildx build --platform linux/amd64 -t $TCR/dify-agent-backend:$TAG -f dify-agent/Dockerfile dify-agent --push
-docker buildx build --platform linux/amd64 -t $TCR/dify-agent-local-sandbox:$TAG -f dify-agent-runtime/docker/Dockerfile dify-agent-runtime --push
+docker buildx build --platform linux/amd64 -t $TCR/lomva-api:$TAG -f api/Dockerfile api --push
+docker buildx build --platform linux/amd64 -t $TCR/lomva-web:$TAG -f web/Dockerfile web --push
+docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-backend:$TAG -f dify-agent/Dockerfile dify-agent --push
+docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-local-sandbox:$TAG -f dify-agent-runtime/docker/Dockerfile dify-agent-runtime --push
 
 # 上游镜像转推（sandbox / plugin-daemon 源码不在本仓库）
-for img in "dify-sandbox:0.2.15" "dify-plugin-daemon:0.6.10-local"; do
-  docker pull --platform linux/amd64 langgenius/$img
-  docker tag langgenius/$img $TCR/$img
-  docker push $TCR/$img
-done
+docker pull --platform linux/amd64 langgenius/dify-sandbox:0.2.15
+docker tag langgenius/dify-sandbox:0.2.15 $TCR/lomva-sandbox:0.2.15
+docker push $TCR/lomva-sandbox:0.2.15
+docker pull --platform linux/amd64 langgenius/dify-plugin-daemon:0.6.10-local
+docker tag langgenius/dify-plugin-daemon:0.6.10-local $TCR/lomva-plugin-daemon:0.6.10-local
+docker push $TCR/lomva-plugin-daemon:0.6.10-local
 ```
 
 然后编辑 `overlays/tke/kustomization.yaml`，取消 `images:` 段注释并替换为你的 TCR 地址。
@@ -2283,26 +2284,26 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 ## 存储说明
 
 默认 6 个 PVC 全部走集群默认 StorageClass（TKE 为 CBS，RWO）。注意 CBS 是块存储，
-多个 Pod 挂同一 RWO 卷时会被调度到同一节点（`dify-app-storage` 被 api/worker/api-websocket
+多个 Pod 挂同一 RWO 卷时会被调度到同一节点（`lomva-app-storage` 被 api/worker/api-websocket
 共享）。多节点生产环境建议：改用 CFS（文件存储，支持 RWX）建 StorageClass，
 或把对象存储切到腾讯云 COS（见下节）。调整容量：编辑对应 PVC 的 `storage` 后重新 apply
 （CBS 支持在线扩容）。
 
 ## 切换托管服务（可选）
 
-- **TencentDB for PostgreSQL**：删除 `middleware/postgres.yaml`，把 `dify-config.env`
-  的 `DB_HOST`/`DB_PORT` 指向托管实例，`dify-secret.env` 更新 `DB_PASSWORD`。
+- **TencentDB for PostgreSQL**：删除 `middleware/postgres.yaml`，把 `lomva-config.env`
+  的 `DB_HOST`/`DB_PORT` 指向托管实例，`lomva-secret.env` 更新 `DB_PASSWORD`。
 - **TencentDB for Redis**：删除 `middleware/redis.yaml`，更新 `REDIS_HOST` 及
   `REDIS_PASSWORD`、`CELERY_BROKER_URL`、`DIFY_AGENT_REDIS_URL`。
-- **COS 对象存储**：`dify-config.env` 设 `STORAGE_TYPE=tencent_cos`，补充
+- **COS 对象存储**：`lomva-config.env` 设 `STORAGE_TYPE=tencent_cos`，补充
   `TENCENT_COS_BUCKET_NAME` / `TENCENT_COS_REGION` / `TENCENT_COS_SCHEME`，
-  `dify-secret.env` 补充 `TENCENT_COS_SECRET_ID` / `TENCENT_COS_SECRET_KEY`；
-  此后 `dify-app-storage` PVC 仍需保留（SECRET_KEY 等本地状态用）。
+  `lomva-secret.env` 补充 `TENCENT_COS_SECRET_ID` / `TENCENT_COS_SECRET_KEY`；
+  此后 `lomva-app-storage` PVC 仍需保留（SECRET_KEY 等本地状态用）。
 
 ## 切换向量库为 pgvector（可选）
 
-1. `dify-config.env`：`VECTOR_STORE=pgvector`，追加 `PGVECTOR_HOST=pgvector`、`PGVECTOR_PORT=5432`、
-   `PGVECTOR_USER=postgres`、`PGVECTOR_DATABASE=dify`；`dify-secret.env` 追加 `PGVECTOR_PASSWORD=...`
+1. `lomva-config.env`：`VECTOR_STORE=pgvector`，追加 `PGVECTOR_HOST=pgvector`、`PGVECTOR_PORT=5432`、
+   `PGVECTOR_USER=postgres`、`PGVECTOR_DATABASE=dify`；`lomva-secret.env` 追加 `PGVECTOR_PASSWORD=...`
 2. 仿照 `base/middleware/weaviate.yaml` 新建 `pgvector.yaml`（镜像 `pgvector/pgvector:pg16`，
    端口 5432，PVC 挂 `/var/lib/postgresql/data`），并加入 kustomization resources。
 
@@ -2320,14 +2321,14 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 ## 安全说明
 
-- `dify-secret.env` 内为公开的开发默认值，**生产部署前必须全部更换**
+- `lomva-secret.env` 内为公开的开发默认值，**生产部署前必须全部更换**
 - 本清单未配 NetworkPolicy（compose 的网络隔离未翻译到 K8s）；生产建议为
   ssrf-proxy / local-sandbox 增加 NetworkPolicy 限制出向流量
 ````
 
 - [ ] **Step 2: 校对 README 与清单的一致性**
 
-Run: `grep -n "qa-ai\|8080\|dify-secret.env" deploy/kubernetes/README.md | head -10`
+Run: `grep -n "qa-ai\|8080\|lomva-secret.env" deploy/kubernetes/README.md | head -10`
 Expected: 命名空间、端口、文件名与实际清单一致；无引用不存在的文件。
 
 - [ ] **Step 3: Commit**
