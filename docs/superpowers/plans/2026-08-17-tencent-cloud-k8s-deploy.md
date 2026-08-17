@@ -2346,6 +2346,11 @@ git commit -m "docs(deploy): add TKE deployment guide"
 
 ---
 
+## 执行后补充（2026-08-17）
+
+- Task 7 修订：按真实域名改为子路径部署（见 Task 7 的修订块）
+- 新增 `k8s/scripts/build-images.sh`（4 个仓库镜像构建 + 2 个上游镜像转推 + 推 TCR；web 自动带 `NEXT_PUBLIC_BASE_PATH=/lomva`）与 `k8s/scripts/deploy.sh`（集群确认 → apply → rollout 等待 → port-forward 冒烟检查），README 相应章节已改为脚本优先
+
 ## Self-Review 记录
 
 - **Spec 覆盖**：目录结构（Task 1-7）、16 组件（Task 2-6，init_permissions=Job）、ConfigMap/Secret（Task 1）、6 个 PVC（Task 2/4/5）、Ingress+port-forward（Task 7/8）、TCR 流程+托管切换+pgvector 说明+FAQ（Task 9）、验证标准（Task 8）。spec 的 `base/config/` 落为 generator env 文件（kustomize 惯例，等价）。

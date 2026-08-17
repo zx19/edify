@@ -33,14 +33,20 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 1. **修改 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
    （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
 2. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
-   自建**（上游官方镜像只支持根路径），见下文「自建镜像推 TCR」；完成后取消
-   `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的 TCR 地址。
-3. **部署**：
+   自建**（上游官方镜像只支持根路径）。直接用脚本完成 4 构建 + 2 转推 + 推送：
 
    ```bash
-   kubectl apply -k k8s/overlays/tke
-   kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
+   TCR_NAMESPACE=ccr.ccs.tencentyun.com/<你的命名空间> ./k8s/scripts/build-images.sh
    ```
+
+   完成后取消 `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的 TCR 地址。
+3. **部署**（apply + 等待就绪 + 冒烟检查，一条命令）：
+
+   ```bash
+   ./k8s/scripts/deploy.sh
+   ```
+
+   或手动：`kubectl apply -k k8s/overlays/tke && kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s`
 
 4. **获取入口**：`kubectl -n qa-ai get ingress lomva` 的 ADDRESS 即 CLB VIP；
    将域名解析到该 IP（qa-xai.xingshulin.com 若已解析到现有 CLB，需在该 CLB 上合并
@@ -61,7 +67,14 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 
 ## 自建镜像推 TCR（部署本仓库改动）
 
-本仓库可构建 4 个组件镜像，另外 2 个直接转推上游镜像：
+本仓库可构建 4 个组件镜像，另外 2 个直接转推上游镜像。推荐用脚本一次完成：
+
+```bash
+TCR_NAMESPACE=ccr.ccs.tencentyun.com/<你的命名空间> ./k8s/scripts/build-images.sh
+# 可选环境变量：TAG（默认 1.16.1-edify）、NEXT_PUBLIC_BASE_PATH（默认 /lomva）、PLATFORM（默认 linux/amd64）
+```
+
+脚本等价的手动命令：
 
 ```bash
 TCR=ccr.ccs.tencentyun.com/<你的命名空间>
