@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - ingress.yaml
+
+# 自建镜像推 TCR 后，取消注释并把 <tcr-namespace> 换成你的 TCR 命名空间：
+# images:
+#   - name: langgenius/dify-api
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api
+#     newTag: 1.16.1-edify
+#   - name: langgenius/dify-web
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-web
+#     newTag: 1.16.1-edify
+#   - name: langgenius/dify-agent-backend
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-backend
+#     newTag: 1.16.1-edify
+#   - name: langgenius/dify-agent-local-sandbox
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-local-sandbox
+#     newTag: 1.16.1-edify
+#   - name: langgenius/dify-sandbox
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-sandbox
+#     newTag: 0.2.15
+#   - name: langgenius/dify-plugin-daemon
+#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-plugin-daemon
+#     newTag: 0.6.10-local
