@@ -120,7 +120,13 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 - **TencentDB for PostgreSQL**（首次部署，无数据迁移负担）：
   1. 开通实例（建议 PG 15/16，与 TKE 同 VPC；安全组放行 pod/节点网段）
-  2. 在实例上手动建两个库：`lomva`（主库）、`lomva_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥）
+  2. 用高权限账号在实例上建两个库：`lomva`（主库）、`lomva_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥），并在主库内预建扩展：
+     ```sql
+     CREATE DATABASE lomva OWNER <应用账号>;
+     CREATE DATABASE lomva_plugin OWNER <应用账号>;
+     \c lomva
+     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   -- 主库 init 迁移依赖，扩展是库级的
+     ```
   3. `lomva-config.env`：`DB_HOST`=内网地址、`DB_PORT`（默认 5432）、按需调 `DB_USERNAME`；`lomva-secret.env`：`DB_PASSWORD`
   4. 从 `base/kustomization.yaml` 的 resources 删除 `- middleware/postgres.yaml`（文件可一并删除）
   5. 正常部署即可，api 首次启动会自动在空库上建表（migration）
