@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssrf-proxy
+  labels:
+    app: ssrf-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssrf-proxy
+  template:
+    metadata:
+      labels:
+        app: ssrf-proxy
+    spec:
+      containers:
+        - name: squid
+          image: ubuntu/squid
+          env:
+            - name: HTTP_PORT
+              value: "3128"
+            - name: COREDUMP_DIR
+              value: /var/spool/squid
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -e
+              expand_env() {
+                awk '{ while(match($0, /\${[A-Za-z_][A-Za-z_0-9]*}/)) { var = substr($0, RSTART+2, RLENGTH-3); val = ENVIRON[var]; $0 = substr($0, 1, RSTART-1) val substr($0, RSTART+RLENGTH) } print }' "$1"
+              }
+              expand_env /etc/squid/templates/squid.conf.template > /etc/squid/squid.conf
+              expand_env /etc/squid/templates/dify_common.conf.template > /etc/squid/dify_common.conf
+              echo "# Generated: no private allowlist configured" > /etc/squid/dify_allow_private.conf
+              echo "# Generated: no sandbox bridge configured" > /etc/squid/dify_sandbox_proxy.conf
+              tail -F /var/log/squid/access.log /var/log/squid/cache.log 2>/dev/null &
+              /usr/sbin/squid -Nz
+              exec /usr/sbin/squid -f /etc/squid/squid.conf -NYC 1
+          ports:
+            - containerPort: 3128
+          readinessProbe:
+            tcpSocket:
+              port: 3128
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: config
+              mountPath: /etc/squid/templates
+      volumes:
+        - name: config
+          configMap:
+            name: lomva-ssrf-proxy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssrf-proxy
+spec:
+  selector:
+    app: ssrf-proxy
+  ports:
+    - port: 3128
+      targetPort: 3128

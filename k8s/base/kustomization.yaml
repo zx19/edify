@@ -8,6 +8,8 @@ resources:
   - middleware/postgres.yaml
   - middleware/redis.yaml
   - middleware/weaviate.yaml
+  - proxy/ssrf-proxy.yaml
+  - proxy/agent-ssrf-proxy.yaml
 
 configMapGenerator:
   - name: lomva-config
@@ -16,6 +18,14 @@ configMapGenerator:
   - name: lomva-web-config
     envs:
       - config/web-config.env
+  - name: lomva-ssrf-proxy-config
+    files:
+      - squid.conf.template=config/squid/ssrf-squid.conf.template
+      - dify_common.conf.template=config/squid/dify_common.conf.template
+  - name: lomva-agent-ssrf-proxy-config
+    files:
+      - squid.conf.template=config/squid/agent-squid.conf.template
+      - dify_common.conf.template=config/squid/dify_common.conf.template
 
 secretGenerator:
   - name: lomva-secret
