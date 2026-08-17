@@ -17,12 +17,15 @@ spec:
       initContainers:
         - name: wait-middleware
           image: busybox
+          envFrom:
+            - configMapRef:
+                name: lomva-config
           command:
             - sh
             - -c
             - |
-              until nc -z postgres 5432 && nc -z redis 6379; do
-                echo waiting for postgres/redis
+              until nc -z "$DB_HOST" "$DB_PORT" && nc -z redis 6379; do
+                echo waiting for "$DB_HOST:$DB_PORT"/redis
                 sleep 2
               done
       containers:

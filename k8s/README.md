@@ -110,8 +110,14 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 ## 切换托管服务（可选）
 
-- **TencentDB for PostgreSQL**：删除 `middleware/postgres.yaml`，把 `lomva-config.env`
-  的 `DB_HOST`/`DB_PORT` 指向托管实例，`lomva-secret.env` 更新 `DB_PASSWORD`。
+各组件的 wait initContainer 跟随 `DB_HOST`/`DB_PORT` 配置，切换外部数据库无需改 YAML。
+
+- **TencentDB for PostgreSQL**（首次部署，无数据迁移负担）：
+  1. 开通实例（建议 PG 15/16，与 TKE 同 VPC；安全组放行 pod/节点网段）
+  2. 在实例上手动建两个库：`dify`（主库）、`dify_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥）
+  3. `lomva-config.env`：`DB_HOST`=内网地址、`DB_PORT`（默认 5432）、按需调 `DB_USERNAME`；`lomva-secret.env`：`DB_PASSWORD`
+  4. 从 `base/kustomization.yaml` 的 resources 删除 `- middleware/postgres.yaml`（文件可一并删除）
+  5. 正常部署即可，api 首次启动会自动在空库上建表（migration）
 - **TencentDB for Redis**：删除 `middleware/redis.yaml`，更新 `REDIS_HOST` 及
   `REDIS_PASSWORD`、`CELERY_BROKER_URL`、`DIFY_AGENT_REDIS_URL`。
 - **COS 对象存储**：`lomva-config.env` 设 `STORAGE_TYPE=tencent_cos`，补充

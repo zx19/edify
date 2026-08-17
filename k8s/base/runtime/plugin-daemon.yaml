@@ -27,7 +27,17 @@ spec:
       initContainers:
         - name: wait-postgres
           image: busybox
-          command: ["sh", "-c", "until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done"]
+          envFrom:
+            - configMapRef:
+                name: lomva-config
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z "$DB_HOST" "$DB_PORT"; do
+                echo waiting for "$DB_HOST:$DB_PORT"
+                sleep 2
+              done
       containers:
         - name: plugin-daemon
           image: langgenius/dify-plugin-daemon
