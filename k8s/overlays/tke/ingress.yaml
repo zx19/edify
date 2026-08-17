@@ -3,14 +3,20 @@ kind: Ingress
 metadata:
   name: lomva
   annotations:
-    # TKE CLB Ingress Controller
-    kubernetes.io/ingress.class: qcloud
+    # 本集群使用 nginx-ingress controller（class 名 nginx-ingress，见 dify-nginx-ingress），
+    # 规则会合并进 qa-xai.xingshulin.com 所在的共享 CLB，不会新建 CLB
+    # 大文件上传（默认上限 15MB）需要放大 controller 的 body 限制
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    # LLM SSE 流式响应可能长时间无新字节，放大读写超时避免被截断
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 spec:
+  ingressClassName: nginx-ingress
   rules:
     - host: qa-xai.xingshulin.com
       http:
         paths:
-          # 应用主体（子路径部署）
+          # 应用主体（子路径部署；完整 URI 透传给 nginx Service，由它剥离前缀）
           - path: /lomva/
             pathType: Prefix
             backend:
@@ -19,6 +25,8 @@ spec:
                 port:
                   number: 80
           # 协作 WebSocket（socket.io client 固定请求根路径，见 overlay 的 nginx default.conf）
+          # 注意：若同 host 的其他 Ingress 已声明 /socket.io/，nginx-ingress 按创建时间取最老者，
+          # 本规则不生效（kubectl -n qa-ai describe ingress lomva 可看到冲突事件）
           - path: /socket.io/
             pathType: Prefix
             backend:

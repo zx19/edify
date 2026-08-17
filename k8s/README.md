@@ -48,11 +48,12 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 
    或手动：`kubectl apply -k k8s/overlays/tke && kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s`
 
-4. **获取入口**：`kubectl -n qa-ai get ingress lomva` 的 ADDRESS 即 CLB VIP；
-   将域名解析到该 IP（qa-xai.xingshulin.com 若已解析到现有 CLB，需在该 CLB 上合并
-   `/lomva/` 与 `/socket.io/` 两条转发规则，或不建本 Ingress、由现有网关直接转发到
-   `nginx` Service）。TLS：a) 在 TKE 控制台为 CLB 绑定证书；b) 集群内装 cert-manager。
-   外部链路已是 https，配置无需再改。
+4. **获取入口**：本集群使用 nginx-ingress controller（共享 CLB），Ingress 创建后
+   `kubectl -n qa-ai get ingress lomva` 的 ADDRESS 与现有 `dify-nginx-ingress` 相同——
+   流量走现有共享 CLB，**不会新建 CLB，也无需改 DNS**。
+   可用 `kubectl -n qa-ai port-forward svc/nginx 18080:80` 先绕过 Ingress 做冒烟验证。
+   建议分阶段上线：先临时注释 `overlays/tke/kustomization.yaml` 中的 `- ingress.yaml`
+   部署并验证 pod 全部 Ready（对现有环境零影响），再恢复该行使外部流量接入。
 
 ## 修改配置
 
@@ -130,7 +131,8 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 | 现象 | 排查 |
 |---|---|
 | 页面 404 / 白屏、`_next` 静态资源加载失败 | web 镜像未带子路径构建：必须用 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva` 重新构建 |
-| 工作流协作不生效（多人编辑无同步） | 确认 Ingress/网关已把 `/socket.io/` 路由到 nginx；`kubectl -n qa-ai logs deploy/api-websocket` |
+| 工作流协作不生效（多人编辑无同步） | 确认 `/socket.io/` 未被同 host 其他 Ingress 占用：`kubectl -n qa-ai describe ingress lomva` 看是否有冲突事件（nginx-ingress 对重复 host+path 取创建时间最老者） |
+| 上传文件报 413 | Ingress 的 `proxy-body-size` 注解未生效；确认注解值 ≥ 应用上传上限 |
 | Pod `ImagePullBackOff` | TKE 拉 Docker Hub 慢/限流：改用上方 TCR 流程，或为集群配置镜像加速 |
 | PVC 一直 `Pending` | `kubectl get sc` 确认存在 default StorageClass；TKE 默认有 `cbs`，kind 为 `standard` |
 | api 一直 `Init:0/2` | 在等 postgres/redis 就绪或 init-permissions Job：`kubectl -n qa-ai logs job/init-permissions` |
