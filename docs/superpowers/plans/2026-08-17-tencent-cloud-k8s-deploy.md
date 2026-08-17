@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 为 edify 仓库新增 `deploy/kubernetes/`，用 Kustomize（base + overlays/tke）描述全部 16 个组件，`kubectl apply -k` 即可在 TKE 或本地 kind 拉起完整 Dify 并跑通核心链路。
+**Goal:** 为 edify 仓库新增 `k8s/`，用 Kustomize（base + overlays/tke）描述全部 16 个组件，`kubectl apply -k` 即可在 TKE 或本地 kind 拉起完整 Dify 并跑通核心链路。
 
 **Architecture:** 静态 YAML + Kustomize。base 含全部组件（中间件集群内自建：PostgreSQL/Redis/Weaviate），overlay `tke` 增加 CLB Ingress 与 TCR 镜像替换示例。共享 env 提炼为 ConfigMap/Secret（generator 生成），组件间通过 ClusterIP Service DNS 互访，nginx 为唯一入口。
 
@@ -17,7 +17,7 @@
 - 镜像 tag 集中在 `base/kustomization.yaml` 的 `images:` 字段；各 Pod spec 里 `image:` 只写裸名称（不带 tag）。
 - 中间件全部集群内自建；向量库只用 Weaviate（与 compose 默认一致）。
 - env 文件中**只允许整行注释**（kustomize generator 不剥离行内注释，会把它吞进值里）。
-- 不修改 `docker/` 下任何现有文件；新文件全部在 `deploy/kubernetes/` 下。
+- 不修改 `docker/` 下任何现有文件；新文件全部在 `k8s/` 下。
 - commit 信息精简、单行，不加 Co-Authored-By。
 
 ## 全局接口表（各 task 产出的 Service / 对象名）
@@ -62,11 +62,11 @@
 ### Task 1: 目录骨架 + 共享配置（namespace / env / base kustomization）
 
 **Files:**
-- Create: `deploy/kubernetes/base/namespace.yaml`
-- Create: `deploy/kubernetes/base/config/lomva-config.env`
-- Create: `deploy/kubernetes/base/config/lomva-secret.env`
-- Create: `deploy/kubernetes/base/config/web-config.env`
-- Create: `deploy/kubernetes/base/kustomization.yaml`
+- Create: `k8s/base/namespace.yaml`
+- Create: `k8s/base/config/lomva-config.env`
+- Create: `k8s/base/config/lomva-secret.env`
+- Create: `k8s/base/config/web-config.env`
+- Create: `k8s/base/kustomization.yaml`
 
 **Interfaces:**
 - Produces: namespace `qa-ai`；ConfigMap `lomva-config`、`lomva-web-config`；Secret `lomva-secret`（key 见下方文件内容，后续 task 通过 `envFrom` / `secretKeyRef` 引用原名）；`images:` tag 清单。
@@ -325,13 +325,13 @@ images:
 
 - [ ] **Step 6: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base | grep -E "^kind:|^  name:" | head -20`
+Run: `kubectl kustomize k8s/base | grep -E "^kind:|^  name:" | head -20`
 Expected: 输出包含 `Namespace`、`ConfigMap`（lomva-config/lomva-web-config，带 hash 后缀）、`Secret`（lomva-secret），命令退出码 0。
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add k8s base skeleton and shared config"
 ```
 
@@ -340,10 +340,10 @@ git commit -m "feat(deploy): add k8s base skeleton and shared config"
 ### Task 2: 中间件（postgres / redis / weaviate）
 
 **Files:**
-- Create: `deploy/kubernetes/base/middleware/postgres.yaml`
-- Create: `deploy/kubernetes/base/middleware/redis.yaml`
-- Create: `deploy/kubernetes/base/middleware/weaviate.yaml`
-- Modify: `deploy/kubernetes/base/kustomization.yaml`（resources 追加 3 个文件）
+- Create: `k8s/base/middleware/postgres.yaml`
+- Create: `k8s/base/middleware/redis.yaml`
+- Create: `k8s/base/middleware/weaviate.yaml`
+- Modify: `k8s/base/kustomization.yaml`（resources 追加 3 个文件）
 
 **Interfaces:**
 - Consumes: Secret `lomva-secret` 的 key `DB_PASSWORD`、`REDIS_PASSWORD`、`WEAVIATE_API_KEY`（Task 1）。
@@ -616,13 +616,13 @@ resources:
 
 - [ ] **Step 5: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base | grep -E "^kind:" | sort | uniq -c`
+Run: `kubectl kustomize k8s/base | grep -E "^kind:" | sort | uniq -c`
 Expected: 含 `3 StatefulSet`、`3 Service`、`3 PersistentVolumeClaim` 及 Task 1 的对象；退出码 0。
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add postgres/redis/weaviate manifests"
 ```
 
@@ -631,12 +631,12 @@ git commit -m "feat(deploy): add postgres/redis/weaviate manifests"
 ### Task 3: SSRF 代理（ssrf-proxy / agent-ssrf-proxy）
 
 **Files:**
-- Create: `deploy/kubernetes/base/config/squid/dify_common.conf.template`
-- Create: `deploy/kubernetes/base/config/squid/ssrf-squid.conf.template`
-- Create: `deploy/kubernetes/base/config/squid/agent-squid.conf.template`
-- Create: `deploy/kubernetes/base/proxy/ssrf-proxy.yaml`
-- Create: `deploy/kubernetes/base/proxy/agent-ssrf-proxy.yaml`
-- Modify: `deploy/kubernetes/base/kustomization.yaml`（resources + configMapGenerator 追加）
+- Create: `k8s/base/config/squid/dify_common.conf.template`
+- Create: `k8s/base/config/squid/ssrf-squid.conf.template`
+- Create: `k8s/base/config/squid/agent-squid.conf.template`
+- Create: `k8s/base/proxy/ssrf-proxy.yaml`
+- Create: `k8s/base/proxy/agent-ssrf-proxy.yaml`
+- Modify: `k8s/base/kustomization.yaml`（resources + configMapGenerator 追加）
 
 **Interfaces:**
 - Consumes: 无（模板内容从 `docker/ssrf_proxy/` 移植）。
@@ -953,13 +953,13 @@ configMapGenerator 追加（`key=path` 语法让 ConfigMap 的 key 是 `squid.co
 
 - [ ] **Step 7: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base | grep -cE "^kind: (Deployment|Service)$"`
-Expected: `7`（2 Deployment：ssrf-proxy、agent-ssrf-proxy；5 Service：Task 2 的 3 个 + 本 task 的 2 个）；退出码 0。另执行 `kubectl kustomize deploy/kubernetes/base | grep "name: lomva-ssrf-proxy-config"` 确认 ConfigMap 已生成。
+Run: `kubectl kustomize k8s/base | grep -cE "^kind: (Deployment|Service)$"`
+Expected: `7`（2 Deployment：ssrf-proxy、agent-ssrf-proxy；5 Service：Task 2 的 3 个 + 本 task 的 2 个）；退出码 0。另执行 `kubectl kustomize k8s/base | grep "name: lomva-ssrf-proxy-config"` 确认 ConfigMap 已生成。
 
 - [ ] **Step 8: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add ssrf proxy manifests and squid config"
 ```
 
@@ -968,11 +968,11 @@ git commit -m "feat(deploy): add ssrf proxy manifests and squid config"
 ### Task 4: 运行时（plugin-daemon / sandbox / local-sandbox）
 
 **Files:**
-- Create: `deploy/kubernetes/base/runtime/plugin-daemon.yaml`
-- Create: `deploy/kubernetes/base/config/sandbox/config.yaml`
-- Create: `deploy/kubernetes/base/runtime/sandbox.yaml`
-- Create: `deploy/kubernetes/base/runtime/local-sandbox.yaml`
-- Modify: `deploy/kubernetes/base/kustomization.yaml`
+- Create: `k8s/base/runtime/plugin-daemon.yaml`
+- Create: `k8s/base/config/sandbox/config.yaml`
+- Create: `k8s/base/runtime/sandbox.yaml`
+- Create: `k8s/base/runtime/local-sandbox.yaml`
+- Modify: `k8s/base/kustomization.yaml`
 
 **Interfaces:**
 - Consumes: ConfigMap `lomva-config`；Secret `lomva-secret` 的 key `PLUGIN_DAEMON_KEY`、`PLUGIN_DIFY_INNER_API_KEY`、`CODE_EXECUTION_API_KEY`、`DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN`；Service `postgres`、`ssrf-proxy`、`agent-ssrf-proxy`。
@@ -1279,13 +1279,13 @@ configMapGenerator 追加：
 
 - [ ] **Step 6: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml`
+Run: `kubectl kustomize k8s/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml`
 Expected: `5`（ssrf-proxy、agent-ssrf-proxy、plugin-daemon、sandbox、local-sandbox）；退出码 0。
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add plugin-daemon/sandbox/local-sandbox manifests"
 ```
 
@@ -1294,14 +1294,14 @@ git commit -m "feat(deploy): add plugin-daemon/sandbox/local-sandbox manifests"
 ### Task 5: 应用层（init Job / api / api-websocket / worker / worker-beat / web / agent-backend）
 
 **Files:**
-- Create: `deploy/kubernetes/base/app/init-job.yaml`
-- Create: `deploy/kubernetes/base/app/api.yaml`
-- Create: `deploy/kubernetes/base/app/api-websocket.yaml`
-- Create: `deploy/kubernetes/base/app/worker.yaml`
-- Create: `deploy/kubernetes/base/app/worker-beat.yaml`
-- Create: `deploy/kubernetes/base/app/web.yaml`
-- Create: `deploy/kubernetes/base/app/agent-backend.yaml`
-- Modify: `deploy/kubernetes/base/kustomization.yaml`
+- Create: `k8s/base/app/init-job.yaml`
+- Create: `k8s/base/app/api.yaml`
+- Create: `k8s/base/app/api-websocket.yaml`
+- Create: `k8s/base/app/worker.yaml`
+- Create: `k8s/base/app/worker-beat.yaml`
+- Create: `k8s/base/app/web.yaml`
+- Create: `k8s/base/app/agent-backend.yaml`
+- Modify: `k8s/base/kustomization.yaml`
 
 **Interfaces:**
 - Consumes: ConfigMap `lomva-config`、`lomva-web-config`；Secret `lomva-secret`；Service `postgres`/`redis`/`plugin-daemon`/`local-sandbox`。
@@ -1796,13 +1796,13 @@ spec:
 
 - [ ] **Step 9: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml && grep -cE "^kind: Job$" /tmp/lomva-base.yaml`
+Run: `kubectl kustomize k8s/base > /tmp/lomva-base.yaml && grep -cE "^kind: Deployment$" /tmp/lomva-base.yaml && grep -cE "^kind: Job$" /tmp/lomva-base.yaml`
 Expected: Deployment `11`（前序 5 个 + 本 task 6 个）、Job `1`；退出码 0。
 
 - [ ] **Step 10: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add api/worker/web/agent-backend manifests"
 ```
 
@@ -1811,11 +1811,11 @@ git commit -m "feat(deploy): add api/worker/web/agent-backend manifests"
 ### Task 6: 网关 nginx
 
 **Files:**
-- Create: `deploy/kubernetes/base/config/nginx/nginx.conf`
-- Create: `deploy/kubernetes/base/config/nginx/proxy.conf`
-- Create: `deploy/kubernetes/base/config/nginx/default.conf`
-- Create: `deploy/kubernetes/base/gateway/nginx.yaml`
-- Modify: `deploy/kubernetes/base/kustomization.yaml`
+- Create: `k8s/base/config/nginx/nginx.conf`
+- Create: `k8s/base/config/nginx/proxy.conf`
+- Create: `k8s/base/config/nginx/default.conf`
+- Create: `k8s/base/gateway/nginx.yaml`
+- Modify: `k8s/base/kustomization.yaml`
 
 **Interfaces:**
 - Consumes: Service `api`/`api-websocket`/`web`/`plugin-daemon`。
@@ -2024,13 +2024,13 @@ configMapGenerator 追加：
 
 - [ ] **Step 6: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/base > /tmp/lomva-base.yaml && grep -cE "^kind: (Deployment|StatefulSet|Service|Job|PersistentVolumeClaim|ConfigMap|Secret|Namespace)$" /tmp/lomva-base.yaml`
+Run: `kubectl kustomize k8s/base > /tmp/lomva-base.yaml && grep -cE "^kind: (Deployment|StatefulSet|Service|Job|PersistentVolumeClaim|ConfigMap|Secret|Namespace)$" /tmp/lomva-base.yaml`
 Expected: `43`（12 Deployment、3 StatefulSet、13 Service、1 Job、6 PVC、6 ConfigMap、1 Secret、1 Namespace）；退出码 0。
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add deploy/kubernetes/base
+git add k8s/base
 git commit -m "feat(deploy): add nginx gateway manifests"
 ```
 
@@ -2039,8 +2039,8 @@ git commit -m "feat(deploy): add nginx gateway manifests"
 ### Task 7: TKE overlay（CLB Ingress + TCR 镜像替换示例）
 
 **Files:**
-- Create: `deploy/kubernetes/overlays/tke/kustomization.yaml`
-- Create: `deploy/kubernetes/overlays/tke/ingress.yaml`
+- Create: `k8s/overlays/tke/kustomization.yaml`
+- Create: `k8s/overlays/tke/ingress.yaml`
 
 **Interfaces:**
 - Consumes: base 全部资源；Service `nginx:80`。
@@ -2107,13 +2107,13 @@ spec:
 
 - [ ] **Step 3: 验证构建**
 
-Run: `kubectl kustomize deploy/kubernetes/overlays/tke > /tmp/lomva-tke.yaml && grep -cE "^kind: Ingress$" /tmp/lomva-tke.yaml`
+Run: `kubectl kustomize k8s/overlays/tke > /tmp/lomva-tke.yaml && grep -cE "^kind: Ingress$" /tmp/lomva-tke.yaml`
 Expected: `1`；且输出中包含 base 的全部对象（总数比 Task 6 多 1）。退出码 0。
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add deploy/kubernetes/overlays
+git add k8s/overlays
 git commit -m "feat(deploy): add tke overlay with CLB ingress"
 ```
 
@@ -2135,7 +2135,7 @@ Expected: `Kind cluster "lomva-k8s-verify" created.`
 
 - [ ] **Step 2: 部署 base（不含 Ingress，用 port-forward 验证）**
 
-Run: `kubectl apply -k deploy/kubernetes/base`
+Run: `kubectl apply -k k8s/base`
 Expected: 全部对象 `created`（namespace/configmap/secret/pvc/statefulset/deployment/job/service），无 error。
 
 - [ ] **Step 3: 等待 Job 与有状态组件就绪**
@@ -2195,12 +2195,12 @@ Expected: `Deleted nodes` / `Deleted clusters`。
 ### Task 9: README 部署文档
 
 **Files:**
-- Create: `deploy/kubernetes/README.md`
+- Create: `k8s/README.md`
 
 **Interfaces:**
 - Consumes: 所有 task 的最终产物路径与对象名。
 
-- [ ] **Step 1: 创建 deploy/kubernetes/README.md**
+- [ ] **Step 1: 创建 k8s/README.md**
 
 完整内容如下：
 
@@ -2224,7 +2224,7 @@ Expected: `Deleted nodes` / `Deleted clusters`。
 
 ```bash
 kind create cluster --name lomva
-kubectl apply -k deploy/kubernetes/base
+kubectl apply -k k8s/base
 kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
 kubectl -n qa-ai port-forward svc/nginx 8080:80
 ```
@@ -2241,7 +2241,7 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 3. **部署**：
 
    ```bash
-   kubectl apply -k deploy/kubernetes/overlays/tke
+   kubectl apply -k k8s/overlays/tke
    kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
    ```
 
@@ -2328,13 +2328,13 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 - [ ] **Step 2: 校对 README 与清单的一致性**
 
-Run: `grep -n "qa-ai\|8080\|lomva-secret.env" deploy/kubernetes/README.md | head -10`
+Run: `grep -n "qa-ai\|8080\|lomva-secret.env" k8s/README.md | head -10`
 Expected: 命名空间、端口、文件名与实际清单一致；无引用不存在的文件。
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add deploy/kubernetes/README.md
+git add k8s/README.md
 git commit -m "docs(deploy): add TKE deployment guide"
 ```
 

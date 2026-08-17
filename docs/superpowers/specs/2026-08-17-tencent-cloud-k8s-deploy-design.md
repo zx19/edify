@@ -33,7 +33,7 @@ edify（Dify fork）当前仅有 docker-compose 部署资产（`docker/`），�
 ## 目录结构
 
 ```
-deploy/kubernetes/
+k8s/
 ├── README.md                        # 部署文档
 ├── base/
 │   ├── kustomization.yaml           # namespace、resources、images:、configMapGenerator、secretGenerator
@@ -108,7 +108,7 @@ worker、worker_beat 与 api 共用 dify-api 镜像（不同启动命令），�
 
 ## 验证（成功标准）
 
-1. `kubectl apply -k deploy/kubernetes/overlays/tke`（本地用 kind 验证）后所有 Pod Ready
+1. `kubectl apply -k k8s/overlays/tke`（本地用 kind 验证）后所有 Pod Ready
 2. port-forward 打开 nginx，出现 Dify 安装/登录页
 3. 创建应用发一条消息跑通（验证 api → postgres / redis / weaviate / plugin_daemon 链路）
 4. README 附常见问题排查表（镜像拉取、PVC Pending、Init 失败等）
