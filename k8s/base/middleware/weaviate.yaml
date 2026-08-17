@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lomva-weaviate-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: weaviate
+  labels:
+    app: weaviate
+spec:
+  serviceName: weaviate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weaviate
+  template:
+    metadata:
+      labels:
+        app: weaviate
+    spec:
+      containers:
+        - name: weaviate
+          image: semitechnologies/weaviate
+          env:
+            - name: PERSISTENCE_DATA_PATH
+              value: /var/lib/weaviate
+            - name: QUERY_DEFAULTS_LIMIT
+              value: "25"
+            - name: AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED
+              value: "false"
+            - name: DEFAULT_VECTORIZER_MODULE
+              value: "none"
+            - name: CLUSTER_HOSTNAME
+              value: "node1"
+            - name: AUTHENTICATION_APIKEY_ENABLED
+              value: "true"
+            - name: AUTHENTICATION_APIKEY_ALLOWED_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: lomva-secret
+                  key: WEAVIATE_API_KEY
+            - name: AUTHENTICATION_APIKEY_USERS
+              value: "hello@dify.ai"
+            - name: AUTHORIZATION_ADMINLIST_ENABLED
+              value: "true"
+            - name: AUTHORIZATION_ADMINLIST_USERS
+              value: "hello@dify.ai"
+            - name: DISABLE_TELEMETRY
+              value: "false"
+            - name: ENABLE_TOKENIZER_GSE
+              value: "false"
+            - name: ENABLE_TOKENIZER_KAGOME_JA
+              value: "false"
+            - name: ENABLE_TOKENIZER_KAGOME_KR
+              value: "false"
+          ports:
+            - containerPort: 8080
+            - containerPort: 50051
+          readinessProbe:
+            httpGet:
+              path: /v1/.well-known/ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/weaviate
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: lomva-weaviate-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weaviate
+spec:
+  selector:
+    app: weaviate
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      port: 50051
+      targetPort: 50051
