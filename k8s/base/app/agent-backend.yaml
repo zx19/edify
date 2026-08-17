@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-backend
+  labels:
+    app: agent-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-backend
+  template:
+    metadata:
+      labels:
+        app: agent-backend
+    spec:
+      initContainers:
+        - name: wait-deps
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z redis 6379 && nc -z plugin-daemon 5002; do
+                echo waiting for redis/plugin-daemon
+                sleep 2
+              done
+      containers:
+        - name: agent-backend
+          image: langgenius/dify-agent-backend
+          envFrom:
+            - secretRef:
+                name: lomva-secret
+          env:
+            - name: DIFY_AGENT_REDIS_PREFIX
+              value: dify-agent
+            - name: DIFY_AGENT_PLUGIN_DAEMON_URL
+              value: http://plugin-daemon:5002
+            - name: DIFY_AGENT_INNER_API_URL
+              value: http://api:5001
+            - name: DIFY_AGENT_RUNTIME_BACKEND
+              value: local
+            - name: DIFY_AGENT_LOCAL_SANDBOX_ENDPOINT
+              value: http://local-sandbox:5004
+            - name: DIFY_AGENT_STUB_API_BASE_URL
+              value: http://agent-backend:5050/agent-stub
+            - name: DIFY_AGENT_SANDBOX_FILES_BASE_URL
+              value: http://api:5001
+            - name: DIFY_AGENT_SHUTDOWN_GRACE_SECONDS
+              value: "30"
+            - name: DIFY_AGENT_RUN_RETENTION_SECONDS
+              value: "259200"
+            - name: DIFY_AGENT_RUN_TIMEOUT_SECONDS
+              value: "3600"
+            - name: DIFY_AGENT_E2B_ACTIVE_TIMEOUT_SECONDS
+              value: "3600"
+          ports:
+            - containerPort: 5050
+          readinessProbe:
+            tcpSocket:
+              port: 5050
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-backend
+spec:
+  selector:
+    app: agent-backend
+  ports:
+    - port: 5050
+      targetPort: 5050

@@ -13,6 +13,13 @@ resources:
   - runtime/plugin-daemon.yaml
   - runtime/sandbox.yaml
   - runtime/local-sandbox.yaml
+  - app/init-job.yaml
+  - app/api.yaml
+  - app/api-websocket.yaml
+  - app/worker.yaml
+  - app/worker-beat.yaml
+  - app/web.yaml
+  - app/agent-backend.yaml
 
 configMapGenerator:
   - name: lomva-config

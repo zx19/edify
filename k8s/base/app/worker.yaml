@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      initContainers:
+        - name: wait-middleware
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z postgres 5432 && nc -z redis 6379; do
+                echo waiting for postgres/redis
+                sleep 2
+              done
+        - name: wait-init
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until [ -f /app/api/storage/.init_permissions ]; do
+                echo waiting for init-permissions job
+                sleep 2
+              done
+          volumeMounts:
+            - name: storage
+              mountPath: /app/api/storage
+      containers:
+        - name: worker
+          image: langgenius/dify-api
+          envFrom:
+            - configMapRef:
+                name: lomva-config
+            - secretRef:
+                name: lomva-secret
+          env:
+            - name: MODE
+              value: worker
+          volumeMounts:
+            - name: storage
+              mountPath: /app/api/storage
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: lomva-app-storage

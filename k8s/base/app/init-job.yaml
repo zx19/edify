@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lomva-app-storage
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-permissions
+  labels:
+    app: init-permissions
+spec:
+  template:
+    metadata:
+      labels:
+        app: init-permissions
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: init
+          image: busybox
+          command: ["sh", "-c"]
+          args:
+            - |
+              FLAG_FILE="/app/api/storage/.init_permissions"
+              if [ -f "$FLAG_FILE" ]; then
+                echo "Permissions already initialized. Exiting."
+                exit 0
+              fi
+              echo "Initializing permissions for /app/api/storage"
+              chown -R 1001:1001 /app/api/storage && touch "$FLAG_FILE"
+              echo "Permissions initialized. Exiting."
+          volumeMounts:
+            - name: storage
+              mountPath: /app/api/storage
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: lomva-app-storage
