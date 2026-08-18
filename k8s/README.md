@@ -22,9 +22,10 @@
 
 ```bash
 kind create cluster --name lomva
+kubectl create ns qa-ai-lomva          # 命名空间不由清单管理，手动创建一次
 kubectl apply -k k8s/overlays/local
-kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
-kubectl -n qa-ai port-forward svc/nginx 8080:80
+kubectl -n qa-ai-lomva wait --for=condition=available deploy --all --timeout=600s
+kubectl -n qa-ai-lomva port-forward svc/nginx 8080:80
 ```
 
 打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name lomva`。
@@ -40,6 +41,8 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 - [ ] `base/config/lomva-secret.env`：共享密钥已更换（SECRET_KEY 可留空）
 - [ ] 镜像已推送，且 `overlays/qa/kustomization.yaml` 的 `images:` 已取消注释指向你的仓库
 - [ ] web 镜像确认带 `NEXT_PUBLIC_BASE_PATH=/lomva` 构建
+- [ ] 命名空间已存在（没有则 `kubectl create ns qa-ai-lomva`；**本清单不创建/删除 Namespace**，
+  `delete -k` 不会误伤共享命名空间里的其他栈）
 - [ ] kubectl context 指向 QA 集群（deploy.sh 第一步会打印并要求确认）
 
 ### 1. 分阶段上线
@@ -54,11 +57,11 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 ```
 
 > 注意：`kubectl apply` 不删除资源——注释 ingress.yaml 只在 Ingress **尚未创建**时有效；
-> 已创建后要断流量必须 `kubectl -n qa-ai delete ingress lomva`（见「回退方案」）。
+> 已创建后要断流量必须 `kubectl -n qa-ai-lomva delete ingress lomva`（见「回退方案」）。
 
 ### 2. 验证清单
 
-- [ ] `kubectl -n qa-ai get pods` 全部 Ready（无 postgres Pod——外部 PG）
+- [ ] `kubectl -n qa-ai-lomva get pods` 全部 Ready（无 postgres Pod——外部 PG）
 - [ ] 冒烟通过：deploy.sh 末尾的 web 200 + `/console/api/version` 返回版本号
 - [ ] `https://qa-xai.xingshulin.com/lomva/install` 能打开，创建管理员
 - [ ] 配置模型供应商 key，创建应用发一条消息成功
@@ -82,11 +85,11 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 ### 1. 快速止血：摘流量（秒级，最常用）
 
 ```bash
-kubectl -n qa-ai delete ingress lomva        # prod 换 -n prod-ai
+kubectl -n qa-ai-lomva delete ingress lomva        # prod 换 -n prod-ai
 ```
 
 外部请求立即不再进入本栈（共享域名上其他应用不受影响），Pod 与数据原样保留，排查完
-`./k8s/scripts/deploy.sh` 重新接入。 Pod 级故障也可先 `kubectl -n qa-ai rollout restart deploy/api` 试试。
+`./k8s/scripts/deploy.sh` 重新接入。 Pod 级故障也可先 `kubectl -n qa-ai-lomva rollout restart deploy/lomva-api` 试试。
 
 ### 2. 配置回退（改错 env 等）
 
@@ -103,8 +106,8 @@ git revert <错误提交>          # 或手动改回
 ```bash
 # 方式一：overlay 的 images newTag 改回旧 tag，重新 deploy.sh（推荐，有 git 记录）
 # 方式二：就地回滚到上一版本
-kubectl -n qa-ai rollout undo deploy/api deploy/api-websocket deploy/worker deploy/worker-beat deploy/web deploy/agent-backend
-kubectl -n qa-ai rollout status deploy/api
+kubectl -n qa-ai-lomva rollout undo deploy/lomva-api deploy/lomva-api-websocket deploy/lomva-worker deploy/lomva-worker-beat deploy/lomva-web deploy/lomva-agent-backend
+kubectl -n qa-ai-lomva rollout status deploy/lomva-api
 ```
 
 ### 4. 数据回退（migration 已造成破坏）
@@ -121,7 +124,9 @@ kubectl -n qa-ai rollout status deploy/api
 kubectl delete -k k8s/overlays/qa
 ```
 
-⚠️ 会连 PVC 一起删除：集群内 redis/weaviate 数据与 CBS 卷（默认 Delete 回收策略）将销毁；
+清单不含 Namespace 对象，此操作只影响本栈资源（共享命名空间内其他栈不受影响）。
+⚠️ 但仍会连 PVC 一起删除：集群内 redis/weaviate 数据与云盘将销毁（注意本集群 qa-cbs/qa-cfs 为
+Retain，PV 会转 Released 保留数据，可重建 PVC 绑回；默认 cbs 类为 Delete 则直接销毁）。
 外部 PG 库不受影响（需另行手动 DROP）。**有真实数据后禁止使用此方式回退。**
 
 ## 修改配置
@@ -228,15 +233,15 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 | 现象 | 排查 |
 |---|---|
 | 页面 404 / 白屏、`_next` 静态资源加载失败 | web 镜像未带子路径构建：必须用 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva` 重新构建 |
-| 工作流协作不生效（多人编辑无同步） | 确认 `/socket.io/` 未被同 host 其他 Ingress 占用：`kubectl -n qa-ai describe ingress lomva` 看是否有冲突事件（nginx-ingress 对重复 host+path 取创建时间最老者） |
+| 工作流协作不生效（多人编辑无同步） | 确认 `/socket.io/` 未被同 host 其他 Ingress 占用：`kubectl -n qa-ai-lomva describe ingress lomva` 看是否有冲突事件（nginx-ingress 对重复 host+path 取创建时间最老者） |
 | 上传文件报 413 | Ingress 的 `proxy-body-size` 注解未生效；确认注解值 ≥ 应用上传上限 |
 | Pod `ImagePullBackOff` | TKE 拉 Docker Hub 慢/限流：改用上方 TCR 流程，或为集群配置镜像加速 |
-| PVC 一直 `Pending` | `kubectl -n qa-ai describe pvc <名>` 看 Events：`disk size is invalid` = 低于 CBS 10Gi 下限；`storageclass not found` 等 = `kubectl get sc` 确认默认类（TKE 一般为 `cbs`，kind 为 `standard`） |
-| api 一直 `Init:0/2` | 在等 postgres/redis 就绪或 init-permissions Job：`kubectl -n qa-ai logs job/init-permissions` |
-| api `CrashLoopBackOff` | `kubectl -n qa-ai logs deploy/api`；首次启动 migration 需几分钟，startupProbe 已兜底 |
+| PVC 一直 `Pending` | `kubectl -n qa-ai-lomva describe pvc <名>` 看 Events：`disk size is invalid` = 低于 CBS 10Gi 下限；`storageclass not found` 等 = `kubectl get sc` 确认默认类（TKE 一般为 `cbs`，kind 为 `standard`） |
+| api 一直 `Init:0/2` | 在等 postgres/redis 就绪或 init-permissions Job：`kubectl -n qa-ai-lomva logs job/lomva-init-permissions` |
+| api `CrashLoopBackOff` | `kubectl -n qa-ai-lomva logs deploy/lomva-api`；首次启动 migration 需几分钟，startupProbe 已兜底 |
 | local-sandbox 报 Landlock 相关错误 | 节点内核 < 5.13 不支持：把 `runtime/local-sandbox.yaml` 的 `SHELLCTL_ENABLE_PATH_ISOLATION` 改为 `"false"` |
-| 页面能开但发消息报错 | 检查模型供应商 key；`kubectl -n qa-ai logs deploy/plugin-daemon` / `deploy/worker` |
-| 改完配置 Pod 没变化 | 正常应自动滚动（generator hash）；若直接改了生成的 ConfigMap 则需手动 `kubectl -n qa-ai rollout restart` |
+| 页面能开但发消息报错 | 检查模型供应商 key；`kubectl -n qa-ai-lomva logs deploy/lomva-plugin-daemon` / `deploy/lomva-worker` |
+| 改完配置 Pod 没变化 | 正常应自动滚动（generator hash）；若直接改了生成的 ConfigMap 则需手动 `kubectl -n qa-ai-lomva rollout restart` |
 
 ## 安全说明
 
