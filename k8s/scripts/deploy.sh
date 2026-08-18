@@ -21,6 +21,14 @@ if [[ "${ASSUME_YES:-0}" != "1" ]]; then
   [[ "${ans:-N}" =~ ^[yY]$ ]] || { echo "已取消"; exit 1; }
 fi
 
+# 预检：真实机密文件（gitignored）是否已就位
+if [[ -f "$OVERLAY/config/secret.env.example" && ! -f "$OVERLAY/config/secret.env" ]]; then
+  echo "!! 缺少 $OVERLAY/config/secret.env（真实机密，不入 git）。请先执行："
+  echo "   cp $OVERLAY/config/secret.env.example $OVERLAY/config/secret.env"
+  echo "   然后编辑填入真实值"
+  exit 1
+fi
+
 echo "==> kubectl apply -k $OVERLAY"
 kubectl apply -k "$OVERLAY"
 

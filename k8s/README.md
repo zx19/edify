@@ -38,7 +38,9 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 PG 为**外部自建实例**（独立域名，集群内不起 postgres Pod）。
 
 1. **配置外部 PG（必须）**：在实例上建好库和扩展（SQL 见「切换托管服务」一节），编辑
-   `overlays/qa/config/external-services.env` 填 `DB_HOST`，`overlays/qa/config/secret.env` 填 `DB_PASSWORD`。
+   `overlays/qa/config/external-services.env` 填 `DB_HOST`；
+   `cp overlays/qa/config/secret.env.example overlays/qa/config/secret.env` 后填 `DB_PASSWORD`
+   （`secret.env` 已被 gitignore，真实机密不会进 git）。
 2. **修改共享 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
    （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
 3. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
@@ -69,7 +71,7 @@ PG 为**外部自建实例**（独立域名，集群内不起 postgres Pod）。
 | `overlays/prod/ingress.yaml` | `host` 改线上域名；ingressClassName 按线上集群确认 |
 | `overlays/prod/config/public-urls.env`、`web-public.env` | 线上域名（5 处 + 3 处） |
 | `overlays/prod/config/external-services.env` | TencentDB 内网地址 |
-| `overlays/prod/config/secret.env` | `DB_PASSWORD`（及其余密钥覆盖） |
+| `overlays/prod/config/secret.env` | 由 `secret.env.example` 复制生成（gitignored），填 `DB_PASSWORD` 等真实机密 |
 | `overlays/prod/kustomization.yaml` | 取消 `images:` 注释、替换镜像仓库地址 |
 
 部署（注意线上集群的 kubectl context 可能不同）：
@@ -81,10 +83,13 @@ OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh
 ## 修改配置
 
 - 共享非机密：`base/config/lomva-config.env`（api / worker / api-websocket / plugin-daemon 等共用）
-- 共享机密：`base/config/lomva-secret.env`（dev 默认值，任何环境部署前都必须更换）
+- 共享机密默认值：`base/config/lomva-secret.env`（**均为上游 docker-compose 的公开默认值，可入 git**；
+  任何环境的真实机密不要写进这里）
 - web 前端：`base/config/web-config.env`
 - 环境覆盖：`overlays/<env>/config/`（`public-urls.env` 对外 URL、`web-public.env` web 侧、
-  `external-services.env` 外部 PG、`secret.env` 环境专属机密），merge 进同名 ConfigMap/Secret
+  `external-services.env` 外部 PG 地址），merge 进同名 ConfigMap
+- **环境真实机密**：`overlays/<env>/config/secret.env`——**已被 gitignore，不会提交**；
+  由同目录 `secret.env.example` 复制生成后填真实值，merge 进 `lomva-secret`（同名 key 覆盖共享默认值）
 - 子路径 nginx 路由：`overlays/subpath/config/nginx/`（qa/prod 共用）
 - 单个组件专属：直接改对应 YAML 里的 `env:` 块
 
@@ -190,7 +195,9 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 ## 安全说明
 
-- `lomva-secret.env` 内为公开的开发默认值，**生产部署前必须全部更换**
+- 真实机密只放 `overlays/<env>/config/secret.env`（**已 gitignore**）；git 里的
+  `base/config/lomva-secret.env` 是上游公开默认值、`secret.env.example` 是占位模板
+- 误提交补救：若真实机密已进 git 历史，仅删文件不够，需改写历史（git filter-repo）并更换该机密
 - 本清单未配 NetworkPolicy（compose 的网络隔离未翻译到 K8s）；生产建议为
   ssrf-proxy / local-sandbox 增加 NetworkPolicy 限制出向流量
 
