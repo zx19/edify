@@ -32,13 +32,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      # api / agent-backend 的 Dockerfile 以仓库根目录为构建上下文（COPY api/... 等路径），
+      # 只有 agent-local-sandbox 用子目录
       matrix:
         include:
           - name: api
-            context: api
+            context: .
             file: api/Dockerfile
           - name: agent-backend
-            context: dify-agent
+            context: .
             file: dify-agent/Dockerfile
           - name: agent-local-sandbox
             context: dify-agent-runtime
@@ -84,7 +86,7 @@ jobs:
       - name: Build and push web
         uses: docker/build-push-action@v6
         with:
-          context: web
+          context: .
           file: web/Dockerfile
           platforms: linux/amd64
           push: true

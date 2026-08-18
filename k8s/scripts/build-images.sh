@@ -34,9 +34,11 @@ retag() { # retag <上游镜像:tag> <目标镜像名:tag>
   docker push "$TCR_NAMESPACE/$dst"
 }
 
-build lomva-api                 api/Dockerfile                       api
-build lomva-web                 web/Dockerfile                       web --build-arg "NEXT_PUBLIC_BASE_PATH=$BASE_PATH"
-build lomva-agent-backend       dify-agent/Dockerfile                dify-agent
+# 注意：api / web / agent-backend 的 Dockerfile 以仓库根目录为构建上下文
+# （COPY 路径形如 api/pyproject.toml、web/package.json），只有 agent-local-sandbox 用子目录
+build lomva-api                 api/Dockerfile                       .
+build lomva-web                 web/Dockerfile                       . --build-arg "NEXT_PUBLIC_BASE_PATH=$BASE_PATH"
+build lomva-agent-backend       dify-agent/Dockerfile                .
 build lomva-agent-local-sandbox dify-agent-runtime/docker/Dockerfile dify-agent-runtime
 
 retag langgenius/dify-sandbox:0.2.15             lomva-sandbox:0.2.15

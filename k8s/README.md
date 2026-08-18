@@ -166,11 +166,11 @@ TCR_NAMESPACE=ccr.ccs.tencentyun.com/<你的命名空间> ./k8s/scripts/build-im
 TCR=ccr.ccs.tencentyun.com/<你的命名空间>
 TAG=1.16.1-edify
 
-# 本仓库构建（在仓库根目录执行）
-docker buildx build --platform linux/amd64 -t $TCR/lomva-api:$TAG -f api/Dockerfile api --push
+# 本仓库构建（在仓库根目录执行；api/web/agent-backend 以仓库根为构建上下文）
+docker buildx build --platform linux/amd64 -t $TCR/lomva-api:$TAG -f api/Dockerfile . --push
 # 子路径部署必须带 NEXT_PUBLIC_BASE_PATH；若改为根路径部署可去掉该 build-arg
-docker buildx build --platform linux/amd64 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva -t $TCR/lomva-web:$TAG -f web/Dockerfile web --push
-docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-backend:$TAG -f dify-agent/Dockerfile dify-agent --push
+docker buildx build --platform linux/amd64 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva -t $TCR/lomva-web:$TAG -f web/Dockerfile . --push
+docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-backend:$TAG -f dify-agent/Dockerfile . --push
 docker buildx build --platform linux/amd64 -t $TCR/lomva-agent-local-sandbox:$TAG -f dify-agent-runtime/docker/Dockerfile dify-agent-runtime --push
 
 # 上游镜像转推（sandbox / plugin-daemon 源码不在本仓库）
