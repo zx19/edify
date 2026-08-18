@@ -30,55 +30,99 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name lomva`。
 （也可用脚本：`OVERLAY=k8s/overlays/local SMOKE_PATH= ./k8s/scripts/deploy.sh`）
 
-## QA 部署（测试环境，https://qa-xai.xingshulin.com/lomva）
+## QA 上线流程（测试环境，https://qa-xai.xingshulin.com/lomva）
 
-本 overlay 已按**子路径** `https://qa-xai.xingshulin.com/lomva` 配置好：对外 URL 在
-`overlays/qa/config/public-urls.env` 和 `web-public.env`，子路径路由在
-`overlays/subpath/config/nginx/default.conf`（剥前缀转发 api，保留前缀转发 web）。
-PG 为**外部自建实例**（独立域名，集群内不起 postgres Pod）。
+### 0. 上线前检查清单
 
-1. **配置外部 PG（必须）**：在实例上建好库和扩展（SQL 见「切换托管服务」一节），编辑
-   `overlays/qa/config/external-services.env` 填 `DB_HOST`；
-   `cp overlays/qa/config/secret.env.example overlays/qa/config/secret.env` 后填 `DB_PASSWORD`
-   （`secret.env` 已被 gitignore，真实机密不会进 git）。
-2. **修改共享 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
-   （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
-3. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
-   自建**（上游官方镜像只支持根路径）。用 GitHub Actions 推 Docker Hub 或本地脚本推 TCR，
-   见下文「自建镜像推送」；完成后取消 `overlays/qa/kustomization.yaml` 中 `images:` 段注释并替换为你的仓库地址。
-4. **部署**（apply + 等待就绪 + 冒烟检查，一条命令）：
+- [ ] 外部自建 PG：已建 `lomva` / `lomva_plugin` 库 + `uuid-ossp` 扩展（SQL 见「切换托管服务」）
+- [ ] `overlays/qa/config/external-services.env`：`DB_HOST` 已填真实地址
+- [ ] `overlays/qa/config/secret.env`：已由 `secret.env.example` 复制并填真实密码（gitignored）
+- [ ] `base/config/lomva-secret.env`：共享密钥已更换（SECRET_KEY 可留空）
+- [ ] 镜像已推送，且 `overlays/qa/kustomization.yaml` 的 `images:` 已取消注释指向你的仓库
+- [ ] web 镜像确认带 `NEXT_PUBLIC_BASE_PATH=/lomva` 构建
+- [ ] kubectl context 指向 QA 集群（deploy.sh 第一步会打印并要求确认）
 
-   ```bash
-   ./k8s/scripts/deploy.sh
-   ```
-
-   或手动：`kubectl apply -k k8s/overlays/qa && kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s`
-
-5. **获取入口**：本集群使用 nginx-ingress controller（共享 CLB），Ingress 创建后
-   `kubectl -n qa-ai get ingress lomva` 的 ADDRESS 与现有 `dify-nginx-ingress` 相同——
-   流量走现有共享 CLB，**不会新建 CLB，也无需改 DNS**。
-   可用 `kubectl -n qa-ai port-forward svc/nginx 18080:80` 先绕过 Ingress 做冒烟验证。
-   建议分阶段上线：先临时注释 `overlays/qa/kustomization.yaml` 中的 `- ingress.yaml`
-   部署并验证 pod 全部 Ready（对现有环境零影响），再恢复该行使外部流量接入。
-
-## 线上部署（prod）
-
-与 QA 同构，差异：外部 **TencentDB** PG、命名空间 `prod-ai`、域名占位。部署前必改：
-
-| 位置 | 改什么 |
-|---|---|
-| `overlays/prod/kustomization.yaml` + `namespace.yaml` | 命名空间（默认 `prod-ai`） |
-| `overlays/prod/ingress.yaml` | `host` 改线上域名；ingressClassName 按线上集群确认 |
-| `overlays/prod/config/public-urls.env`、`web-public.env` | 线上域名（5 处 + 3 处） |
-| `overlays/prod/config/external-services.env` | TencentDB 内网地址 |
-| `overlays/prod/config/secret.env` | 由 `secret.env.example` 复制生成（gitignored），填 `DB_PASSWORD` 等真实机密 |
-| `overlays/prod/kustomization.yaml` | 取消 `images:` 注释、替换镜像仓库地址 |
-
-部署（注意线上集群的 kubectl context 可能不同）：
+### 1. 分阶段上线
 
 ```bash
-OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh
+# 阶段一：不接外部流量，先把 Pod 跑起来（对现有环境零影响）
+#   临时把 overlays/qa/kustomization.yaml 里的 - ingress.yaml 注释掉
+./k8s/scripts/deploy.sh        # 含 rollout 等待 + port-forward 冒烟检查
+
+# 阶段二：确认全部 Ready 后恢复 ingress.yaml 注释，接入流量
+./k8s/scripts/deploy.sh
 ```
+
+> 注意：`kubectl apply` 不删除资源——注释 ingress.yaml 只在 Ingress **尚未创建**时有效；
+> 已创建后要断流量必须 `kubectl -n qa-ai delete ingress lomva`（见「回退方案」）。
+
+### 2. 验证清单
+
+- [ ] `kubectl -n qa-ai get pods` 全部 Ready（无 postgres Pod——外部 PG）
+- [ ] 冒烟通过：deploy.sh 末尾的 web 200 + `/console/api/version` 返回版本号
+- [ ] `https://qa-xai.xingshulin.com/lomva/install` 能打开，创建管理员
+- [ ] 配置模型供应商 key，创建应用发一条消息成功
+- [ ] 确认旧环境无恙：`https://qa-xai.xingshulin.com/`（旧 dify 根路径）正常
+
+## 线上上线流程（prod）
+
+与 QA 同骨架，差异与额外要求：
+
+1. **按「修改配置」填齐 prod 占位**：namespace（默认 `prod-ai`）、域名（ingress.yaml +
+   `config/public-urls.env` + `config/web-public.env`）、`external-services.env`（TencentDB 地址）、
+   `secret.env`（由 example 复制，真实密码）、`images:` 仓库地址
+2. **TencentDB 侧准备**：建库 SQL 同 QA；**确认自动备份已开启**（控制台默认开，上线前手动做一次备份点）
+3. **选低峰期**，提前通知；如线上在独立集群，先确认 kubectl context
+4. 分阶段上线与验证清单同 QA（`OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh`）
+
+## 回退方案
+
+按影响面从小到大选择：
+
+### 1. 快速止血：摘流量（秒级，最常用）
+
+```bash
+kubectl -n qa-ai delete ingress lomva        # prod 换 -n prod-ai
+```
+
+外部请求立即不再进入本栈（共享域名上其他应用不受影响），Pod 与数据原样保留，排查完
+`./k8s/scripts/deploy.sh` 重新接入。 Pod 级故障也可先 `kubectl -n qa-ai rollout restart deploy/api` 试试。
+
+### 2. 配置回退（改错 env 等）
+
+```bash
+git revert <错误提交>          # 或手动改回
+./k8s/scripts/deploy.sh        # generator hash 变化触发滚动
+```
+
+### 3. 镜像回退（新版本有问题）
+
+**前提：新旧版本之间没有破坏性 DB migration**（api 启动会自动 migrate，schema 是单向向前的）。
+纯加法 migration（新表/新列）通常可直接回退镜像；含删列/改类型的版本不要直接回退镜像，走第 4 条。
+
+```bash
+# 方式一：overlay 的 images newTag 改回旧 tag，重新 deploy.sh（推荐，有 git 记录）
+# 方式二：就地回滚到上一版本
+kubectl -n qa-ai rollout undo deploy/api deploy/api-websocket deploy/worker deploy/worker-beat deploy/web deploy/agent-backend
+kubectl -n qa-ai rollout status deploy/api
+```
+
+### 4. 数据回退（migration 已造成破坏）
+
+1. 先摘流量（第 1 条）
+2. 恢复 PG 备份：TencentDB 用控制台「回档」到备份点；自建 PG 用上线前的 `pg_dump` 恢复
+   （**上线前务必有备份**：`pg_dump -h <host> -U postgres lomva > lomva.bak`，lomva_plugin 同理）
+3. 镜像回退到与备份匹配的版本（第 3 条方式一）
+4. 验证后重新接入流量
+
+### 5. 全量拆除（仅限首次验证失败、还没真实数据）
+
+```bash
+kubectl delete -k k8s/overlays/qa
+```
+
+⚠️ 会连 PVC 一起删除：集群内 redis/weaviate 数据与 CBS 卷（默认 Delete 回收策略）将销毁；
+外部 PG 库不受影响（需另行手动 DROP）。**有真实数据后禁止使用此方式回退。**
 
 ## 修改配置
 
