@@ -26,27 +26,11 @@ secretGenerator:
     envs:
       - config/secret.env
 
-# 自建镜像推送后，取消注释并把地址换成你的仓库：
-# - 推 TCR：newName 形如 ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api
-# - 推 Docker Hub（用 .github/workflows/lomva-build-push.yml 构建）：newName 直接写
-#   <dockerhub用户名>/lomva-api，无需 registry 前缀
-# 注意 web 镜像必须带 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva 构建（见 README）
-# images:
-#   - name: langgenius/dify-api
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api
-#     newTag: 1.16.1-edify
-#   - name: langgenius/dify-web
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-web
-#     newTag: 1.16.1-edify
-#   - name: langgenius/dify-agent-backend
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-backend
-#     newTag: 1.16.1-edify
-#   - name: langgenius/dify-agent-local-sandbox
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-agent-local-sandbox
-#     newTag: 1.16.1-edify
-#   - name: langgenius/dify-sandbox
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-sandbox
-#     newTag: 0.2.15
-#   - name: langgenius/dify-plugin-daemon
-#     newName: ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-plugin-daemon
-#     newTag: 0.6.10-local
+# 镜像来源：
+# - web 必须自建（NEXT_PUBLIC_BASE_PATH=/lomva 构建期参数），已推送 Docker Hub
+# - 其余组件沿用上游 langgenius 镜像（fork 与上游 1.16.1 无代码差异）；
+#   若后续有代码改动，用 .github/workflows/lomva-build-push.yml 构建后在此追加对应条目
+images:
+  - name: langgenius/dify-web
+    newName: z123x/lomva-web
+    newTag: 1.16.1-edify
