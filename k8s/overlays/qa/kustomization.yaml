@@ -1,11 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# 测试环境（QA）：https://qa-xai.xingshulin.com/lomva，外部自建 PG（独立域名）
+namespace: qa-ai
+
 resources:
-  - ../../base
+  - ../subpath
+  - namespace.yaml
   - ingress.yaml
 
-# 覆盖 base 的共享配置：对外 URL 改为 https://qa-xai.xingshulin.com/lomva
 configMapGenerator:
   - name: lomva-config
     behavior: merge
@@ -16,27 +19,15 @@ configMapGenerator:
     behavior: merge
     envs:
       - config/web-public.env
-  # 子路径路由需要另一份 default.conf；replace 会替换整个 ConfigMap，
-  # 因此 nginx.conf / proxy.conf 在此各放一份相同副本
-  - name: lomva-nginx-config
-    behavior: replace
-    files:
-      - nginx.conf=config/nginx/nginx.conf
-      - proxy.conf=config/nginx/proxy.conf
-      - default.conf=config/nginx/default.conf
 
-# overlay 的 nginx 配置不监听根路径，readiness 探针改探子路径首页
-patches:
-  - target:
-      kind: Deployment
-      name: nginx
-    patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
-        value: /lomva/
+secretGenerator:
+  - name: lomva-secret
+    behavior: merge
+    envs:
+      - config/secret.env
 
 # 自建镜像推送后，取消注释并把地址换成你的仓库：
-# - 推 TCR：newName 形如 ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api（见下方注释示例）
+# - 推 TCR：newName 形如 ccr.ccs.tencentyun.com/<tcr-namespace>/lomva-api
 # - 推 Docker Hub（用 .github/workflows/lomva-build-push.yml 构建）：newName 直接写
 #   <dockerhub用户名>/lomva-api，无需 registry 前缀
 # 注意 web 镜像必须带 --build-arg NEXT_PUBLIC_BASE_PATH=/lomva 构建（见 README）

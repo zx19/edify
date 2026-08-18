@@ -2,13 +2,14 @@
 # 部署 edify 到当前 kubectl context 指向的集群，并做冒烟检查。
 #
 # 用法：
-#   ./k8s/scripts/deploy.sh            # 部署 overlays/tke，交互确认集群
+#   ./k8s/scripts/deploy.sh            # 部署 overlays/qa（测试环境），交互确认集群
 #   ASSUME_YES=1 ./k8s/scripts/deploy.sh   # 跳过确认（CI 用）
-#   OVERLAY=k8s/base ./k8s/scripts/deploy.sh  # 部署 base（本地 kind 验证）
+#   OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh   # 线上
+#   OVERLAY=k8s/overlays/local SMOKE_PATH= ./k8s/scripts/deploy.sh        # 本地 kind
 set -euo pipefail
 
-OVERLAY="${OVERLAY:-k8s/overlays/tke}"
-NAMESPACE=qa-ai
+OVERLAY="${OVERLAY:-k8s/overlays/qa}"
+NAMESPACE="${NAMESPACE:-qa-ai}"
 SMOKE_PATH="${SMOKE_PATH-/lomva}"   # 不带尾斜杠；overlays/local（根路径）验证时设为空字符串
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

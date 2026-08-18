@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# /lomva 子路径部署的中间层：不作为独立环境部署，由 overlays/qa 与 overlays/prod 引用。
+# 内容：子路径 nginx 路由（整体替换 base 的根路径配置）+ nginx 探针路径修正。
+resources:
+  - ../../base
+
+configMapGenerator:
+  # replace 会替换整个 ConfigMap，因此 nginx.conf / proxy.conf 在此各放一份相同副本
+  - name: lomva-nginx-config
+    behavior: replace
+    files:
+      - nginx.conf=config/nginx/nginx.conf
+      - proxy.conf=config/nginx/proxy.conf
+      - default.conf=config/nginx/default.conf
+
+# 子路径配置不监听根路径，readiness 探针改探子路径首页
+patches:
+  - target:
+      kind: Deployment
+      name: nginx
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
+        value: /lomva/

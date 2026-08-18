@@ -3,8 +3,11 @@ kind: Kustomization
 
 # 本地 kind 验证环境：base + 集群内自建 PostgreSQL（可选组件）
 # 用法：kind create cluster --name lomva && kubectl apply -k k8s/overlays/local
+namespace: qa-ai
+
 resources:
   - ../../base
+  - namespace.yaml
 
 components:
   - ../../components/incluster-postgres

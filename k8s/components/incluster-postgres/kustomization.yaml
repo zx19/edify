@@ -2,12 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 # 集群内自建 PostgreSQL（可选组件）：
-# - base 引用它，供 kind 本地验证等无外部数据库的场景使用
-# - overlays/tke 不引用，DB_HOST 指向外部 TencentDB
-# 如需在 tke 改回集群内自建：在 overlays/tke/kustomization.yaml 加
+# - overlays/local 引用它，供 kind 本地验证使用
+# - overlays/qa（外部自建 PG）与 overlays/prod（TencentDB）均不引用
+# 如某环境需改回集群内自建：在该环境的 kustomization.yaml 加
 #   components:
 #     - ../../components/incluster-postgres
-# 并把 overlays/tke/config/external-services.env 里的 DB_HOST 改回 postgres
+# 并把该环境 config/external-services.env 里的 DB_HOST 改回 postgres
 
 resources:
   - postgres.yaml

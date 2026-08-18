@@ -113,6 +113,11 @@ worker、worker_beat 与 api 共用 dify-api 镜像（不同启动命令），�
 3. 创建应用发一条消息跑通（验证 api → postgres / redis / weaviate / plugin_daemon 链路）
 4. README 附常见问题排查表（镜像拉取、PVC Pending、Init 失败等）
 
+## 修订记录
+
+- 2026-08-17：对外地址定为 `https://qa-xai.xingshulin.com/lomva`（子路径）；集群实为 nginx-ingress 共享 CLB（非 qcloud CLB Ingress）；数据库改名 `lomva` / `lomva_plugin`；部署资源前缀统一 `lomva-`；目录定为顶层 `k8s/`
+- 2026-08-18：环境拆分三层结构——`overlays/subpath`（子路径中间层）、`overlays/qa`（测试：外部自建 PG、qa-ai）、`overlays/prod`（线上：TencentDB PG、prod-ai、域名占位）、`overlays/local`（kind + 唯一引用 incluster-postgres 组件）；namespace 对象随 overlay 走；中间件默认外置，自建 PG 仅为可选组件
+
 ## 风险与缓解
 
 | 风险 | 缓解 |
