@@ -5,7 +5,6 @@ namespace: qa-ai
 
 resources:
   - namespace.yaml
-  - middleware/postgres.yaml
   - middleware/redis.yaml
   - middleware/weaviate.yaml
   - proxy/ssrf-proxy.yaml
@@ -21,6 +20,7 @@ resources:
   - app/web.yaml
   - app/agent-backend.yaml
   - gateway/nginx.yaml
+
 
 configMapGenerator:
   - name: lomva-config

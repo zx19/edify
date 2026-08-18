@@ -2,8 +2,10 @@
 
 本目录提供 edify（Dify）的 Kubernetes 部署清单，基于 Kustomize：
 
-- `base/`：全部组件清单（中间件集群内自建：PostgreSQL / Redis / Weaviate）
-- `overlays/tke/`：腾讯云 TKE 环境（CLB Ingress、TCR 镜像替换示例）
+- `base/`：全部组件清单（Redis / Weaviate 集群内自建；PostgreSQL 不在 base 中，见下）
+- `components/incluster-postgres/`：集群内自建 PostgreSQL（kustomize Component，可选件）
+- `overlays/tke/`：腾讯云 TKE 环境（**默认使用外部 PG**、nginx-ingress CLB、镜像替换示例）
+- `overlays/local/`：本地 kind 验证环境（base + 集群内自建 PG）
 
 组件（与 `docker/docker-compose.yaml` 默认组件集一致）：nginx（入口）、api、api-websocket、worker、worker-beat、web、agent-backend、plugin-daemon、sandbox、local-sandbox、ssrf-proxy、agent-ssrf-proxy、postgres、redis、weaviate、init-permissions（Job）。全部部署在命名空间 `qa-ai`。
 
@@ -17,12 +19,13 @@
 
 ```bash
 kind create cluster --name lomva
-kubectl apply -k k8s/base
+kubectl apply -k k8s/overlays/local
 kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s
 kubectl -n qa-ai port-forward svc/nginx 8080:80
 ```
 
 打开 http://localhost:8080/install 创建管理员。验证完 `kind delete cluster --name lomva`。
+（也可用脚本：`OVERLAY=k8s/overlays/local SMOKE_PATH= ./k8s/scripts/deploy.sh`）
 
 ## TKE 部署（https://qa-xai.xingshulin.com/lomva）
 
@@ -31,11 +34,14 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 `overlays/tke/config/nginx/default.conf`（剥前缀转发 api，保留前缀转发 web）。
 
 1. **修改 Secret（必须）**：编辑 `base/config/lomva-secret.env`，更换所有开发默认密钥
-   （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储）。
-2. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
+   （`SECRET_KEY` 可留空，api 会自动生成并持久化到共享存储；`DB_PASSWORD` 填外部 PG 的密码）。
+2. **配置外部 PostgreSQL（必须）**：编辑 `overlays/tke/config/external-services.env`，把
+   `DB_HOST` 改为 TencentDB 内网地址；并按下方「切换托管服务」一节的 SQL 建好
+   `lomva` / `lomva_plugin` 两个库和 `uuid-ossp` 扩展。
+3. **构建并推送镜像**：子路径部署要求 **web 镜像必须带 `--build-arg NEXT_PUBLIC_BASE_PATH=/lomva`
    自建**（上游官方镜像只支持根路径）。用 GitHub Actions 推 Docker Hub 或本地脚本推 TCR，
    见下文「自建镜像推送」；完成后取消 `overlays/tke/kustomization.yaml` 中 `images:` 段注释并替换为你的仓库地址。
-3. **部署**（apply + 等待就绪 + 冒烟检查，一条命令）：
+4. **部署**（apply + 等待就绪 + 冒烟检查，一条命令）：
 
    ```bash
    ./k8s/scripts/deploy.sh
@@ -43,7 +49,7 @@ kubectl -n qa-ai port-forward svc/nginx 8080:80
 
    或手动：`kubectl apply -k k8s/overlays/tke && kubectl -n qa-ai wait --for=condition=available deploy --all --timeout=600s`
 
-4. **获取入口**：本集群使用 nginx-ingress controller（共享 CLB），Ingress 创建后
+5. **获取入口**：本集群使用 nginx-ingress controller（共享 CLB），Ingress 创建后
    `kubectl -n qa-ai get ingress lomva` 的 ADDRESS 与现有 `dify-nginx-ingress` 相同——
    流量走现有共享 CLB，**不会新建 CLB，也无需改 DNS**。
    可用 `kubectl -n qa-ai port-forward svc/nginx 18080:80` 先绕过 Ingress 做冒烟验证。
@@ -118,18 +124,17 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 各组件的 wait initContainer 跟随 `DB_HOST`/`DB_PORT` 配置，切换外部数据库无需改 YAML。
 
-- **TencentDB for PostgreSQL**（首次部署，无数据迁移负担）：
-  1. 开通实例（建议 PG 15/16，与 TKE 同 VPC；安全组放行 pod/节点网段）
-  2. 用高权限账号在实例上建两个库：`lomva`（主库）、`lomva_plugin`（plugin-daemon 用；托管账号不一定有 CREATEDB 权限，手动建稳妥），并在主库内预建扩展：
-     ```sql
-     CREATE DATABASE lomva OWNER <应用账号>;
-     CREATE DATABASE lomva_plugin OWNER <应用账号>;
-     \c lomva
-     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   -- 主库 init 迁移依赖，扩展是库级的
-     ```
-  3. `lomva-config.env`：`DB_HOST`=内网地址、`DB_PORT`（默认 5432）、按需调 `DB_USERNAME`；`lomva-secret.env`：`DB_PASSWORD`
-  4. 从 `base/kustomization.yaml` 的 resources 删除 `- middleware/postgres.yaml`（文件可一并删除）
-  5. 正常部署即可，api 首次启动会自动在空库上建表（migration）
+- **PostgreSQL**：tke overlay **默认就是外部 PG**（`overlays/tke/config/external-services.env` 填地址）。
+  用高权限账号在实例上建两个库并在主库预建扩展：
+  ```sql
+  CREATE DATABASE lomva OWNER <应用账号>;
+  CREATE DATABASE lomva_plugin OWNER <应用账号>;
+  \c lomva
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";   -- 主库 init 迁移依赖，扩展是库级的
+  ```
+  如需在 tke 改回集群内自建 PG：给 `overlays/tke/kustomization.yaml` 加
+  `components: [- ../../components/incluster-postgres]`，并把 `external-services.env` 的
+  `DB_HOST` 改回 `postgres`。
 - **TencentDB for Redis**：删除 `middleware/redis.yaml`，更新 `REDIS_HOST` 及
   `REDIS_PASSWORD`、`CELERY_BROKER_URL`、`DIFY_AGENT_REDIS_URL`。
 - **COS 对象存储**：`lomva-config.env` 设 `STORAGE_TYPE=tencent_cos`，补充

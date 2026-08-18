@@ -9,7 +9,7 @@ set -euo pipefail
 
 OVERLAY="${OVERLAY:-k8s/overlays/tke}"
 NAMESPACE=qa-ai
-SMOKE_PATH="${SMOKE_PATH:-/lomva}"   # 不带尾斜杠；base（根路径）验证时设为空字符串
+SMOKE_PATH="${SMOKE_PATH-/lomva}"   # 不带尾斜杠；overlays/local（根路径）验证时设为空字符串
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT"
@@ -26,7 +26,10 @@ kubectl apply -k "$OVERLAY"
 echo "==> 等待 init Job 与有状态组件"
 kubectl -n "$NAMESPACE" wait --for=condition=complete job/init-permissions --timeout=300s
 for sts in postgres redis weaviate; do
-  kubectl -n "$NAMESPACE" rollout status "statefulset/$sts" --timeout=300s
+  # postgres 为可选组件（tke overlay 用外部 PG，集群内无此 StatefulSet）
+  if kubectl -n "$NAMESPACE" get statefulset "$sts" >/dev/null 2>&1; then
+    kubectl -n "$NAMESPACE" rollout status "statefulset/$sts" --timeout=300s
+  fi
 done
 
 echo "==> 等待全部 Deployment（api 首次 migration 较慢，最长 10 分钟）"

@@ -11,6 +11,7 @@ configMapGenerator:
     behavior: merge
     envs:
       - config/public-urls.env
+      - config/external-services.env
   - name: lomva-web-config
     behavior: merge
     envs:

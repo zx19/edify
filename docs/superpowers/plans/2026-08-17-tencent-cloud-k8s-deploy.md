@@ -2350,6 +2350,10 @@ git commit -m "docs(deploy): add TKE deployment guide"
 
 - Task 7 修订：按真实域名改为子路径部署（见 Task 7 的修订块）
 - 新增 `k8s/scripts/build-images.sh`（4 个仓库镜像构建 + 2 个上游镜像转推 + 推 TCR；web 自动带 `NEXT_PUBLIC_BASE_PATH=/lomva`）与 `k8s/scripts/deploy.sh`（集群确认 → apply → rollout 等待 → port-forward 冒烟检查），README 相应章节已改为脚本优先
+- 新增 `.github/workflows/lomva-build-push.yml`：手动触发构建 4 个镜像推 Docker Hub（上游 build-push.yml 限定了 langgenius/dify 仓库 + Depot runner，无法复用）
+- 数据库改名：主库 `lomva`、plugin 库 `lomva_plugin`（纯 env，无代码改动；主库需 `uuid-ossp` 扩展）
+- PostgreSQL 外置化（QA 用外部 PG）：`postgres.yaml` 从 base 移到 `k8s/components/incluster-postgres/`（kustomize Component）；`overlays/local`（kind 验证）引用该组件，`overlays/tke` 不引用并通过 `config/external-services.env` 合并外部 `DB_HOST`/`DB_PORT`；wait initContainer 已改为跟随 `DB_HOST` 配置；deploy.sh 的 StatefulSet 等待改为按存在性跳过
+- Ingress 修正：集群实际为 nginx-ingress controller（共享 CLB），非 TKE qcloud；补充 proxy-body-size 与 SSE 超时注解
 
 ## Self-Review 记录
 
