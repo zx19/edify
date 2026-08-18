@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssrf-proxy
+  name: lomva-ssrf-proxy
   labels:
     app: ssrf-proxy
 spec:

@@ -19,7 +19,7 @@ configMapGenerator:
 patches:
   - target:
       kind: Deployment
-      name: nginx
+      name: lomva-nginx
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/readinessProbe/httpGet/path

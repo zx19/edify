@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: prod-ai   # 与 kustomization.yaml 的 namespace 保持一致，按需修改
-  labels:
-    app.kubernetes.io/name: lomva

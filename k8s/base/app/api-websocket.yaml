@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-websocket
+  name: lomva-api-websocket
   labels:
     app: api-websocket
 spec:

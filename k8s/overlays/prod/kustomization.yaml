@@ -8,7 +8,6 @@ namespace: prod-ai   # 按需修改（线上命名空间；若线上在独立集
 
 resources:
   - ../subpath
-  - namespace.yaml
   - ingress.yaml
 
 configMapGenerator:
@@ -27,6 +26,15 @@ secretGenerator:
     behavior: merge
     envs:
       - config/secret.env
+
+# 线上集群使用 prod-cbs 存储类（对全部 PVC 生效，包括可选组件带入的）
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+    patch: |-
+      - op: add
+        path: /spec/storageClassName
+        value: prod-cbs
 
 # 自建镜像推送后取消注释并替换仓库地址（示例见 overlays/qa/kustomization.yaml）
 # images: []

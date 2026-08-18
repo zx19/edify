@@ -188,6 +188,7 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 ## 存储说明
 
 默认 6 个 PVC 全部走集群默认 StorageClass（TKE 为 CBS，RWO）。注意 CBS 是块存储，
+**单盘最小 10Gi**（所有 PVC 已按此下限设置，调小会 provisioning 失败）；
 多个 Pod 挂同一 RWO 卷时会被调度到同一节点（`lomva-app-storage` 被 api/worker/api-websocket
 共享）。多节点生产环境建议：改用 CFS（文件存储，支持 RWX）建 StorageClass，
 或把对象存储切到腾讯云 COS（见下节）。调整容量：编辑对应 PVC 的 `storage` 后重新 apply
@@ -230,7 +231,7 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 | 工作流协作不生效（多人编辑无同步） | 确认 `/socket.io/` 未被同 host 其他 Ingress 占用：`kubectl -n qa-ai describe ingress lomva` 看是否有冲突事件（nginx-ingress 对重复 host+path 取创建时间最老者） |
 | 上传文件报 413 | Ingress 的 `proxy-body-size` 注解未生效；确认注解值 ≥ 应用上传上限 |
 | Pod `ImagePullBackOff` | TKE 拉 Docker Hub 慢/限流：改用上方 TCR 流程，或为集群配置镜像加速 |
-| PVC 一直 `Pending` | `kubectl get sc` 确认存在 default StorageClass；TKE 默认有 `cbs`，kind 为 `standard` |
+| PVC 一直 `Pending` | `kubectl -n qa-ai describe pvc <名>` 看 Events：`disk size is invalid` = 低于 CBS 10Gi 下限；`storageclass not found` 等 = `kubectl get sc` 确认默认类（TKE 一般为 `cbs`，kind 为 `standard`） |
 | api 一直 `Init:0/2` | 在等 postgres/redis 就绪或 init-permissions Job：`kubectl -n qa-ai logs job/init-permissions` |
 | api `CrashLoopBackOff` | `kubectl -n qa-ai logs deploy/api`；首次启动 migration 需几分钟，startupProbe 已兜底 |
 | local-sandbox 报 Landlock 相关错误 | 节点内核 < 5.13 不支持：把 `runtime/local-sandbox.yaml` 的 `SHELLCTL_ENABLE_PATH_ISOLATION` 改为 `"false"` |

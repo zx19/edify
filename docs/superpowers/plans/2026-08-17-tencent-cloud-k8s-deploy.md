@@ -51,11 +51,13 @@
 | PVC | 挂载点 | 使用方 |
 |---|---|---|
 | `lomva-postgres-data` (10Gi) | /var/lib/postgresql/data | postgres |
-| `lomva-redis-data` (2Gi) | /data | redis |
+| `lomva-redis-data` (10Gi) | /data | redis |
 | `lomva-weaviate-data` (10Gi) | /var/lib/weaviate | weaviate |
-| `lomva-plugin-storage` (5Gi) | /app/storage | plugin-daemon |
+| `lomva-plugin-storage` (10Gi) | /app/storage | plugin-daemon |
 | `lomva-app-storage` (10Gi) | /app/api/storage | api/worker/api-websocket/init-permissions Job |
-| `lomva-sandbox-deps` (2Gi) | /dependencies | sandbox |
+| `lomva-sandbox-deps` (10Gi) | /dependencies | sandbox |
+
+（2026-08-18 修订：全部提至 10Gi——TKE CBS 单盘最小 10Gi，低于下限 provisioning 报 `disk size is invalid`）
 
 ---
 

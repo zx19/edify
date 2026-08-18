@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: agent-backend
+  name: lomva-agent-backend
   labels:
     app: agent-backend
 spec:

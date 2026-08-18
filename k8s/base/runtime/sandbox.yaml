@@ -6,12 +6,12 @@ spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi   # TKE CBS 最小 10Gi（[10, 32000]），勿调小
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sandbox
+  name: lomva-sandbox
   labels:
     app: sandbox
 spec:
