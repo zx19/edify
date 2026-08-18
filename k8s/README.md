@@ -242,6 +242,12 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 - 真实机密只放 `overlays/<env>/config/secret.env`（**已 gitignore**）；git 里的
   `base/config/lomva-secret.env` 是上游公开默认值、`secret.env.example` 是占位模板
 - 误提交补救：若真实机密已进 git 历史，仅删文件不够，需改写历史（git filter-repo）并更换该机密
+- 密钥一致性分组（自定义时必须同值修改，当前默认值已保证一致）：
+  - `REDIS_PASSWORD` = `CELERY_BROKER_URL` 与 `DIFY_AGENT_REDIS_URL` 中的密码段（3 处）
+  - `INNER_API_KEY_FOR_PLUGIN` = `PLUGIN_DIFY_INNER_API_KEY` = `DIFY_AGENT_INNER_API_KEY`
+  - `AGENT_BACKEND_API_TOKEN` = `DIFY_AGENT_API_TOKEN`
+  - `SECRET_KEY` 留空则 api 自动生成并持久化到共享 PVC（api/worker/api-websocket 一致）；
+    更换它会使数据库中已加密存储的模型凭据不可读，需重新录入
 - 本清单未配 NetworkPolicy（compose 的网络隔离未翻译到 K8s）；生产建议为
   ssrf-proxy / local-sandbox 增加 NetworkPolicy 限制出向流量
 
