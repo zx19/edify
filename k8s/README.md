@@ -5,9 +5,9 @@
 - `base/`：全部组件清单（Redis / Weaviate 集群内自建；不含 namespace 与 PostgreSQL）
 - `components/incluster-postgres/`：集群内自建 PostgreSQL（kustomize Component，可选件）
 - `overlays/subpath/`：`/lomva` 子路径部署的中间层（nginx 路由替换 + 探针修正），**不直接部署**，供 qa/prod 引用
-- `overlays/qa/`：**测试环境**（`qa-xai.xingshulin.com/lomva`，外部自建 PG，命名空间 `qa-ai`）
-- `overlays/prod/`：**线上环境**（外部 TencentDB PG，命名空间 `prod-ai`；域名等为占位符，部署前必改）
-- `overlays/local/`：本地 kind 验证环境（base + 集群内自建 PG，命名空间 `qa-ai`）
+- `overlays/qa/`：**测试环境**（`qa-xai.xingshulin.com/lomva`，外部自建 PG，命名空间 `qa-ai-lomva`）
+- `overlays/prod/`：**线上环境**（外部 TencentDB PG，命名空间 `prod-ai-lomva`；域名等为占位符，部署前必改）
+- `overlays/local/`：本地 kind 验证环境（base + 集群内自建 PG，命名空间 `qa-ai-lomva`）
 
 组件（与 `docker/docker-compose.yaml` 默认组件集一致）：nginx（入口）、api、api-websocket、worker、worker-beat、web、agent-backend、plugin-daemon、sandbox、local-sandbox、ssrf-proxy、agent-ssrf-proxy、postgres（仅 local）、redis、weaviate、init-permissions（Job）。
 
@@ -71,12 +71,12 @@ kubectl -n qa-ai-lomva port-forward svc/nginx 8080:80
 
 与 QA 同骨架，差异与额外要求：
 
-1. **按「修改配置」填齐 prod 占位**：namespace（默认 `prod-ai`）、域名（ingress.yaml +
+1. **按「修改配置」填齐 prod 占位**：namespace（默认 `prod-ai-lomva`）、域名（ingress.yaml +
    `config/public-urls.env` + `config/web-public.env`）、`external-services.env`（TencentDB 地址）、
    `secret.env`（由 example 复制，真实密码）、`images:` 仓库地址
 2. **TencentDB 侧准备**：建库 SQL 同 QA；**确认自动备份已开启**（控制台默认开，上线前手动做一次备份点）
 3. **选低峰期**，提前通知；如线上在独立集群，先确认 kubectl context
-4. 分阶段上线与验证清单同 QA（`OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh`）
+4. 分阶段上线与验证清单同 QA（`OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai-lomva ./k8s/scripts/deploy.sh`）
 
 ## 回退方案
 
@@ -85,7 +85,7 @@ kubectl -n qa-ai-lomva port-forward svc/nginx 8080:80
 ### 1. 快速止血：摘流量（秒级，最常用）
 
 ```bash
-kubectl -n qa-ai-lomva delete ingress lomva        # prod 换 -n prod-ai
+kubectl -n qa-ai-lomva delete ingress lomva        # prod 换 -n prod-ai-lomva
 ```
 
 外部请求立即不再进入本栈（共享域名上其他应用不受影响），Pod 与数据原样保留，排查完

@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# 注意：namespace 由各环境 overlay 设定（qa-ai-lomva / prod-ai），base 不设默认值
+# 注意：namespace 由各环境 overlay 设定（qa-ai-lomva / prod-ai-lomva），base 不设默认值
 
 resources:
   - middleware/redis.yaml

@@ -2356,7 +2356,7 @@ git commit -m "docs(deploy): add TKE deployment guide"
 - 数据库改名：主库 `lomva`、plugin 库 `lomva_plugin`（纯 env，无代码改动；主库需 `uuid-ossp` 扩展）
 - PostgreSQL 外置化（QA 用外部 PG）：`postgres.yaml` 从 base 移到 `k8s/components/incluster-postgres/`（kustomize Component）；`overlays/local`（kind 验证）引用该组件，`overlays/tke` 不引用并通过 `config/external-services.env` 合并外部 `DB_HOST`/`DB_PORT`；wait initContainer 已改为跟随 `DB_HOST` 配置；deploy.sh 的 StatefulSet 等待改为按存在性跳过
 - Ingress 修正：集群实际为 nginx-ingress controller（共享 CLB），非 TKE qcloud；补充 proxy-body-size 与 SSE 超时注解
-- 2026-08-18 环境拆分：`overlays/tke` 重构为三层——`overlays/subpath`（/lomva 子路径中间层：nginx 配置替换 + 探针 patch，不直接部署）、`overlays/qa`（测试：qa-xai 域名 + **外部自建 PG**、namespace qa-ai、PVC 打 `qa-cbs` 存储类）、`overlays/prod`（线上：**TencentDB PG**、namespace prod-ai、`prod-cbs`、域名占位）；namespace 对象从 base 移至各环境 overlay；`deploy.sh` 的 OVERLAY/NAMESPACE 均可传参（默认 qa）
+- 2026-08-18 环境拆分：`overlays/tke` 重构为三层——`overlays/subpath`（/lomva 子路径中间层：nginx 配置替换 + 探针 patch，不直接部署）、`overlays/qa`（测试：qa-xai 域名 + **外部自建 PG**、namespace qa-ai、PVC 打 `qa-cbs` 存储类）、`overlays/prod`（线上：**TencentDB PG**、namespace prod-ai-lomva、`prod-cbs`、域名占位）；namespace 对象从 base 移至各环境 overlay；`deploy.sh` 的 OVERLAY/NAMESPACE 均可传参（默认 qa）
 - 2026-08-18 工作负载改名：全部 Deployment/StatefulSet/Job 加 `lomva-` 前缀（pod 名可辨识），**Service 名不变**（env/nginx/squid 的 DNS 引用链零改动）；PVC 下限统一 10Gi（CBS 最小值）；真实机密文件 `secret.env` gitignore 化
 
 ## Self-Review 记录

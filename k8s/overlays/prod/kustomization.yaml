@@ -2,9 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 # 线上环境：外部 TencentDB PG。部署前必改：
-#   namespace（下方 prod-ai）、域名（ingress.yaml + config/public-urls.env + config/web-public.env）、
+#   namespace（下方 prod-ai-lomva）、域名（ingress.yaml + config/public-urls.env + config/web-public.env）、
 #   config/external-services.env（DB_HOST）、config/secret.env（DB_PASSWORD 等）、images 仓库地址
-namespace: prod-ai   # 按需修改（线上命名空间；若线上在独立集群，注意切换 kubectl context）
+namespace: prod-ai-lomva   # 按需修改（线上命名空间；若线上在独立集群，注意切换 kubectl context）
 
 resources:
   - ../subpath

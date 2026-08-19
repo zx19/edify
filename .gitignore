@@ -271,3 +271,8 @@ dify-agent-runtime/.integration-state
 
 # k8s 部署真实机密（仅本地存在；模板为同目录 secret.env.example）
 k8s/overlays/*/config/secret.env
+
+# 本地 AI 工具
+skills-lock.json
+.claude
+.agents

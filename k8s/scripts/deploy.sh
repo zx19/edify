@@ -4,7 +4,7 @@
 # 用法：
 #   ./k8s/scripts/deploy.sh            # 部署 overlays/qa（测试环境），交互确认集群
 #   ASSUME_YES=1 ./k8s/scripts/deploy.sh   # 跳过确认（CI 用）
-#   OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai ./k8s/scripts/deploy.sh   # 线上
+#   OVERLAY=k8s/overlays/prod NAMESPACE=prod-ai-lomva ./k8s/scripts/deploy.sh   # 线上
 #   OVERLAY=k8s/overlays/local SMOKE_PATH= ./k8s/scripts/deploy.sh        # 本地 kind
 set -euo pipefail
 
