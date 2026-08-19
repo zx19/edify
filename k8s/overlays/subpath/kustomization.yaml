@@ -24,3 +24,12 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
         value: /lomva/
+
+  # web 镜像按 NEXT_PUBLIC_BASE_PATH=/lomva 构建，根路径 404，探针同样改探子路径
+  - target:
+      kind: Deployment
+      name: lomva-web
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
+        value: /lomva/

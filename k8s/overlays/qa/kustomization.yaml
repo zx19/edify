@@ -34,6 +34,19 @@ patches:
         path: /spec/storageClassName
         value: qa-cbs
 
+  # 例外：app-storage 被 api/api-websocket/worker 三个 Deployment 共挂，
+  # RWO 云盘跨节点 Multi-Attach 会死锁，改用 CFS（RWX）允许多节点共挂
+  - target:
+      kind: PersistentVolumeClaim
+      name: lomva-app-storage
+    patch: |-
+      - op: replace
+        path: /spec/accessModes/0
+        value: ReadWriteMany
+      - op: replace
+        path: /spec/storageClassName
+        value: qa-cfs
+
 # 镜像来源：
 # - web 必须自建（NEXT_PUBLIC_BASE_PATH=/lomva 构建期参数），已推送 Docker Hub
 # - 其余组件沿用上游 langgenius 镜像（fork 与上游 1.16.1 无代码差异）；
