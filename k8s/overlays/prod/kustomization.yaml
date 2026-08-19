@@ -36,5 +36,19 @@ patches:
         path: /spec/storageClassName
         value: prod-cbs
 
+  # 例外：app-storage 被 api/api-websocket/worker 三个 Deployment 共挂，
+  # RWO 云盘跨节点 Multi-Attach 会死锁，改用 CFS（RWX）允许多节点共挂。
+  # 前提：线上集群需存在 prod-cfs 存储类（csi.cfs, ReadWriteMany）
+  - target:
+      kind: PersistentVolumeClaim
+      name: lomva-app-storage
+    patch: |-
+      - op: replace
+        path: /spec/accessModes/0
+        value: ReadWriteMany
+      - op: replace
+        path: /spec/storageClassName
+        value: prod-cfs
+
 # 自建镜像推送后取消注释并替换仓库地址（示例见 overlays/qa/kustomization.yaml）
 # images: []
