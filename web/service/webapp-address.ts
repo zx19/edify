@@ -1,3 +1,5 @@
+import { basePath } from '@/utils/var'
+
 const WEB_APP_ROUTE_SEGMENTS = new Set(['agent', 'chat', 'chatbot', 'completion', 'workflow'])
 const WEB_APP_SIGNIN_SEGMENTS = new Set(['webapp-signin', 'check-code', 'login'])
 
@@ -13,8 +15,16 @@ export type WebAppAddress =
 
 const normalizePath = (path: string) => (path.startsWith('/') ? path : `/${path}`)
 
+// location.pathname 包含 Next basePath（如 /lomva），解析前需剥离；否则子路径
+// 部署下解析返回 null，webapp 页面永远停在加载态
+const stripBasePath = (pathname: string): string => {
+  if (basePath && (pathname === basePath || pathname.startsWith(`${basePath}/`)))
+    return pathname.slice(basePath.length) || '/'
+  return pathname
+}
+
 export const parseWebAppAddress = (pathname: string): WebAppAddress | null => {
-  const segments = pathname.split('/').filter(Boolean)
+  const segments = stripBasePath(pathname).split('/').filter(Boolean)
   if (segments[0] === 'env') {
     const [, route, code, ...rest] = segments
     if (!route || !code || rest.length > 0 || !WEB_APP_ROUTE_SEGMENTS.has(route)) return null
