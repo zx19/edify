@@ -81,7 +81,7 @@ web 的 basePath）隔离，path≠/ 时放弃 `__Host-` 前缀（规范不允�
 - prod 部署前提：prod-cfs SC 存在；prod 集群若多 AZ 需 WFFC SC
 - 浏览器侧故障期的 301 已被永久缓存，需各端清一次站点数据
 
-## 附：构建性能分析（2026-08-20，未实施）
+## 附：构建性能分析（2026-08-20）
 
 `Build and Push Lomva Images` 的 build-web 约 9 分钟，分解（日志逐行时间戳分析）：
 
@@ -95,10 +95,10 @@ web 的 basePath）隔离，path≠/ 时放弃 `__Host-` 前缀（规范不允�
 | GHA 缓存导出 | ~218s | cache-to mode=max 导出全部中间层 |
 | 镜像推送 | ~30s | |
 
-两个可省大头：
-1. **缓存导出 218s**：`COPY . .` 每次提交都变，pnpm build 的缓存层永不命中，mode=max 导出的都是死数据。改 `mode=min`（只缓存基础层/pnpm install 层，靠 lockfile 哈希命中）预计省 150~200s。
-2. **vinext 77s**：加 build-arg（如 SKIP_VINEXT）在 Dockerfile 条件跳过，workflow 传参。需保留上游默认行为。
+两个可省大头（**2026-08-20 已实施**）：
+1. **缓存导出 218s**：`COPY . .` 每次提交都变，pnpm build 的缓存层永不命中，mode=max 导出的都是死数据 → 改 `mode=min`。
+2. **vinext 77s**：Dockerfile 加 `SKIP_VINEXT` build-arg 条件跳过（mkdir 保底 production 的 COPY），workflow 传 `SKIP_VINEXT=true`。
 
 其余：next 编译 112s 是 Turbopack 固有开销；pnpm install 已由 lockfile 缓存命中（0s）。
 
-目标：~9min -> ~4min。
+目标：~9min -> ~5min（以构建实际耗时验证）。

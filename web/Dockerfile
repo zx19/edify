@@ -42,7 +42,12 @@ COPY . .
 WORKDIR /app/web
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV pnpm_config_verify_deps_before_run=false
-RUN pnpm build && pnpm build:vinext
+# SKIP_VINEXT=true 时跳过 vinext 构建（部署默认不走 vinext，见 entrypoint.sh 的
+# EXPERIMENTAL_ENABLE_VINEXT），可省约 80s；mkdir 保底让 production 阶段的
+# COPY web/dist/standalone 不因源缺失失败
+ARG SKIP_VINEXT=false
+RUN pnpm build && \
+    if [ "$SKIP_VINEXT" = "true" ]; then mkdir -p dist/standalone; else pnpm build:vinext; fi
 
 
 # production stage
