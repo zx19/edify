@@ -270,10 +270,10 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   5. 重新构建 web 镜像后生效
 - 镜像问题
   1. 镜像放哪
-   
 - 域名 cookie
   1. xai 下已经有 dify了   cookie 问题
 - 多副本 HA 调优
 - Jenkins 问题
-- cos 存储 和 pg
-- 
+- cos 配置 和 pg
+  1. STORAGE_TYPE=tencent-cos
+- network-policy
