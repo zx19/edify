@@ -268,3 +268,12 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   3. `overlays/qa/ingress.yaml`、`overlays/prod/ingress.yaml`：删除根路径 `/socket.io/` 规则
   4. `NEXT_PUBLIC_SOCKET_URL` 保持 origin-only（`wss://qa-xai.xingshulin.com`，不能加子路径）
   5. 重新构建 web 镜像后生效
+- 镜像问题
+  1. 镜像放哪
+   
+- 域名 cookie
+  1. xai 下已经有 dify了   cookie 问题
+- 多副本 HA 调优
+- Jenkins 问题
+- cos 存储 和 pg
+- 
