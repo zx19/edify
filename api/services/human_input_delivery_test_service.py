@@ -64,10 +64,14 @@ class DeliveryTestUnsupportedError(DeliveryTestError):
 def _build_form_link(token: str | None) -> str | None:
     if not token:
         return None
+    # APP_WEB_URL 约定为 origin-only（web 侧拼 basePath）；此处直接生成完整
+    # 链接，需自行带上部署子路径前缀（与 libs/token 的 cookie path 同源）
+    from libs.token import deployment_path_prefix
+
     base_url = dify_config.APP_WEB_URL
     if not base_url:
         return None
-    return f"{base_url.rstrip('/')}/form/{token}"
+    return f"{base_url.rstrip('/')}{deployment_path_prefix()}/form/{token}"
 
 
 class DeliveryTestHandler(Protocol):

@@ -49,10 +49,14 @@ from services.workflow_run_service import WorkflowRunListArgs, WorkflowRunServic
 def _build_backstage_input_url(form_token: str | None) -> str | None:
     if not form_token:
         return None
+    # APP_WEB_URL 约定为 origin-only（web 侧拼 basePath）；此处直接生成完整
+    # 链接，需自行带上部署子路径前缀（与 libs/token 的 cookie path 同源）
+    from libs.token import deployment_path_prefix
+
     base_url = dify_config.APP_WEB_URL
     if not base_url:
         return None
-    return f"{base_url.rstrip('/')}/form/{form_token}"
+    return f"{base_url.rstrip('/')}{deployment_path_prefix()}/form/{form_token}"
 
 
 # Workflow run status choices for filtering

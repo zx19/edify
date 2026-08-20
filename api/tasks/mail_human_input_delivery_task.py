@@ -44,8 +44,12 @@ class _EmailDeliveryJob:
 
 
 def _build_form_link(token: str) -> str:
-    base_url = dify_config.APP_WEB_URL
-    return f"{base_url.rstrip('/')}/form/{token}"
+    # APP_WEB_URL 约定为 origin-only（web 侧拼 basePath）；此处直接生成完整
+    # 链接，需自行带上部署子路径前缀（与 libs/token 的 cookie path 同源）
+    from libs.token import deployment_path_prefix
+
+    base_url = dify_config.APP_WEB_URL.rstrip("/")
+    return f"{base_url}{deployment_path_prefix()}/form/{token}"
 
 
 def _parse_recipient_payload(payload: str) -> tuple[str | None, RecipientType | None]:

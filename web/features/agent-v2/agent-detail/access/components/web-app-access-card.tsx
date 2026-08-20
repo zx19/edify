@@ -16,6 +16,7 @@ import ShareQRCode from '@/app/components/base/qrcode'
 import { AccessMode } from '@/models/access-control'
 import { consoleQuery } from '@/service/client'
 import { AppModeEnum } from '@/types/app'
+import { basePath } from '@/utils/var'
 import { accessSurfaceActionClassName, AccessSurfaceCard } from './access-surface-card'
 import { WebAppAccessControlButton } from './web-app-access-control-button'
 
@@ -368,9 +369,10 @@ function getAgentWebAppUrl(agent?: AgentAppDetailWithSite) {
   const token = site?.access_token ?? site?.code
   if (!token) return ''
 
+  // app_base_url 约定为 origin-only，与其他消费点一致追加构建期 basePath
   const baseUrl =
     site?.app_base_url || (typeof window === 'undefined' ? '' : window.location.origin)
-  return `${baseUrl.replace(/\/$/, '')}/agent/${token}`
+  return `${baseUrl.replace(/\/$/, '')}${basePath}/agent/${token}`
 }
 
 function SsoBadge() {

@@ -47,17 +47,26 @@ def _cookie_domain() -> str | None:
     return domain or None
 
 
-def _cookie_path() -> str:
+def deployment_path_prefix() -> str:
     """
-    Returns the cookie path: the console API's URL path prefix for sub-path
-    deployments (e.g. https://host/lomva -> /lomva), so that multiple Dify
-    instances sharing one domain don't overwrite each other's session cookies
-    (RFC 6265 orders cookies by descending path length, so the sub-path cookie
-    wins on matching requests). Root deployments keep "/".
+    Returns the deployment sub-path prefix from CONSOLE_API_URL, e.g.
+    https://host/lomva -> "/lomva". Empty string for root deployments.
+    Used for cookie path scoping and for building absolute web links
+    (mail/form links) that must include the sub-path.
     """
     parsed = urlparse(dify_config.CONSOLE_API_URL)
-    path = (parsed.path or "").rstrip("/")
-    return path or "/"
+    return (parsed.path or "").rstrip("/")
+
+
+def _cookie_path() -> str:
+    """
+    Returns the cookie path: the deployment sub-path for sub-path deployments
+    (e.g. /lomva), so that multiple Dify instances sharing one domain don't
+    overwrite each other's session cookies (RFC 6265 orders cookies by
+    descending path length, so the sub-path cookie wins on matching requests).
+    Root deployments keep "/".
+    """
+    return deployment_path_prefix() or "/"
 
 
 def _real_cookie_name(cookie_name: str) -> str:
