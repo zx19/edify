@@ -91,12 +91,17 @@ export const DEFAULT_COMPLETION_PROMPT_CONFIG = {
 export const LOCALE_COOKIE_NAME = 'locale'
 
 const COOKIE_DOMAIN = getStringConfig(env.NEXT_PUBLIC_COOKIE_DOMAIN, '').trim()
+const BASE_PATH = getStringConfig(env.NEXT_PUBLIC_BASE_PATH, '').trim()
 export const SOCKET_URL = getStringConfig(env.NEXT_PUBLIC_SOCKET_URL, 'ws://localhost:5001').trim()
 
 export const BATCH_CONCURRENCY = env.NEXT_PUBLIC_BATCH_CONCURRENCY
 
 export const CSRF_COOKIE_NAME = () => {
   if (COOKIE_DOMAIN) return 'csrf_token'
+  // 子路径部署时 api 侧的 cookie path 为 basePath（非 /），而 __Host- 前缀按规范
+  // 必须 Path=/，此时 api 用不带前缀的 cookie 名，这里需与其保持一致
+  // （见 api/libs/token.py 的 _real_cookie_name / _cookie_path）
+  if (BASE_PATH) return 'csrf_token'
   const isSecure = API_PREFIX.startsWith('https://')
   return isSecure ? '__Host-csrf_token' : 'csrf_token'
 }

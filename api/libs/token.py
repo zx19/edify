@@ -2,6 +2,7 @@ import hmac
 import logging
 import re
 from datetime import UTC, datetime, timedelta
+from urllib.parse import urlparse
 
 from flask import Request
 from werkzeug.exceptions import Unauthorized
@@ -46,8 +47,23 @@ def _cookie_domain() -> str | None:
     return domain or None
 
 
+def _cookie_path() -> str:
+    """
+    Returns the cookie path: the console API's URL path prefix for sub-path
+    deployments (e.g. https://host/lomva -> /lomva), so that multiple Dify
+    instances sharing one domain don't overwrite each other's session cookies
+    (RFC 6265 orders cookies by descending path length, so the sub-path cookie
+    wins on matching requests). Root deployments keep "/".
+    """
+    parsed = urlparse(dify_config.CONSOLE_API_URL)
+    path = (parsed.path or "").rstrip("/")
+    return path or "/"
+
+
 def _real_cookie_name(cookie_name: str) -> str:
-    if is_secure() and _cookie_domain() is None:
+    # __Host- prefix requires Path=/ per RFC 6265bis, so it is only usable on
+    # root deployments; sub-path cookies (path != /) must use the plain name.
+    if is_secure() and _cookie_domain() is None and _cookie_path() == "/":
         return "__Host-" + cookie_name
     return cookie_name
 
@@ -117,7 +133,7 @@ def set_access_token_to_cookie(request: Request, response: Response, token: str,
         secure=is_secure(),
         samesite=samesite,
         max_age=int(dify_config.ACCESS_TOKEN_EXPIRE_MINUTES * 60),
-        path="/",
+        path=_cookie_path(),
     )
 
 
@@ -130,7 +146,7 @@ def set_refresh_token_to_cookie(request: Request, response: Response, token: str
         secure=is_secure(),
         samesite="Lax",
         max_age=int(60 * 60 * 24 * dify_config.REFRESH_TOKEN_EXPIRE_DAYS),
-        path="/",
+        path=_cookie_path(),
     )
 
 
@@ -143,7 +159,7 @@ def set_csrf_token_to_cookie(request: Request, response: Response, token: str):
         secure=is_secure(),
         samesite="Lax",
         max_age=int(60 * dify_config.ACCESS_TOKEN_EXPIRE_MINUTES),
-        path="/",
+        path=_cookie_path(),
     )
 
 
@@ -157,7 +173,7 @@ def _clear_cookie(
         _real_cookie_name(cookie_name),
         "",
         expires=0,
-        path="/",
+        path=_cookie_path(),
         domain=_cookie_domain(),
         secure=is_secure(),
         httponly=http_only,

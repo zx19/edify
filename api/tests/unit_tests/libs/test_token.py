@@ -57,6 +57,27 @@ def test_real_cookie_name_without_host_prefix_when_domain_present(monkeypatch: p
     assert token._real_cookie_name("csrf_token") == "csrf_token"
 
 
+def test_real_cookie_name_without_host_prefix_on_sub_path_deployment(monkeypatch: pytest.MonkeyPatch):
+    # 子路径部署：__Host- 前缀要求 Path=/，只能用普通名并把 path 限定为子路径
+    monkeypatch.setattr(token.dify_config, "CONSOLE_WEB_URL", "https://example.com/lomva", raising=False)
+    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://example.com/lomva", raising=False)
+    monkeypatch.setattr(token.dify_config, "COOKIE_DOMAIN", "", raising=False)
+
+    assert token._real_cookie_name("csrf_token") == "csrf_token"
+    assert token._cookie_path() == "/lomva"
+
+
+def test_cookie_path_normalization(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://example.com/lomva/", raising=False)
+    assert token._cookie_path() == "/lomva"
+
+    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://example.com", raising=False)
+    assert token._cookie_path() == "/"
+
+    monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "http://127.0.0.1:5001", raising=False)
+    assert token._cookie_path() == "/"
+
+
 def test_set_csrf_cookie_includes_domain_when_configured(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(token.dify_config, "CONSOLE_WEB_URL", "https://console.example.com", raising=False)
     monkeypatch.setattr(token.dify_config, "CONSOLE_API_URL", "https://api.example.com", raising=False)
