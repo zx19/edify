@@ -54,13 +54,13 @@ patches:
 images:
   - name: langgenius/dify-web
     newName: z123x/lomva-web
-    newTag: 1.16.1-edify
+    newTag: 1.16.1-edify-2
   - name: langgenius/dify-api
     newName: z123x/lomva-api
-    newTag: 1.16.1-edify
+    newTag: 1.16.1-edify-2
   - name: langgenius/dify-agent-backend
     newName: z123x/lomva-agent-backend
-    newTag: 1.16.1-edify
+    newTag: 1.16.1-edify-2
   - name: langgenius/dify-agent-local-sandbox
     newName: z123x/lomva-agent-local-sandbox
-    newTag: 1.16.1-edify
+    newTag: 1.16.1-edify-2
