@@ -47,11 +47,20 @@ patches:
         path: /spec/storageClassName
         value: qa-cfs
 
-# 镜像来源：
-# - web 必须自建（NEXT_PUBLIC_BASE_PATH=/lomva 构建期参数），已推送 Docker Hub
-# - 其余组件沿用上游 langgenius 镜像（fork 与上游 1.16.1 无代码差异）；
-#   若后续有代码改动，用 .github/workflows/lomva-build-push.yml 构建后在此追加对应条目
+# 镜像来源（.github/workflows/lomva-build-push.yml 手动触发构建推送）：
+# - web 必须自建（NEXT_PUBLIC_BASE_PATH=/lomva 构建期参数）
+# - api/agent-backend/agent-local-sandbox 也用自建镜像：fork 与上游 1.16.1 已有接口
+#   分叉（如 /console/api/workspaces/current/summary 仅存在于 fork），上游镜像会 404
 images:
   - name: langgenius/dify-web
     newName: z123x/lomva-web
+    newTag: 1.16.1-edify
+  - name: langgenius/dify-api
+    newName: z123x/lomva-api
+    newTag: 1.16.1-edify
+  - name: langgenius/dify-agent-backend
+    newName: z123x/lomva-agent-backend
+    newTag: 1.16.1-edify
+  - name: langgenius/dify-agent-local-sandbox
+    newName: z123x/lomva-agent-local-sandbox
     newTag: 1.16.1-edify
