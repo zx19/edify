@@ -95,10 +95,14 @@ web 的 basePath）隔离，path≠/ 时放弃 `__Host-` 前缀（规范不允�
 | GHA 缓存导出 | ~218s | cache-to mode=max 导出全部中间层 |
 | 镜像推送 | ~30s | |
 
-两个可省大头（**2026-08-20 已实施**）：
-1. **缓存导出 218s**：`COPY . .` 每次提交都变，pnpm build 的缓存层永不命中，mode=max 导出的都是死数据 → 改 `mode=min`。
-2. **vinext 77s**：Dockerfile 加 `SKIP_VINEXT` build-arg 条件跳过（mkdir 保底 production 的 COPY），workflow 传 `SKIP_VINEXT=true`。
+两个可省大头（**2026-08-20 已实施，2026-08-21 实测验证**）：
+1. **缓存导出 218s**：`COPY . .` 每次提交都变，pnpm build 的缓存层永不命中，mode=max 导出的都是死数据 → 曾试 `mode=min`，后会丢 packages 中间层缓存致 pnpm install 每次重跑，**回滚保留 mode=max**（实测 pnpm install CACHED 0s，218s 导出换 install 命中是划算的）。
+2. **vinext 77s**：Dockerfile 加 `SKIP_VINEXT` build-arg 条件跳过（mkdir 保底 production 的 COPY），workflow 传 `SKIP_VINEXT=true`。实测生效。
+3. 补充：`COPY . .` 收窄为 `web/ + packages/ + 根配置`（web 构建无需其他路径）。
 
-其余：next 编译 112s 是 Turbopack 固有开销；pnpm install 已由 lockfile 缓存命中（0s）。
+**实测（edify-3 构建）**：9min -> **7m13s**。builder 阶段 227s -> 134s（vinext 已跳过），
+缓存导出仍 210s（导出大头是 node_modules/.next 产物层而非源码上下文，收窄 COPY 对此
+收益有限）。pnpm install 全程 CACHED。下一步若继续压：registry cache 替代 GHA cache，
+或 actions/cache 托管 pnpm store 后再评估 mode=min。
 
-目标：~9min -> ~5min（以构建实际耗时验证）。
+其余：next 编译 ~110s 是 Turbopack 固有开销。
