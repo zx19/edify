@@ -19,6 +19,9 @@ resources:
   - app/web.yaml
   - app/agent-backend.yaml
   - gateway/nginx.yaml
+  # network-policy.yaml 暂不引用：当前子账号无 networkpolicies 权限，引用会导致
+  # apply -k 整体失败。拿到权限后（README 安全节三步）再把这行加回来
+  # - network-policy.yaml
 
 
 configMapGenerator:

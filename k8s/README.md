@@ -255,8 +255,17 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   - `AGENT_BACKEND_API_TOKEN` = `DIFY_AGENT_API_TOKEN`
   - `SECRET_KEY` 留空则 api 自动生成并持久化到共享 PVC（api/worker/api-websocket 一致）；
     更换它会使数据库中已加密存储的模型凭据不可读，需重新录入
-- 本清单未配 NetworkPolicy（compose 的网络隔离未翻译到 K8s）；生产建议为
-  ssrf-proxy / local-sandbox 增加 NetworkPolicy 限制出向流量
+- NetworkPolicy（`base/network-policy.yaml`，**已设计未启用**，2026-08-21 决定：
+  拿到权限后再做）：sandbox / local-sandbox 出向仅放行各自 ssrf 代理 + kube-dns，
+  代理出向全放行（内网防护由 squid ACL 承担）。清单暂未挂进 base kustomization
+  （无权限时引用会让 apply -k 整体失败）。**启用步骤**：① 管理员建 ns 级 Role
+  （仅 networkpolicies）+ RoleBinding 授权；② 临时 pod + deny-all 实测集群是否
+  真拦截（tke-eni-agent 在跑是好信号，Global Router 模式不生效）；③ 恢复
+  kustomization 引用 -> diff 预览 -> apply -> 工作流代码节点 / agent 工具出网
+  回归。**不做期间的已知暴露**：沙箱代码可无视 HTTP_PROXY 直连内网（redis/
+  weaviate/外部 PG/同集群其他业务/节点元数据），squid ACL 只管自愿走代理的
+  流量；QA 内部使用可接受，prod 对外开放前应启用。ingress 收紧与
+  redis/weaviate 白名单见「待办」
 
 ## 待办
 
@@ -296,7 +305,10 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 - **多副本 HA 调优**：依赖 COS；另含滚动部署策略（plugin-daemon 已改 Recreate，其余组件待评估）
 - **镜像仓库选址**：当前 Docker Hub `z123x/lomva-*`；是否迁 TCR 未定
 - **Jenkins 问题**：（待补充细节）
-- **NetworkPolicy**：ssrf-proxy / local-sandbox 限制出向流量（生产建议）
+- **NetworkPolicy 启用**：清单已设计（见安全节），卡在 networkpolicies 权限；
+  后续：sandbox / local-sandbox / proxy 的 ingress 收紧（先实测 kubelet probe 是否
+  被节点流量拦截，参考实现 xsldify 版有缺 DNS 放行与 probe 两坑）、
+  redis/weaviate ingress 白名单、全量 default-deny（prod 稳定后）
 - **prod 首次部署前提**：建 `prod-cfs` SC；确认 prod 集群是否多 AZ（多则建 WFFC SC）；
   填域名与 `secret.env`；`kubectl diff -k` 预览后再 apply
 - **构建提速后续**（2026-08-21 已做一轮，9min→7m13s）：缓存导出仍 210s，下一步评估

@@ -1,0 +1,109 @@
+# compose 网络隔离的 K8s 翻译：跑用户/LLM 生成代码的 sandbox 与 local-sandbox
+# 是真正的逃逸面，出向只许到各自的 ssrf 代理 + kube-dns；两个代理自身出向全放行
+# （目标不可枚举，内网防护由 squid ACL deny to_private_networks 承担）。
+#
+# 与参考实现（xsldify deploy/kubernetes/base/network-policy.yaml）的差异：
+# 1. 补 DNS 放行：egress 默认拒绝会拦掉到 kube-dns:53 的查询，sandbox 解析不了
+#    ssrf-proxy Service 名，代理不可达（参考缺此规则，属经典坑）
+# 2. ingress 收紧暂缓：kubelet readiness probe 从节点网络发起，podSelector 白名单
+#    会拦掉它（TKE 对节点->pod 流量的 enforcement 行为未实测），待实测后再加；
+#    本次只做 egress，不影响入站 probe
+# 3. 不含 redis/weaviate 的 ingress 收紧：涉及组件多（api/worker/worker-beat/
+#    api-websocket/plugin-daemon/agent-backend/init-job），漏一个即断服务，
+#    待 prod 稳定后随全量 default-deny 一起评估（README 待办）
+#
+# 前置：集群需支持 NetworkPolicy（TKE Global Router 模式不生效）且操作者有
+# networkpolicies 权限；apply 前建议按 README 流程 kubectl diff -k 预览
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lomva-sandbox-network
+spec:
+  podSelector:
+    matchLabels:
+      app: sandbox
+  policyTypes:
+    - Egress
+  egress:
+    # 用户代码的出向只能走 ssrf 代理（squid ACL 负责禁内网）
+    - to:
+        - podSelector:
+            matchLabels:
+              app: ssrf-proxy
+      ports:
+        - protocol: TCP
+          port: 3128
+    # 解析 ssrf-proxy Service 名（egress 默认拒绝会拦 DNS）
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lomva-local-sandbox-network
+spec:
+  podSelector:
+    matchLabels:
+      app: local-sandbox
+  policyTypes:
+    - Egress
+  egress:
+    # agent 运行时出向只能走 agent-ssrf 代理
+    - to:
+        - podSelector:
+            matchLabels:
+              app: agent-ssrf-proxy
+      ports:
+        - protocol: TCP
+          port: 3128
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lomva-ssrf-proxy-network
+spec:
+  podSelector:
+    matchLabels:
+      app: ssrf-proxy
+  policyTypes:
+    - Egress
+  egress:
+    # 全放行：代理目标不可枚举（LLM API、工作流 HTTP 节点等任意外网目标）
+    # 当前无行为影响（无 policy 即全放行），为将来命名空间 default-deny 预置
+    - {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lomva-agent-ssrf-proxy-network
+spec:
+  podSelector:
+    matchLabels:
+      app: agent-ssrf-proxy
+  policyTypes:
+    - Egress
+  egress:
+    - {}
