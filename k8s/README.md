@@ -248,14 +248,17 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 - 真实机密只放 `overlays/<env>/config/secret.env`（**已 gitignore**）；git 里的
   `base/config/lomva-secret.env` 是上游公开默认值、`secret.env.example` 是占位模板
-- **必须覆盖全部默认密钥（qa 也一样，2026-08-21 review 结论）**：共享集群无
+- **必须覆盖全部默认密钥（qa 已于 2026-08-21 完成轮换）**：共享集群无
   NetworkPolicy 隔离（见下条），同集群任意 pod 可直连本栈 Service；只换
   `DB_PASSWORD`/`SECRET_KEY` 时，redis/weaviate/sandbox/plugin/agent 仍是上游
   公开默认值（`difyai123456` 等），等效未授权--redis 可被 FLUSHALL/注入 celery
   任务，sandbox 可用公开 key 执行任意代码，local-sandbox 的
   `DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN` 为空即无认证。覆盖时按下方一致性分组
   同值修改；换 redis 密码需同时更新 `CELERY_BROKER_URL`/`DIFY_AGENT_REDIS_URL`
-  两个连接串，并滚动重启 redis 与全部使用方
+  两个连接串，并滚动重启 redis 与全部使用方。**注意
+  `DIFY_AGENT_SERVER_SECRET_KEY` 的格式：无填充 base64url 且解码后恰为 32 字节**
+  （`openssl rand -base64 32 | tr '+/' '-_' | tr -d '='`），hex/普通 base64 都会让
+  agent-backend 启动即 ValidationError
 - 误提交补救：若真实机密已进 git 历史，仅删文件不够，需改写历史（git filter-repo）并更换该机密
 - 密钥一致性分组（自定义时必须同值修改，当前默认值已保证一致）：
   - `REDIS_PASSWORD` = `CELERY_BROKER_URL` 与 `DIFY_AGENT_REDIS_URL` 中的密码段（3 处）
@@ -321,3 +324,28 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   `type=registry` 缓存（Docker Hub buildcache tag）替代 GHA cache
 - **浏览器缓存残留**：故障期 nginx 的 301（绝对 http Location）被浏览器永久缓存，
   各端需清一次站点数据
+
+### 2026-08-21 全量 review 待修项（按建议顺序）
+
+- **F2 sandbox 补 `strategy: Recreate`**：`lomva-sandbox-deps` 是 CBS RWO，Deployment
+  默认 RollingUpdate，滚动时新 pod 落别的节点会 Multi-Attach 卡死（plugin-daemon
+  同款事故，plugin 已修 sandbox 漏了）
+- **F6 redis 加持久化**：`redis-server` 补 `--appendonly yes`，否则 pod 重启丢
+  celery 队列/缓存/协作会话
+- **F3 api-websocket 显式 `MIGRATION_ENABLED=false`**：当前与 api 共享 true，
+  冷启动两个入口并发 `flask db upgrade`，竞态未定义；也是 api 多副本的前置
+  （migration 应收敛为独立 Job）
+- **F4 prod 预填自建镜像**：prod kustomization `images:` 整段注释着，直接 apply
+  会拉上游 langgenius 镜像踩已知的接口分叉 404 + web 无 basePath 坑；
+  预填 `z123x/lomva-*` 占位 tag
+- **F5 容器 resources**：全组件无 requests/limits（BestEffort QoS，共享集群节点
+  有压力时最先被驱逐）；prod 上线前至少给 api/worker/web/nginx/plugin-daemon
+  配 requests
+- **F7 sandbox config 硬化**：`config/sandbox/config.yaml` 的 `debug: True` 改
+  False、`key: dify-sandbox` 硬编码与 secret 双来源易漂移、`worker_timeout: 5`
+  与 env `WORKER_TIMEOUT=15` 冲突
+- **F8 注释漂移**：qa/prod `web-public.env` 的 socket.io 注释还是旧方案（已随
+  9f2fd0549c 改为 basePath 派生）；subpath kustomization 注释说 proxy.conf 是
+  "相同副本"，实际 subpath 版改了 X-Forwarded-Proto（照注释同步会复现
+  Mixed Content 事故）
+- **F9 prod 决策项**：CORS `*` 收敛；api `SERVER_WORKER_CONNECTIONS=10` 容量评估
