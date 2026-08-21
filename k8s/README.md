@@ -248,6 +248,14 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 - 真实机密只放 `overlays/<env>/config/secret.env`（**已 gitignore**）；git 里的
   `base/config/lomva-secret.env` 是上游公开默认值、`secret.env.example` 是占位模板
+- **必须覆盖全部默认密钥（qa 也一样，2026-08-21 review 结论）**：共享集群无
+  NetworkPolicy 隔离（见下条），同集群任意 pod 可直连本栈 Service；只换
+  `DB_PASSWORD`/`SECRET_KEY` 时，redis/weaviate/sandbox/plugin/agent 仍是上游
+  公开默认值（`difyai123456` 等），等效未授权--redis 可被 FLUSHALL/注入 celery
+  任务，sandbox 可用公开 key 执行任意代码，local-sandbox 的
+  `DIFY_AGENT_LOCAL_SANDBOX_AUTH_TOKEN` 为空即无认证。覆盖时按下方一致性分组
+  同值修改；换 redis 密码需同时更新 `CELERY_BROKER_URL`/`DIFY_AGENT_REDIS_URL`
+  两个连接串，并滚动重启 redis 与全部使用方
 - 误提交补救：若真实机密已进 git 历史，仅删文件不够，需改写历史（git filter-repo）并更换该机密
 - 密钥一致性分组（自定义时必须同值修改，当前默认值已保证一致）：
   - `REDIS_PASSWORD` = `CELERY_BROKER_URL` 与 `DIFY_AGENT_REDIS_URL` 中的密码段（3 处）
@@ -255,17 +263,15 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   - `AGENT_BACKEND_API_TOKEN` = `DIFY_AGENT_API_TOKEN`
   - `SECRET_KEY` 留空则 api 自动生成并持久化到共享 PVC（api/worker/api-websocket 一致）；
     更换它会使数据库中已加密存储的模型凭据不可读，需重新录入
-- NetworkPolicy（`base/network-policy.yaml`，**已设计未启用**，2026-08-21 决定：
-  拿到权限后再做）：sandbox / local-sandbox 出向仅放行各自 ssrf 代理 + kube-dns，
-  代理出向全放行（内网防护由 squid ACL 承担）。清单暂未挂进 base kustomization
-  （无权限时引用会让 apply -k 整体失败）。**启用步骤**：① 管理员建 ns 级 Role
-  （仅 networkpolicies）+ RoleBinding 授权；② 临时 pod + deny-all 实测集群是否
-  真拦截（tke-eni-agent 在跑是好信号，Global Router 模式不生效）；③ 恢复
-  kustomization 引用 -> diff 预览 -> apply -> 工作流代码节点 / agent 工具出网
-  回归。**不做期间的已知暴露**：沙箱代码可无视 HTTP_PROXY 直连内网（redis/
-  weaviate/外部 PG/同集群其他业务/节点元数据），squid ACL 只管自愿走代理的
-  流量；QA 内部使用可接受，prod 对外开放前应启用。ingress 收紧与
-  redis/weaviate 白名单见「待办」
+- NetworkPolicy（`base/network-policy.yaml`，**已设计、此集群不可用**，2026-08-21
+  实测结论）：sandbox / local-sandbox 出向仅放行各自 ssrf 代理 + kube-dns，代理
+  出向全放行。**qa-ai 集群拿到权限并实测：deny-all policy 选中 pod 后外网直连、
+  DNS、pod 间（redis:6379）全部照通--集群不执行 NetworkPolicy**（Global Router
+  模式；`tke-eni-agent` 在跑是假信号，混合模式也跑它）。apply 只会得到"配置成功
+  但零防护"的错觉，故清单保持不引用。**后续路径**：prod 建集群时选 VPC-CNI
+  独立网卡模式（支持 NetworkPolicy），本清单直接可用；qa 集群除非换网络插件否则
+  无解。**因此认证是当前唯一有效防线**：见下条默认凭据要求。ingress 收紧与
+  redis/weaviate 白名单的设计随清单保留，启用条件同上
 
 ## 待办
 
@@ -305,10 +311,10 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 - **多副本 HA 调优**：依赖 COS；另含滚动部署策略（plugin-daemon 已改 Recreate，其余组件待评估）
 - **镜像仓库选址**：当前 Docker Hub `z123x/lomva-*`；是否迁 TCR 未定
 - **Jenkins 问题**：（待补充细节）
-- **NetworkPolicy 启用**：清单已设计（见安全节），卡在 networkpolicies 权限；
-  后续：sandbox / local-sandbox / proxy 的 ingress 收紧（先实测 kubelet probe 是否
-  被节点流量拦截，参考实现 xsldify 版有缺 DNS 放行与 probe 两坑）、
-  redis/weaviate ingress 白名单、全量 default-deny（prod 稳定后）
+- **NetworkPolicy**：qa-ai 集群实测不执行（GR 模式，见安全节），**唯一出路是
+  prod 建集群选 VPC-CNI 后启用清单**；届时顺带评估 ingress 收紧（先实测 kubelet
+  probe 是否被节点流量拦截，参考实现 xsldify 版有缺 DNS 放行与 probe 两坑）、
+  redis/weaviate ingress 白名单、全量 default-deny
 - **prod 首次部署前提**：建 `prod-cfs` SC；确认 prod 集群是否多 AZ（多则建 WFFC SC）；
   填域名与 `secret.env`；`kubectl diff -k` 预览后再 apply
 - **构建提速后续**（2026-08-21 已做一轮，9min→7m13s）：缓存导出仍 210s，下一步评估
