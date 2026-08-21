@@ -70,12 +70,12 @@ location 组织转发。两者对"该不该有尾斜杠"的相反预期引出四
 
 ## 遗留问题（待办）
 
-### 同域名新旧 dify 的 cookie 冲突（未修复）
+### 同域名新旧 dify 的 cookie 冲突（2026-08-20 已修复，commit 8e6dd72）
 qa-xai.xingshulin.com 根路径已有旧 dify 栈。两边同一套代码、同样在 https 下无
 COOKIE_DOMAIN 时，cookie 名（`__Host-access_token` 等）、域、path(/) 完全相同，
-**会互踢会话**。
-方案（需改 fork 代码）：cookie path 按部署子路径（CONSOLE_API_URL 的路径前缀 /
-web 的 basePath）隔离，path≠/ 时放弃 `__Host-` 前缀（规范不允许），依赖 RFC 6265
+会互踢会话。
+**修复**：cookie path 按部署子路径隔离（API 从 CONSOLE_API_URL 推导 path 前缀，
+web 按 basePath 判断），path≠/ 时放弃 `__Host-` 前缀（规范不允许），依赖 RFC 6265
 的 cookie 排序（更长 path 在前）实现自动遮蔽。
 
 ### 其他

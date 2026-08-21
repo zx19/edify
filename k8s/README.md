@@ -219,7 +219,8 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 - **COS 对象存储**：`lomva-config.env` 设 `STORAGE_TYPE=tencent_cos`，补充
   `TENCENT_COS_BUCKET_NAME` / `TENCENT_COS_REGION` / `TENCENT_COS_SCHEME`，
   `lomva-secret.env` 补充 `TENCENT_COS_SECRET_ID` / `TENCENT_COS_SECRET_KEY`；
-  此后 `lomva-app-storage` PVC 仍需保留（SECRET_KEY 等本地状态用）。
+  **切换前先把 `.dify_secret_key` 与 `privkeys/` 搬进 COS**（否则已加密的模型凭据不可读），
+  稳定后 `lomva-app-storage` PVC 可删（详见「待办」COS 条）。
 
 ## 切换向量库为 pgvector（可选）
 
@@ -259,17 +260,33 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
 
 ## 待办
 
-- **socket.io 路径收进 `/lomva/`**（2026-08-17 记录，暂未实施）：当前协作 WebSocket 占用共享域名根路径
-  `/socket.io/`（因 socket.io client 的 path 写死，URL 子路径会被当作 namespace）。改为 `/lomva/socket.io/` 需要：
-  1. web 源码 `web/app/components/workflow/collaboration/core/websocket-manager.ts`：
-     `socketOptions.path` 从 `NEXT_PUBLIC_BASE_PATH` 派生（`${BASE_PATH}/socket.io`，basePath 为空时行为与上游一致）
-  2. `overlays/subpath/config/nginx/default.conf`：加 `location /lomva/socket.io/`，剥前缀转发
-     `api-websocket:5001/socket.io/`（带 Upgrade 头；服务端零改动）
-  3. `overlays/qa/ingress.yaml`、`overlays/prod/ingress.yaml`：删除根路径 `/socket.io/` 规则
-  4. `NEXT_PUBLIC_SOCKET_URL` 保持 origin-only（`wss://qa-xai.xingshulin.com`，不能加子路径）
-  5. 重新构建 web 镜像后生效
-- **COS 对象存储**（`STORAGE_TYPE` 切腾讯 COS）：prod 多副本 HA 的前置；当前 QA 用 CFS RWX，
-  prod overlay 用 prod-cfs。见 postmortem 文档存储章节。
+- ~~socket.io 路径收进 `/lomva/`~~（2026-08-21 已实施，见对应 commit）：web 端
+  `socketOptions.path` 从 `NEXT_PUBLIC_BASE_PATH` 派生；nginx 改 `location /lomva/socket.io/`
+  剥前缀转发；qa/prod ingress 删除根路径 `/socket.io/` 规则。**注意部署顺序**：
+  需与新 web 镜像同时生效（旧镜像仍请求根路径，先 apply 会导致协作功能 404 直至新镜像上线）
+- **COS 对象存储**（2026-08-21 细化方案）：api 与 plugin-daemon **同时切**腾讯 COS，
+  是 prod 多副本 HA 的前置（当前 QA app 用 CFS RWX、plugin 用 CBS RWO；prod overlay 用 prod-cfs）。
+  - app 侧：`STORAGE_TYPE=tencent_cos` + `TENCENT_COS_BUCKET_NAME` / `TENCENT_COS_REGION` / `TENCENT_COS_SCHEME`
+  - plugin 侧：`PLUGIN_STORAGE_TYPE=tencent_cos` + `PLUGIN_STORAGE_OSS_BUCKET`（桶全名须带 `-APPID`）；
+    `TENCENT_COS_SECRET_ID/KEY/REGION` 两侧同名，经 envFrom 共用；`TENCENT_COS_ENDPOINT` 可省（默认拼 myqcloud 域名）
+  - **桶策略：QA 同桶**（默认 key 前缀天然不冲突：app `upload_files/`、`privkeys/`；
+    plugin `plugin/`、`plugin_packages/`、`assets/`）**；prod 分桶**（CAM 按桶授权、生命周期/账单独立；
+    分桶且用不同密钥时，一侧需在 Deployment 容器级 env 覆盖同名 SECRET_ID/KEY）
+  - **迁移要点（易踩）**：`.dify_secret_key`（SECRET_KEY 留空时自动生成，见 `api/configs/secret_key.py`）
+    与 `privkeys/`（租户加密私钥，`api/libs/rsa.py`）都走 storage 抽象层——**必须先搬进 COS**，
+    否则新后端会重新生成 SECRET_KEY，数据库已加密的模型凭据全部不可读；
+    其余上传文件 QA 可直接丢、插件重装即可（插件安装记录在 PG，包实体在旧盘）
+  - plugin 侧顺手配 `PIP_MIRROR_URL=https://mirrors.cloud.tencent.com/pypi/simple`（重建后冷启动要重建 venv）
+  - 切换稳定后：删 `lomva-app-storage` PVC；`lomva-plugin-storage` 改 `emptyDir` 并删除 PVC；
+    plugin-daemon `strategy` 改回 RollingUpdate；api/worker 解锁多副本
+  - **prod 第一天就配 COS，不做迁移**；切换前修正「切换托管服务」节"SECRET_KEY 等本地状态用"的旧表述
+- **向量库外置**：weaviate → **pgvector**（复用外部 PG，中小规模知识库首选，步骤见「切换向量库为 pgvector」）
+  或 **Tencent VectorDB**（`VECTOR_STORE=tencent` 原生支持，大规模/高 QPS 选）；
+  决策并切换后删 `lomva-weaviate-data` PVC 与 weaviate StatefulSet
+- **日志接 CLS + 告警**（2026-08-21 教训）：pod 重建后 `kubectl logs` 即失效；plugin-daemon 曾 Init 卡死
+  17 小时无人发现。至少为「pod 长时间非 Running」「readiness 持续失败」配告警
+- **Secret 管理外置**：`secret.env` 散落在各操作机器；评估腾讯云 SSM + External Secrets Operator
+- **Redis → TencentDB for Redis**：prod 决策项（方法见「切换托管服务」），切换后删 redis StatefulSet 与 PVC
 - **多副本 HA 调优**：依赖 COS；另含滚动部署策略（plugin-daemon 已改 Recreate，其余组件待评估）
 - **镜像仓库选址**：当前 Docker Hub `z123x/lomva-*`；是否迁 TCR 未定
 - **Jenkins 问题**：（待补充细节）

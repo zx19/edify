@@ -2,6 +2,7 @@ import type { Socket } from 'socket.io-client'
 import type { DebugInfo, WebSocketConfig } from '../types/websocket'
 import { io } from 'socket.io-client'
 import { SOCKET_URL } from '@/config'
+import { basePath } from '@/utils/var'
 
 type AckArgs = unknown[]
 
@@ -74,7 +75,9 @@ export class WebSocketClient {
       transports: WebSocketConfig['transports']
       withCredentials?: boolean
     } = {
-      path: '/socket.io',
+      // socket.io client 的 path 会原样拼进请求 URL；子路径部署时用 basePath
+      // 前缀（如 /lomva/socket.io），由 nginx 剥前缀转发。basePath 为空时与上游一致
+      path: basePath ? `${basePath}/socket.io` : '/socket.io',
       transports: this.transports,
       withCredentials: this.withCredentials,
     }

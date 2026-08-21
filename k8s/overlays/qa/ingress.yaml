@@ -18,17 +18,8 @@ spec:
         paths:
           # 应用主体（子路径部署；完整 URI 透传给 nginx Service，由它剥离前缀）
           # path 不带尾斜杠：部分 controller 对 Prefix + 尾斜杠告警；Prefix 同样覆盖 /lomva 与 /lomva/...
+          # 协作 WebSocket 走 /lomva/socket.io/（web 端 path 带 basePath），不再占用根路径 /socket.io
           - path: /lomva
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  number: 80
-          # 协作 WebSocket（socket.io client 固定请求根路径，见 overlays/subpath 的 nginx default.conf）
-          # 注意：若同 host 的其他 Ingress 已声明 /socket.io，nginx-ingress 按创建时间取最老者，
-          # 本规则不生效（kubectl -n qa-ai-lomva describe ingress lomva 可看到冲突事件）
-          - path: /socket.io
             pathType: Prefix
             backend:
               service:
