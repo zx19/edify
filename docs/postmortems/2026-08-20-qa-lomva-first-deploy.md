@@ -65,7 +65,8 @@ location 组织转发。两者对"该不该有尾斜杠"的相反预期引出四
 - map 透传 ingress 的 X-Forwarded-Proto（直连时回退 $scheme）
 - `absolute_redirect off`（防御性，nginx 自身重定向一律相对 Location）
 - `/lomva/e/` 加 `proxy_redirect /e/ /lomva/e/` 补回前缀
-- 探针路径带 basePath（web/nginx 都是 `/lomva/`）
+- web 探针路径带 basePath（`/lomva/`）；nginx 探针改为自身应答的 `/healthz`
+  （原探 `/lomva/` 会代理到 web，就绪状态耦合 web 存活，属副作用）
 
 ## 遗留问题（待办）
 
