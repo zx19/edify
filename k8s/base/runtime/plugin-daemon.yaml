@@ -16,6 +16,9 @@ metadata:
     app: plugin-daemon
 spec:
   replicas: 1
+  # 单副本 + CBS RWO 卷：RollingUpdate 会因新 pod 抢不到盘而死锁（新旧并存、K8s 不自愈）
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: plugin-daemon
