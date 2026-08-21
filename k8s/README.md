@@ -264,8 +264,10 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   `socketOptions.path` 从 `NEXT_PUBLIC_BASE_PATH` 派生；nginx 改 `location /lomva/socket.io/`
   剥前缀转发；qa/prod ingress 删除根路径 `/socket.io/` 规则。**注意部署顺序**：
   需与新 web 镜像同时生效（旧镜像仍请求根路径，先 apply 会导致协作功能 404 直至新镜像上线）
-- **COS 对象存储**（2026-08-21 细化方案）：api 与 plugin-daemon **同时切**腾讯 COS，
-  是 prod 多副本 HA 的前置（当前 QA app 用 CFS RWX、plugin 用 CBS RWO；prod overlay 用 prod-cfs）。
+- **COS 对象存储**（2026-08-21 细化方案）：api 与 plugin-daemon 切腾讯 COS（当前 QA app 用 CFS RWX、
+  plugin 用 CBS RWO；prod overlay 用 prod-cfs）。**优先级：app 必做**（api/worker 多副本 HA 的前置）；
+  **plugin 建议同批顺手做、非前置**——滚动死锁已被 `strategy: Recreate` 根治，local+Recreate 是合法稳态，
+  plugin 切 COS 的剩余收益仅多副本/零停机发布；同批做的理由是当前仅装 1 个插件、试错成本最低。
   - app 侧：`STORAGE_TYPE=tencent_cos` + `TENCENT_COS_BUCKET_NAME` / `TENCENT_COS_REGION` / `TENCENT_COS_SCHEME`
   - plugin 侧：`PLUGIN_STORAGE_TYPE=tencent_cos` + `PLUGIN_STORAGE_OSS_BUCKET`（桶全名须带 `-APPID`）；
     `TENCENT_COS_SECRET_ID/KEY/REGION` 两侧同名，经 envFrom 共用；`TENCENT_COS_ENDPOINT` 可省（默认拼 myqcloud 域名）
@@ -276,9 +278,13 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
     与 `privkeys/`（租户加密私钥，`api/libs/rsa.py`）都走 storage 抽象层——**必须先搬进 COS**，
     否则新后端会重新生成 SECRET_KEY，数据库已加密的模型凭据全部不可读；
     其余上传文件 QA 可直接丢、插件重装即可（插件安装记录在 PG，包实体在旧盘）
-  - plugin 侧顺手配 `PIP_MIRROR_URL=https://mirrors.cloud.tencent.com/pypi/simple`（重建后冷启动要重建 venv）
-  - 切换稳定后：删 `lomva-app-storage` PVC；`lomva-plugin-storage` 改 `emptyDir` 并删除 PVC；
-    plugin-daemon `strategy` 改回 RollingUpdate；api/worker 解锁多副本
+  - **venv 机制（0.6.10 源码核实）**：COS 只存插件包；本地 `cwd` 是缓存——目录非空跳过解压、
+    venv 有效跳过重建、损坏自动重建（`environment.go` / `environment_python.go`）。
+    因此 **venv 重建只发生在 emptyDir 终态**（pod 重建后首次调用该插件时逐插件重建，
+    有 Redis 分布式锁防跨 pod 并发）；**保留 PVC 则切 COS 后零冷启动**，emptyDir 改造可缓到多副本之前再做
+  - plugin 侧配 `PIP_MIRROR_URL=https://mirrors.cloud.tencent.com/pypi/simple`（为 emptyDir 终态的冷启动预备）
+  - 切换稳定后：删 `lomva-app-storage` PVC；api/worker 解锁多副本。
+    终态（多副本前）：`lomva-plugin-storage` 改 `emptyDir` 并删除 PVC、plugin-daemon `strategy` 改回 RollingUpdate
   - **prod 第一天就配 COS，不做迁移**；切换前修正「切换托管服务」节"SECRET_KEY 等本地状态用"的旧表述
 - **向量库外置**：weaviate → **pgvector**（复用外部 PG，中小规模知识库首选，步骤见「切换向量库为 pgvector」）
   或 **Tencent VectorDB**（`VECTOR_STORE=tencent` 原生支持，大规模/高 QPS 选）；
