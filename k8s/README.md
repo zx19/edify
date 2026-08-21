@@ -268,12 +268,15 @@ TKE 拉取 TCR 私有镜像需配置访问凭证（TCR 控制台下发，或在�
   3. `overlays/qa/ingress.yaml`、`overlays/prod/ingress.yaml`：删除根路径 `/socket.io/` 规则
   4. `NEXT_PUBLIC_SOCKET_URL` 保持 origin-only（`wss://qa-xai.xingshulin.com`，不能加子路径）
   5. 重新构建 web 镜像后生效
-- 镜像问题
-  1. 镜像放哪
-- 域名 cookie
-  1. xai 下已经有 dify了   cookie 问题
-- 多副本 HA 调优
-- Jenkins 问题
-- cos 配置 和 pg
-  1. STORAGE_TYPE=tencent-cos
-- network-policy
+- **COS 对象存储**（`STORAGE_TYPE` 切腾讯 COS）：prod 多副本 HA 的前置；当前 QA 用 CFS RWX，
+  prod overlay 用 prod-cfs。见 postmortem 文档存储章节。
+- **多副本 HA 调优**：依赖 COS；另含滚动部署策略（plugin-daemon 已改 Recreate，其余组件待评估）
+- **镜像仓库选址**：当前 Docker Hub `z123x/lomva-*`；是否迁 TCR 未定
+- **Jenkins 问题**：（待补充细节）
+- **NetworkPolicy**：ssrf-proxy / local-sandbox 限制出向流量（生产建议）
+- **prod 首次部署前提**：建 `prod-cfs` SC；确认 prod 集群是否多 AZ（多则建 WFFC SC）；
+  填域名与 `secret.env`；`kubectl diff -k` 预览后再 apply
+- **构建提速后续**（2026-08-21 已做一轮，9min→7m13s）：缓存导出仍 210s，下一步评估
+  `type=registry` 缓存（Docker Hub buildcache tag）替代 GHA cache
+- **浏览器缓存残留**：故障期 nginx 的 301（绝对 http Location）被浏览器永久缓存，
+  各端需清一次站点数据
