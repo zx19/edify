@@ -37,7 +37,11 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 FROM base AS builder
 WORKDIR /app
 COPY --from=packages /app/ .
-COPY . .
+# 只 COPY web 构建实际需要的路径（web/ + 本地 workspace 包 + 根配置），
+# 收窄 COPY 层并减少 mode=max 的缓存导出量；api/、e2e/、docker/ 等不进入此层
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages ./packages
+COPY web ./web
 
 WORKDIR /app/web
 ENV NODE_OPTIONS="--max-old-space-size=4096"
