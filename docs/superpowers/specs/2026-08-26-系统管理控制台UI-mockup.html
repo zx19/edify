@@ -178,6 +178,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16 14.7c2.3.2 3.9 1.5 4.5 4"/></svg>
         成员
       </button>
+      <button class="nav-item" data-view="integrations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
+        插件与工具
+      </button>
+      <button class="nav-item" data-view="providers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
+        模型提供商
+      </button>
       <button class="nav-item" data-view="admins">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
         系统管理员
@@ -255,6 +263,53 @@
       </div>
     </section>
 
+    <!-- ====== 插件与工具（托管） ====== -->
+    <section class="page" id="view-integrations" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">插件与工具</div>
+          <div class="page-desc">统一安装并按空间分发：安装时选择「全部空间」或指定空间，升级可对托管空间一键推送。</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-install')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          安装插件
+        </button>
+      </div>
+      <div class="toolbar">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="搜索插件…">
+        </div>
+        <select class="select"><option>全部类型</option><option>工具</option><option>模型</option><option>数据源</option><option>触发器</option><option>Agent 策略</option></select>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>插件</th><th>类型</th><th>版本</th><th>适用范围</th><th>分发状态</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody id="integration-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====== 模型提供商（组织级凭据） ====== -->
+    <section class="page" id="view-providers" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">模型提供商</div>
+          <div class="page-desc">组织级凭据：配置一次、按范围分配到空间；空间无自有凭据时自动回退使用，凭据全程掩码。</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-credential')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          添加凭据
+        </button>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>提供商</th><th>凭据</th><th>状态</th><th>分配范围</th><th>更新时间</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody id="provider-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- ====== 系统管理员 ====== -->
     <section class="page" id="view-admins" hidden>
       <div class="page-head">
@@ -316,6 +371,7 @@
   </div>
   <div class="drawer-tabs">
     <button class="drawer-tab active">成员</button>
+    <button class="drawer-tab">集成</button>
     <button class="drawer-tab">基本信息</button>
   </div>
   <div class="drawer-body">
@@ -378,6 +434,63 @@
   </div>
 </div>
 
+<!-- ============ 弹窗：安装插件 ============ -->
+<div class="modal-wrap" id="modal-install">
+  <div class="modal">
+    <h3>安装插件</h3>
+    <div class="modal-sub">安装后按所选范围分发到各工作空间。</div>
+    <div class="field">
+      <label>插件包</label>
+      <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:18px;text-align:center;color:var(--text-3);font-size:12.5px;background:#FAFBFC">
+        拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+      </div>
+    </div>
+    <div class="field">
+      <label>适用范围</label>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="scope" checked> 全部空间（含未来新建空间）
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="scope"> 指定空间
+        </label>
+        <select class="select" multiple size="3" style="height:auto;padding:6px 8px">
+          <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">安装并分发</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：添加凭据 ============ -->
+<div class="modal-wrap" id="modal-credential">
+  <div class="modal">
+    <h3>添加模型凭据</h3>
+    <div class="modal-sub">组织级凭据仅保存服务端、全程掩码，空间无自有凭据时自动回退使用。</div>
+    <div class="field">
+      <label>提供商</label>
+      <select class="select" style="width:100%"><option>OpenAI</option><option>Azure OpenAI</option><option>Anthropic</option><option>通义千问</option><option>Ollama（本地）</option></select>
+    </div>
+    <div class="field">
+      <label>API Key</label>
+      <input class="input" type="password" placeholder="sk-…">
+      <div class="hint">保存后仅以脱敏形式展示（sk-…****），任何人不可再读取明文。</div>
+    </div>
+    <div class="field">
+      <label>分配范围</label>
+      <select class="select" style="width:100%"><option>全部空间</option><option>指定空间…</option></select>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">保存凭据</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 弹窗：归档确认 ============ -->
 <div class="modal-wrap" id="modal-archive">
   <div class="modal">
@@ -413,6 +526,19 @@ const admins = [
   { name:'张伟', mail:'zhangwei@x.com', source:'env', by:'—', time:'2026-08-01', c:0 },
   { name:'李娜', mail:'lina@x.com', source:'grant', by:'张伟', time:'2026-08-12', c:1 },
   { name:'周杰', mail:'zhoujie@x.com', source:'grant', by:'张伟', time:'2026-08-20', c:2 },
+];
+const integrations = [
+  { name:'Google Search', type:'工具', ver:'1.3.2', scope:'all', n:12, ok:'12/12', c:0 },
+  { name:'Notion', type:'数据源', ver:'0.9.5', scope:'spec', n:3, ok:'3/3', c:1 },
+  { name:'GitHub', type:'工具', ver:'2.1.0', scope:'all', n:12, ok:'11/12 · 1 失败', c:2 },
+  { name:'钉钉机器人', type:'触发器', ver:'0.4.1', scope:'spec', n:2, ok:'2/2', c:3 },
+  { name:'FunctionCall 策略', type:'Agent 策略', ver:'1.0.0', scope:'all', n:12, ok:'12/12', c:4 },
+];
+const providers = [
+  { name:'Azure OpenAI', key:'sk-…a9F2', status:'正常', scope:'全部空间', time:'2026-08-20', c:0 },
+  { name:'通义千问', key:'sk-…77Qz', status:'正常', scope:'指定空间 · 3', time:'2026-08-15', c:2 },
+  { name:'Ollama（内网）', key:'http://ollama.in:11434', status:'正常', scope:'研发部', time:'2026-08-02', c:1 },
+  { name:'Anthropic', key:'sk-…X81c', status:'配额不足', scope:'全部空间', time:'2026-07-28', c:3 },
 ];
 const audits = [
   { t:'2026-08-26 10:42:18', who:'张伟', act:'授予系统管理员', target:'周杰 (zhoujie@x.com)', d:'{\n  "action": "system_admin.grant",\n  "actor": "zhangwei@x.com",\n  "target_account": "zhoujie@x.com",\n  "confirmed_by": "password"\n}' },
@@ -460,6 +586,27 @@ document.getElementById('admin-rows').innerHTML = admins.map((a,i)=>`
         : `<button class="link-btn danger" onclick="openModal('modal-grant')">撤销</button>`}</div></td>
   </tr>`).join('');
 
+const typePill = t => ({'工具':'pill-blue','数据源':'pill-green','触发器':'pill-violet','Agent 策略':'pill-gray'}[t]||'pill-gray');
+document.getElementById('integration-rows').innerHTML = integrations.map(g=>`
+  <tr>
+    <td><div class="cell-main"><div class="ws-icon" style="background:${palette[g.c]}">${g.name[0]}</div><div><div class="cell-title">${g.name}</div></div></div></td>
+    <td><span class="pill ${typePill(g.type)}">${g.type}</span></td>
+    <td class="mono">v${g.ver}</td>
+    <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-blue">指定空间 · ${g.n}</span>`}</td>
+    <td class="muted">${g.ok}${g.ok.includes('失败') ? ' <span class="pill" style="background:var(--danger-soft);color:var(--danger)">部分失败</span>' : ''}</td>
+    <td><div class="row-actions"><button class="link-btn">改范围</button><button class="link-btn">推送升级</button><button class="link-btn danger">回收</button></div></td>
+  </tr>`).join('');
+
+document.getElementById('provider-rows').innerHTML = providers.map(p=>`
+  <tr>
+    <td><div class="cell-main"><div class="ws-icon" style="background:${palette[p.c]}">${p.name[0]}</div><div class="cell-title">${p.name}</div></div></td>
+    <td class="mono">${p.key}</td>
+    <td>${p.status==='正常' ? `<span class="pill pill-green"><span class="dot"></span>正常</span>` : `<span class="pill" style="background:#FFFAEB;color:#B54708"><span class="dot"></span>${p.status}</span>`}</td>
+    <td class="muted">${p.scope}</td>
+    <td class="muted">${p.time}</td>
+    <td><div class="row-actions"><button class="link-btn">编辑</button><button class="link-btn">分配空间</button><button class="link-btn danger">删除</button></div></td>
+  </tr>`).join('');
+
 document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="clickable" id="audit-${i}" onclick="toggleAudit(${i})">
     <td><span class="chev">›</span></td>
@@ -471,7 +618,7 @@ document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="audit-detail" id="audit-d-${i}" hidden><td></td><td colspan="4"><div class="audit-json">${a.d}</div></td></tr>`).join('');
 
 /* ---------- Interactions ---------- */
-const views = ['workspaces','members','admins','audit'];
+const views = ['workspaces','members','integrations','providers','admins','audit'];
 document.getElementById('nav').addEventListener('click', e=>{
   const btn = e.target.closest('.nav-item'); if(!btn) return;
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b===btn));
