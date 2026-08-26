@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统管理 · Lomva Console Mockup</title>
+<style>
+  :root {
+    --bg: #F7F8FA;
+    --card: #FFFFFF;
+    --border: #EBEDF0;
+    --border-strong: #E4E7EC;
+    --text-1: #101828;
+    --text-2: #475467;
+    --text-3: #98A2B3;
+    --primary: #155EEF;
+    --primary-hover: #004EEB;
+    --primary-soft: #EFF4FF;
+    --danger: #D92D20;
+    --danger-soft: #FEF3F2;
+    --success-bg: #ECFDF3; --success-fg: #067647;
+    --gray-pill-bg: #F2F4F7; --gray-pill-fg: #344054;
+    --blue-pill-bg: #EFF4FF; --blue-pill-fg: #155EEF;
+    --violet-pill-bg: #F4F3FF; --violet-pill-fg: #5925DC;
+    --radius: 10px;
+    --shadow-sm: 0 1px 2px rgba(16,24,40,.05);
+    --shadow-md: 0 8px 24px rgba(16,24,40,.10);
+    --font: "Inter", "PingFang SC", -apple-system, "Segoe UI", sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body { font-family:var(--font); background:var(--bg); color:var(--text-1); font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; }
+  input,select { font-family:inherit; }
+
+  /* ===== Layout ===== */
+  .shell { display:flex; height:100vh; overflow:hidden; }
+
+  /* ===== Sidebar ===== */
+  .side { width:232px; flex:none; background:var(--card); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .side-brand { display:flex; align-items:center; gap:10px; padding:18px 16px 14px; }
+  .side-logo { width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,#155EEF,#528BFF); display:grid; place-items:center; color:#fff; font-weight:700; font-size:14px; box-shadow:var(--shadow-sm); }
+  .side-brand-name { font-weight:600; font-size:14px; }
+  .side-brand-tag { font-size:11px; color:var(--text-3); }
+  .side-section { padding:6px 12px 4px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--text-3); text-transform:uppercase; }
+  .nav { padding:4px 8px; display:flex; flex-direction:column; gap:2px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; color:var(--text-2); font-weight:500; border:0; background:none; width:100%; text-align:left; font-size:13.5px; transition:background .12s,color .12s; }
+  .nav-item svg { width:17px; height:17px; flex:none; }
+  .nav-item:hover { background:#F4F6F8; color:var(--text-1); }
+  .nav-item.active { background:var(--primary-soft); color:var(--primary); }
+  .side-foot { margin-top:auto; padding:12px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+  .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#528BFF,#7A5AF8); color:#fff; display:grid; place-items:center; font-size:12px; font-weight:600; flex:none; }
+  .side-foot-meta { min-width:0; }
+  .side-foot-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .side-foot-role { font-size:11px; color:var(--primary); }
+
+  /* ===== Main ===== */
+  .main { flex:1; overflow-y:auto; }
+  .page { max-width:1120px; margin:0 auto; padding:28px 32px 64px; animation:rise .28s ease both; }
+  @keyframes rise { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none;} }
+  .page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+  .page-title { font-size:20px; font-weight:700; letter-spacing:-.01em; }
+  .page-desc { margin-top:4px; font-size:13px; color:var(--text-2); }
+
+  /* ===== Controls ===== */
+  .toolbar { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .input { height:34px; padding:0 12px 0 32px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font-size:13px; width:260px; outline:none; transition:border-color .12s, box-shadow .12s; }
+  .input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(21,94,239,.12); }
+  .input-wrap { position:relative; }
+  .input-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--text-3); }
+  .select { height:34px; padding:0 10px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font-size:13px; color:var(--text-2); outline:none; }
+  .btn { height:34px; padding:0 14px; border-radius:8px; font-size:13px; font-weight:600; border:1px solid transparent; display:inline-flex; align-items:center; gap:6px; transition:background .12s, box-shadow .12s; }
+  .btn-primary { background:var(--primary); color:#fff; box-shadow:var(--shadow-sm); }
+  .btn-primary:hover { background:var(--primary-hover); }
+  .btn-ghost { background:#fff; border-color:var(--border-strong); color:var(--text-2); }
+  .btn-ghost:hover { background:#F6F7F9; }
+  .btn-danger { background:var(--danger); color:#fff; }
+  .btn-danger:hover { background:#B42318; }
+
+  /* ===== Card & Table ===== */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  thead th { text-align:left; font-size:12px; font-weight:600; color:var(--text-3); padding:10px 16px; border-bottom:1px solid var(--border); background:#FBFBFC; letter-spacing:.02em; }
+  tbody td { padding:13px 16px; border-bottom:1px solid var(--border); font-size:13.5px; vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:0; }
+  tbody tr { transition:background .1s; }
+  tbody tr:hover { background:#FAFBFD; }
+  tr.clickable { cursor:pointer; }
+
+  .pill { display:inline-flex; align-items:center; gap:5px; height:21px; padding:0 8px; border-radius:999px; font-size:11.5px; font-weight:600; }
+  .pill .dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+  .pill-green { background:var(--success-bg); color:var(--success-fg); }
+  .pill-gray { background:var(--gray-pill-bg); color:var(--gray-pill-fg); }
+  .pill-blue { background:var(--blue-pill-bg); color:var(--blue-pill-fg); }
+  .pill-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .pill-ws { background:#F0F4F8; color:#344054; font-weight:500; margin:1px 3px 1px 0; }
+  .pill-ws b { color:var(--primary); font-weight:600; }
+
+  .cell-main { display:flex; align-items:center; gap:10px; }
+  .ws-icon { width:30px; height:30px; border-radius:7px; display:grid; place-items:center; color:#fff; font-weight:600; font-size:13px; flex:none; }
+  .cell-title { font-weight:600; }
+  .cell-sub { font-size:12px; color:var(--text-3); margin-top:1px; }
+  .muted { color:var(--text-3); font-size:12.5px; }
+  .mono { font-family:var(--mono); font-size:12px; color:var(--text-2); }
+  .row-actions { display:flex; gap:6px; justify-content:flex-end; }
+  .link-btn { background:none; border:0; color:var(--primary); font-size:13px; font-weight:600; padding:4px 6px; border-radius:6px; }
+  .link-btn:hover { background:var(--primary-soft); }
+  .link-btn.danger { color:var(--danger); }
+  .link-btn.danger:hover { background:var(--danger-soft); }
+  .link-btn:disabled { color:var(--text-3); cursor:not-allowed; background:none; }
+
+  /* ===== Slide-over (workspace detail) ===== */
+  .overlay { position:fixed; inset:0; background:rgba(16,24,40,.32); opacity:0; pointer-events:none; transition:opacity .18s; z-index:40; }
+  .overlay.show { opacity:1; pointer-events:auto; }
+  .drawer { position:fixed; top:0; right:0; height:100vh; width:560px; max-width:92vw; background:#fff; box-shadow:-12px 0 40px rgba(16,24,40,.14); transform:translateX(102%); transition:transform .22s cubic-bezier(.32,.72,.28,1); z-index:50; display:flex; flex-direction:column; }
+  .drawer.show { transform:none; }
+  .drawer-head { padding:20px 24px 0; }
+  .drawer-close { position:absolute; top:16px; right:16px; border:0; background:#F2F4F7; width:28px; height:28px; border-radius:7px; color:var(--text-2); font-size:14px; }
+  .drawer-close:hover { background:#E9ECF0; }
+  .drawer-tabs { display:flex; gap:4px; padding:0 24px; border-bottom:1px solid var(--border); margin-top:14px; }
+  .drawer-tab { border:0; background:none; padding:9px 4px; margin-right:14px; font-size:13.5px; font-weight:600; color:var(--text-3); border-bottom:2px solid transparent; }
+  .drawer-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+  .drawer-body { flex:1; overflow-y:auto; padding:18px 24px 24px; }
+  .kv { display:grid; grid-template-columns:92px 1fr; row-gap:10px; font-size:13px; margin-bottom:4px; }
+  .kv dt { color:var(--text-3); } .kv dd { color:var(--text-1); font-weight:500; }
+  .danger-zone { margin-top:22px; border:1px solid #FECDCA; background:#FFFBFA; border-radius:10px; padding:14px 16px; }
+  .danger-zone h4 { color:var(--danger); font-size:13px; margin-bottom:4px; }
+  .danger-zone p { font-size:12.5px; color:var(--text-2); margin-bottom:10px; }
+
+  /* ===== Modal ===== */
+  .modal-wrap { position:fixed; inset:0; display:grid; place-items:center; z-index:60; pointer-events:none; }
+  .modal { width:440px; max-width:92vw; background:#fff; border-radius:14px; box-shadow:var(--shadow-md); padding:22px 22px 18px; transform:scale(.96) translateY(8px); opacity:0; transition:all .18s ease; pointer-events:none; }
+  .modal-wrap.show { pointer-events:auto; }
+  .modal-wrap.show .modal { transform:none; opacity:1; pointer-events:auto; }
+  .modal h3 { font-size:16px; font-weight:700; margin-bottom:2px; }
+  .modal .modal-sub { font-size:12.5px; color:var(--text-2); margin-bottom:16px; }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:12.5px; font-weight:600; color:var(--text-2); margin-bottom:6px; }
+  .field .input { width:100%; padding-left:12px; }
+  .field .hint { font-size:11.5px; color:var(--text-3); margin-top:5px; }
+  .modal-foot { display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
+
+  /* ===== Audit ===== */
+  .audit-detail { background:#FAFBFC; }
+  .audit-json { font-family:var(--mono); font-size:12px; background:#101828; color:#D1E0FF; padding:12px 14px; border-radius:8px; white-space:pre-wrap; line-height:1.6; }
+  .chev { display:inline-block; transition:transform .15s; color:var(--text-3); }
+  tr.open .chev { transform:rotate(90deg); }
+
+  .stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
+  .stat { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow-sm); }
+  .stat-num { font-size:22px; font-weight:700; letter-spacing:-.02em; }
+  .stat-label { font-size:12px; color:var(--text-3); margin-top:2px; }
+
+  ::-webkit-scrollbar { width:8px; height:8px; }
+  ::-webkit-scrollbar-thumb { background:#DDE1E6; border-radius:8px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ============ Sidebar ============ -->
+  <aside class="side">
+    <div class="side-brand">
+      <div class="side-logo">L</div>
+      <div>
+        <div class="side-brand-name">Lomva 系统管理</div>
+        <div class="side-brand-tag">System Administration</div>
+      </div>
+    </div>
+    <div class="side-section">管理</div>
+    <nav class="nav" id="nav">
+      <button class="nav-item active" data-view="workspaces">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
+        工作空间
+      </button>
+      <button class="nav-item" data-view="members">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16 14.7c2.3.2 3.9 1.5 4.5 4"/></svg>
+        成员
+      </button>
+      <button class="nav-item" data-view="admins">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
+        系统管理员
+      </button>
+      <button class="nav-item" data-view="audit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9.5 12h6M9.5 15.5h6"/></svg>
+        审计日志
+      </button>
+    </nav>
+    <div class="side-foot">
+      <div class="avatar">伟</div>
+      <div class="side-foot-meta">
+        <div class="side-foot-name">张伟</div>
+        <div class="side-foot-role">系统管理员</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ Main ============ -->
+  <main class="main">
+
+    <!-- ====== 空间列表 ====== -->
+    <section class="page" id="view-workspaces">
+      <div class="page-head">
+        <div>
+          <div class="page-title">工作空间</div>
+          <div class="page-desc">管理部署内全部工作空间：创建、归档与成员概览。</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-create-ws')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          创建空间
+        </button>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">12</div><div class="stat-label">空间总数</div></div>
+        <div class="stat"><div class="stat-num">86</div><div class="stat-label">成员总数</div></div>
+        <div class="stat"><div class="stat-num">143</div><div class="stat-label">应用总数</div></div>
+        <div class="stat"><div class="stat-num" style="color:var(--danger)">1</div><div class="stat-label">已归档</div></div>
+      </div>
+      <div class="toolbar">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="搜索空间名称…">
+        </div>
+        <select class="select"><option>全部状态</option><option>正常</option><option>已归档</option></select>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>空间</th><th>Owner</th><th>成员</th><th>状态</th><th>创建时间</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody id="ws-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====== 跨空间成员 ====== -->
+    <section class="page" id="view-members" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">成员</div>
+          <div class="page-desc">跨空间视角：查看每个账号在哪些空间、担任何种角色。</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="搜索姓名 / 邮箱…">
+        </div>
+        <select class="select"><option>全部空间</option><option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option></select>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>成员</th><th>所属空间 · 角色</th><th>最后活跃</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody id="member-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====== 系统管理员 ====== -->
+    <section class="page" id="view-admins" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">系统管理员</div>
+          <div class="page-desc">授予或撤销系统级管理权限。最后一位系统管理员不可撤销。</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-grant')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          授予系统管理员
+        </button>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>成员</th><th>来源</th><th>授予人</th><th>授予时间</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody id="admin-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====== 审计日志 ====== -->
+    <section class="page" id="view-audit" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">审计日志</div>
+          <div class="page-desc">系统管理操作的完整记录：操作人、动作、目标与明细。</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <select class="select"><option>全部操作类型</option><option>空间创建</option><option>空间归档</option><option>成员变更</option><option>管理员变更</option></select>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="操作人 / 目标空间…" style="width:200px">
+        </div>
+        <select class="select"><option>最近 7 天</option><option>最近 30 天</option><option>自定义…</option></select>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th style="width:24px"></th><th>时间</th><th>操作人</th><th>动作</th><th>目标</th></tr></thead>
+          <tbody id="audit-rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ 空间详情抽屉 ============ -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<aside class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeAll()">✕</button>
+  <div class="drawer-head">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="ws-icon" id="d-ws-icon" style="width:38px;height:38px;font-size:16px">市</div>
+      <div>
+        <div style="font-size:17px;font-weight:700" id="d-ws-name">市场部</div>
+        <div style="margin-top:3px"><span class="pill pill-green"><span class="dot"></span>正常</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-tabs">
+    <button class="drawer-tab active">成员</button>
+    <button class="drawer-tab">基本信息</button>
+  </div>
+  <div class="drawer-body">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+      <button class="btn btn-ghost" style="height:30px;font-size:12.5px">+ 添加成员</button>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>成员</th><th>角色</th><th style="text-align:right">操作</th></tr></thead>
+        <tbody id="d-member-rows"></tbody>
+      </table>
+    </div>
+    <div class="danger-zone">
+      <h4>危险操作</h4>
+      <p>归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。操作将记入审计日志。</p>
+      <button class="btn btn-danger" style="height:30px;font-size:12.5px" onclick="openModal('modal-archive')">归档此空间</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ 弹窗：创建空间 ============ -->
+<div class="modal-wrap" id="modal-create-ws">
+  <div class="modal">
+    <h3>创建工作空间</h3>
+    <div class="modal-sub">空间创建后，指定邮箱将成为该空间的 Owner。</div>
+    <div class="field">
+      <label>空间名称</label>
+      <input class="input" placeholder="例如：数据平台组">
+    </div>
+    <div class="field">
+      <label>Owner 邮箱</label>
+      <input class="input" placeholder="name@company.com">
+      <div class="hint">若该邮箱尚未注册，将预创建账号并标记为「待激活」，通过邀请链接完成激活。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：授予系统管理员 ============ -->
+<div class="modal-wrap" id="modal-grant">
+  <div class="modal">
+    <h3>授予系统管理员</h3>
+    <div class="modal-sub">仅可授予<strong>已注册且已激活</strong>的账号。该操作会写入审计日志。</div>
+    <div class="field">
+      <label>成员邮箱</label>
+      <input class="input" placeholder="name@company.com">
+    </div>
+    <div class="field">
+      <label>确认你的密码</label>
+      <input class="input" type="password" placeholder="输入当前账号密码以确认">
+      <div class="hint">高危操作需要验证本人身份。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">确认授予</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：归档确认 ============ -->
+<div class="modal-wrap" id="modal-archive">
+  <div class="modal">
+    <h3 style="color:var(--danger)">归档空间「市场部」？</h3>
+    <div class="modal-sub">归档后：空间内 8 个应用不可访问；6 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-danger" onclick="closeAll()">确认归档</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Mock data ---------- */
+const palette = ['#155EEF','#7A5AF8','#12B76A','#F79009','#EE46BC','#0BA5EC'];
+const workspaces = [
+  { name:'市场部', owner:'张伟 · zhangwei@x.com', members:6, apps:8, status:'正常', time:'2026-06-02', c:0 },
+  { name:'研发部', owner:'李娜 · lina@x.com', members:23, apps:57, status:'正常', time:'2026-06-10', c:1 },
+  { name:'数据团队', owner:'王强 · wangqiang@x.com', members:9, apps:31, status:'正常', time:'2026-07-01', c:2 },
+  { name:'客户成功', owner:'陈晨 · chenchen@x.com', members:14, apps:19, status:'正常', time:'2026-07-18', c:3 },
+  { name:'外部协作-供应商A', owner:'刘洋 · liuyang@x.com', members:5, apps:3, status:'正常', time:'2026-08-05', c:4 },
+  { name:'旧版客服项目', owner:'赵敏 · zhaomin@x.com', members:2, apps:11, status:'已归档', time:'2026-03-22', c:5 },
+];
+const members = [
+  { name:'张伟', mail:'zhangwei@x.com', tags:[['市场部','owner'],['研发部','admin']], active:'5 分钟前', c:0 },
+  { name:'李娜', mail:'lina@x.com', tags:[['研发部','owner'],['数据团队','editor']], active:'12 分钟前', c:1 },
+  { name:'王强', mail:'wangqiang@x.com', tags:[['数据团队','owner']], active:'1 小时前', c:2 },
+  { name:'陈晨', mail:'chenchen@x.com', tags:[['客户成功','owner'],['市场部','editor']], active:'3 小时前', c:3 },
+  { name:'刘洋', mail:'liuyang@x.com', tags:[['外部协作-供应商A','owner'],['研发部','normal']], active:'昨天', c:4 },
+  { name:'赵敏', mail:'zhaomin@x.com', tags:[['旧版客服项目','owner'],['市场部','normal']], active:'3 天前', c:5 },
+];
+const admins = [
+  { name:'张伟', mail:'zhangwei@x.com', source:'env', by:'—', time:'2026-08-01', c:0 },
+  { name:'李娜', mail:'lina@x.com', source:'grant', by:'张伟', time:'2026-08-12', c:1 },
+  { name:'周杰', mail:'zhoujie@x.com', source:'grant', by:'张伟', time:'2026-08-20', c:2 },
+];
+const audits = [
+  { t:'2026-08-26 10:42:18', who:'张伟', act:'授予系统管理员', target:'周杰 (zhoujie@x.com)', d:'{\n  "action": "system_admin.grant",\n  "actor": "zhangwei@x.com",\n  "target_account": "zhoujie@x.com",\n  "confirmed_by": "password"\n}' },
+  { t:'2026-08-26 09:15:03', who:'李娜', act:'空间归档', target:'旧版客服项目', d:'{\n  "action": "workspace.archive",\n  "workspace_id": "7f3a…c21d",\n  "members_affected": 2\n}' },
+  { t:'2026-08-25 17:58:44', who:'张伟', act:'成员角色变更', target:'研发部 → 刘洋: editor→normal', d:'{\n  "action": "member.update_role",\n  "workspace": "研发部",\n  "account": "liuyang@x.com",\n  "from": "editor", "to": "normal"\n}' },
+  { t:'2026-08-25 14:02:30', who:'李娜', act:'创建空间', target:'外部协作-供应商A', d:'{\n  "action": "workspace.create",\n  "name": "外部协作-供应商A",\n  "owner_email": "liuyang@x.com"\n}' },
+  { t:'2026-08-24 11:20:09', who:'张伟', act:'成员移除', target:'市场部 → 测试账号', d:'{\n  "action": "member.remove",\n  "workspace": "市场部",\n  "account": "test01@x.com"\n}' },
+];
+
+/* ---------- Renderers ---------- */
+const wsIcon = (w, cls='ws-icon') =>
+  `<div class="${cls}" style="background:${palette[w.c]}">${w.name[0]}</div>`;
+const statusPill = s => s==='正常'
+  ? `<span class="pill pill-green"><span class="dot"></span>正常</span>`
+  : `<span class="pill pill-gray"><span class="dot"></span>已归档</span>`;
+
+document.getElementById('ws-rows').innerHTML = workspaces.map((w,i)=>`
+  <tr class="clickable" onclick="openDrawer(${i})">
+    <td><div class="cell-main">${wsIcon(w)}<div><div class="cell-title">${w.name}</div><div class="cell-sub">${w.apps} 个应用</div></div></div></td>
+    <td class="muted">${w.owner}</td>
+    <td>${w.members}</td>
+    <td>${statusPill(w.status)}</td>
+    <td class="muted">${w.time}</td>
+    <td><div class="row-actions"><button class="link-btn">详情</button></div></td>
+  </tr>`).join('');
+
+document.getElementById('member-rows').innerHTML = members.map(m=>`
+  <tr>
+    <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]}">${m.name[0]}</div><div><div class="cell-title">${m.name}</div><div class="cell-sub">${m.mail}</div></div></div></td>
+    <td>${m.tags.map(([ws,r])=>`<span class="pill pill-ws">${ws} · <b>${r}</b></span>`).join('')}</td>
+    <td class="muted">${m.active}</td>
+    <td><div class="row-actions"><button class="link-btn">查看空间</button></div></td>
+  </tr>`).join('');
+
+document.getElementById('admin-rows').innerHTML = admins.map((a,i)=>`
+  <tr>
+    <td><div class="cell-main"><div class="avatar" style="background:${palette[a.c]}">${a.name[0]}</div><div><div class="cell-title">${a.name}</div><div class="cell-sub">${a.mail}</div></div></div></td>
+    <td>${a.source==='env'
+        ? `<span class="pill pill-violet">环境变量</span>`
+        : `<span class="pill pill-blue">系统授予</span>`}</td>
+    <td class="muted">${a.by}</td>
+    <td class="muted">${a.time}</td>
+    <td><div class="row-actions">${a.source==='env'
+        ? `<button class="link-btn" disabled title="该管理员来自环境变量，需修改部署配置">撤销</button>`
+        : `<button class="link-btn danger" onclick="openModal('modal-grant')">撤销</button>`}</div></td>
+  </tr>`).join('');
+
+document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
+  <tr class="clickable" id="audit-${i}" onclick="toggleAudit(${i})">
+    <td><span class="chev">›</span></td>
+    <td class="mono">${a.t}</td>
+    <td>${a.who}</td>
+    <td><span class="pill pill-gray">${a.act}</span></td>
+    <td class="muted">${a.target}</td>
+  </tr>
+  <tr class="audit-detail" id="audit-d-${i}" hidden><td></td><td colspan="4"><div class="audit-json">${a.d}</div></td></tr>`).join('');
+
+/* ---------- Interactions ---------- */
+const views = ['workspaces','members','admins','audit'];
+document.getElementById('nav').addEventListener('click', e=>{
+  const btn = e.target.closest('.nav-item'); if(!btn) return;
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b===btn));
+  views.forEach(v=>document.getElementById('view-'+v).hidden = v!==btn.dataset.view);
+});
+
+function openDrawer(i){
+  const w = workspaces[i];
+  document.getElementById('d-ws-name').textContent = w.name;
+  const ic = document.getElementById('d-ws-icon');
+  ic.style.background = palette[w.c]; ic.textContent = w.name[0];
+  document.getElementById('d-member-rows').innerHTML = members.slice(0,4).map(m=>`
+    <tr>
+      <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]};width:26px;height:26px;font-size:11px">${m.name[0]}</div><div><div class="cell-title" style="font-size:13px">${m.name}</div><div class="cell-sub">${m.mail}</div></div></div></td>
+      <td><span class="pill pill-blue">${['owner','admin','editor','normal'][m.c%4]}</span></td>
+      <td><div class="row-actions"><button class="link-btn">改角色</button><button class="link-btn danger">移除</button></div></td>
+    </tr>`).join('');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+}
+function openModal(id){
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById(id).classList.add('show');
+}
+function closeAll(){
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('drawer').classList.remove('show');
+  document.querySelectorAll('.modal-wrap').forEach(m=>m.classList.remove('show'));
+}
+function toggleAudit(i){
+  document.getElementById('audit-'+i).classList.toggle('open');
+  const d = document.getElementById('audit-d-'+i); d.hidden = !d.hidden;
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAll(); });
+</script>
+</body>
+</html>
