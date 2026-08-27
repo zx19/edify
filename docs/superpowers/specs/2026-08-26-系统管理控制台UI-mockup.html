@@ -49,6 +49,9 @@
   .nav-item svg { width:17px; height:17px; flex:none; }
   .nav-item:hover { background:#F4F6F8; color:var(--text-1); }
   .nav-item.active { background:var(--primary-soft); color:var(--primary); }
+  .nav-group-label { padding:12px 12px 4px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--text-3); text-transform:uppercase; }
+  .nav-sub { padding-left:14px; }
+  .nav-sub .nav-item { padding:7px 10px; font-size:13px; }
   .side-foot { margin-top:auto; padding:12px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; }
   .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#528BFF,#7A5AF8); color:#fff; display:grid; place-items:center; font-size:12px; font-weight:600; flex:none; }
   .side-foot-meta { min-width:0; }
@@ -152,6 +155,19 @@
   .stat-num { font-size:22px; font-weight:700; letter-spacing:-.02em; }
   .stat-label { font-size:12px; color:var(--text-3); margin-top:2px; }
 
+  /* ===== Marketplace ===== */
+  .mkt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .mkt-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:10px; transition:box-shadow .15s, transform .15s; }
+  .mkt-card:hover { box-shadow:var(--shadow-md); transform:translateY(-1px); }
+  .mkt-card-head { display:flex; align-items:center; gap:10px; }
+  .mkt-card-title { font-weight:600; font-size:14px; }
+  .mkt-card-ver { font-family:var(--mono); font-size:11px; color:var(--text-3); }
+  .mkt-card-desc { font-size:12.5px; color:var(--text-2); line-height:1.55; min-height:38px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .mkt-card-foot { display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+  .chip-row { display:flex; gap:6px; flex-wrap:wrap; }
+  .chip { height:28px; padding:0 12px; border-radius:999px; border:1px solid var(--border-strong); background:#fff; font-size:12.5px; font-weight:500; color:var(--text-2); }
+  .chip.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+
   ::-webkit-scrollbar { width:8px; height:8px; }
   ::-webkit-scrollbar-thumb { background:#DDE1E6; border-radius:8px; }
 </style>
@@ -178,13 +194,20 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16 14.7c2.3.2 3.9 1.5 4.5 4"/></svg>
         成员
       </button>
-      <button class="nav-item" data-view="integrations">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
-        插件与工具
-      </button>
-      <button class="nav-item" data-view="providers">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
-        模型提供商
+      <div class="nav-group-label">集成</div>
+      <div class="nav-sub">
+        <button class="nav-item" data-view="integrations">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
+          插件与工具
+        </button>
+        <button class="nav-item" data-view="providers">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
+          模型提供商
+        </button>
+      </div>
+      <button class="nav-item" data-view="marketplace">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7l1.5-3.5h13L20 7M4 7h16v3a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-1.5.5A2.5 2.5 0 014 10V7z"/><path d="M5.5 12.5V20h13v-7.5" stroke-linecap="round"/></svg>
+        插件市场
       </button>
       <button class="nav-item" data-view="admins">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
@@ -311,6 +334,26 @@
           <tbody id="provider-rows"></tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ====== 插件市场 ====== -->
+    <section class="page" id="view-marketplace" hidden>
+      <div class="page-head">
+        <div>
+          <div class="page-title">插件市场</div>
+          <div class="page-desc">浏览并安装官方与合作伙伴插件；安装时选择分发范围，安装后进入「插件与工具」托管列表。</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="搜索插件…">
+        </div>
+        <div class="chip-row">
+          <button class="chip active">全部</button><button class="chip">模型</button><button class="chip">工具</button><button class="chip">数据源</button><button class="chip">触发器</button><button class="chip">Agent 策略</button>
+        </div>
+      </div>
+      <div class="mkt-grid" id="mkt-grid"></div>
     </section>
 
     <!-- ====== 系统管理员 ====== -->
@@ -445,16 +488,13 @@
     <div class="field">
       <div style="display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:12px">
         <button class="drawer-tab active" data-src="local">本地上传</button>
-        <button class="drawer-tab" data-src="market">插件市场</button>
         <button class="drawer-tab" data-src="github">GitHub</button>
       </div>
       <div data-pane="local">
         <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:18px;text-align:center;color:var(--text-3);font-size:12.5px;background:#FAFBFC">
           拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
         </div>
-      </div>
-      <div data-pane="market" hidden>
-        <input class="input" style="width:100%;padding-left:12px" placeholder="搜索插件市场…（内网不可用时请改用本地上传）">
+        <div class="hint" style="margin-top:6px">从市场安装请前往「插件市场」页。</div>
       </div>
       <div data-pane="github" hidden>
         <input class="input" style="width:100%;padding-left:12px;margin-bottom:8px" placeholder="仓库 URL，如 https://github.com/org/dify-plugin-x">
@@ -508,6 +548,33 @@
   </div>
 </div>
 
+<!-- ============ 弹窗：范围选择（市场安装） ============ -->
+<div class="modal-wrap" id="modal-scope">
+  <div class="modal">
+    <h3 id="scope-title">安装「Google Search」</h3>
+    <div class="modal-sub">选择该插件分发到哪些工作空间。</div>
+    <div class="field">
+      <label>适用范围</label>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="scope2" checked> 全部空间（含未来新建空间）
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="scope2"> 指定空间
+        </label>
+        <select class="select" multiple size="3" style="height:auto;padding:6px 8px">
+          <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
+        </select>
+      </div>
+      <div class="hint">托管插件在空间侧锁定：成员不可自行升级/卸载；版本由系统管理员统一推送。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">安装并分发</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 弹窗：归档确认 ============ -->
 <div class="modal-wrap" id="modal-archive">
   <div class="modal">
@@ -556,6 +623,14 @@ const providers = [
   { name:'通义千问', key:'sk-…77Qz', status:'正常', scope:'指定空间 · 3', time:'2026-08-15', c:2 },
   { name:'Ollama（内网）', key:'http://ollama.in:11434', status:'正常', scope:'研发部', time:'2026-08-02', c:1 },
   { name:'Anthropic', key:'sk-…X81c', status:'配额不足', scope:'全部空间', time:'2026-07-28', c:3 },
+];
+const mkt = [
+  { name:'OpenAI', desc:'GPT 系列模型，含 GPT-5、o 系列推理模型与 Embedding。', type:'模型', ver:'2.4.1', c:0 },
+  { name:'Google Search', desc:'为 Agent 与工作流提供实时网页搜索能力。', type:'工具', ver:'1.3.2', c:1 },
+  { name:'Notion', desc:'同步 Notion 页面与数据库内容到知识库。', type:'数据源', ver:'0.9.5', c:2 },
+  { name:'钉钉机器人', desc:'钉钉事件 Webhook 触发工作流自动执行。', type:'触发器', ver:'0.4.1', c:3 },
+  { name:'FunctionCall 策略', desc:'经典 Function Calling 推理策略，支持工具循环。', type:'Agent 策略', ver:'1.0.0', c:4 },
+  { name:'Jina Reader', desc:'网页正文提取与清洗，输出结构化文本。', type:'工具', ver:'1.1.7', c:5 },
 ];
 const audits = [
   { t:'2026-08-26 10:42:18', who:'张伟', act:'授予系统管理员', target:'周杰 (zhoujie@x.com)', d:'{\n  "action": "system_admin.grant",\n  "actor": "zhangwei@x.com",\n  "target_account": "zhoujie@x.com",\n  "confirmed_by": "password"\n}' },
@@ -624,6 +699,19 @@ document.getElementById('provider-rows').innerHTML = providers.map(p=>`
     <td><div class="row-actions"><button class="link-btn">编辑</button><button class="link-btn">分配空间</button><button class="link-btn danger">删除</button></div></td>
   </tr>`).join('');
 
+document.getElementById('mkt-grid').innerHTML = mkt.map(p=>`
+  <div class="mkt-card">
+    <div class="mkt-card-head">
+      <div class="ws-icon" style="background:${palette[p.c]};width:34px;height:34px">${p.name[0]}</div>
+      <div><div class="mkt-card-title">${p.name}</div><div class="mkt-card-ver">v${p.ver}</div></div>
+    </div>
+    <div class="mkt-card-desc">${p.desc}</div>
+    <div class="mkt-card-foot">
+      <span class="pill ${typePill(p.type)}">${p.type}</span>
+      <button class="btn btn-primary" style="height:28px;font-size:12.5px" onclick="openScope('${p.name}')">安装</button>
+    </div>
+  </div>`).join('');
+
 document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="clickable" id="audit-${i}" onclick="toggleAudit(${i})">
     <td><span class="chev">›</span></td>
@@ -635,7 +723,7 @@ document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="audit-detail" id="audit-d-${i}" hidden><td></td><td colspan="4"><div class="audit-json">${a.d}</div></td></tr>`).join('');
 
 /* ---------- Interactions ---------- */
-const views = ['workspaces','members','integrations','providers','admins','audit'];
+const views = ['workspaces','members','integrations','providers','marketplace','admins','audit'];
 function switchView(v){
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
   views.forEach(x=>document.getElementById('view-'+x).hidden = x!==v);
@@ -649,6 +737,11 @@ document.querySelectorAll('#modal-install [data-src]').forEach(t=>t.addEventList
   document.querySelectorAll('#modal-install [data-src]').forEach(x=>x.classList.toggle('active', x===t));
   document.querySelectorAll('#modal-install [data-pane]').forEach(p=>p.hidden = p.dataset.pane!==t.dataset.src);
 }));
+/* 市场安装 → 范围选择弹窗 */
+function openScope(name){
+  document.getElementById('scope-title').textContent = `安装「${name}」`;
+  openModal('modal-scope');
+}
 
 function openDrawer(i){
   const w = workspaces[i];
