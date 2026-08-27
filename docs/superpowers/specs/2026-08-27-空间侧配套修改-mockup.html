@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空间侧配套修改 · Lomva Console Mockup</title>
+<style>
+  :root {
+    --bg:#F7F8FA; --card:#fff; --border:#EBEDF0; --border-strong:#E4E7EC;
+    --text-1:#101828; --text-2:#475467; --text-3:#98A2B3;
+    --primary:#155EEF; --primary-hover:#004EEB; --primary-soft:#EFF4FF;
+    --danger:#D92D20; --danger-soft:#FEF3F2;
+    --success-bg:#ECFDF3; --success-fg:#067647;
+    --gray-pill-bg:#F2F4F7; --gray-pill-fg:#344054;
+    --blue-pill-bg:#EFF4FF; --blue-pill-fg:#155EEF;
+    --violet-pill-bg:#F4F3FF; --violet-pill-fg:#5925DC;
+    --amber-bg:#FFFAEB; --amber-fg:#B54708;
+    --radius:10px; --shadow-sm:0 1px 2px rgba(16,24,40,.05); --shadow-md:0 8px 24px rgba(16,24,40,.10);
+    --font:"Inter","PingFang SC",-apple-system,"Segoe UI",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:var(--bg); color:var(--text-1); font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; }
+  input { font-family:inherit; }
+
+  .shell { display:flex; height:100vh; overflow:hidden; }
+
+  /* ===== console 左侧导航（仿 Dify 空间内） ===== */
+  .side { width:216px; flex:none; background:var(--card); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .ws-switch { display:flex; align-items:center; gap:10px; margin:14px 12px 10px; padding:9px 10px; border:1px solid var(--border-strong); border-radius:10px; background:#fff; box-shadow:var(--shadow-sm); }
+  .ws-icon { width:28px; height:28px; border-radius:7px; background:linear-gradient(135deg,#155EEF,#528BFF); color:#fff; display:grid; place-items:center; font-weight:700; font-size:13px; }
+  .ws-name { font-weight:600; font-size:13.5px; }
+  .ws-sub { font-size:11px; color:var(--text-3); }
+  .nav { padding:4px 8px; display:flex; flex-direction:column; gap:2px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; color:var(--text-2); font-weight:500; border:0; background:none; width:100%; text-align:left; font-size:13.5px; }
+  .nav-item svg { width:17px; height:17px; }
+  .nav-item:hover { background:#F4F6F8; color:var(--text-1); }
+  .nav-item.active { background:var(--primary-soft); color:var(--primary); }
+  .nav-group-label { padding:12px 12px 4px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--text-3); text-transform:uppercase; }
+  .nav-sub { padding-left:12px; }
+  .nav-sub .nav-item { padding:7px 10px; font-size:13px; }
+  .nav-item.dim { color:var(--text-3); cursor:default; }
+  .nav-item.dim:hover { background:none; color:var(--text-3); }
+  .demo-link { background:none; border:0; color:var(--text-3); font-size:11.5px; text-decoration:underline; padding:0; cursor:pointer; }
+  .nav-item .lock-note { margin-left:auto; font-size:10.5px; color:var(--text-3); }
+
+  /* ===== 主区 ===== */
+  .main { flex:1; overflow-y:auto; position:relative; }
+  .topbar { height:52px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 24px; position:sticky; top:0; z-index:10; }
+  .topbar-title { font-size:13px; color:var(--text-2); }
+  .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#528BFF,#7A5AF8); color:#fff; display:grid; place-items:center; font-size:12px; font-weight:600; cursor:pointer; }
+
+  /* 头像下拉 */
+  .menu { position:absolute; top:56px; right:20px; width:220px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); padding:6px; z-index:20; }
+  .menu-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; font-size:13px; color:var(--text-2); width:100%; border:0; background:none; text-align:left; }
+  .menu-item:hover { background:#F4F6F8; }
+  .menu-item.admin-entry { color:var(--primary); font-weight:600; background:var(--primary-soft); }
+  .menu-sep { height:1px; background:var(--border); margin:5px 4px; }
+  .menu-tag { margin-left:auto; font-size:10.5px; background:var(--blue-pill-bg); color:var(--blue-pill-fg); padding:1px 6px; border-radius:99px; font-weight:600; }
+
+  .page { max-width:1080px; margin:0 auto; padding:24px 32px 64px; }
+  .page-title { font-size:19px; font-weight:700; }
+  .page-desc { margin-top:4px; font-size:13px; color:var(--text-2); margin-bottom:18px; }
+
+  .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); overflow:hidden; }
+  table { width:100%; border-collapse:collapse; }
+  thead th { text-align:left; font-size:12px; font-weight:600; color:var(--text-3); padding:10px 16px; border-bottom:1px solid var(--border); background:#FBFBFC; }
+  tbody td { padding:13px 16px; border-bottom:1px solid var(--border); font-size:13.5px; vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:0; }
+
+  .pill { display:inline-flex; align-items:center; gap:5px; height:21px; padding:0 8px; border-radius:999px; font-size:11.5px; font-weight:600; }
+  .pill .dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+  .pill-green { background:var(--success-bg); color:var(--success-fg); }
+  .pill-gray { background:var(--gray-pill-bg); color:var(--gray-pill-fg); }
+  .pill-blue { background:var(--blue-pill-bg); color:var(--blue-pill-fg); }
+  .pill-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .pill-amber { background:var(--amber-bg); color:var(--amber-fg); }
+
+  .btn { height:32px; padding:0 12px; border-radius:8px; font-size:12.5px; font-weight:600; border:1px solid transparent; display:inline-flex; align-items:center; gap:6px; }
+  .btn-primary { background:var(--primary); color:#fff; }
+  .btn-ghost { background:#fff; border-color:var(--border-strong); color:var(--text-2); }
+  .btn:disabled, .btn.disabled { background:#F2F4F7; color:var(--text-3); border-color:var(--border); cursor:not-allowed; }
+  .link-btn { background:none; border:0; color:var(--primary); font-size:13px; font-weight:600; padding:4px 6px; border-radius:6px; }
+  .link-btn:disabled { color:var(--text-3); cursor:not-allowed; }
+  .link-btn.danger { color:var(--danger); }
+  .link-btn.danger:disabled { color:var(--text-3); }
+
+  .cell-main { display:flex; align-items:center; gap:10px; }
+  .cell-title { font-weight:600; }
+  .cell-sub { font-size:12px; color:var(--text-3); margin-top:1px; }
+  .muted { color:var(--text-3); font-size:12.5px; }
+  .mono { font-family:var(--mono); font-size:12px; color:var(--text-2); }
+  .row-actions { display:flex; gap:6px; justify-content:flex-end; }
+
+  /* 模型供应商页布局 */
+  .mp-layout { display:grid; grid-template-columns:280px 1fr; gap:16px; align-items:start; }
+  .mp-item { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; }
+  .mp-item:last-child { border-bottom:0; }
+  .mp-item.active { background:var(--primary-soft); }
+  .cred-box { padding:18px 20px; }
+  .cred-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:12.5px; font-weight:600; color:var(--text-2); margin-bottom:6px; }
+  .input { height:34px; padding:0 12px; border:1px solid var(--border-strong); border-radius:8px; font-size:13px; width:100%; max-width:420px; outline:none; }
+  .input:disabled { background:#F6F7F9; color:var(--text-3); }
+  .notice { border-radius:10px; padding:12px 14px; font-size:12.5px; line-height:1.7; margin-bottom:14px; }
+  .notice-blue { background:var(--primary-soft); color:#1849C6; }
+  .notice-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+
+  /* 登录提示页 */
+  .empty-wrap { height:100%; display:grid; place-items:center; }
+  .empty-card { width:420px; text-align:center; padding:40px 36px; }
+  .empty-icon { width:56px; height:56px; border-radius:16px; background:var(--primary-soft); color:var(--primary); display:grid; place-items:center; margin:0 auto 16px; }
+  .empty-title { font-size:17px; font-weight:700; margin-bottom:8px; }
+  .empty-desc { font-size:13px; color:var(--text-2); line-height:1.7; margin-bottom:18px; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <!-- 仿 Dify 空间内控制台侧栏 -->
+  <aside class="side">
+    <div class="ws-switch">
+      <div class="ws-icon">市</div>
+      <div><div class="ws-name">市场部</div><div class="ws-sub">工作空间</div></div>
+    </div>
+    <nav class="nav" id="side-nav">
+      <button class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>应用</button>
+      <button class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5a2 2 0 012-2h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>知识库</button>
+      <div class="nav-group-label">集成</div>
+      <div class="nav-sub">
+        <button class="nav-item active" data-view="plugins"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4.5 4.5 0 00-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 006-6L14 13l-2-2 2.7-4.7z"/></svg>工具</button>
+        <button class="nav-item" data-view="providers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>模型供应商</button>
+        <button class="nav-item dim" title="本原型不展开"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3z"/><path d="M4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7"/></svg>数据源</button>
+        <button class="nav-item dim" title="本原型不展开"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg>触发器</button>
+      </div>
+    </nav>
+    <div style="margin-top:auto;padding:12px" class="muted">
+      Lomva Console · 空间侧<br>
+      <button class="demo-link" data-view="empty">演示：无空间登录提示页 →</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="crumb">集成 / 工具</div>
+      <div style="position:relative">
+        <div class="avatar" onclick="toggleMenu()">李</div>
+        <div class="menu" id="menu" hidden>
+          <button class="menu-item">我的账户</button>
+          <button class="menu-item">偏好设置</button>
+          <div class="menu-sep"></div>
+          <button class="menu-item admin-entry">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
+            系统管理 <span class="menu-tag">系统管理员</span>
+          </button>
+          <div class="menu-sep"></div>
+          <button class="menu-item">退出登录</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ① 插件页：托管锁定 -->
+    <section class="page" id="view-plugins">
+      <div class="page-title">集成 · 工具</div>
+      <div class="page-desc">空间内可用的工具与插件，全部由系统管理员统一分发与维护；空间内不可安装、升级或卸载。</div>
+      <div class="card">
+        <table>
+          <thead><tr><th>插件</th><th>类型</th><th>版本</th><th>来源</th><th style="text-align:right">操作</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="cell-main"><div class="ws-icon" style="background:#155EEF">G</div><div><div class="cell-title">Google Search</div><div class="cell-sub">实时网页搜索</div></div></div></td>
+              <td><span class="pill pill-blue">工具</span></td>
+              <td class="mono">v1.3.2</td>
+              <td><span class="pill pill-violet">托管</span></td>
+              <td><div class="row-actions">
+                <button class="link-btn" disabled title="由系统管理员统一托管，不可在空间内升级">升级</button>
+                <button class="link-btn danger" disabled title="由系统管理员统一托管，不可在空间内卸载">卸载</button>
+              </div></td>
+            </tr>
+            <tr>
+              <td><div class="cell-main"><div class="ws-icon" style="background:#12B76A">J</div><div><div class="cell-title">Jina Reader</div><div class="cell-sub">网页正文提取</div></div></div></td>
+              <td><span class="pill pill-blue">工具</span></td>
+              <td class="mono">v1.1.7</td>
+              <td><span class="pill pill-violet">托管</span></td>
+              <td><div class="row-actions">
+                <button class="link-btn" disabled title="由系统管理员统一托管">升级</button>
+                <button class="link-btn danger" disabled title="由系统管理员统一托管">卸载</button>
+              </div></td>
+            </tr>
+            <tr>
+              <td><div class="cell-main"><div class="ws-icon" style="background:#0BA5EC">D</div><div><div class="cell-title">钉钉机器人</div><div class="cell-sub">事件触发工作流</div></div></div></td>
+              <td><span class="pill pill-amber">触发器</span></td>
+              <td class="mono">v0.4.1</td>
+              <td><span class="pill pill-violet">托管</span></td>
+              <td><div class="row-actions">
+                <button class="link-btn" disabled title="由系统管理员统一托管">升级</button>
+                <button class="link-btn danger" disabled title="由系统管理员统一托管">卸载</button>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ② 模型供应商页：凭据三态 -->
+    <section class="page" id="view-providers" hidden>
+      <div class="page-title">集成 · 模型供应商</div>
+      <div class="page-desc">模型凭据由组织统一配置，空间内不可查看或修改。如需变更请联系系统管理员。</div>
+      <div class="mp-layout">
+        <div class="card">
+          <div class="mp-item active" data-mp="azure"><div class="ws-icon" style="background:#155EEF">A</div><div><div class="cell-title">Azure OpenAI</div><div class="cell-sub"><span class="pill pill-green" style="height:18px;font-size:10.5px">可用</span></div></div></div>
+          <div class="mp-item" data-mp="qwen"><div class="ws-icon" style="background:#12B76A">通</div><div><div class="cell-title">通义千问</div><div class="cell-sub"><span class="pill pill-green" style="height:18px;font-size:10.5px">可用</span></div></div></div>
+          <div class="mp-item" data-mp="anthropic"><div class="ws-icon" style="background:#F79009">A</div><div><div class="cell-title">Anthropic</div><div class="cell-sub"><span class="pill pill-amber" style="height:18px;font-size:10.5px">配额不足</span></div></div></div>
+          <div class="mp-item" data-mp="deepseek"><div class="ws-icon" style="background:#EE46BC">D</div><div><div class="cell-title">DeepSeek</div><div class="cell-sub"><span class="pill pill-gray" style="height:18px;font-size:10.5px">未配置</span></div></div></div>
+        </div>
+        <div class="card cred-box" id="cred-panel"></div>
+      </div>
+    </section>
+
+    <!-- ③ 无空间登录提示页 -->
+    <section class="page" id="view-empty" hidden style="height:calc(100vh - 52px)">
+      <div class="empty-wrap">
+        <div class="card empty-card">
+          <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><path d="M17 16v5M14.5 18.5h5" stroke-linecap="round"/></svg></div>
+          <div class="empty-title">你还没有加入任何工作空间</div>
+          <div class="empty-desc">当前账号未关联任何工作空间。请联系系统管理员为你创建空间或把你加入现有空间；完成后重新登录即可进入。</div>
+          <button class="btn btn-ghost">重新登录</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const credPanels = {
+  azure: `
+    <div class="cred-head"><div class="ws-icon" style="background:#155EEF">A</div><div class="cell-title">Azure OpenAI</div><span class="pill pill-green">可用</span></div>
+    <div class="notice notice-violet">该供应商凭据由<strong>组织统一配置</strong>（sk-…****），空间内不可查看或修改。如需变更请联系系统管理员。</div>
+    <div class="field"><label>可用模型</label><input class="input" value="gpt-5, gpt-5-mini, text-embedding-3-large" disabled></div>`,
+  qwen: `
+    <div class="cred-head"><div class="ws-icon" style="background:#12B76A">通</div><div class="cell-title">通义千问</div><span class="pill pill-green">可用</span></div>
+    <div class="notice notice-violet">该供应商凭据由<strong>组织统一配置</strong>（sk-…****），空间内不可查看或修改。如需变更请联系系统管理员。</div>
+    <div class="field"><label>可用模型</label><input class="input" value="qwen-max, qwen-plus" disabled></div>`,
+  anthropic: `
+    <div class="cred-head"><div class="ws-icon" style="background:#F79009">A</div><div class="cell-title">Anthropic</div><span class="pill pill-amber">配额不足</span></div>
+    <div class="notice notice-violet">该供应商凭据由<strong>组织统一配置</strong>，当前配额不足，请稍后再试或联系系统管理员。</div>
+    <div class="field"><label>可用模型</label><input class="input" value="claude-fable-5" disabled></div>`,
+  deepseek: `
+    <div class="cred-head"><div class="ws-icon" style="background:#EE46BC">D</div><div class="cell-title">DeepSeek</div><span class="pill pill-gray">未配置</span></div>
+    <div class="notice notice-blue">组织尚未配置该供应商。如需使用请联系系统管理员在「模型提供商」中配置。</div>`,
+};
+function renderCred(k){ document.getElementById('cred-panel').innerHTML = credPanels[k]; }
+renderCred('azure');
+document.querySelectorAll('.mp-item').forEach(el=>el.addEventListener('click', ()=>{
+  document.querySelectorAll('.mp-item').forEach(x=>x.classList.toggle('active', x===el));
+  renderCred(el.dataset.mp);
+}));
+
+const crumbs = { plugins:'集成 / 工具', providers:'集成 / 模型供应商', empty:'' };
+function switchView(v){
+  ['plugins','providers','empty'].forEach(x=>document.getElementById('view-'+x).hidden = x!==v);
+  document.querySelectorAll('#side-nav .nav-item[data-view]').forEach(x=>x.classList.toggle('active', x.dataset.view===v));
+  document.getElementById('crumb').textContent = crumbs[v] || '';
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click', ()=>switchView(b.dataset.view)));
+function toggleMenu(){ const m=document.getElementById('menu'); m.hidden=!m.hidden; }
+</script>
+</body>
+</html>
