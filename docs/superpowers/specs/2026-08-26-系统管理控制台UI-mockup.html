@@ -297,10 +297,13 @@
           <div class="page-title">模型提供商</div>
           <div class="page-desc">组织级凭据：配置一次、按范围分配到空间；空间无自有凭据时自动回退使用，凭据全程掩码。</div>
         </div>
-        <button class="btn btn-primary" onclick="openModal('modal-credential')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-          添加凭据
-        </button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="switchView('integrations')" title="提供商插件的安装/升级在「插件与工具」页统一管理">安装提供商插件</button>
+          <button class="btn btn-primary" onclick="openModal('modal-credential')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+            添加凭据
+          </button>
+        </div>
       </div>
       <div class="card">
         <table>
@@ -434,15 +437,28 @@
   </div>
 </div>
 
-<!-- ============ 弹窗：安装插件 ============ -->
+<!-- ============ 弹窗：安装插件（三源） ============ -->
 <div class="modal-wrap" id="modal-install">
   <div class="modal">
     <h3>安装插件</h3>
     <div class="modal-sub">安装后按所选范围分发到各工作空间。</div>
     <div class="field">
-      <label>插件包</label>
-      <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:18px;text-align:center;color:var(--text-3);font-size:12.5px;background:#FAFBFC">
-        拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+      <div style="display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:12px">
+        <button class="drawer-tab active" data-src="local">本地上传</button>
+        <button class="drawer-tab" data-src="market">插件市场</button>
+        <button class="drawer-tab" data-src="github">GitHub</button>
+      </div>
+      <div data-pane="local">
+        <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:18px;text-align:center;color:var(--text-3);font-size:12.5px;background:#FAFBFC">
+          拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+        </div>
+      </div>
+      <div data-pane="market" hidden>
+        <input class="input" style="width:100%;padding-left:12px" placeholder="搜索插件市场…（内网不可用时请改用本地上传）">
+      </div>
+      <div data-pane="github" hidden>
+        <input class="input" style="width:100%;padding-left:12px;margin-bottom:8px" placeholder="仓库 URL，如 https://github.com/org/dify-plugin-x">
+        <input class="input" style="width:100%;padding-left:12px" placeholder="版本号，如 1.2.0">
       </div>
     </div>
     <div class="field">
@@ -458,6 +474,7 @@
           <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
         </select>
       </div>
+      <div class="hint">托管插件在空间侧锁定：成员不可自行升级/卸载；版本由系统管理员统一推送。</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
@@ -594,7 +611,7 @@ document.getElementById('integration-rows').innerHTML = integrations.map(g=>`
     <td class="mono">v${g.ver}</td>
     <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-blue">指定空间 · ${g.n}</span>`}</td>
     <td class="muted">${g.ok}${g.ok.includes('失败') ? ' <span class="pill" style="background:var(--danger-soft);color:var(--danger)">部分失败</span>' : ''}</td>
-    <td><div class="row-actions"><button class="link-btn">改范围</button><button class="link-btn">推送升级</button><button class="link-btn danger">回收</button></div></td>
+    <td><div class="row-actions"><button class="link-btn">改范围</button><button class="link-btn" title="上传新版本包后扇出升级所有托管空间">推送升级</button><button class="link-btn danger">回收</button></div></td>
   </tr>`).join('');
 
 document.getElementById('provider-rows').innerHTML = providers.map(p=>`
@@ -619,11 +636,19 @@ document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
 
 /* ---------- Interactions ---------- */
 const views = ['workspaces','members','integrations','providers','admins','audit'];
+function switchView(v){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  views.forEach(x=>document.getElementById('view-'+x).hidden = x!==v);
+}
 document.getElementById('nav').addEventListener('click', e=>{
   const btn = e.target.closest('.nav-item'); if(!btn) return;
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b===btn));
-  views.forEach(v=>document.getElementById('view-'+v).hidden = v!==btn.dataset.view);
+  switchView(btn.dataset.view);
 });
+/* 安装弹窗来源 tab */
+document.querySelectorAll('#modal-install [data-src]').forEach(t=>t.addEventListener('click', ()=>{
+  document.querySelectorAll('#modal-install [data-src]').forEach(x=>x.classList.toggle('active', x===t));
+  document.querySelectorAll('#modal-install [data-pane]').forEach(p=>p.hidden = p.dataset.pane!==t.dataset.src);
+}));
 
 function openDrawer(i){
   const w = workspaces[i];
