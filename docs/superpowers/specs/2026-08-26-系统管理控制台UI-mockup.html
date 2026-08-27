@@ -600,7 +600,31 @@
     </div>
     <div class="field">
       <label>分配范围</label>
-      <select class="select" style="width:100%"><option>全部空间</option><option>指定空间…</option></select>
+      <div class="hint" style="margin-bottom:6px">插件分发范围：<b>全部空间</b>（在「插件管理」中调整）</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="credscope" checked> 跟随插件范围
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="credscope"> 收窄到子集
+        </label>
+        <select class="select" multiple size="3" style="height:auto;padding:6px 8px">
+          <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
+        </select>
+      </div>
+      <div class="hint">凭据范围只能是插件分发范围的子集。</div>
+    </div>
+    <div class="field">
+      <label>配置策略</label>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="credpolicy" checked style="margin-top:2px"> 空间自配 <span style="color:var(--text-3);font-weight:400">空间可自行配置覆盖；未配置的回退到组织凭据</span>
+        </label>
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="credpolicy" style="margin-top:2px"> 组织统一 <span style="color:var(--text-3);font-weight:400">空间侧锁定不可自配，仅使用组织凭据</span>
+        </label>
+      </div>
+      <div class="hint">切换策略不会删除空间已有凭据，仅切换生效来源。</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
@@ -781,7 +805,7 @@ document.getElementById('tool-rows').innerHTML = integrations.filter(g=>g.type==
     <td class="mono">v${g.ver}</td>
     <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-blue">指定空间 · ${g.n}</span>`}</td>
     <td class="muted">${g.ok}</td>
-    <td><div class="row-actions"><button class="link-btn">改范围</button><button class="link-btn danger">回收</button></div></td>
+    <td><div class="row-actions"><button class="link-btn" onclick="openCred('${g.name}')" title="工具插件的组织级凭据（Key/Secret 类）">配置凭据</button><button class="link-btn">改范围</button><button class="link-btn danger">回收</button></div></td>
   </tr>`).join('');
 
 document.getElementById('mcp-rows').innerHTML = mcps.map(m=>`
