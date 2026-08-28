@@ -79,6 +79,44 @@
   .help-btn { width:30px; height:30px; border-radius:9px; color:var(--text-3); display:grid; place-items:center; flex:none; }
   .help-btn:hover { background:var(--bg-soft); color:var(--text-1); }
 
+  /* ===== 下拉菜单（头像 / 空间切换） ===== */
+  .dropdown { position:relative; }
+  .dropdown-menu { position:absolute; bottom:calc(100% + 6px); left:0; right:0; min-width:200px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); padding:6px; z-index:90; opacity:0; transform:translateY(4px); pointer-events:none; transition:opacity .15s, transform .15s; }
+  .dropdown-menu.open { opacity:1; transform:none; pointer-events:auto; }
+  .dropdown-menu.wide { min-width:280px; padding:0; overflow:hidden; }
+  .dm-head { padding:12px 14px 10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+  .dm-head .avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#FF8C00,#FFB566); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:700; flex:none; }
+  .dm-head-name { font-size:13.5px; font-weight:700; }
+  .dm-head-mail { font-size:11.5px; color:var(--text-3); margin-top:1px; }
+  .dm-section { padding:6px 4px; }
+  .dm-section-label { font-size:10.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; padding:6px 10px 4px; }
+  .dm-item { display:flex; align-items:center; gap:10px; height:36px; padding:0 10px; border-radius:9px; color:var(--text-2); font-size:13px; font-weight:500; width:100%; text-align:left; }
+  .dm-item:hover { background:var(--bg-soft); color:var(--text-1); }
+  .dm-item svg { width:16px; height:16px; flex:none; color:var(--text-3); }
+  .dm-item:hover svg { color:var(--text-1); }
+  .dm-item.danger { color:var(--danger); }
+  .dm-item.danger:hover { background:#FEF3F2; }
+  .dm-item .badge { margin-left:auto; font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:999px; background:var(--accent-soft); color:var(--accent-deep); }
+  .dm-divider { height:1px; background:var(--border); margin:4px 6px; }
+
+  /* 空间切换面板 */
+  .ws-panel { position:absolute; top:calc(100% + 6px); left:0; width:260px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); z-index:90; opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .15s, transform .15s; overflow:hidden; }
+  .ws-panel.open { opacity:1; transform:none; pointer-events:auto; }
+  .ws-panel-head { padding:10px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+  .ws-panel-head-title { font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--text-3); text-transform:uppercase; }
+  .ws-panel-list { max-height:280px; overflow-y:auto; padding:4px; }
+  .ws-panel-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; cursor:pointer; }
+  .ws-panel-item:hover { background:var(--bg-soft); }
+  .ws-panel-item.active { background:var(--accent-soft); }
+  .ws-panel-item .ws-avatar { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; font-weight:700; font-size:12px; color:#fff; flex:none; }
+  .ws-panel-item .ws-info { flex:1; min-width:0; }
+  .ws-panel-item .ws-pname { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ws-panel-item .ws-prole { font-size:11px; color:var(--text-3); margin-top:1px; }
+  .ws-panel-item .check { color:var(--accent-deep); font-weight:800; font-size:14px; flex:none; }
+  .ws-panel-foot { padding:8px; border-top:1px solid var(--border); }
+  .ws-panel-foot button { width:100%; height:34px; border-radius:9px; background:var(--bg-soft); color:var(--text-2); font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .ws-panel-foot button:hover { background:#EDEDEF; color:var(--text-1); }
+
   /* ===== 主区 ===== */
   .main { flex:1; overflow-y:auto; background:var(--bg); }
   .page { padding:24px 36px 56px; max-width:1040px; margin:0 auto; }
@@ -204,11 +242,64 @@
       <div class="logo-mark">L</div>
       <div class="logo-text">Lomva</div>
     </div>
-    <button class="ws-switch">
-      <div class="ws-avatar">张</div>
-      <div class="ws-name">市场部</div>
-      <svg class="ws-caret" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
+    <div class="dropdown" style="margin:2px 12px 10px">
+      <button class="ws-switch" onclick="toggleMenu('ws-panel')" style="width:calc(100% - 0px);margin:0">
+        <div class="ws-avatar">市</div>
+        <div class="ws-name">市场部</div>
+        <svg class="ws-caret" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <!-- 空间切换面板 -->
+      <div class="ws-panel" id="ws-panel">
+        <div class="ws-panel-head">
+          <span class="ws-panel-head-title">切换工作空间</span>
+        </div>
+        <div class="ws-panel-list">
+          <div class="ws-panel-item active">
+            <div class="ws-avatar" style="background:#FF8C00">市</div>
+            <div class="ws-info">
+              <div class="ws-pname">市场部</div>
+              <div class="ws-prole">Owner</div>
+            </div>
+            <span class="check">✓</span>
+          </div>
+          <div class="ws-panel-item">
+            <div class="ws-avatar" style="background:#7A5AF8">研</div>
+            <div class="ws-info">
+              <div class="ws-pname">研发部</div>
+              <div class="ws-prole">Admin</div>
+            </div>
+          </div>
+          <div class="ws-panel-item">
+            <div class="ws-avatar" style="background:#12B76A">数</div>
+            <div class="ws-info">
+              <div class="ws-pname">数据团队</div>
+              <div class="ws-prole">Editor</div>
+            </div>
+          </div>
+          <div class="ws-panel-item">
+            <div class="ws-avatar" style="background:#0BA5EC">客</div>
+            <div class="ws-info">
+              <div class="ws-pname">客户成功</div>
+              <div class="ws-prole">Editor</div>
+            </div>
+          </div>
+          <div class="ws-panel-item">
+            <div class="ws-avatar" style="background:#EE46BC">外</div>
+            <div class="ws-info">
+              <div class="ws-pname">外部协作-供应商A</div>
+              <div class="ws-prole">Normal</div>
+            </div>
+          </div>
+          <div class="ws-panel-item" style="opacity:.5">
+            <div class="ws-avatar" style="background:#98A2B3">旧</div>
+            <div class="ws-info">
+              <div class="ws-pname">旧版客服项目</div>
+              <div class="ws-prole">已归档</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <nav class="nav" id="global-nav">
       <button class="nav-item" data-nav="home">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z" stroke-linejoin="round"/></svg>
@@ -243,10 +334,41 @@
       </button>
     </div>
     <div class="side-bottom">
-      <button class="account">
-        <div class="avatar">张</div>
-        <div class="name">张玺</div>
-      </button>
+      <div class="dropdown" style="flex:1">
+        <button class="account" onclick="toggleMenu('account-menu')" style="width:100%">
+          <div class="avatar">张</div>
+          <div class="name">张玺</div>
+          <svg style="margin-left:auto;color:var(--text-3)" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <!-- 头像下拉菜单 -->
+        <div class="dropdown-menu wide" id="account-menu">
+          <div class="dm-head">
+            <div class="avatar">张</div>
+            <div>
+              <div class="dm-head-name">张玺</div>
+              <div class="dm-head-mail">zhangxi@xingshulin.com</div>
+            </div>
+          </div>
+          <div class="dm-section">
+            <div class="dm-section-label">账号</div>
+            <button class="dm-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c.8-3.5 3.6-5.5 8-5.5s7.2 2 8 5.5"/></svg>
+              个人资料
+            </button>
+            <button class="dm-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              密码与安全
+            </button>
+          </div>
+          <div class="dm-divider"></div>
+          <div class="dm-section">
+            <button class="dm-item danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21h6M10 21v-7h4v7M5 7h14l-1 13H6L5 7zM9 7V4h6v3"/></svg>
+              退出登录
+            </button>
+          </div>
+        </div>
+      </div>
       <button class="help-btn" title="帮助">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.5 2.5 0 114.2 1.9c-.9.8-1.7 1.3-1.7 2.4" stroke-linecap="round"/><circle cx="12" cy="16.6" r=".4" fill="currentColor"/></svg>
       </button>
@@ -356,7 +478,7 @@
       <div class="intg-body" id="intg-body"><!-- JS 渲染 --></div>
     </section>
 
-    <!-- ⑤ 登录失败提示 -->
+    <!-- ⑤ 登录失败提示（普通账号无空间） -->
     <section data-view="login-fail" class="empty-wrap" hidden>
       <div class="card empty-card">
         <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><path d="M17 16v5M14.5 18.5h5" stroke-linecap="round"/></svg></div>
@@ -648,6 +770,7 @@ function go(v) {
   document.querySelectorAll('#view-switch button').forEach(b => b.classList.toggle('on', b.dataset.go === v));
   document.getElementById('anno-body').innerHTML = annos[v] || annos.integrations;
   document.getElementById('anno').style.display = v === 'login-fail' ? 'none' : '';
+  closeAllMenus();
   if (v === 'integrations') renderIntg();
   else document.querySelectorAll('.nav-sub-item').forEach(x => x.classList.remove('active'));
   document.getElementById('main').scrollTop = 0;
@@ -665,6 +788,22 @@ document.querySelectorAll('[data-subnav]').forEach(b => b.addEventListener('clic
   curIntg = b.dataset.subnav === 'provider' ? 'provider' : 'tools-builtin';
   go('integrations');
 }));
+
+/* ===== 下拉菜单（头像 / 空间切换） ===== */
+function toggleMenu(id) {
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('open');
+  closeAllMenus();
+  if (!wasOpen) el.classList.add('open');
+}
+function closeAllMenus() {
+  document.querySelectorAll('.dropdown-menu, .ws-panel').forEach(m => m.classList.remove('open'));
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dropdown')) closeAllMenus();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllMenus(); });
+
 go('integrations');
 </script>
 </body>
