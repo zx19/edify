@@ -41,8 +41,13 @@ echo "==> kubectl apply -k $OVERLAY"
 # 服务端 dry-run 校验（不落库）：提前拦截不可变字段等校验错误
 kubectl apply -k "$OVERLAY" --dry-run=server > /dev/null
 
-# 与集群现状的差异预览（首次部署会全量列出）；有差异时 diff 退出码为 1，属预期
-kubectl diff -k "$OVERLAY" || true
+# 与集群现状的差异预览（首次部署会全量列出）；退出码 1=有差异（预期），>1=真错误
+diff_rc=0
+kubectl diff -k "$OVERLAY" || diff_rc=$?
+if (( diff_rc > 1 )); then
+  echo "!! kubectl diff 异常退出（$diff_rc）"
+  exit "$diff_rc"
+fi
 if [[ "${ASSUME_YES:-0}" != "1" ]]; then
   read -r -p "确认应用以上变更？[y/N] " ans
   [[ "${ans:-N}" =~ ^[yY]$ ]] || { echo "已取消"; exit 1; }
@@ -52,26 +57,37 @@ kubectl apply -k "$OVERLAY"
 
 echo "==> 等待 init Job 与有状态组件"
 kubectl -n "$NAMESPACE" wait --for=condition=complete job/lomva-init-permissions --timeout=300s
-for sts in lomva-postgres lomva-redis lomva-weaviate; do
-  # postgres 为可选组件（qa/prod 用外部 PG，集群内无此 StatefulSet），按存在性跳过
-  if kubectl -n "$NAMESPACE" get statefulset "$sts" >/dev/null 2>&1; then
-    kubectl -n "$NAMESPACE" rollout status "statefulset/$sts" --timeout=300s
-  fi
+# 动态取实际存在的 StatefulSet（qa/prod 外部 PG 无 postgres sts；local 含 lomva-postgres）
+kubectl -n "$NAMESPACE" get sts -o name | while read -r s; do
+  kubectl -n "$NAMESPACE" rollout status "$s" --timeout=300s
 done
 
-echo "==> 等待全部 Deployment（api 首次 migration 较慢，最长 10 分钟）"
-kubectl -n "$NAMESPACE" wait --for=condition=available deploy --all --timeout=600s
+echo "==> 等待全部 Deployment 滚动完成（api migration 较慢，单个最长 10 分钟）"
+# 注意：wait --for=condition=available 在滚动更新期间恒为 True（maxUnavailable 下旧 Pod 保活），
+# 更新场景会立即返回、带着旧版本冒烟并误报完成；rollout status 等到新副本全部就绪才返回
+kubectl -n "$NAMESPACE" get deploy -o name | while read -r d; do
+  kubectl -n "$NAMESPACE" rollout status "$d" --timeout=600s
+done
 
 echo "==> 冒烟检查（port-forward 经 nginx 转发）"
 kubectl -n "$NAMESPACE" port-forward svc/nginx 18080:80 &
 PF_PID=$!
 trap 'kill "$PF_PID" 2>/dev/null || true' EXIT
 sleep 3
+SMOKE_FAIL=0
+if ! kill -0 "$PF_PID" 2>/dev/null; then
+  echo "!! port-forward 启动失败（18080 端口被占用？）"
+  SMOKE_FAIL=1
+fi
 curl -fsS -o /dev/null -w "web  %{http_code}\n" "http://localhost:18080${SMOKE_PATH}/" \
-  || echo "!! web 检查失败（tke overlay 需确认 web 镜像带 NEXT_PUBLIC_BASE_PATH=/lomva 构建）"
+  || { SMOKE_FAIL=1; echo "!! web 检查失败（tke overlay 需确认 web 镜像带 NEXT_PUBLIC_BASE_PATH=/lomva 构建）"; }
 curl -fsS "http://localhost:18080${SMOKE_PATH}/console/api/version" \
-  && echo " <- api" || echo "!! api 检查失败：kubectl -n $NAMESPACE logs deploy/lomva-api"
+  && echo " <- api" || { SMOKE_FAIL=1; echo "!! api 检查失败：kubectl -n $NAMESPACE logs deploy/lomva-api"; }
 
 echo
 kubectl -n "$NAMESPACE" get ingress lomva 2>/dev/null || true
+if [[ "$SMOKE_FAIL" == "1" ]]; then
+  echo "!! 冒烟检查未通过，退出码置 1（滚动可能仍在进行或应用层异常，按 README 回退方案排查）"
+  exit 1
+fi
 echo "完成。"
