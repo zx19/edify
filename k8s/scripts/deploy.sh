@@ -81,8 +81,9 @@ if ! kill -0 "$PF_PID" 2>/dev/null; then
 fi
 curl -fsS -o /dev/null -w "web  %{http_code}\n" "http://localhost:18080${SMOKE_PATH}/" \
   || { SMOKE_FAIL=1; echo "!! web 检查失败（tke overlay 需确认 web 镜像带 NEXT_PUBLIC_BASE_PATH=/lomva 构建）"; }
-curl -fsS "http://localhost:18080${SMOKE_PATH}/console/api/version" \
-  && echo " <- api" || { SMOKE_FAIL=1; echo "!! api 检查失败：kubectl -n $NAMESPACE logs deploy/lomva-api"; }
+curl -fsS "http://localhost:18080${SMOKE_PATH}/console/api/version?current_version=999.999.999" \
+  && echo " <- api（回显的是部署版本；该接口必填 current_version，否则 422）" \
+  || { SMOKE_FAIL=1; echo "!! api 检查失败：kubectl -n $NAMESPACE logs deploy/lomva-api"; }
 
 echo
 kubectl -n "$NAMESPACE" get ingress lomva 2>/dev/null || true
