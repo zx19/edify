@@ -200,17 +200,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
           插件管理
         </button>
-        <div class="nav-group-label" style="padding:8px 12px 2px">工具</div>
-        <div class="nav-sub">
-          <button class="nav-item" data-view="tools-plugins">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4.5 4.5 0 00-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 006-6L14 13l-2-2 2.7-4.7z"/></svg>
-            工具插件
-          </button>
-          <button class="nav-item" data-view="mcp">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2-5 4 10 2-5h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            MCP
-          </button>
-        </div>
         <button class="nav-item" data-view="providers">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
           模型提供商
@@ -324,48 +313,12 @@
       </div>
     </section>
 
-    <!-- ====== 工具插件 ====== -->
-    <section class="page" id="view-tools-plugins" hidden>
-      <div class="page-head">
-        <div>
-          <div class="page-title">工具插件</div>
-          <div class="page-desc">工具类插件的托管视图（「插件管理」的类型过滤视角）。</div>
-        </div>
-      </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>插件</th><th>版本</th><th>适用范围</th><th>分发状态</th><th style="text-align:right">操作</th></tr></thead>
-          <tbody id="tool-rows"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ====== MCP ====== -->
-    <section class="page" id="view-mcp" hidden>
-      <div class="page-head">
-        <div>
-          <div class="page-title">MCP 服务器</div>
-          <div class="page-desc">统一登记 MCP 服务器并按空间分发。</div>
-        </div>
-        <button class="btn btn-primary" onclick="openModal('modal-scope')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-          添加 MCP 服务器
-        </button>
-      </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>名称</th><th>端点</th><th>适用范围</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
-          <tbody id="mcp-rows"></tbody>
-        </table>
-      </div>
-    </section>
-
     <!-- ====== 模型提供商（组织级凭据） ====== -->
     <section class="page" id="view-providers" hidden>
       <div class="page-head">
         <div>
           <div class="page-title">模型提供商</div>
-          <div class="page-desc">组织级凭据：空间自有凭据优先，未配置的空间回退到组织凭据；凭据全程掩码。</div>
+          <div class="page-desc">组织级凭据：一期全量组织统一（空间侧只读、无回退），未配置的供应商空间侧不可用；凭据全程掩码。</div>
         </div>
         <button class="btn btn-ghost" onclick="switchView('marketplace')" title="提供商插件的安装/升级在「插件中心」页统一进行">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
@@ -519,18 +472,10 @@
       <table>
         <thead><tr><th>配置项</th><th>状态</th></tr></thead>
         <tbody>
-          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-green"><span class="dot"></span>空间自有</span></td></tr>
-          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-blue"><span class="dot"></span>组织回退</span></td></tr>
+          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一 · 锁定</span></td></tr>
+          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray">未配置</span></td></tr>
           <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一 · 锁定</span></td></tr>
           <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray">未配置</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="side-section" style="padding-left:0">MCP 服务器</div>
-    <div class="card">
-      <table>
-        <tbody>
-          <tr><td style="font-weight:600">CRM 查询</td><td class="mono" style="font-size:11.5px">https://crm-mcp.in.x.com/sse</td><td><span class="pill pill-blue">托管分发</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -592,7 +537,7 @@
 <div class="modal-wrap" id="modal-credential">
   <div class="modal">
     <h3 id="cred-title">编辑凭据</h3>
-    <div class="modal-sub">组织级凭据仅保存服务端、全程掩码；空间自有凭据优先，未配置的空间回退使用组织凭据。</div>
+    <div class="modal-sub">组织级凭据仅保存服务端、全程掩码；一期全量组织统一，空间侧不可自配。</div>
     <div class="field">
       <label>API Key</label>
       <input class="input" type="password" placeholder="sk-…">
@@ -718,10 +663,6 @@ const mkt = [
   { name:'FunctionCall 策略', desc:'经典 Function Calling 推理策略，支持工具循环。', type:'Agent 策略', ver:'1.0.0', c:4 },
   { name:'Jina Reader', desc:'网页正文提取与清洗，输出结构化文本。', type:'工具', ver:'1.1.7', c:5 },
 ];
-const mcps = [
-  { name:'内部工单系统', url:'https://mcp.in.x.com/sse', scope:'spec', n:2, status:'正常', c:0 },
-  { name:'CRM 查询', url:'https://crm-mcp.in.x.com/sse', scope:'all', n:12, status:'正常', c:5 },
-];
 const audits = [
   { t:'2026-08-26 10:42:18', who:'张伟', act:'授予系统管理员', target:'周杰 (zhoujie@x.com)', d:'{\n  "action": "system_admin.grant",\n  "actor": "zhangwei@x.com",\n  "target_account": "zhoujie@x.com",\n  "confirmed_by": "password"\n}' },
   { t:'2026-08-26 09:15:03', who:'李娜', act:'空间归档', target:'旧版客服项目', d:'{\n  "action": "workspace.archive",\n  "workspace_id": "7f3a…c21d",\n  "members_affected": 2\n}' },
@@ -799,24 +740,6 @@ document.getElementById('provider-rows').innerHTML = providers.map(p=>`
     <td><div class="row-actions">${providerOps(p)}</div></td>
   </tr>`).join('');
 
-document.getElementById('tool-rows').innerHTML = integrations.filter(g=>g.type==='工具').map(g=>`
-  <tr>
-    <td><div class="cell-main"><div class="ws-icon" style="background:${palette[g.c]}">${g.name[0]}</div><div class="cell-title">${g.name}</div></div></td>
-    <td class="mono">v${g.ver}</td>
-    <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-blue">指定空间 · ${g.n}</span>`}</td>
-    <td class="muted">${g.ok}</td>
-    <td><div class="row-actions"><button class="link-btn" onclick="openCred('${g.name}')" title="工具插件的组织级凭据（Key/Secret 类）">配置凭据</button><button class="link-btn">改范围</button><button class="link-btn danger">回收</button></div></td>
-  </tr>`).join('');
-
-document.getElementById('mcp-rows').innerHTML = mcps.map(m=>`
-  <tr>
-    <td><div class="cell-main"><div class="ws-icon" style="background:${palette[m.c]}">${m.name[0]}</div><div class="cell-title">${m.name}</div></div></td>
-    <td class="mono">${m.url}</td>
-    <td>${m.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-blue">指定空间 · ${m.n}</span>`}</td>
-    <td><span class="pill pill-green"><span class="dot"></span>${m.status}</span></td>
-    <td><div class="row-actions"><button class="link-btn">编辑</button><button class="link-btn danger">移除</button></div></td>
-  </tr>`).join('');
-
 document.getElementById('mkt-grid').innerHTML = mkt.map(p=>`
   <div class="mkt-card">
     <div class="mkt-card-head">
@@ -841,7 +764,7 @@ document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="audit-detail" id="audit-d-${i}" hidden><td></td><td colspan="4"><div class="audit-json">${a.d}</div></td></tr>`).join('');
 
 /* ---------- Interactions ---------- */
-const views = ['workspaces','members','plugins','tools-plugins','mcp','providers','marketplace','admins','audit'];
+const views = ['workspaces','members','plugins','providers','marketplace','admins','audit'];
 function switchView(v){
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
   views.forEach(x=>document.getElementById('view-'+x).hidden = x!==v);
