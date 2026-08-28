@@ -48,14 +48,18 @@ const mockUsePathname = mockNavigation.usePathname
 const mockUseRouter = mockNavigation.useRouter
 const mockFetchAppDetailDirect = vi.mocked(fetchAppDetailDirect)
 
-const createAppDetail = (overrides: Partial<App> = {}) =>
+type AppDetailFixture = App & {
+  bound_agent_id?: string | null
+}
+
+const createAppDetail = (overrides: Partial<AppDetailFixture> = {}) =>
   ({
     id: 'app-1',
     name: 'Demo App',
     mode: AppModeEnum.WORKFLOW,
     permission_keys: [AppACLPermission.ViewLayout, AppACLPermission.Monitor],
     ...overrides,
-  }) as App
+  }) as AppDetailFixture
 
 const waitForAppContent = async () => {
   await waitFor(() => {
@@ -87,7 +91,6 @@ describe('AppDetailLayout', () => {
       ['/app/app-1/workflow', 'common.appMenus.promptEng', AppModeEnum.WORKFLOW],
       ['/app/app-1/configuration', 'common.appMenus.promptEng', AppModeEnum.CHAT],
       ['/app/app-1/access-point', 'common.appMenus.accessPoint', AppModeEnum.WORKFLOW],
-      ['/app/app-1/develop', 'common.appMenus.apiAccess', AppModeEnum.WORKFLOW],
       ['/app/app-1/deploy', 'common.appMenus.deploy', AppModeEnum.WORKFLOW],
       ['/app/app-1/logs', 'common.appMenus.logs', AppModeEnum.WORKFLOW],
       ['/app/app-1/annotations', 'common.appMenus.annotations', AppModeEnum.CHAT],
@@ -423,6 +426,52 @@ describe('AppDetailLayout', () => {
 
     expect(mockReplace).not.toHaveBeenCalled()
     expect(useStore.getState().appDetail?.id).toBe('app-1')
+  })
+
+  it('should redirect Agent app access config URLs to the Agent configure page', async () => {
+    mockPathname = '/app/app-1/access-config'
+    mockFetchAppDetailDirect.mockResolvedValue(
+      createAppDetail({
+        mode: AppModeEnum.AGENT,
+        bound_agent_id: 'agent-1',
+        permission_keys: [AppACLPermission.AccessConfig],
+      }),
+    )
+
+    render(
+      <AppDetailLayout appId="app-1">
+        <div>App page content</div>
+      </AppDetailLayout>,
+    )
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/agents/agent-1/configure')
+    })
+    expect(screen.queryByText('App page content')).not.toBeInTheDocument()
+    expect(useStore.getState().appDetail).toBeUndefined()
+  })
+
+  it('should keep Agent app access config content hidden while redirecting cached app data', async () => {
+    mockPathname = '/app/app-1/access-config'
+    useStore.getState().setAppDetail(
+      createAppDetail({
+        mode: AppModeEnum.AGENT,
+        bound_agent_id: 'agent-1',
+        permission_keys: [AppACLPermission.AccessConfig],
+      }),
+    )
+
+    render(
+      <AppDetailLayout appId="app-1">
+        <div>App page content</div>
+      </AppDetailLayout>,
+    )
+
+    expect(screen.queryByText('App page content')).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/agents/agent-1/configure')
+    })
+    expect(mockFetchAppDetailDirect).not.toHaveBeenCalled()
   })
 
   it('should redirect access config pages when RBAC is disabled', async () => {
