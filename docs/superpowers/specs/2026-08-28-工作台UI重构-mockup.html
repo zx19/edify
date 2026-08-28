@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作台重构 · Lomva Console Mockup</title>
+<style>
+  /* ===== 设计语言：白+黑+橙（#FF8C00 选中/强调） ===== */
+  :root {
+    --bg: #FFFFFF;
+    --bg-soft: #F7F7F8;
+    --panel: #FFFFFF;
+    --border: #E8E8EA;
+    --border-strong: #D9D9DC;
+    --text-1: #0A0A0B;   /* 主文字 黑 */
+    --text-2: #3D3D42;
+    --text-3: #8A8A93;
+    --accent: #FF8C00;   /* 选中/强调 橙 */
+    --accent-soft: #FFF3E0;
+    --accent-deep: #E67A00;
+    --danger: #E5484D;
+    --success: #12A150;
+    --success-soft: #E9F9EF;
+    --gray-pill-bg: #F2F2F4;
+    --gray-pill-fg: #3D3D42;
+    --violet-pill-bg: #F4F3FF;
+    --violet-pill-fg: #6938EF;
+    --amber-pill-bg: #FFF6E8;
+    --amber-pill-fg: #B76400;
+    --radius-card: 14px;
+    --radius-btn: 9px;
+    --radius-pill: 999px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .10);
+    --font: "Inter", "SF Pro Text", -apple-system, "PingFang SC", "system-ui", sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body { font-family:var(--font); background:var(--bg); color:var(--text-1); font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; border:0; background:none; color:inherit; }
+  input { font-family:inherit; outline:none; }
+  a { color:inherit; text-decoration:none; }
+
+  .shell { display:flex; height:100vh; overflow:hidden; }
+
+  /* ===== 全局侧栏：窄图标栏 + 展开区 ===== */
+  .side { width:216px; flex:none; background:var(--bg); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .side-head { padding:18px 16px 10px; display:flex; align-items:center; gap:10px; }
+  .logo-mark { width:30px; height:30px; border-radius:9px; background:var(--text-1); color:#fff; display:grid; place-items:center; font-weight:800; font-size:15px; flex:none; }
+  .logo-text { font-weight:800; font-size:16px; letter-spacing:-.2px; }
+  .ws-switch { display:flex; align-items:center; gap:10px; height:40px; padding:0 10px; margin:2px 12px 10px; border-radius:11px; background:var(--bg-soft); }
+  .ws-switch:hover { background:#EDEDEF; }
+  .ws-avatar { width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#0A0A0B,#52525B); color:#fff; display:grid; place-items:center; font-weight:700; font-size:12px; flex:none; }
+  .ws-name { font-size:13.5px; font-weight:600; }
+  .ws-caret { margin-left:auto; color:var(--text-3); }
+
+  .nav { display:flex; flex-direction:column; gap:2px; padding:2px 10px; }
+  .nav-item { display:flex; align-items:center; gap:10px; height:36px; padding:0 12px; border-radius:10px; color:var(--text-2); font-size:14px; font-weight:500; width:100%; text-align:left; position:relative; }
+  .nav-item svg { width:18px; height:18px; flex:none; }
+  .nav-item:hover { background:var(--bg-soft); color:var(--text-1); }
+  .nav-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
+  .nav-item.active::before { content:""; position:absolute; left:-10px; top:8px; bottom:8px; width:3px; border-radius:3px; background:var(--accent); }
+  .nav-sub { padding:2px 10px 6px; margin-left:22px; display:flex; flex-direction:column; gap:2px; }
+  .nav-sub-item { display:flex; align-items:center; height:30px; padding:0 12px; border-radius:8px; color:var(--text-3); font-size:13px; font-weight:500; width:100%; text-align:left; }
+  .nav-sub-item:hover { background:var(--bg-soft); color:var(--text-1); }
+  .nav-sub-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
+  .nav-item .intg-caret { transition:transform .15s; }
+  .nav-item.intg-open .intg-caret { transform:rotate(90deg); }
+  .webapps { padding:10px 12px 4px; margin-top:6px; border-top:1px solid var(--border); }
+  .webapps-head { display:flex; align-items:center; justify-content:space-between; padding:0 12px 6px; color:var(--text-3); font-size:10.5px; font-weight:700; letter-spacing:.1em; }
+  .webapps-item { display:flex; align-items:center; gap:8px; height:32px; padding:0 12px; border-radius:9px; color:var(--text-2); font-size:13px; width:100%; text-align:left; }
+  .webapps-item:hover { background:var(--bg-soft); }
+  .side-bottom { margin-top:auto; padding:10px 12px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+  .account { display:flex; align-items:center; gap:9px; height:34px; padding:0 8px 0 6px; border-radius:10px; flex:1; }
+  .account:hover { background:var(--bg-soft); }
+  .account .avatar { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#FF8C00,#FFB566); color:#fff; display:grid; place-items:center; font-size:11px; font-weight:700; flex:none; }
+  .account .name { font-size:12.5px; font-weight:600; }
+  .help-btn { width:30px; height:30px; border-radius:9px; color:var(--text-3); display:grid; place-items:center; flex:none; }
+  .help-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+
+  /* ===== 主区 ===== */
+  .main { flex:1; overflow-y:auto; background:var(--bg); }
+  .page { padding:24px 36px 56px; max-width:1040px; margin:0 auto; }
+  .page-title { font-size:22px; font-weight:800; letter-spacing:-.3px; }
+  .page-sub { font-size:13px; color:var(--text-3); margin-top:4px; }
+  .toolbar { display:flex; align-items:center; gap:10px; margin:18px 0 18px; flex-wrap:wrap; }
+
+  .btn { height:34px; padding:0 16px; border-radius:var(--radius-btn); font-size:13.5px; font-weight:700; display:inline-flex; align-items:center; gap:7px; }
+  .btn-primary { background:var(--text-1); color:#fff; }
+  .btn-primary:hover { background:#26262B; }
+  .btn-accent { background:var(--accent); color:#fff; }
+  .btn-accent:hover { background:var(--accent-deep); }
+  .btn-ghost { background:#fff; border:1px solid var(--border-strong); color:var(--text-2); }
+  .btn-ghost:hover { border-color:var(--text-3); color:var(--text-1); }
+  .btn:disabled { background:var(--gray-pill-bg); color:var(--text-3); border-color:transparent; cursor:not-allowed; }
+
+  .search-input { height:34px; min-width:220px; padding:0 14px; border-radius:10px; border:1px solid var(--border-strong); background:#fff; font-size:13px; color:var(--text-1); }
+  .search-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .search-input::placeholder { color:var(--text-3); }
+  .chip { height:30px; padding:0 14px; border-radius:var(--radius-pill); background:#fff; border:1px solid var(--border-strong); color:var(--text-2); font-size:12.5px; font-weight:600; display:inline-flex; align-items:center; gap:5px; }
+  .chip:hover { border-color:var(--text-3); color:var(--text-1); }
+  .chip.on { background:var(--accent-soft); border-color:var(--accent); color:var(--accent-deep); }
+
+  .pill { display:inline-flex; align-items:center; gap:5px; height:21px; padding:0 9px; border-radius:var(--radius-pill); font-size:11px; font-weight:700; }
+  .pill .dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+  .pill-gray { background:var(--gray-pill-bg); color:var(--gray-pill-fg); }
+  .pill-green { background:var(--success-soft); color:var(--success); }
+  .pill-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .pill-amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
+  .pill-accent { background:var(--accent-soft); color:var(--accent-deep); }
+
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-card); }
+  .notice { border-radius:11px; padding:12px 16px; font-size:13px; line-height:1.7; color:var(--text-2); }
+  .notice-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .notice-blue { background:var(--accent-soft); color:var(--accent-deep); }
+  .muted { color:var(--text-3); font-size:12.5px; }
+  .mono { font-family:var(--mono); font-size:12px; color:var(--text-2); }
+
+  /* ===== 集成页：顶部 tab 重排（替代左侧二级栏） ===== */
+  .intg-head { padding:22px 36px 0; max-width:1040px; margin:0 auto; }
+  .intg-tool-tabs { display:flex; align-items:center; gap:8px; margin:16px 0 4px; flex-wrap:wrap; }
+  .sub-tab { height:30px; padding:0 14px; border-radius:var(--radius-pill); background:var(--bg-soft); color:var(--text-2); font-size:12.5px; font-weight:600; }
+  .sub-tab:hover { color:var(--text-1); }
+  .sub-tab.on { background:var(--text-1); color:#fff; }
+  .intg-body { padding:16px 36px 56px; max-width:1040px; margin:0 auto; }
+
+  /* ===== 工具卡片网格（重新设计：大卡片，非列表行） ===== */
+  .tool-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(268px, 1fr)); gap:12px; }
+  .tool-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); padding:16px; text-align:left; display:flex; flex-direction:column; gap:10px; transition:border-color .15s, box-shadow .15s; }
+  .tool-card:hover { border-color:var(--border-strong); box-shadow:var(--shadow-xs); }
+  .tool-card:disabled { cursor:default; }
+  .tool-icon { width:42px; height:42px; border-radius:11px; background:var(--bg-soft); border:1px solid var(--border); display:grid; place-items:center; font-size:18px; font-weight:700; color:var(--text-1); flex:none; }
+  .tool-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  .tool-name { font-size:15px; font-weight:700; }
+  .tool-desc { font-size:12.5px; color:var(--text-3); margin-top:3px; line-height:1.55; min-height:2.2em; }
+  .tool-card-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; }
+  .tool-ver { font-family:var(--mono); font-size:11.5px; color:var(--text-3); }
+  .tool-actions { display:flex; align-items:center; gap:10px; margin-left:auto; }
+
+  /* ===== 右侧滑出详情面板 ===== */
+  .drawer-mask { position:fixed; inset:0; background:rgb(10 10 11 / .28); z-index:60; opacity:0; pointer-events:none; transition:opacity .2s; }
+  .drawer-mask.open { opacity:1; pointer-events:auto; }
+  .drawer { position:fixed; top:0; right:0; bottom:0; width:440px; background:#fff; border-left:1px solid var(--border); box-shadow:var(--shadow-md); z-index:70; transform:translateX(100%); transition:transform .25s cubic-bezier(.32,.72,.33,1); display:flex; flex-direction:column; }
+  .drawer.open { transform:translateX(0); }
+  .drawer-head { padding:20px 24px 14px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:14px; }
+  .drawer-close { width:30px; height:30px; border-radius:9px; color:var(--text-3); display:grid; place-items:center; }
+  .drawer-close:hover { background:var(--bg-soft); color:var(--text-1); }
+  .drawer-body { flex:1; overflow-y:auto; padding:18px 24px; }
+  .drawer-sec-title { font-size:11.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; margin:18px 0 10px; }
+  .drawer-sec-title:first-child { margin-top:0; }
+  .action-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:11px; margin-bottom:8px; width:100%; text-align:left; }
+  .action-item:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .action-icon { width:32px; height:32px; border-radius:9px; background:var(--bg-soft); display:grid; place-items:center; font-size:14px; flex:none; }
+  .action-name { font-size:13.5px; font-weight:700; }
+  .action-desc { font-size:12px; color:var(--text-3); margin-top:1px; }
+  .kv { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px dashed var(--border); font-size:13px; }
+  .kv:last-child { border-bottom:0; }
+  .kv .k { color:var(--text-3); }
+  .kv .v { font-weight:600; }
+
+  /* ===== 模型供应商卡片 ===== */
+  .mp-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
+  .mp-card { padding:18px 20px; display:flex; flex-direction:column; gap:10px; }
+  .mp-head { display:flex; align-items:center; gap:12px; }
+  .mp-name { font-size:15px; font-weight:700; }
+  .mp-models { font-size:12.5px; color:var(--text-3); line-height:1.8; }
+  .mp-models b { color:var(--text-2); font-weight:700; }
+
+  /* ===== 工作室 / 知识库卡片网格 ===== */
+  .grid-cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:14px; }
+  .app-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); padding:18px; display:block; transition:border-color .15s, box-shadow .15s; }
+  .app-card:hover { border-color:var(--border-strong); box-shadow:var(--shadow-xs); }
+  .app-card-head { display:flex; align-items:flex-start; justify-content:space-between; }
+  .app-card-title { font-size:15.5px; font-weight:700; }
+  .app-card-type { font-size:12px; color:var(--text-3); margin-top:3px; }
+  .app-card-foot { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-3); margin-top:14px; }
+
+  /* ===== 登录失败提示 ===== */
+  .empty-wrap { height:100vh; display:grid; place-items:center; background:#fff; }
+  .empty-card { width:420px; text-align:center; padding:36px 32px; }
+  .empty-icon { width:56px; height:56px; border-radius:16px; background:var(--accent-soft); color:var(--accent-deep); display:grid; place-items:center; margin:0 auto 16px; }
+  .empty-title { font-size:17px; font-weight:800; margin-bottom:8px; }
+  .empty-desc { font-size:13px; color:var(--text-2); line-height:1.7; margin-bottom:18px; }
+
+  /* 视图切换 */
+  section[data-view] { display:none; }
+  section[data-view].on { display:block; }
+  body[data-mode="login-fail"] .side { display:none; }
+
+  /* 标注 */
+  .anno { position:fixed; right:16px; bottom:16px; z-index:50; width:280px; background:var(--text-1); color:#F5F5F6; border-radius:13px; padding:14px 16px; font-size:12px; line-height:1.8; box-shadow:var(--shadow-md); }
+  .anno b { color:var(--accent); }
+  .view-switch { position:fixed; left:16px; bottom:16px; z-index:80; display:flex; gap:6px; flex-wrap:wrap; max-width:420px; }
+  .view-switch button { background:var(--text-1); color:#fff; border-radius:9px; padding:7px 13px; font-size:12px; font-weight:700; }
+  .view-switch button.on { background:var(--accent); }
+</style>
+</head>
+<body data-mode="workspace">
+<div class="shell">
+  <!-- ===== 全局侧栏（白底黑字，橙选中） ===== -->
+  <aside class="side">
+    <div class="side-head">
+      <div class="logo-mark">L</div>
+      <div class="logo-text">Lomva</div>
+    </div>
+    <button class="ws-switch">
+      <div class="ws-avatar">张</div>
+      <div class="ws-name">市场部</div>
+      <svg class="ws-caret" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <nav class="nav" id="global-nav">
+      <button class="nav-item" data-nav="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z" stroke-linejoin="round"/></svg>
+        主页
+      </button>
+      <button class="nav-item" data-nav="studio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
+        工作室
+      </button>
+      <button class="nav-item" data-nav="knowledge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5a2 2 0 012-2h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        知识库
+      </button>
+      <button class="nav-item" data-nav="integrations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.3 3.5a1.7 1.7 0 013.4 0l.3 1.8 1.7.9 1.7-.7a1.7 1.7 0 011.2 3.1l-1.4 1.2v1.9l1.4 1.2a1.7 1.7 0 01-1.2 3.1l-1.7-.7-1.7.9-.3 1.8a1.7 1.7 0 01-3.4 0l-.3-1.8-1.7-.9-1.7.7a1.7 1.7 0 01-1.2-3.1l1.4-1.2v-1.9L5.1 8.6a1.7 1.7 0 011.2-3.1l1.7.7 1.7-.9z" stroke-linejoin="round"/><circle cx="12" cy="11" r="1.8"/></svg>
+        集成
+        <svg class="ws-caret intg-caret" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="nav-sub" id="intg-submenu">
+        <button class="nav-sub-item" data-subnav="provider">模型供应商</button>
+        <button class="nav-sub-item" data-subnav="tools-builtin">工具</button>
+      </div>
+    </nav>
+    <div class="webapps">
+      <div class="webapps-head">
+        WEB APPS
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <button class="webapps-item">
+        <span>📋</span>
+        <span>会议纪要</span>
+      </button>
+    </div>
+    <div class="side-bottom">
+      <button class="account">
+        <div class="avatar">张</div>
+        <div class="name">张玺</div>
+      </button>
+      <button class="help-btn" title="帮助">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.5 2.5 0 114.2 1.9c-.9.8-1.7 1.3-1.7 2.4" stroke-linecap="round"/><circle cx="12" cy="16.6" r=".4" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== 主区 ===== -->
+  <main class="main" id="main">
+    <!-- ① 主页 -->
+    <section data-view="home" class="page">
+      <div class="page-title">最近</div>
+      <div class="grid-cards" style="margin-top:16px">
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">第三方</div><div class="app-card-type">Workflow</div></div>
+            <span>🤖</span>
+          </div>
+          <div class="app-card-foot">张玺 · 编辑于 21 小时前</div>
+        </a>
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">会议纪要</div><div class="app-card-type">Chatbot</div></div>
+            <span>📋</span>
+          </div>
+          <div class="app-card-foot">张玺 · 编辑于 8 天前</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ② 工作室 -->
+    <section data-view="studio" class="page" hidden>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px">
+        <div class="page-title">工作室</div>
+        <div class="toolbar" style="margin:0">
+          <button class="chip">类型</button>
+          <button class="chip">标签</button>
+          <input class="search-input" placeholder="搜索应用">
+          <button class="btn btn-primary">创建</button>
+        </div>
+      </div>
+      <div class="grid-cards" style="margin-top:16px">
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">第三方</div><div class="app-card-type">Workflow</div></div>
+            <span>🤖</span>
+          </div>
+          <div class="app-card-foot">张玺 · 编辑于 08/27</div>
+        </a>
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">测试1</div><div class="app-card-type">Workflow</div></div>
+            <span>🤖</span>
+          </div>
+          <div class="app-card-foot">张玺 · 编辑于 08/21</div>
+        </a>
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">会议纪要</div><div class="app-card-type">Chatbot</div></div>
+            <span>📋</span>
+          </div>
+          <div class="app-card-foot">张玺 · 编辑于 08/20</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ③ 知识库 -->
+    <section data-view="knowledge" class="page" hidden>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px">
+        <div>
+          <div class="page-title">知识库</div>
+          <div class="page-sub">创建即用型知识库 · 导入已有文本</div>
+        </div>
+        <div class="toolbar" style="margin:0">
+          <button class="chip">标签</button>
+          <input class="search-input" placeholder="搜索">
+          <button class="btn btn-primary">创建</button>
+        </div>
+      </div>
+      <div class="notice notice-blue" style="margin-top:16px">
+        一期知识库为<b>创建即用型</b>：导入源仅保留「导入已有文本」（本地文件上传 / 网址抓取）。Notion、网盘等 OAuth 数据源同步已收归系统管理员配置，如需接入请联系系统管理员。
+      </div>
+      <div class="grid-cards" style="margin-top:16px">
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">恒沐AI助理.txt...</div><div class="app-card-type">General</div></div>
+            <span>🤖</span>
+          </div>
+          <div class="app-card-foot">1 段文档 · 更新于 3 小时前</div>
+        </a>
+        <a class="app-card" href="javascript:void(0)">
+          <div class="app-card-head">
+            <div><div class="app-card-title">Untitled 1</div><div class="app-card-type">Pipeline</div></div>
+            <span>📙</span>
+          </div>
+          <div class="app-card-foot">0 段文档 · 更新于 1 天前</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ④ 集成：侧栏二级（模型供应商/工具）；工具页内三级子 tab（工具插件/MCP/工作流/Swagger API） -->
+    <section data-view="integrations" hidden>
+      <div class="intg-head">
+        <div class="page-title" style="display:flex; align-items:center; gap:12px" id="intg-title">模型供应商
+          <span class="pill pill-accent">由系统管理员统一托管</span>
+        </div>
+      </div>
+      <div class="intg-body" id="intg-body"><!-- JS 渲染 --></div>
+    </section>
+
+    <!-- ⑤ 登录失败提示 -->
+    <section data-view="login-fail" class="empty-wrap" hidden>
+      <div class="card empty-card">
+        <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><path d="M17 16v5M14.5 18.5h5" stroke-linecap="round"/></svg></div>
+        <div class="empty-title">登录失败：未加入任何工作空间</div>
+        <div class="empty-desc">当前账号未关联任何工作空间，无法登录。请联系系统管理员为你创建空间或把你加入现有空间，完成后再重新登录。</div>
+        <button class="btn btn-ghost" onclick="go('home')">返回登录</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===== 右侧滑出：工具详情面板 ===== -->
+<div class="drawer-mask" id="drawer-mask" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="tool-icon" style="width:46px; height:46px; font-size:19px" id="d-icon">G</div>
+    <div style="flex:1">
+      <div style="font-size:17px; font-weight:800" id="d-name">Google Search</div>
+      <div class="muted" style="margin-top:2px" id="d-meta">langgenius / google · v1.3.2</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-sec-title">简介</div>
+    <div style="font-size:13.5px; line-height:1.7; color:var(--text-2)" id="d-desc"></div>
+
+    <div class="drawer-sec-title">包含 2 个操作</div>
+    <div id="d-actions"></div>
+
+    <div class="drawer-sec-title">托管状态</div>
+    <div class="kv"><span class="k">来源</span><span class="v"><span class="pill pill-violet">托管分发</span></span></div>
+    <div class="kv"><span class="k">版本</span><span class="v mono" id="d-ver">v1.3.2</span></div>
+    <div class="kv"><span class="k">凭据</span><span class="v"><span class="pill pill-green"><span class="dot"></span>组织统一</span></span></div>
+    <div class="kv"><span class="k">升级 / 卸载</span><span class="v muted">由系统管理员统一管理</span></div>
+
+    <div class="notice notice-violet" style="margin-top:16px">
+      插件的安装、升级、卸载与凭据配置均在<b>系统管理控制台</b>完成。空间内仅可查看与调用。
+    </div>
+  </div>
+</aside>
+
+<!-- 视图切换（演示用） -->
+<div class="view-switch" id="view-switch">
+  <button data-go="home">主页</button>
+  <button data-go="studio">工作室</button>
+  <button data-go="knowledge">知识库</button>
+  <button data-go="integrations">集成</button>
+  <button data-go="login-fail">登录失败</button>
+</div>
+<div class="anno" id="anno">
+  <div style="font-weight:800; margin-bottom:4px; font-size:12.5px">工作台重构 · 一期收窄标注</div>
+  <span id="anno-body"></span>
+</div>
+
+<script>
+/* ===== 集成页各 tab 内容 ===== */
+const intgViews = {
+  provider: `
+    <div class="page-sub">凭据由组织统一配置，空间内不可查看或修改。如需变更请联系系统管理员。</div>
+    <div class="toolbar">
+      <input class="search-input" placeholder="搜索供应商">
+    </div>
+    <div class="mp-grid">
+      <div class="card mp-card">
+        <div class="mp-head">
+          <div class="tool-icon">A</div>
+          <div style="flex:1"><div class="mp-name">Azure OpenAI</div><div class="muted">已由组织统一配置</div></div>
+          <span class="pill pill-green"><span class="dot"></span>可用</span>
+        </div>
+        <div class="mp-models"><b>可用模型</b>：gpt-5, gpt-5-mini, text-embedding-3-large</div>
+      </div>
+      <div class="card mp-card">
+        <div class="mp-head">
+          <div class="tool-icon">通</div>
+          <div style="flex:1"><div class="mp-name">通义千问</div><div class="muted">已由组织统一配置</div></div>
+          <span class="pill pill-green"><span class="dot"></span>可用</span>
+        </div>
+        <div class="mp-models"><b>可用模型</b>：qwen-max, qwen-plus</div>
+      </div>
+      <div class="card mp-card">
+        <div class="mp-head">
+          <div class="tool-icon">A</div>
+          <div style="flex:1"><div class="mp-name">Anthropic</div><div class="muted">已由组织统一配置</div></div>
+          <span class="pill pill-amber">配额不足</span>
+        </div>
+        <div class="mp-models"><b>可用模型</b>：claude-fable-5</div>
+      </div>
+      <div class="card mp-card">
+        <div class="mp-head">
+          <div class="tool-icon">D</div>
+          <div style="flex:1"><div class="mp-name">DeepSeek</div><div class="muted">组织尚未配置</div></div>
+          <span class="pill pill-gray">未配置</span>
+        </div>
+        <div class="mp-models">如需使用请联系系统管理员在「系统管理 · 模型提供商」中配置。</div>
+      </div>
+    </div>`,
+  'tools-builtin': `
+    ${toolTabs('tools-builtin')}
+    <div class="page-sub">空间内可用的工具，全部由系统管理员统一分发与维护。点击卡片查看详情。</div>
+    <div class="toolbar">
+      <button class="chip on">全部</button>
+      <button class="chip">搜索</button>
+      <button class="chip">生产力</button>
+      <input class="search-input" placeholder="搜索">
+    </div>
+    <div class="tool-grid">
+      <button class="tool-card" onclick="openDrawer(0)">
+        <div class="tool-card-head">
+          <div class="tool-icon">G</div>
+          <span class="pill pill-violet">托管</span>
+        </div>
+        <div>
+          <div class="tool-name">Google Search</div>
+          <div class="tool-desc">实时网页搜索，为 Agent 与工作流提供检索能力。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v1.3.2</span>
+          <span class="muted">langgenius / google</span>
+        </div>
+      </button>
+      <button class="tool-card" onclick="openDrawer(1)">
+        <div class="tool-card-head">
+          <div class="tool-icon">J</div>
+          <span class="pill pill-violet">托管</span>
+        </div>
+        <div>
+          <div class="tool-name">Jina Reader</div>
+          <div class="tool-desc">网页正文提取与清洗，输出结构化文本。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v1.1.7</span>
+          <span class="muted">jina-ai / jina</span>
+        </div>
+      </button>
+      <button class="tool-card" onclick="openDrawer(2)">
+        <div class="tool-card-head">
+          <div class="tool-icon">钉</div>
+          <span class="pill pill-violet">托管</span>
+        </div>
+        <div>
+          <div class="tool-name">钉钉机器人</div>
+          <div class="tool-desc">钉钉事件 Webhook 触发工作流自动执行。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v0.4.1</span>
+          <span class="muted">langgenius / dingtalk</span>
+        </div>
+      </button>
+      <button class="tool-card" onclick="openDrawer(3)">
+        <div class="tool-card-head">
+          <div class="tool-icon">代</div>
+          <span class="pill pill-gray">内置</span>
+        </div>
+        <div>
+          <div class="tool-name">代码解释器</div>
+          <div class="tool-desc">运行一段代码并返回结果。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v1.0.0</span>
+          <span class="muted">Dify / code</span>
+        </div>
+      </button>
+    </div>`,
+  'tools-mcp': `
+    ${toolTabs('tools-mcp')}
+    <div class="page-sub">连接 MCP 服务器，让应用访问外部工具与服务。MCP 由空间内自行创建与管理。</div>
+    <div class="toolbar">
+      <input class="search-input" placeholder="搜索">
+      <button class="btn btn-primary">添加 MCP 服务 (HTTP)</button>
+    </div>
+    <div class="tool-grid">
+      <button class="tool-card" onclick="openDrawer(4)">
+        <div class="tool-card-head">
+          <div class="tool-icon">M</div>
+          <span class="pill pill-gray">未配置服务</span>
+        </div>
+        <div>
+          <div class="tool-name">AI 表单审核 MCP</div>
+          <div class="tool-desc">xaudit-ufrom-mcp</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="muted">更新于 1 天前</span>
+        </div>
+      </button>
+    </div>`,
+  'tools-workflow': `
+    ${toolTabs('tools-workflow')}
+    <div class="page-sub">将工作流发布为工具，在应用与其他工作流中调用。由空间内自行创建与管理。</div>
+    <div class="toolbar">
+      <input class="search-input" placeholder="搜索">
+      <button class="btn btn-primary">创建工具</button>
+    </div>
+    <div class="notice notice-blue">当前空间暂无工作流工具。在工作室发布工作流后，可在此将其工具化。</div>`,
+  'tools-api': `
+    ${toolTabs('tools-api')}
+    <div class="page-sub">导入 Swagger/OpenAPI 定义，把外部 API 变成工具。由空间内自行创建与管理。</div>
+    <div class="toolbar">
+      <input class="search-input" placeholder="搜索">
+      <button class="btn btn-primary">导入 API</button>
+    </div>
+    <div class="notice notice-blue">已导入的 API 工具会出现在这里，可在应用编排中选择。</div>`,
+};
+
+/* ===== 详情面板数据 ===== */
+const tools = [
+  { icon:'G', name:'Google Search', meta:'langgenius / google', ver:'v1.3.2', desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。',
+    actions:[{icon:'🔍', name:'搜索网页', desc:'按关键词检索网页并返回结果列表'},{icon:'🔗', name:'读取页面', desc:'抓取指定 URL 的页面正文'}] },
+  { icon:'J', name:'Jina Reader', meta:'jina-ai / jina', ver:'v1.1.7', desc:'网页正文提取与清洗，输出结构化文本。适合将网页内容喂给大模型或知识库。',
+    actions:[{icon:'📄', name:'提取正文', desc:'从 URL 提取干净正文'},{icon:'🖼', name:'提取图片', desc:'获取页面中的图片资源'}] },
+  { icon:'钉', name:'钉钉机器人', meta:'langgenius / dingtalk', ver:'v0.4.1', desc:'钉钉事件 Webhook 触发工作流自动执行。支持群消息、审批等事件订阅。',
+    actions:[{icon:'💬', name:'发送消息', desc:'向钉钉群发送文本或 Markdown'},{icon:'🔔', name:'事件订阅', desc:'订阅钉钉事件并触发工作流'}] },
+  { icon:'代', name:'代码解释器', meta:'Dify / code', ver:'v1.0.0', desc:'运行一段代码并返回结果。支持 Python 沙箱执行，可处理数据转换与计算。',
+    actions:[{icon:'🐍', name:'执行代码', desc:'在沙箱中运行 Python 代码'}] },
+  { icon:'M', name:'AI 表单审核 MCP', meta:'xaudit-ufrom-mcp', ver:'—', desc:'表单审核 MCP 服务器，提供表单数据校验与审核动作。',
+    actions:[{icon:'📋', name:'审核表单', desc:'对提交的表单数据进行规则审核'}] },
+];
+
+function openDrawer(i) {
+  const t = tools[i];
+  document.getElementById('d-icon').textContent = t.icon;
+  document.getElementById('d-name').textContent = t.name;
+  document.getElementById('d-meta').textContent = `${t.meta} · ${t.ver}`;
+  document.getElementById('d-ver').textContent = t.ver;
+  document.getElementById('d-desc').textContent = t.desc;
+  document.getElementById('d-actions').innerHTML = t.actions.map(a => `
+    <button class="action-item">
+      <div class="action-icon">${a.icon}</div>
+      <div><div class="action-name">${a.name}</div><div class="action-desc">${a.desc}</div></div>
+    </button>`).join('');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-mask').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-mask').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+const annos = {
+  home: '与真实主页一致：最近 + 模板。一期不改动。',
+  studio: '与真实工作室一致，一期不改动（卡片+标签筛选+创建）。',
+  knowledge: '<b>知识库收窄</b>：只保留创建即用型；导入源只留「导入已有文本」（本地上传/网址抓取）；删 OAuth 数据源导入。',
+  integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具）；工具页内放四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API）；删 数据来源/触发器/Agent 策略/扩展/自定义端点；删 安装/调试/权限。插件安装与凭据配置挪到系统管理控制台。',
+  'login-fail': '登录失败提示：无会话、不进入控制台外壳。',
+};
+const intgAnno = {
+  provider: '<b>模型供应商</b>：一期全量组织统一。卡片只读两态（可用/未配置），无 Add API Key / Default Models / 安装入口。',
+  'tools-builtin': '<b>工具插件</b>：卡片网格（非列表行），全「托管」态；点卡片开<b>右侧滑出详情面板</b>（简介+actions+托管状态）；删市场轮播与自动更新。',
+  'tools-mcp': 'MCP 维持空间自建（一期不托管），保留添加/管理入口。',
+  'tools-workflow': '工作流作为工具：空间原生功能，维持现状。',
+  'tools-api': 'Swagger API 作为工具：空间原生功能，维持现状。',
+};
+
+let curIntg = 'provider';
+const intgTitles = { provider: '模型供应商', 'tools-builtin': '工具', 'tools-mcp': '工具', 'tools-workflow': '工具', 'tools-api': '工具' };
+function toolTabs(cur) {
+  return `<div class="intg-tool-tabs">
+    <button class="sub-tab ${cur === 'tools-builtin' ? 'on' : ''}" data-intg="tools-builtin">工具插件</button>
+    <button class="sub-tab ${cur === 'tools-mcp' ? 'on' : ''}" data-intg="tools-mcp">MCP</button>
+    <button class="sub-tab ${cur === 'tools-workflow' ? 'on' : ''}" data-intg="tools-workflow">工作流作为工具</button>
+    <button class="sub-tab ${cur === 'tools-api' ? 'on' : ''}" data-intg="tools-api">Swagger API 作为工具</button>
+  </div>`;
+}
+function syncSubnav() {
+  // 侧栏二级：模型供应商 vs 工具
+  document.querySelectorAll('.nav-sub-item').forEach(x => {
+    const isProvider = x.dataset.subnav === 'provider';
+    x.classList.toggle('active', isProvider ? curIntg === 'provider' : curIntg !== 'provider');
+  });
+  // 集成一级：展开态
+  document.querySelectorAll('#global-nav .nav-item').forEach(b => {
+    if (b.dataset.nav === 'integrations') b.classList.add('intg-open', 'active');
+  });
+  document.getElementById('intg-title').childNodes[0].textContent = intgTitles[curIntg] + ' ';
+}
+function renderIntg() {
+  document.getElementById('intg-body').innerHTML = intgViews[curIntg];
+  syncSubnav();
+  document.getElementById('anno-body').innerHTML = intgAnno[curIntg] || annos.integrations;
+}
+
+function go(v) {
+  document.querySelectorAll('section[data-view]').forEach(s => s.classList.toggle('on', s.dataset.view === v));
+  document.querySelectorAll('#global-nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === v));
+  document.querySelector('[data-nav="integrations"]').classList.toggle('intg-open', v === 'integrations');
+  document.body.dataset.mode = v === 'login-fail' ? 'login-fail' : 'workspace';
+  document.querySelectorAll('#view-switch button').forEach(b => b.classList.toggle('on', b.dataset.go === v));
+  document.getElementById('anno-body').innerHTML = annos[v] || annos.integrations;
+  document.getElementById('anno').style.display = v === 'login-fail' ? 'none' : '';
+  if (v === 'integrations') renderIntg();
+  else document.querySelectorAll('.nav-sub-item').forEach(x => x.classList.remove('active'));
+  document.getElementById('main').scrollTop = 0;
+}
+
+document.querySelectorAll('#view-switch button').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+document.querySelectorAll('#global-nav .nav-item').forEach(b => b.addEventListener('click', () => go(b.dataset.nav)));
+document.getElementById('intg-body').addEventListener('click', e => {
+  const b = e.target.closest('[data-intg]');
+  if (!b) return;
+  const k = b.dataset.intg;
+  if (intgViews[k]) { curIntg = k; renderIntg(); }
+});
+document.querySelectorAll('[data-subnav]').forEach(b => b.addEventListener('click', () => {
+  curIntg = b.dataset.subnav === 'provider' ? 'provider' : 'tools-builtin';
+  go('integrations');
+}));
+go('integrations');
+</script>
+</body>
+</html>
