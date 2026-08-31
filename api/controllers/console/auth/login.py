@@ -199,7 +199,10 @@ class LoginApi(Resource):
             _log_console_login_failure(email=normalized_email, reason=LoginFailureReason.INVALID_CREDENTIALS)
             raise AuthenticationFailedError() from exc
         tenants = TenantService.get_join_tenants(account, session=db.session())
-        if len(tenants) == 0:
+        # A valid invitation lets a workspace-less account log in (e.g. re-inviting a
+        # removed member): the membership is created at POST /activate, which is only
+        # reachable after a successful login.
+        if len(tenants) == 0 and invitation_data is None:
             if (
                 FeatureService.is_workspace_creation_allowed()
                 and not FeatureService.get_license().workspaces.is_available()

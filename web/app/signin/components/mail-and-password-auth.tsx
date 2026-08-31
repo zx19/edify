@@ -90,6 +90,9 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup }: MailAndP
         })
 
         if (isInvite) {
+          // Clear the 401 profile probe cached on /signin so invite-settings refetches
+          // with the fresh session cookies (same as the non-invite branch below)
+          await queryClient.resetQueries({ queryKey: consoleQuery.account.profile.get.key() })
           router.replace(`/signin/invite-settings?${searchParams.toString()}`)
         } else {
           await queryClient.resetQueries({ queryKey: consoleQuery.account.profile.get.key() })

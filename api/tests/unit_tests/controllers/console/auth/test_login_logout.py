@@ -210,6 +210,59 @@ class TestLoginApi:
     @patch("controllers.console.wraps.db")
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
+    @patch("controllers.console.auth.login.AccountService.authenticate")
+    @patch("controllers.console.auth.login.TenantService.get_join_tenants")
+    @patch("controllers.console.auth.login.AccountService.login")
+    @patch("controllers.console.auth.login.AccountService.reset_login_error_rate_limit")
+    def test_successful_login_with_valid_invitation_and_no_workspace(
+        self,
+        mock_reset_rate_limit,
+        mock_login,
+        mock_get_tenants,
+        mock_authenticate,
+        mock_get_invitation,
+        mock_is_rate_limit,
+        mock_db,
+        app: Flask,
+        mock_account,
+        mock_token_pair,
+    ):
+        """
+        Test successful login with valid invitation for a workspace-less account.
+
+        Re-inviting a removed member leaves the account with no tenants until the
+        invitation is accepted at POST /activate, which requires a successful login.
+        Verifies that:
+        - A valid invitation bypasses the "workspace not found" rejection
+        - Login proceeds and tokens are issued
+        """
+        # Arrange
+        mock_is_rate_limit.return_value = False
+        mock_get_invitation.return_value = {"data": {"email": "test@example.com"}}
+        mock_authenticate.return_value = mock_account
+        mock_get_tenants.return_value = []  # No tenants, e.g. removed then re-invited
+        mock_login.return_value = mock_token_pair
+
+        # Act
+        with app.test_request_context(
+            "/login",
+            method="POST",
+            json={
+                "email": "test@example.com",
+                "password": encode_password("ValidPass123!"),
+                "invite_token": "valid_token",
+            },
+        ):
+            login_api = LoginApi()
+            response = login_api.post()
+
+        # Assert
+        mock_login.assert_called_once()
+        assert response.json["result"] == "success"
+
+    @patch("controllers.console.wraps.db")
+    @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
+    @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     def test_login_fails_when_rate_limited(
         self, mock_get_invitation, mock_is_rate_limit, mock_db, app: Flask, caplog: pytest.LogCaptureFixture
     ):
