@@ -1,6 +1,6 @@
 # 权限体系自研总体方案-模型A：RBAC 本地化 + 组织级管理
 
-> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估；2026-08-30 修订：插件托管动作模型定稿（四动词/双向改范围/升级波双向收敛/recycling）、组织凭据加密锚点方案 A 与显式分派模型、凭据范围与插件分发解耦）。
+> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估；2026-08-30 修订：插件托管动作模型定稿（四动词/双向改范围/升级波双向收敛/recycling）、组织凭据加密锚点方案 A 与显式分派模型、凭据范围与插件分发解耦；2026-08-31 修订：空间侧防线三道补为四道——新增④`/permission/change` 锁改 install_permission（工作台 UI 评审发现，防 owner 改回 everyone 自装非托管插件））。
 > **排期**：流 B 一期（系统管理员 + 跨空间管理 + 审计 + 插件托管 + 组织级凭据）为**上线前必做项**（组织级管理属上线交付内容）；流 A（RBAC 本地化）需求驱动。
 > 决策前提：完整对齐企业版 RBAC 功能（前端现有 UI 全部可用）；**严格切换**（开启后固定角色不再授予权限）。
 > 现状参考：《权限体系模型-代码核实与设计目标》；关联：《工作空间机制说明》§3.3/§3.6、《企业版与社区版功能对照》附录。
@@ -178,7 +178,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 **插件托管与收口（B-P4，同期纳入，设计稿 §4.6/§4.8）**：托管记录（`integration_grants`）+ 逐 tenant 扇出（复用现有安装链）+ 新建空间自动安装钩子。`TenantPluginPermission.install_permission` 一期收紧为 noone：**存量空间批量迁移 + 新建空间默认 noone**（改 `server_default` 或建空间钩子；现默认 everyone，见 `api/models/account.py:389`，不改则新空间回到全员可装）。空间侧「托管态」判定以 `integration_grants` 为唯一真相：插件 × 本租户命中分发范围即视为托管（锁定升级/卸载、不参与自动更新），与 daemon 侧安装记录通过 (tenant_id, plugin_id) 对应，不依赖 daemon 打标。
 
-**空间侧升级封死的三道防线（均 api 层现成/低成本，daemon 无感、不兜底）**：① 手动升级端点（`console/workspace/plugin.py` 的 `/upgrade/marketplace|github`）挂 `plugin_permission_required(install_required=True)`，install_permission 收 noone 后天然全关；② **托管态拦截**补缝隙--install_permission 是空间 owner/admin 可改回的，console 升级/卸载端点前置检查命中 grant 即 403（防「改回 everyone 后自升已托管插件」）；③ **自动升级任务过滤**--`process_tenant_plugin_autoupgrade_check_task` 不走空间侧权限判定且 ALL 模式忽略 exclude 列表，逐租户豁免名单不可行，落点为 check task 组装完 plugin_ids 后查该租户命中 grant 减去托管项（一次查询、三种 mode 通吃）；`ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK` env 开关留作部署层冗余（与 `MARKETPLACE_ENABLED` 联动注册，内网部署 beat 本就不跑）。空间插件列表 UI 不显示升级入口与新版本徽标（`list_latest_versions` 在 marketplace 关闭时返回 None，内网天然无徽标）。
+**空间侧封死的四道防线（均 api 层现成/低成本，daemon 无感、不兜底）**：① 手动升级端点（`console/workspace/plugin.py` 的 `/upgrade/marketplace|github`）挂 `plugin_permission_required(install_required=True)`，install_permission 收 noone 后天然全关；② **托管态拦截**补缝隙--install_permission 是空间 owner/admin 可改回的，console 升级/卸载端点前置检查命中 grant 即 403（防「改回 everyone 后自升已托管插件」）；③ **自动升级任务过滤**--`process_tenant_plugin_autoupgrade_check_task` 不走空间侧权限判定且 ALL 模式忽略 exclude 列表，逐租户豁免名单不可行，落点为 check task 组装完 plugin_ids 后查该租户命中 grant 减去托管项（一次查询、三种 mode 通吃）；`ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK` env 开关留作部署层冗余（与 `MARKETPLACE_ENABLED` 联动注册，内网部署 beat 本就不跑）；④ **权限修改端点锁定**（2026-08-31 补，工作台 UI 评审发现）——①②③ 只管升级/卸载/自动升级，而 owner/admin 可经 `POST /permission/change` 把 install_permission 改回 everyone，安装端点（`/install/pkg|github|marketplace`、`/upload/pkg|github|bundle`）随之重开，空间可自装非托管插件绕过收口；一期 `/permission/change` 直接拒绝修改 install_permission（403，提示由系统管理员托管；debug 权限维持默认「无人」同样锁改），单点锁定比给安装链逐端点挂拦截便宜。空间插件列表 UI 不显示升级入口与新版本徽标（`list_latest_versions` 在 marketplace 关闭时返回 None，内网天然无徽标）。
 
 **admin 动作模型（四动词，2026-08-30 定稿）**：**装、升、改范围、回收**。无「分配」动作（安装表单即选范围，默认 scope=all 全组织含未来新空间；试点 = specific+清单；scope=all 与空 specific 语义不等价故并存）。改范围双向自由（试点是回环非单向漏斗；单向限制会删掉唯一 undo 路径--范围写错的纠正只剩回收重装，且上游卸载连带删工具凭据）。**统一警示原则**：意图驱动 + 静态警示 + 无动态门（无引用扫描），后果用点发现（`ToolProviderNotFoundError` + 编辑器标红）；社区版卸载链本无使用检查（`try_pre_uninstall_plugin` 为企业版行为），破坏半径信息有廉价一阶版本（grant 范围内空间数）。
 
@@ -225,7 +225,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 - 单测：check-access 判定矩阵（组织级∪空间级 × 策略 × 白名单 × maintainer × own 约束）；流 B 补 login 预检与 `load_user` 窄分支（有空间不变 / 无空间管理员放行 / 无空间普通账号 fail）。
 - 合同测试：45+ 端点按 §4 DTO 契约做 schema 断言（前端 `normalizers.ts` 容错点作反向用例）。
 - QA 回归：admin/editor/normal 三类账号走查应用/数据集列表、插件、成员管理；「角色与权限」「权限集」tab 全功能；非系统管理员访问 `/admin/*` 全 403；归档空间后成员登录自动切换（多空间）或明确失败提示（唯一空间）。
-- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone、三道防线逐条验证：改回 everyone 后自升被 403、自动升级任务过滤托管插件）、改范围双向与升级/回收波次；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效、分派表读链路在真实流量下烤一个周期；登录三分支（无空间管理员 -> `/admin`、无空间普通账号 -> 引导提示、有空间账号不变）+ **第四分支：邮箱邀请的管理员**（未注册邮箱 -> PENDING 预创建 + 邀请邮件 -> 激活设密码 -> 首登直达 `/admin`；激活前登录被拒走激活流程，不走管理员放行）；管理员授予两路径（已注册直效/未注册邀请）与邮件失败降级（控制台展示邀请链接手动转交）。
+- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone、四道防线逐条验证：`/permission/change` 锁改 install_permission 返回 403、改回 everyone 后自升被 403（④锁定后该路径仅作纵深验证，②兜底存量/异常权限值）、自动升级任务过滤托管插件）、改范围双向与升级/回收波次；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效、分派表读链路在真实流量下烤一个周期；登录三分支（无空间管理员 -> `/admin`、无空间普通账号 -> 引导提示、有空间账号不变）+ **第四分支：邮箱邀请的管理员**（未注册邮箱 -> PENDING 预创建 + 邀请邮件 -> 激活设密码 -> 首登直达 `/admin`；激活前登录被拒走激活流程，不走管理员放行）；管理员授予两路径（已注册直效/未注册邀请）与邮件失败降级（控制台展示邀请链接手动转交）。
 - ABAC 资源标签（可选增强）：`apps/datasets` 加 sensitivity_tag + 策略 deny_tags + 判定断言；不做 PDP/多因子。
 
 ## 10. 分阶段交付（两流整合）
