@@ -476,28 +476,43 @@
     </div>
   </div>
   <div class="drawer-body" data-dpane="integration" hidden>
-    <div class="side-section" style="padding-left:0">插件与工具</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="side-section" style="padding:0">插件与工具</div>
+      <button class="btn btn-ghost" style="height:28px;font-size:12.5px" onclick="closeAll();switchView('marketplace')">+ 安装插件</button>
+    </div>
     <div class="card" style="margin-bottom:16px">
       <table>
-        <thead><tr><th>插件</th><th>版本</th><th>来源</th></tr></thead>
+        <thead><tr><th>插件</th><th>类型</th><th>版本</th></tr></thead>
         <tbody>
-          <tr><td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#FF8C00">G</div><span style="font-weight:600">Google Search</span></div></td><td class="mono">v1.3.2</td><td><span class="pill pill-accent">托管分发</span></td></tr>
-          <tr><td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#12A150">J</div><span style="font-weight:600">Jina Reader</span></div></td><td class="mono">v1.1.7</td><td><span class="pill pill-gray">空间自装</span></td></tr>
-          <tr><td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#6938EF">D</div><span style="font-weight:600">钉钉机器人</span></div></td><td class="mono">v0.4.1</td><td><span class="pill pill-accent">托管分发</span></td></tr>
+          <tr class="clickable" onclick="openWorkspacePlugin('Google Search')">
+            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#FF8C00">G</div><span style="font-weight:600">Google Search</span></div></td>
+            <td><span class="pill pill-accent">工具</span></td><td class="mono">v1.3.2</td>
+          </tr>
+          <tr class="clickable" onclick="openWorkspacePlugin('钉钉机器人')">
+            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#6938EF">D</div><span style="font-weight:600">钉钉机器人</span></div></td>
+            <td><span class="pill pill-violet">触发器</span></td><td class="mono">v0.4.1</td>
+          </tr>
+          <tr class="clickable" onclick="openWorkspacePlugin('Notion')">
+            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#7A5AF8">N</div><span style="font-weight:600">Notion</span></div></td>
+            <td><span class="pill pill-green">数据源</span></td><td class="mono">v0.9.5</td>
+          </tr>
         </tbody>
       </table>
     </div>
     <div class="side-section" style="padding-left:0">凭据与授权</div>
     <div class="card" style="margin-bottom:16px">
       <table>
-        <thead><tr><th>配置项</th><th>状态</th></tr></thead>
+        <thead><tr><th>配置项</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
         <tbody>
-          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一 · 锁定</span></td></tr>
-          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray">未配置</span></td></tr>
-          <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一 · 锁定</span></td></tr>
-          <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray">未配置</span></td></tr>
+          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Azure OpenAI')">配置</button></div></td></tr>
+          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('通义千问')">配置</button></div></td></tr>
+          <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-accent"><span class="dot"></span>本空间覆盖</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Anthropic')">配置</button></div></td></tr>
+          <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('DeepSeek')">配置</button></div></td></tr>
         </tbody>
       </table>
+      <div class="notice notice-blue" style="margin:12px 16px 14px;font-size:12px">
+        组织统一凭据由系统管理员在「模型提供商」中统一配置；本空间可按需单独覆盖（仅影响当前空间）。
+      </div>
     </div>
   </div>
   <div class="drawer-body" data-dpane="info" hidden>
@@ -510,6 +525,62 @@
     </dl>
   </div>
 </aside>
+
+<!-- ============ 插件详情抽屉 ============ -->
+<aside class="drawer" id="plugin-drawer">
+  <button class="drawer-close" onclick="closePluginDrawer()">✕</button>
+  <div class="drawer-head">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="ws-icon" id="pd-icon" style="width:40px;height:40px;font-size:16px">G</div>
+      <div>
+        <div style="font-size:17px;font-weight:700" id="pd-name">Google Search</div>
+        <div style="margin-top:4px" id="pd-type"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-body">
+    <div class="side-section" style="padding-left:0">简介</div>
+    <div style="font-size:13.5px;line-height:1.7;color:var(--text-2)" id="pd-desc"></div>
+
+    <div class="side-section" style="padding-left:0">托管信息</div>
+    <dl class="kv">
+      <dt>类型</dt><dd id="pd-type2"></dd>
+      <dt>版本</dt><dd><span class="mono" id="pd-ver"></span> <span class="pill pill-green" style="margin-left:4px"><span class="dot"></span>自动升级</span></dd>
+      <dt>适用范围</dt><dd id="pd-scope"></dd>
+      <dt>分发状态</dt><dd id="pd-status"></dd>
+    </dl>
+
+    <div class="side-section" style="padding-left:0">操作</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn btn-ghost" style="justify-content:center" onclick="closePluginDrawer();openUpgradeModal(curPlugin)">升级插件</button>
+      <button class="btn btn-ghost" style="justify-content:center" onclick="closePluginDrawer();openScopeModal(curPlugin,'modify')">修改分发范围</button>
+      <button class="btn btn-danger" style="justify-content:center" onclick="closePluginDrawer()">回收插件</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ 弹窗：插件升级 ============ -->
+<div class="modal-wrap" id="modal-upgrade">
+  <div class="modal">
+    <h3>升级插件</h3>
+    <div class="modal-sub">上传新版本包，自动扇出升级到所有托管空间。</div>
+    <div class="field">
+      <label>当前版本</label>
+      <div class="mono" id="upg-cur" style="padding:8px 0">v1.3.2</div>
+    </div>
+    <div class="field">
+      <label>上传新版本包</label>
+      <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:24px;color:var(--text-3);font-size:13px;background:var(--bg-soft);text-align:center">
+        拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+      </div>
+      <div class="hint">升级后自动分发到全部 12 个托管空间，版本统一。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">升级并分发</button>
+    </div>
+  </div>
+</div>
 
 <!-- ============ 弹窗：创建空间 ============ -->
 <div class="modal-wrap" id="modal-create-ws">
@@ -582,19 +653,18 @@
     </div>
     <div class="field">
       <label>分配范围</label>
-      <div class="hint" style="margin-bottom:6px">插件分发范围：<b>全部空间</b>（在「插件管理」中调整）</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
-          <input type="radio" name="credscope" checked> 跟随插件范围
+          <input type="radio" name="credscope" checked> 全部空间（含未来新建空间）
         </label>
         <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
-          <input type="radio" name="credscope"> 收窄到子集
+          <input type="radio" name="credscope"> 指定空间
         </label>
         <select class="select" multiple size="3" style="height:auto;padding:6px 8px">
           <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
         </select>
       </div>
-      <div class="hint">凭据范围只能是插件分发范围的子集。</div>
+      <div class="hint">凭据默认分发给全部空间；如需单独覆盖到某个空间，请在该空间详情的「集成」中单独配置。</div>
     </div>
     <div class="notice notice-blue" style="margin-bottom:0">
       <b>一期配置策略：组织统一</b> —— 所有凭据项固定由组织统一配置，空间侧锁定不可自配。二期开放「空间自配」开关后可逐项切换。
@@ -606,11 +676,39 @@
   </div>
 </div>
 
-<!-- ============ 弹窗：范围选择（市场安装） ============ -->
+<!-- ============ 弹窗：空间级模型配置（单独覆盖） ============ -->
+<div class="modal-wrap" id="modal-ws-cred">
+  <div class="modal">
+    <h3 id="ws-cred-title">配置模型 · 市场部</h3>
+    <div class="modal-sub">针对该空间单独配置模型凭据，覆盖组织统一默认值；仅影响当前空间。</div>
+    <div class="field">
+      <label>配置方式</label>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="wscred" checked> 跟随组织统一（默认）
+        </label>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="wscred"> 本空间自定义
+        </label>
+      </div>
+    </div>
+    <div class="field">
+      <label>API Key（自定义时填写）</label>
+      <input class="input" type="password" placeholder="sk-…">
+      <div class="hint">选择「本空间自定义」并填写后，本空间将使用该凭据；其他空间仍使用组织统一配置。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：范围选择（市场安装 / 修改分发范围） ============ -->
 <div class="modal-wrap" id="modal-scope">
   <div class="modal">
     <h3 id="scope-title">安装「Google Search」</h3>
-    <div class="modal-sub">选择该插件分发到哪些工作空间。</div>
+    <div class="modal-sub" id="scope-sub">选择该插件分发到哪些工作空间。</div>
     <div class="field">
       <label>适用范围</label>
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -624,11 +722,11 @@
           <option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option>
         </select>
       </div>
-      <div class="hint">托管插件在空间侧锁定：成员不可自行升级/卸载；版本由系统管理员统一推送。</div>
+      <div class="hint">托管插件在空间侧锁定：成员不可自行升级/卸载；版本由系统管理员统一管理。</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
-      <button class="btn btn-primary" onclick="closeAll()">安装并分发</button>
+      <button class="btn btn-primary" id="scope-confirm" onclick="closeAll()">安装并分发</button>
     </div>
   </div>
 </div>
@@ -670,11 +768,11 @@ const admins = [
   { name:'周杰', mail:'zhoujie@x.com', source:'grant', by:'张伟', time:'2026-08-20', c:2 },
 ];
 const integrations = [
-  { name:'Google Search', type:'工具', ver:'1.3.2', scope:'all', n:12, ok:'12/12', c:0 },
-  { name:'Notion', type:'数据源', ver:'0.9.5', scope:'spec', n:3, ok:'3/3', c:1 },
-  { name:'GitHub', type:'工具', ver:'2.1.0', scope:'all', n:12, ok:'11/12 · 1 失败', c:2 },
-  { name:'钉钉机器人', type:'触发器', ver:'0.4.1', scope:'spec', n:2, ok:'2/2', c:3 },
-  { name:'FunctionCall 策略', type:'Agent 策略', ver:'1.0.0', scope:'all', n:12, ok:'12/12', c:4 },
+  { name:'Google Search', type:'工具', ver:'1.3.2', scope:'all', n:12, ok:'12/12', c:0, desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。' },
+  { name:'Notion', type:'数据源', ver:'0.9.5', scope:'spec', n:3, ok:'3/3', c:1, desc:'同步 Notion 页面与数据库内容到知识库，支持多级页面与增量同步。' },
+  { name:'GitHub', type:'工具', ver:'2.1.0', scope:'all', n:12, ok:'11/12 · 1 失败', c:2, desc:'访问 GitHub 仓库、Issue 与 PR，为研发自动化流程提供代码库能力。' },
+  { name:'钉钉机器人', type:'触发器', ver:'0.4.1', scope:'spec', n:2, ok:'2/2', c:3, desc:'钉钉事件 Webhook 触发工作流自动执行，支持群消息、审批等事件订阅。' },
+  { name:'FunctionCall 策略', type:'Agent 策略', ver:'1.0.0', scope:'all', n:12, ok:'12/12', c:4, desc:'经典 Function Calling 推理策略，支持工具循环与结构化参数解析。' },
 ];
 const providers = [
   { name:'Azure OpenAI', key:'sk-…a9F2', status:'正常', scope:'全部空间', time:'2026-08-20', c:0 },
@@ -742,13 +840,13 @@ document.getElementById('admin-rows').innerHTML = admins.map((a,i)=>`
   </tr>`).join('');
 
 const typePill = t => ({'工具':'pill-accent','数据源':'pill-green','触发器':'pill-violet','Agent 策略':'pill-gray'}[t]||'pill-gray');
-document.getElementById('integration-rows').innerHTML = integrations.map(g=>`
-  <tr>
+document.getElementById('integration-rows').innerHTML = integrations.map((g,i)=>`
+  <tr class="clickable" onclick="openPluginDetail(${i})">
     <td><div class="cell-main"><div class="ws-icon" style="background:${palette[g.c]}">${g.name[0]}</div><div><div class="cell-title">${g.name}</div></div></div></td>
     <td><span class="pill ${typePill(g.type)}">${g.type}</span></td>
     <td><span class="mono">v${g.ver}</span></td>
     <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-accent">指定空间 · ${g.n}</span>`}</td>
-    <td><div class="row-actions"><button class="link-btn">升级</button><button class="link-btn">改范围</button><button class="link-btn danger">回收</button></div></td>
+    <td><div class="row-actions" onclick="event.stopPropagation()"><button class="link-btn" onclick="openUpgradeModal(${i})">升级</button><button class="link-btn" onclick="openScopeModal(${i},'modify')">改范围</button><button class="link-btn danger">回收</button></div></td>
   </tr>`).join('');
 
 const providerStatus = p => ({
@@ -758,8 +856,8 @@ const providerStatus = p => ({
 }[p.status] || `<span class="pill" style="background:#FFFAEB;color:#B54708"><span class="dot"></span>${p.status}</span>`);
 const providerOps = p => {
   if (p.status==='未安装') return `<button class="link-btn" onclick="switchView('marketplace')">去安装</button>`;
-  if (p.status==='未配置') return `<button class="link-btn" onclick="openCred('${p.name}')">添加凭据</button><button class="link-btn">分配空间</button>`;
-  return `<button class="link-btn" onclick="openCred('${p.name}')">编辑凭据</button><button class="link-btn">分配空间</button><button class="link-btn danger">删除</button>`;
+  if (p.status==='未配置') return `<button class="link-btn" onclick="openCred('${p.name}')">添加凭据</button>`;
+  return `<button class="link-btn" onclick="openCred('${p.name}')">编辑凭据</button><button class="link-btn danger">删除</button>`;
 };
 document.getElementById('provider-rows').innerHTML = providers.map(p=>`
   <tr>
@@ -816,15 +914,70 @@ document.getElementById('drawer-tabs').addEventListener('click', e=>{
   document.querySelectorAll('[data-dpane]').forEach(p=>p.hidden = p.dataset.dpane!==t.dataset.dtab);
 });
 
-/* 市场安装 → 范围选择弹窗 */
+/* 市场安装 → 范围选择弹窗（安装模式） */
 function openScope(name){
   document.getElementById('scope-title').textContent = `安装「${name}」`;
+  document.getElementById('scope-sub').textContent = '选择该插件分发到哪些工作空间。';
+  document.getElementById('scope-confirm').textContent = '安装并分发';
+  openModal('modal-scope');
+}
+/* 插件管理 → 改范围（修改模式） */
+function openScopeModal(i, mode){
+  const g = integrations[i];
+  if(mode==='modify'){
+    document.getElementById('scope-title').textContent = `修改「${g.name}」分发范围`;
+    document.getElementById('scope-sub').textContent = '调整该插件的分发范围：新增空间将自动获得该插件，移除的空间将在确认后回收。';
+    document.getElementById('scope-confirm').textContent = '保存范围';
+  }
   openModal('modal-scope');
 }
 /* 行内凭据弹窗 */
 function openCred(name){
   document.getElementById('cred-title').textContent = `配置凭据 · ${name}`;
   openModal('modal-credential');
+}
+/* 空间级模型配置（单独覆盖） */
+function openWsCred(name){
+  document.getElementById('ws-cred-title').textContent = `配置模型 · ${name}`;
+  openModal('modal-ws-cred');
+}
+/* 插件详情抽屉 */
+let curPlugin = 0;
+function openPluginDetail(i){
+  curPlugin = i;
+  openPluginDrawer(integrations[i]);
+}
+function openWorkspacePlugin(name){
+  const p = integrations.find(x=>x.name===name) || {name, type:'工具', ver:'—', desc:'暂无详情。', c:0};
+  curPlugin = integrations.findIndex(x=>x.name===name);
+  openPluginDrawer(p);
+}
+function openPluginDrawer(p){
+  document.getElementById('pd-name').textContent = p.name;
+  const ic = document.getElementById('pd-icon');
+  ic.style.background = palette[p.c]||palette[0];
+  ic.textContent = p.name[0];
+  document.getElementById('pd-type').innerHTML = `<span class="pill ${typePill(p.type)}">${p.type}</span>`;
+  document.getElementById('pd-type2').textContent = p.type;
+  document.getElementById('pd-desc').textContent = p.desc || '暂无简介。';
+  document.getElementById('pd-ver').textContent = 'v'+p.ver;
+  document.getElementById('pd-scope').innerHTML = (p.scope==='all')
+    ? `<span class="pill pill-green">全部空间</span>`
+    : `<span class="pill pill-accent">指定空间 · ${p.n}</span>`;
+  document.getElementById('pd-status').innerHTML = `<span class="pill pill-green"><span class="dot"></span>已分发</span>`;
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('plugin-drawer').classList.add('show');
+}
+function closePluginDrawer(){
+  document.getElementById('plugin-drawer').classList.remove('show');
+  const anyOpen = document.querySelector('.drawer.show, .modal-wrap.show');
+  if(!anyOpen) document.getElementById('overlay').classList.remove('show');
+}
+/* 插件升级弹窗 */
+function openUpgradeModal(i){
+  const g = integrations[i];
+  document.getElementById('upg-cur').textContent = `v${g.ver}`;
+  openModal('modal-upgrade');
 }
 /* 撤销系统管理员弹窗 */
 function openRevoke(i){
@@ -857,6 +1010,7 @@ function openModal(id){
 function closeAll(){
   document.getElementById('overlay').classList.remove('show');
   document.getElementById('drawer').classList.remove('show');
+  document.getElementById('plugin-drawer').classList.remove('show');
   document.querySelectorAll('.modal-wrap').forEach(m=>m.classList.remove('show'));
 }
 function toggleAudit(i){
