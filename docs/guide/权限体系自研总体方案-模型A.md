@@ -105,18 +105,20 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 - **命名**：统一为「系统管理员」（`SYSTEM_ADMIN_EMAILS` / `is_system_admin` / `@system_admin_required`）。
 - **账号与密码**：不是独立账号体系——普通账号 + 提权标记，密码走现成流程（首账号 `/install` 设置、其他人邀请激活/重置密码），无独立密码通道。
 - **多位配置**：env 名单逗号分隔 / `is_system_admin` 列多行，均天然支持；**建议至少两位**防单点；移除即时生效（判定在每请求装饰器）。
-- **判定（推荐组合）**：`account.email ∈ SYSTEM_ADMIN_EMAILS`（env 静态兜底）**或** `account.is_system_admin`（持久化标记，二期可转组织级角色绑定）。
+- **判定（推荐组合）**：`account.email ∈ SYSTEM_ADMIN_EMAILS`（env 静态兜底，**仅存量升级场景实际生效**，新部署名单为空）**或** `account.is_system_admin`（持久化标记，/install 置位 + 邮箱邀请授予为主通道；二期可转组织级角色绑定）。
 - **/install 改造**（小）：`RegisterService.setup()`（`account_service.py:1938`）里把首账号 `is_system_admin` 置位——装完即用、避免名单漏配导致无管理员；置位需落在 setup 自带的失败回滚范围（删 DifySetup/Join/Account/Tenant）内。/install 页面不加 UI 字段。
 - **/install 一次性**：`POST /setup` 有 `SetupAlreadyCompletedError` 保护（`console/setup.py:66-105`），只建一个账号 + 一个工作空间；`GET /setup` 返回 not_started/finished。多 tenant 不走 /install，走 admin 端点。
 - `INIT_PASSWORD` 是 `/install` 访问口令（`wraps.py:321`），与管理员密码无关。
 - 前端显隐：`/account/profile` 返回 `is_system_admin`（账号属性随身份接口下发；system-features 不动）。
 
-**系统管理员的授予与撤销**（多位制，无"转让"概念——授予 B + 撤销 A 即完成交接）：
+**系统管理员的授予与撤销**（多位制，无"转让"概念--授予 B + 撤销 A 即完成交接；2026-08-30 修订：授予改为**邮箱邀请制**，QA SMTP 已就绪）：
 
 - 端点：`GET/POST /admin/system-admins`、`DELETE /admin/system-admins/<account_id>`（@system_admin_required）。
-- 授予约束：仅**已注册且 active** 账号（不预创建，防占位账号提权）；**当前账号密码确认**（QA 无邮件服务，以密码确认替代 owner 转让的邮件验证码）；写审计。
-- 撤销约束：**最后一位不可撤销**（防系统锁死）；允许撤销自己（剩余 ≥1）。
-- env 名单与 DB 标记是**并集**：名单来源者控制台不可撤（UI 标注"来自环境变量"）。
+- **授予流程（邮箱邀请制）**：操作者输入目标邮箱 + **当前账号密码确认**（验证操作者身份）--邮箱**已注册且 active**：直接置 `is_system_admin` + 发通知邮件，即时生效；邮箱**未注册**：**PENDING 预创建**（复用 `invite_new_member` 的 register(status=PENDING) 路径，`account_service.py:2048`）+ 发邀请邮件（链接 `/activate?token=...`，复用 `send_invite_member_mail_task`，`tasks/mail_invite_member_task.py:15`）-> 收件人设密码激活 -> `is_system_admin` 已预置 -> 首登走「无空间管理员放行」分支直达 `/admin`。**新增系统管理员邀请 token 类型**（无空间绑定：现有 token 绑 workspace_id，系统管理员无空间）。
+- 授予约束变更：放开「不预创建」（原防占位提权改由邀请 token 时效与一次性保障，既有机制）；密码确认保留（操作者身份验证）与邮件验证（接受者身份验证）**不互斥，两者都要**。
+- **邮件失败降级**：SMTP 不可达/发信失败不阻塞授予--落审计「邀请已创建、邮件发送失败」-> 控制台在授予结果处**展示邀请链接供 admin 手动转交**（复制粘贴）。
+- 撤销约束：**最后一位不可撤销**（防系统锁死）；允许撤销自己（剩余 ≥1）；PENDING 未激活的邀请账号可撤销（等同作废邀请）。
+- env 名单与 DB 标记是**并集**：名单来源者控制台不可撤（UI 标注"来自环境变量"）。**env 兜底降级为存量升级通道**--新部署全程 env 无关（/install 直接置位）；仅已跑过 /install 的旧部署升级时靠 env 名单或 CLI grant 注入首位管理员。
 - CLI 通道：`flask system-admin grant/revoke <email>`（救急/自动化）。
 - **存量部署升级**：已跑过 /install 的部署没有再初始化通道，升级后首位系统管理员靠 env 名单或 CLI grant 注入。
 - 二期转组织级角色后：即 `rbac_member_role_bindings` 的 organization 行增删。
@@ -223,7 +225,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 - 单测：check-access 判定矩阵（组织级∪空间级 × 策略 × 白名单 × maintainer × own 约束）；流 B 补 login 预检与 `load_user` 窄分支（有空间不变 / 无空间管理员放行 / 无空间普通账号 fail）。
 - 合同测试：45+ 端点按 §4 DTO 契约做 schema 断言（前端 `normalizers.ts` 容错点作反向用例）。
 - QA 回归：admin/editor/normal 三类账号走查应用/数据集列表、插件、成员管理；「角色与权限」「权限集」tab 全功能；非系统管理员访问 `/admin/*` 全 403；归档空间后成员登录自动切换（多空间）或明确失败提示（唯一空间）。
-- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone、三道防线逐条验证：改回 everyone 后自升被 403、自动升级任务过滤托管插件）、改范围双向与升级/回收波次；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效、分派表读链路在真实流量下烤一个周期；登录三分支（无空间管理员 -> `/admin`、无空间普通账号 -> 引导提示、有空间账号不变）。
+- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone、三道防线逐条验证：改回 everyone 后自升被 403、自动升级任务过滤托管插件）、改范围双向与升级/回收波次；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效、分派表读链路在真实流量下烤一个周期；登录三分支（无空间管理员 -> `/admin`、无空间普通账号 -> 引导提示、有空间账号不变）+ **第四分支：邮箱邀请的管理员**（未注册邮箱 -> PENDING 预创建 + 邀请邮件 -> 激活设密码 -> 首登直达 `/admin`；激活前登录被拒走激活流程，不走管理员放行）；管理员授予两路径（已注册直效/未注册邀请）与邮件失败降级（控制台展示邀请链接手动转交）。
 - ABAC 资源标签（可选增强）：`apps/datasets` 加 sensitivity_tag + 策略 deny_tags + 判定断言；不做 PDP/多因子。
 
 ## 10. 分阶段交付（两流整合）
