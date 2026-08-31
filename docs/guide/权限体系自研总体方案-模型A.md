@@ -1,6 +1,6 @@
 # 权限体系自研总体方案-模型A：RBAC 本地化 + 组织级管理
 
-> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估）。
+> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估；2026-08-30 修订：插件托管动作模型定稿（四动词/双向改范围/升级波双向收敛/recycling）、组织凭据加密锚点方案 A 与显式分派模型、凭据范围与插件分发解耦）。
 > **排期**：流 B 一期（系统管理员 + 跨空间管理 + 审计 + 插件托管 + 组织级凭据）为**上线前必做项**（组织级管理属上线交付内容）；流 A（RBAC 本地化）需求驱动。
 > 决策前提：完整对齐企业版 RBAC 功能（前端现有 UI 全部可用）；**严格切换**（开启后固定角色不再授予权限）。
 > 现状参考：《权限体系模型-代码核实与设计目标》；关联：《工作空间机制说明》§3.3/§3.6、《企业版与社区版功能对照》附录。
@@ -52,10 +52,11 @@
 | `rbac_access_policy_bindings` | id、tenant_id、policy_id、scope_level(workspace/resource)、resource_id 可空、subject_type(role/account)、subject_id、is_locked | 矩阵的一格 |
 | `rbac_resource_whitelists` | tenant_id、resource_type、resource_id、scope(all/only_me/specific)、account_ids JSONB；唯一(tenant,resource_type,resource_id) | 资源可见范围 |
 | `admin_audit_logs` * | id、actor_account_id、action、target_type、target_id、workspace_id 可空、detail JSONB、created_at | 跨空间审计 |
-| `integration_grants` * | id、tenant_id 可空（组织级=空）、plugin_unique_identifier、version、scope(all/specific)、scope_tenant_ids JSONB、last_push_at、时间戳 | 插件托管记录（范围/版本/扇出状态，改范围/回收依据） |
-| `organization_credentials` * | id、tenant_id 可空（组织级=空）、provider_name、credential_type(key_secret/oauth)、encrypted_config、policy(空间自配/组织统一，**一期固定组织统一**)、scope_tenant_ids JSONB（⊆插件分发范围）、时间戳 | 组织级凭据（密文存储、掩码只进不出） |
+| `integration_grants` * | id、tenant_id 可空（组织级=空）、**plugin_id**（非完整 identifier）、version、source(marketplace/github/package)、scope(all/specific)、scope_tenant_ids JSONB、last_push_at、status(active/recycling)、时间戳；唯一(tenant_id IS NULL, plugin_id) | 插件托管记录（范围/版本/扇出状态，改范围/升级/回收依据）。**不存完整 identifier**：checksum 推送时才从包解析（三源各不同），存了必与 version 冗余冲突。source 是取包路径记录非身份组成（同版本同包无论哪源物理同一份）。status=recycling 为回收波进行中的中间态（防无 grant 的孤儿安装） |
+| `organization_credentials` * | id、provider_name、credential_type(key_secret/oauth)、encrypted_config、**encryption_anchor_tenant_id**、时间戳；唯一(provider_name) | 组织级凭据（密文存储、掩码只进不出）。**加密锚点（方案 A）**：现有加密层为每租户 RSA 密钥对（`libs/rsa.py`，私钥 `privkeys/{tenant_id}/`），空 tenant_id 无密钥可用；组织凭据密文统一挂**锚租户**（首个租户或专设 org-anchor）的密钥下加解密，锚租户独立成列、tenant_id 列不再承担加密语义。**scope 与插件分发范围解耦**（见 §6.4） |
+| `provider_credential_assignments` * | id、provider_name、tenant_id、assignment(org/self)、时间戳；唯一(provider_name, tenant_id) | 凭据分派指针（**一期只读、值恒为 org**）。显式分派替代回退链：解析按分派直查单条，无优先级规则。一期建表+读链路上线（热路径一个版本），二期只加写入口与切换 UI，无 schema 变更 |
 
-要点：permission_keys 用 JSONB 数组；全部查询带 tenant_id 组合索引；Alembic 迁移按 `api/migrations/` 规范；凭据密文对称加密存储。
+要点：permission_keys 用 JSONB 数组；全部查询带 tenant_id 组合索引；Alembic 迁移按 `api/migrations/` 规范；凭据密文加密存储（组织凭据经锚租户 RSA，见上表方案 A）。
 
 ## 4. 流 A 接口面（本地 handler，45+ 端点按复杂度分三组）
 
@@ -158,21 +159,41 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 | `GET/POST /admin/workspaces/<id>/members`、`PUT/DELETE .../members/<mid>` | 成员查看/直加/改角色/移除 | `TenantService`/`RegisterService` |
 | `GET/POST /admin/system-admins`、`DELETE /admin/system-admins/<id>` | 系统管理员授予/撤销（约束见 §6.1） | `Account` 标记列 |
 | `GET /admin/audit-logs` | 按 workspace_id/action/actor/时间过滤 | `admin_audit_logs` |
-| `GET/POST /admin/integration-grants`、`PUT/DELETE /admin/integration-grants/<id>` | 插件托管运营：列表/改范围/推送升级/回收（扇出为异步任务、失败空间可重试） | 现有插件安装链（`api/core/plugin/`） |
-| `POST /admin/integrations/install` | 插件中心安装（市场/GitHub/本地包三源 + 范围选择） | 同上 |
-| `GET/POST/PUT/DELETE /admin/organization-credentials` | 组织级凭据 CRUD（掩码只进不出；范围 ⊆ 插件分发范围） | `ProviderManager` |
+| `GET/POST /admin/integration-grants`、`PUT/DELETE /admin/integration-grants/<id>` | 插件托管运营：列表/改范围/升级/回收（扇出为异步任务、失败空间可重试）。**无「分配」独立动作**--安装表单即选范围，分配退化为改范围编辑。**回收拆两动作**：解除托管（即时删 grant、无波次）与回收（active→recycling→卸载波→删） |
+| `POST /admin/integration-grants/<id>/push` | 升级波触发（对齐 grant.version 的收敛波，方向无关：升级/回滚/修漂移同一动词；波次机制名保留 push 语义，`last_push_at` 含回滚与漂移修复波次） | 复用 `PluginService.upgrade_plugin_with_marketplace/github` 现成静态链（显式传 tenant_id） |
+| `POST /admin/integrations/install` | 插件中心安装（市场/GitHub/本地包三源 + 范围选择，默认 scope=all） | 同上；本地包上传需**代理租户**（admin 无租户身份，上传路由为 tenant 域，跨租户从 identifier 复用安装未经实测，排期留半天 PoC） |
+| `GET/POST/PUT/DELETE /admin/organization-credentials` | 组织级凭据 CRUD（掩码只进不出）。**范围与插件分发解耦**：凭据分派独立成流，不挂 integration_grants 范围（详见 §6.4） | `ProviderManager` |
 
 ### 6.3 审计采集
 
 `audit_log(action, target, ...)` 工具函数统一埋点：admin 端点全量 + 关键业务动作（成员增删改、空间归档、凭据变更）。**先采集后查看**，顺序不可反。
 
-### 6.4 集中凭据与插件托管（**已提入一期**，2026-08-26 用户决策；**一期收窄为全量组织统一**，2026-08-27 用户决策）
+### 6.4 集中凭据与插件托管（**已提入一期**，2026-08-26 用户决策；**一期收窄为全量组织统一**，2026-08-27 用户决策；2026-08-30 修订：加密锚点方案 A、显式分派模型、插件托管动作模型定稿）
 
-组织级凭据表（`organization_credentials`，§3）+ ProviderManager 解析链改造 + 掩码只进不出。**一期全部凭据项固定「组织统一」**：解析仅组织凭据（**无回退层**，一期不存在空间自有凭据概念），空间侧凭据区只读（"由组织统一配置"）、无编辑入口、不显示来源徽标。**动运行时热路径，须带模型调用全链路回归**，企业版已有接缝可参考（`ENTERPRISE_DISABLE_RUNTIME_CREDENTIAL_CHECK`、`tool_manager.py`/`model_manager.py` 的 credential policy 检查）。UI 落在系统管理控制台「模型提供商」页（设计稿 §4.7）。
+**组织级凭据（B-P5）**：组织级凭据表（`organization_credentials`，§3，含加密锚点方案 A）+ ProviderManager 解析链改造 + 掩码只进不出。**一期全部凭据项固定「组织统一」**：解析仅组织凭据（**无回退层**，一期不存在空间自有凭据概念），空间侧凭据区只读（"由组织统一配置"）、无编辑入口、不显示来源徽标。一期交付分派地基：**分派表（`provider_credential_assignments`）建表、读链路上线、值恒为 org、无写入口**--解析链「按分派读」的行为一期建好二期不动（热路径只有一个版本，全链路回归只跑一次），二期开放自配为纯增量（写入口 + UI）。**动运行时热路径，须带模型调用全链路回归**，企业版已有接缝可参考（`ENTERPRISE_DISABLE_RUNTIME_CREDENTIAL_CHECK`、`tool_manager.py`/`model_manager.py` 的 credential policy 检查）。UI 落在系统管理控制台「模型提供商」页（设计稿 §4.7）。
 
-**配置策略模型（二期形态，2026-08-27 定稿）**：每个凭据项一个策略开关，Key/Secret 与 OAuth 通用——**空间自配**（原生行为，组织凭据作回退：空间自有 > 组织）/ **组织统一**（空间侧锁定，仅组织凭据）。数据结构保留策略字段、一期固定组织统一（UI 不做开关），二期开放「空间自配」无迁移。遮蔽语义：策略切换遮蔽而非删除凭据；变更按 tenant 失效解析缓存。OAuth 类（数据源/部分触发器）组织代授权与触发器订阅共享为二期。
+**显式分派模型（替代原回退式策略，2026-08-30 定稿）**：二期开放「空间自配」时，**不做隐式回退链**（原「空间自有 > 组织」优先级），改为**显式分派指针**--每个 (provider_name, tenant_id) 一行 `assignment(org/self)`，切换 = 改指针 + 失效该空间解析缓存，解析按分派直查单条、无优先级规则。理由：① 回退破坏锁定的可判定性（「该空间在用哪份」需追优先级规则，凭据失效排查不可判定）；② 遮蔽语义与回退语义叠加后状态空间膨胀且无 UI 能讲清；③ 组织管理叙事是「谁说了算」的显式声明，隐式回退是多租户原生思路。**策略粒度收敛 provider 级**（不做 model 级：撞 load balancing 的 `CredentialSourceType` PROVIDER/CUSTOM_MODEL 语义，场景罕见）。**凭据范围与插件分发解耦**：插件范围管「装不装」、凭据分派管「用哪份」，两维度正交（空间装了插件但走自配凭据是正常形态；MCP 凭据更无处附着插件范围）。遮蔽语义随指针模型自然消失（策略不在密文行上，切换不碰密文）。**一期边界**：分派表只读不被写、无分派管理 UI、无分派写 API、无按空间范围差异；一期 organization_credentials 仅覆盖模型/工具插件的 provider 凭据，MCP 凭据（`tool_mcp_providers.encrypted_credentials`）一期维持空间自管。OAuth 类（数据源/部分触发器）组织代授权与触发器订阅共享为二期，二期复用同一分派模型（token 归属 = 分派指针）。
 
-**插件托管与收口（同期纳入，设计稿 §4.6/§4.8）**：托管记录（`integration_grants`）+ 逐 tenant 扇出（复用现有安装链）+ 新建空间自动安装钩子。`TenantPluginPermission.install_permission` 一期收紧为 noone：**存量空间批量迁移 + 新建空间默认 noone**（改 `server_default` 或建空间钩子；现默认 everyone，见 `api/models/account.py:389`，不改则新空间回到全员可装）；托管插件空间侧锁定（不可自升/自卸、不参与空间自动更新），版本只由系统管理员统一推送。**MCP/OpenAPI 连接实例不纳入托管**：连接实例型（URL+auth+schema 一体，无"插件包+凭据"分离结构），不适用扇出与策略模型，一期维持空间自建。空间侧「托管态」判定以 `integration_grants` 为唯一真相：插件 × 本租户命中分发范围即视为托管（锁定升级/卸载、不参与自动更新），与 daemon 侧安装记录通过 (tenant_id, plugin_unique_identifier) 对应，不依赖 daemon 打标。
+**插件托管与收口（B-P4，同期纳入，设计稿 §4.6/§4.8）**：托管记录（`integration_grants`）+ 逐 tenant 扇出（复用现有安装链）+ 新建空间自动安装钩子。`TenantPluginPermission.install_permission` 一期收紧为 noone：**存量空间批量迁移 + 新建空间默认 noone**（改 `server_default` 或建空间钩子；现默认 everyone，见 `api/models/account.py:389`，不改则新空间回到全员可装）。空间侧「托管态」判定以 `integration_grants` 为唯一真相：插件 × 本租户命中分发范围即视为托管（锁定升级/卸载、不参与自动更新），与 daemon 侧安装记录通过 (tenant_id, plugin_id) 对应，不依赖 daemon 打标。
+
+**空间侧升级封死的三道防线（均 api 层现成/低成本，daemon 无感、不兜底）**：① 手动升级端点（`console/workspace/plugin.py` 的 `/upgrade/marketplace|github`）挂 `plugin_permission_required(install_required=True)`，install_permission 收 noone 后天然全关；② **托管态拦截**补缝隙--install_permission 是空间 owner/admin 可改回的，console 升级/卸载端点前置检查命中 grant 即 403（防「改回 everyone 后自升已托管插件」）；③ **自动升级任务过滤**--`process_tenant_plugin_autoupgrade_check_task` 不走空间侧权限判定且 ALL 模式忽略 exclude 列表，逐租户豁免名单不可行，落点为 check task 组装完 plugin_ids 后查该租户命中 grant 减去托管项（一次查询、三种 mode 通吃）；`ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK` env 开关留作部署层冗余（与 `MARKETPLACE_ENABLED` 联动注册，内网部署 beat 本就不跑）。空间插件列表 UI 不显示升级入口与新版本徽标（`list_latest_versions` 在 marketplace 关闭时返回 None，内网天然无徽标）。
+
+**admin 动作模型（四动词，2026-08-30 定稿）**：**装、升、改范围、回收**。无「分配」动作（安装表单即选范围，默认 scope=all 全组织含未来新空间；试点 = specific+清单；scope=all 与空 specific 语义不等价故并存）。改范围双向自由（试点是回环非单向漏斗；单向限制会删掉唯一 undo 路径--范围写错的纠正只剩回收重装，且上游卸载连带删工具凭据）。**统一警示原则**：意图驱动 + 静态警示 + 无动态门（无引用扫描），后果用点发现（`ToolProviderNotFoundError` + 编辑器标红）；社区版卸载链本无使用检查（`try_pre_uninstall_plugin` 为企业版行为），破坏半径信息有廉价一阶版本（grant 范围内空间数）。
+
+| 动作 | 确认框 | 静态警示 | 波次 |
+|---|---|---|---|
+| 安装（源+版本+范围） | 无 | 无 | 安装波（表单提交即扇出） |
+| 改范围（扩围） | 无 | 无 | 增量安装波（保存即波） |
+| 改范围（收缩） | 无 | 事前 toast（"范围外空间若正在使用将无法运行"）+ **reason 必填**进审计 + 被移除空间通知 | 卸载波 |
+| 升级（含回滚/修漂移） | 有（**动态副文案显式目标版本**："将 N 个空间升级到 vX" / "回滚到 vY"） | 有 | 收敛波（显式按钮触发，方向无关） |
+| 解除托管 | 有（轻量） | 无 | 无波（即时删 grant，插件留在各空间，安全阀） |
+| 回收 | 有（静态警示"正在使用的应用将无法运行"） | 有 | active→recycling→卸载波→删（防孤儿：波次部分失败时 grant 仍在、可重试） |
+
+**升级波语义（双向收敛）**：漂移定义为「≠ grant.version」而非「>」--含收编瞬间存量漂移（某空间已自动升到 v2、grant 定 v1，扇出需能降回）。上行复用 `upgrade_plugin_with_marketplace/github` 现成链（含包下载/上传/缓存失效，静态方法显式传 tenant_id，admin 扇出直接可用）；**下行（回滚）走卸载+重装链**，daemon upgrade 端点无降级路径上游测试背书，不指望其双向通用。回收波沿用上游 uninstall 默认连带删该空间此插件工具凭据的行为（回收语义正确；副作用：重新托管需重配工具凭据，记录在案）。
+
+**扇出与竞态闭合**：安装/卸载波幂等为 daemon 白送（已装返回 `AllInstalled` 跳过、卸载查无记录返回 success，重试安全，diff 不需精确）；新建空间钩子补未来（建空间事务后查 scope=all 的 grants 补装）、grant 扇出扫描补存量，**两个方向各盖一头、竞态闭合**，无分布式锁。对账为管理台手动触发的「一致性检查」（拉 daemon `list_plugins` × grants 比对 drift 报告），不新增常驻 beat 任务。
+
+**MCP/OpenAPI 连接实例不纳入托管**：连接实例型（URL+auth+schema 一体，无"插件包+凭据"分离结构），不适用扇出与策略模型，一期维持空间自建。组织级 MCP 若做，形态为**目录/白名单模型**（管理员登记可信 MCP 服务器，空间从目录选择、不得任意填 URL）而非扇出模型，二期独立特性立项。三条线正交：**插件（包+版本+范围，扇出模型）/ 凭据（provider × 分派，指针模型）/ MCP（实例+目录，白名单模型）**，不互相从属。
 
 ### 6.5 前端
 
@@ -202,7 +223,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 - 单测：check-access 判定矩阵（组织级∪空间级 × 策略 × 白名单 × maintainer × own 约束）；流 B 补 login 预检与 `load_user` 窄分支（有空间不变 / 无空间管理员放行 / 无空间普通账号 fail）。
 - 合同测试：45+ 端点按 §4 DTO 契约做 schema 断言（前端 `normalizers.ts` 容错点作反向用例）。
 - QA 回归：admin/editor/normal 三类账号走查应用/数据集列表、插件、成员管理；「角色与权限」「权限集」tab 全功能；非系统管理员访问 `/admin/*` 全 403；归档空间后成员登录自动切换（多空间）或明确失败提示（唯一空间）。
-- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone）；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效；登录三分支（无空间管理员 → `/admin`、无空间普通账号 → 引导提示、有空间账号不变）。
+- 流 B QA：插件三源安装与扇出（失败空间可见可重试）、新建空间自动安装、空间侧锁定与安装权限收口（含新建空间默认 noone、三道防线逐条验证：改回 everyone 后自升被 403、自动升级任务过滤托管插件）、改范围双向与升级/回收波次；组织凭据配置后模型调用全链路（对话/补全）与变更缓存失效、分派表读链路在真实流量下烤一个周期；登录三分支（无空间管理员 -> `/admin`、无空间普通账号 -> 引导提示、有空间账号不变）。
 - ABAC 资源标签（可选增强）：`apps/datasets` 加 sensitivity_tag + 策略 deny_tags + 判定断言；不做 PDP/多因子。
 
 ## 10. 分阶段交付（两流整合）
@@ -218,8 +239,8 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 | B-P1 | B | admin 端点组 + 审计表与埋点 + **/install 瘦身与 login/load_user 分支** | 3-4 |
 | B-P2 | B | 系统管理前端（含无空间落地路由） | 2-3 |
 | B-P3 | B | 组织级角色并入（依赖 A-P2） | 1-2 |
-| B-P4 | B | **插件托管 + 插件中心**（提入一期，2026-08-26：三源安装、扇出/重试、空间侧锁定、新建空间自动安装钩子、`TenantPluginPermission` 收口） | 4-6 |
-| B-P5 | B | **组织级凭据**（提入一期、一期全量组织统一：表 + 解析链 + 空间侧只读 + 缓存失效） | 4-6 |
+| B-P4 | B | **插件托管 + 插件中心**（提入一期，2026-08-26：三源安装、扇出/重试、空间侧三道升级防线、新建空间自动安装钩子、`TenantPluginPermission` 收口、四动词动作模型与 recycling 状态；含本地包代理租户 PoC 0.5 天） | 4-6 |
+| B-P5 | B | **组织级凭据**（提入一期、一期全量组织统一：表 + 加密锚点方案 A + 分派表地基（只读恒 org）+ 解析链 + 空间侧只读 + 缓存失效） | 4-6 |
 | **合计** | | | **约 25-33 人日**（两流可并行，A-P2 是最长链） |
 
 交付顺序建议：**两流独立，B 可完全先行**——B-P0~P2（约 5.5-7.5 人日）只依赖现有 TenantService，得到系统管理 UI + 审计；**插件托管与插件中心（B-P4）、组织级凭据（B-P5）已提入一期**（约 8-12 人日：B-P4 依赖插件安装链，B-P5 动 ProviderManager 热路径，两者可并行），**流 B 一期合计约 14-20 人日**；「组织级角色」（B-P3）才依赖 A-P2 的表与判定链。A-P2 完成即具备严格切换能力；A-P3 补全矩阵 UI。衔接点无沉没成本：`@deployment_admin_required` 先按 env 名单判定，流 A 落地后迁到组织级角色，判定逻辑不变只换数据源。
