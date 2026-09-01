@@ -198,11 +198,13 @@
 
   /* ===== 模型供应商卡片 ===== */
   .mp-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
-  .mp-card { padding:18px 20px; display:flex; flex-direction:column; gap:10px; }
+  .mp-card { padding:18px 20px; display:flex; flex-direction:column; gap:10px; text-align:left; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+  .mp-card:hover { border-color:var(--border-strong); box-shadow:var(--shadow-xs); }
   .mp-head { display:flex; align-items:center; gap:12px; }
   .mp-name { font-size:15px; font-weight:700; }
   .mp-models { font-size:12.5px; color:var(--text-3); line-height:1.8; }
   .mp-models b { color:var(--text-2); font-weight:700; }
+  .notice-amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
 
   /* ===== 工作室 / 知识库卡片网格 ===== */
   .grid-cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:14px; }
@@ -551,9 +553,7 @@
     <!-- ④ 集成：侧栏二级（模型供应商/工具）；工具页内三级子 tab（工具插件/MCP/工作流/Swagger API） -->
     <section data-view="integrations" hidden>
       <div class="intg-head">
-        <div class="page-title" style="display:flex; align-items:center; gap:12px" id="intg-title">模型供应商
-          <span class="pill pill-accent" id="intg-pill">由系统管理员统一托管</span>
-        </div>
+        <div class="page-title" id="intg-title">模型供应商</div>
       </div>
       <div class="intg-body" id="intg-body"><!-- JS 渲染 --></div>
     </section>
@@ -583,25 +583,7 @@
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
     </button>
   </div>
-  <div class="drawer-body">
-    <div class="drawer-sec-title">简介</div>
-    <div style="font-size:13.5px; line-height:1.7; color:var(--text-2)" id="d-desc"></div>
-
-    <div class="drawer-sec-title" id="d-actions-title">包含 2 个操作</div>
-    <div id="d-actions"></div>
-
-    <div class="drawer-sec-title">托管状态</div>
-    <div id="d-hosting">
-      <div class="kv"><span class="k">来源</span><span class="v"><span class="pill pill-violet">托管分发</span></span></div>
-      <div class="kv"><span class="k">版本</span><span class="v mono" id="d-ver">v1.3.2</span></div>
-      <div class="kv"><span class="k">凭据</span><span class="v"><span class="pill pill-green"><span class="dot"></span>组织统一</span></span></div>
-      <div class="kv"><span class="k">升级 / 卸载</span><span class="v muted">由系统管理员统一管理</span></div>
-    </div>
-
-    <div class="notice notice-violet" style="margin-top:16px" id="d-notice">
-      插件的安装、升级、卸载与凭据配置均在<b>系统管理控制台</b>完成。空间内仅可查看与调用。
-    </div>
-  </div>
+  <div class="drawer-body" id="d-body"><!-- JS 渲染：工具=简介+actions；供应商=模型清单+操作 --></div>
 </aside>
 
 <!-- 视图切换（演示用） -->
@@ -623,47 +605,56 @@
 /* ===== 集成页各 tab 内容 ===== */
 const intgViews = {
   provider: `
-    <div class="page-sub">凭据由组织统一配置，空间内不可查看或修改。如需变更请联系系统管理员。</div>
+    <div class="page-sub">查看空间可用的模型，点击卡片查看模型清单。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索供应商">
+      <button class="btn btn-ghost" style="margin-left:auto">默认模型设置</button>
     </div>
     <div class="mp-grid">
-      <div class="card mp-card">
+      <button class="card mp-card" onclick="openProvider(0)">
         <div class="mp-head">
           <div class="tool-icon">A</div>
-          <div style="flex:1"><div class="mp-name">Azure OpenAI</div><div class="muted">已由组织统一配置</div></div>
+          <div style="flex:1">
+            <div class="mp-name">Azure OpenAI <span class="mono" style="font-size:11.5px;color:var(--text-3);font-weight:400">1.0.4</span></div>
+            <div style="margin-top:6px; display:flex; gap:4px"><span class="pill pill-gray">LLM</span><span class="pill pill-gray">TEXT EMBEDDING</span></div>
+          </div>
           <span class="pill pill-green"><span class="dot"></span>可用</span>
         </div>
-        <div class="mp-models"><b>可用模型</b>：gpt-5, gpt-5-mini, text-embedding-3-large</div>
-      </div>
-      <div class="card mp-card">
+      </button>
+      <button class="card mp-card" onclick="openProvider(1)">
         <div class="mp-head">
           <div class="tool-icon">通</div>
-          <div style="flex:1"><div class="mp-name">通义千问</div><div class="muted">已由组织统一配置</div></div>
+          <div style="flex:1">
+            <div class="mp-name">通义千问 <span class="mono" style="font-size:11.5px;color:var(--text-3);font-weight:400">0.5.2</span></div>
+            <div style="margin-top:6px; display:flex; gap:4px"><span class="pill pill-gray">LLM</span></div>
+          </div>
           <span class="pill pill-green"><span class="dot"></span>可用</span>
         </div>
-        <div class="mp-models"><b>可用模型</b>：qwen-max, qwen-plus</div>
-      </div>
-      <div class="card mp-card">
+      </button>
+      <button class="card mp-card" onclick="openProvider(2)">
         <div class="mp-head">
           <div class="tool-icon">A</div>
-          <div style="flex:1"><div class="mp-name">Anthropic</div><div class="muted">已由组织统一配置</div></div>
-          <span class="pill pill-amber">配额不足</span>
+          <div style="flex:1">
+            <div class="mp-name">Anthropic <span class="mono" style="font-size:11.5px;color:var(--text-3);font-weight:400">0.3.28</span></div>
+            <div style="margin-top:6px; display:flex; gap:4px"><span class="pill pill-gray">LLM</span></div>
+          </div>
+          <span class="pill pill-green"><span class="dot"></span>可用</span>
         </div>
-        <div class="mp-models"><b>可用模型</b>：claude-fable-5</div>
-      </div>
-      <div class="card mp-card">
+      </button>
+      <button class="card mp-card" onclick="openProvider(3)">
         <div class="mp-head">
           <div class="tool-icon">D</div>
-          <div style="flex:1"><div class="mp-name">DeepSeek</div><div class="muted">组织尚未配置</div></div>
+          <div style="flex:1">
+            <div class="mp-name">DeepSeek <span class="mono" style="font-size:11.5px;color:var(--text-3);font-weight:400">0.1.9</span></div>
+            <div class="muted" style="margin-top:6px">未配置凭据，模型不可用</div>
+          </div>
           <span class="pill pill-gray">未配置</span>
         </div>
-        <div class="mp-models">如需使用请联系系统管理员在「系统管理 · 模型提供商」中配置。</div>
-      </div>
+      </button>
     </div>`,
   'tools-builtin': `
     ${toolTabs('tools-builtin')}
-    <div class="page-sub">空间内可用的工具，全部由系统管理员统一分发与维护。点击卡片查看详情。</div>
+    <div class="page-sub">空间内可用的工具，点击卡片查看详情。</div>
     <div class="toolbar">
       <button class="chip on">全部</button>
       <button class="chip">搜索</button>
@@ -671,10 +662,9 @@ const intgViews = {
       <input class="search-input" placeholder="搜索">
     </div>
     <div class="tool-grid">
-      <button class="tool-card" onclick="openDrawer(0)">
+      <button class="tool-card" onclick="openTool(0)">
         <div class="tool-card-head">
           <div class="tool-icon">G</div>
-          <span class="pill pill-violet">托管</span>
         </div>
         <div>
           <div class="tool-name">Google Search</div>
@@ -685,10 +675,9 @@ const intgViews = {
           <span class="muted">langgenius / google</span>
         </div>
       </button>
-      <button class="tool-card" onclick="openDrawer(1)">
+      <button class="tool-card" onclick="openTool(1)">
         <div class="tool-card-head">
           <div class="tool-icon">J</div>
-          <span class="pill pill-violet">托管</span>
         </div>
         <div>
           <div class="tool-name">Jina Reader</div>
@@ -699,10 +688,9 @@ const intgViews = {
           <span class="muted">jina-ai / jina</span>
         </div>
       </button>
-      <button class="tool-card" onclick="openDrawer(2)">
+      <button class="tool-card" onclick="openTool(2)">
         <div class="tool-card-head">
           <div class="tool-icon">GH</div>
-          <span class="pill pill-violet">托管</span>
         </div>
         <div>
           <div class="tool-name">GitHub</div>
@@ -713,10 +701,9 @@ const intgViews = {
           <span class="muted">langgenius / github</span>
         </div>
       </button>
-      <button class="tool-card" onclick="openDrawer(3)">
+      <button class="tool-card" onclick="openTool(3)">
         <div class="tool-card-head">
           <div class="tool-icon">代</div>
-          <span class="pill pill-gray">内置</span>
         </div>
         <div>
           <div class="tool-name">代码解释器</div>
@@ -730,7 +717,7 @@ const intgViews = {
     </div>`,
   'tools-mcp': `
     ${toolTabs('tools-mcp')}
-    <div class="page-sub">连接 MCP 服务器，让应用访问外部工具与服务。MCP 由空间内自行创建与管理。</div>
+    <div class="page-sub">连接 MCP 服务器，让应用访问外部工具与服务。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
       <button class="btn btn-primary">添加 MCP 服务 (HTTP)</button>
@@ -753,7 +740,7 @@ const intgViews = {
     </div>`,
   'tools-workflow': `
     ${toolTabs('tools-workflow')}
-    <div class="page-sub">将工作流发布为工具，在应用与其他工作流中调用。由空间内自行创建与管理。</div>
+    <div class="page-sub">将工作流发布为工具，在应用与其他工作流中调用。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
       <button class="btn btn-primary">创建工具</button>
@@ -761,7 +748,7 @@ const intgViews = {
     <div class="notice notice-blue">当前空间暂无工作流工具。在工作室发布工作流后，可在此将其工具化。</div>`,
   'tools-api': `
     ${toolTabs('tools-api')}
-    <div class="page-sub">导入 Swagger/OpenAPI 定义，把外部 API 变成工具。由空间内自行创建与管理。</div>
+    <div class="page-sub">导入 Swagger/OpenAPI 定义，把外部 API 变成工具。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
       <button class="btn btn-primary">导入 API</button>
@@ -769,47 +756,64 @@ const intgViews = {
     <div class="notice notice-blue">已导入的 API 工具会出现在这里，可在应用编排中选择。</div>`,
 };
 
-/* ===== 详情面板数据 ===== */
+/* ===== 详情抽屉数据（工具 + 供应商共用外壳） ===== */
 const tools = [
-  { icon:'G', name:'Google Search', meta:'langgenius / google', ver:'v1.3.2', desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。',
+  { icon:'G', name:'Google Search', meta:'langgenius / google · v1.3.2', desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。',
     actions:[{icon:'🔍', name:'搜索网页', desc:'按关键词检索网页并返回结果列表'},{icon:'🔗', name:'读取页面', desc:'抓取指定 URL 的页面正文'}] },
-  { icon:'J', name:'Jina Reader', meta:'jina-ai / jina', ver:'v1.1.7', desc:'网页正文提取与清洗，输出结构化文本。适合将网页内容喂给大模型或知识库。',
+  { icon:'J', name:'Jina Reader', meta:'jina-ai / jina · v1.1.7', credMissing:true, desc:'网页正文提取与清洗，输出结构化文本。适合将网页内容喂给大模型或知识库。',
     actions:[{icon:'📄', name:'提取正文', desc:'从 URL 提取干净正文'},{icon:'🖼', name:'提取图片', desc:'获取页面中的图片资源'}] },
-  { icon:'GH', name:'GitHub', meta:'langgenius / github', ver:'v1.2.0', desc:'连接 GitHub 仓库，支持 Issue、PR 与代码内容的查询和管理。',
+  { icon:'GH', name:'GitHub', meta:'langgenius / github · v1.2.0', desc:'连接 GitHub 仓库，支持 Issue、PR 与代码内容的查询和管理。',
     actions:[{icon:'🐛', name:'查询 Issue', desc:'按条件检索仓库 Issue'},{icon:'📦', name:'读取仓库', desc:'获取仓库文件与元信息'}] },
-  { icon:'代', name:'代码解释器', meta:'Dify / code', ver:'v1.0.0', kind:'builtin', desc:'运行一段代码并返回结果。支持 Python 沙箱执行，可处理数据转换与计算。',
+  { icon:'代', name:'代码解释器', meta:'Dify / code · v1.0.0', desc:'运行一段代码并返回结果。支持 Python 沙箱执行，可处理数据转换与计算。',
     actions:[{icon:'🐍', name:'执行代码', desc:'在沙箱中运行 Python 代码'}] },
 ];
+const providers = [
+  { icon:'A', name:'Azure OpenAI', ok:true, groups:{ 'LLM':['gpt-5','gpt-5-mini'], 'Embedding':['text-embedding-3-large'] } },
+  { icon:'通', name:'通义千问', ok:true, groups:{ 'LLM':['qwen-max','qwen-plus'] } },
+  { icon:'A', name:'Anthropic', ok:true, groups:{ 'LLM':['claude-fable-5'] } },
+  { icon:'D', name:'DeepSeek', ok:false },
+];
 
-function openDrawer(i) {
-  const t = tools[i];
-  document.getElementById('d-icon').textContent = t.icon;
-  document.getElementById('d-name').textContent = t.name;
-  document.getElementById('d-meta').textContent = `${t.meta} · ${t.ver}`;
-  document.getElementById('d-desc').textContent = t.desc;
-  document.getElementById('d-actions-title').textContent = `包含 ${t.actions.length} 个操作`;
-  document.getElementById('d-actions').innerHTML = t.actions.map(a => `
-    <div class="action-item">
-      <div class="action-icon">${a.icon}</div>
-      <div><div class="action-name">${a.name}</div><div class="action-desc">${a.desc}</div></div>
-    </div>`).join('');
-  // 托管状态区按类型显隐：内置工具无凭据/托管语义
-  if (t.kind === 'builtin') {
-    document.getElementById('d-hosting').innerHTML = `
-      <div class="kv"><span class="k">来源</span><span class="v"><span class="pill pill-gray">内置</span></span></div>
-      <div class="kv"><span class="k">版本</span><span class="v mono">${t.ver}</span></div>`;
-    document.getElementById('d-notice').style.display = 'none';
-  } else {
-    document.getElementById('d-hosting').innerHTML = `
-      <div class="kv"><span class="k">来源</span><span class="v"><span class="pill pill-violet">托管分发</span></span></div>
-      <div class="kv"><span class="k">版本</span><span class="v mono">${t.ver}</span></div>
-      <div class="kv"><span class="k">凭据</span><span class="v"><span class="pill pill-green"><span class="dot"></span>组织统一</span></span></div>
-      <div class="kv"><span class="k">升级 / 卸载</span><span class="v muted">由系统管理员统一管理</span></div>`;
-    document.getElementById('d-notice').style.display = '';
-  }
+function setHead(icon, name, meta) {
+  document.getElementById('d-icon').textContent = icon;
+  document.getElementById('d-name').textContent = name;
+  document.getElementById('d-meta').textContent = meta;
+}
+function showDrawer() {
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer-mask').classList.add('open');
 }
+
+/* 工具抽屉：简介 + actions（纯展示）。凭据未配置才提示（默认不说，不可用时才说） */
+function openTool(i) {
+  const t = tools[i];
+  setHead(t.icon, t.name, t.meta);
+  document.getElementById('d-body').innerHTML = `
+    ${t.credMissing ? '<div class="notice notice-amber" style="margin-bottom:16px">凭据未配置，暂不可用。请联系系统管理员配置。</div>' : ''}
+    <div class="drawer-sec-title">简介</div>
+    <div style="font-size:13.5px; line-height:1.7; color:var(--text-2)">${t.desc}</div>
+    <div class="drawer-sec-title">包含 ${t.actions.length} 个操作</div>
+    ${t.actions.map(a => `
+      <div class="action-item">
+        <div class="action-icon">${a.icon}</div>
+        <div><div class="action-name">${a.name}</div><div class="action-desc">${a.desc}</div></div>
+      </div>`).join('')}`;
+  showDrawer();
+}
+
+/* 供应商抽屉：模型清单（按类型分组）纯查看——模型与凭据配置均收归系统管理控制台，空间侧无添加模型/默认模型设置入口 */
+function openProvider(i) {
+  const p = providers[i];
+  const total = p.ok ? Object.values(p.groups).flat().length : 0;
+  setHead(p.icon, p.name, p.ok ? `${total} 个模型` : '未配置凭据');
+  document.getElementById('d-body').innerHTML = !p.ok
+    ? `<div class="notice notice-amber">凭据未配置，模型不可用。如需使用请联系系统管理员配置。</div>`
+    : Object.entries(p.groups).map(([type, list]) => `
+        <div class="drawer-sec-title">${type}</div>
+        ${list.map(m => `<div class="kv"><span class="mono">${m}</span></div>`).join('')}`).join('');
+  showDrawer();
+}
+
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawer-mask').classList.remove('open');
@@ -822,12 +826,12 @@ const annos = {
   agents: 'Agents（新 Agent 栈）：保留在导航，一期不改动，mockup 不展开。',
   skills: 'Skills（Agent 能力包，新 Agent 栈配套）：保留在导航，一期不改动，mockup 不展开。',
   knowledge: '<b>知识库收窄</b>：只保留创建即用型；导入源只留「导入已有文本」（本地上传/网址抓取）；数据源同步（含 OAuth 与 Key 类）一期整体不开放。',
-  integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具）；工具页内四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API，现状已存在于二级侧栏，此处为视觉重排）；删 Marketplace 一级入口；删 数据来源/触发器/Agent 策略/扩展/自定义端点 二级页与 安装/调试/权限/自动更新 入口。插件安装与凭据配置挪到系统管理控制台。',
+  integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具）；工具页内四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API，现状已存在于二级侧栏，此处为视觉重排）；删 Marketplace 一级入口；删 数据来源/触发器/Agent 策略/扩展/自定义端点 二级页与 安装/调试/权限/自动更新 入口。<b>治理叙事不进空间侧 UI</b>（默认不说，不可用时才说）。',
   'login-fail': '登录失败提示：无会话、不进入控制台外壳；实现为 login 流程终态页（返回指向 /signin），非工作台路由。',
 };
 const intgAnno = {
-  provider: '<b>模型供应商</b>：一期全量组织统一。卡片只读两态（可用/未配置），无 Add API Key / Default Models / 安装入口。',
-  'tools-builtin': '<b>工具插件</b>：卡片网格，全「托管」态（内置工具为「内置」灰徽标）；仅本 tab 点卡片开<b>右侧滑出详情抽屉</b>（简介+actions 纯展示+托管状态按类型显隐）；删市场精选轮播与自动更新。',
+  provider: '<b>模型供应商</b>：纯查看——卡片照 QA 现状结构（版本号+类型徽标+状态），点卡片开抽屉看模型清单（按类型分组）；<b>默认模型设置保留在页面顶层</b>（工具栏右侧，空间级同现状）；无添加模型/API Key/安装入口；未配置时提示联系系统管理员。',
+  'tools-builtin': '<b>工具插件</b>：卡片网格（无来源徽标）；点卡片开只读抽屉（简介 + actions 纯展示，版本在头部）；凭据未配置才在抽屉提示。删市场精选轮播与自动更新。',
   'tools-mcp': 'MCP 维持空间自建（一期不托管，凭据空间自管），保留添加/管理入口；不走统一详情抽屉，管理走既有 MCP UI。',
   'tools-workflow': '工作流作为工具：空间原生功能，维持现状。',
   'tools-api': 'Swagger API 作为工具：空间原生功能，维持现状。',
@@ -854,8 +858,6 @@ function syncSubnav() {
     if (b.dataset.nav === 'integrations') b.classList.add('intg-open', 'active');
   });
   document.getElementById('intg-title').childNodes[0].textContent = intgTitles[curIntg] + ' ';
-  // 页头托管徽标仅模型供应商页常驻；工具各 tab 由卡片级徽标承载
-  document.getElementById('intg-pill').style.display = curIntg === 'provider' ? '' : 'none';
 }
 function renderIntg() {
   document.getElementById('intg-body').innerHTML = intgViews[curIntg];
