@@ -2390,10 +2390,21 @@ class TestRegisterService:
         mock_tenant = _tenant(sqlite_session)
         mock_tenant.id = "tenant-456"
         mock_tenant.name = "Test Workspace"
+        other_tenant = _tenant(sqlite_session)
+        other_tenant.id = "other-tenant-789"
         mock_inviter = TestAccountAssociatedDataFactory.create_account_mock(account_id="inviter-123", name="Inviter")
         mock_existing_account = TestAccountAssociatedDataFactory.create_account_mock(
             account_id="existing-user-456", email="existing@example.com", status="active"
         )
+
+        sqlite_session.add(
+            TenantAccountJoin(
+                tenant_id=other_tenant.id,
+                account_id=mock_existing_account.id,
+                role=TenantAccountRole.NORMAL,
+            )
+        )
+        sqlite_session.commit()
 
         with patch("services.account_service.AccountService.get_account_by_email_with_case_fallback") as mock_lookup:
             mock_lookup.return_value = mock_existing_account
@@ -2425,6 +2436,54 @@ class TestRegisterService:
                 mock_create_member.assert_not_called()
                 mock_generate_token.assert_called_once_with(
                     mock_tenant, mock_existing_account, "admin", requires_setup=False
+                )
+                mock_task_dependencies.delay.assert_called_once()
+
+    def test_invite_removed_member_restores_membership(
+        self, sqlite_session: Session, mock_task_dependencies: MagicMock
+    ) -> None:
+        """Re-inviting an active account with no workspace membership restores the join immediately.
+
+        Login and per-request session loading reject workspace-less accounts, so the
+        membership must exist before the invitee can log in to accept the invitation.
+        """
+        mock_tenant = _tenant(sqlite_session)
+        mock_tenant.id = "tenant-456"
+        mock_tenant.name = "Test Workspace"
+        mock_inviter = TestAccountAssociatedDataFactory.create_account_mock(account_id="inviter-123", name="Inviter")
+        mock_removed_account = TestAccountAssociatedDataFactory.create_account_mock(
+            account_id="removed-user-456", email="removed@example.com", status="active"
+        )
+
+        with patch("services.account_service.AccountService.get_account_by_email_with_case_fallback") as mock_lookup:
+            mock_lookup.return_value = mock_removed_account
+
+            with (
+                patch("services.account_service.TenantService.check_member_permission"),
+                patch("services.account_service.TenantService.create_tenant_member") as mock_create_member,
+                patch("services.account_service.RegisterService.generate_invite_token") as mock_generate_token,
+            ):
+                mock_generate_token.return_value = "invite-token-123"
+
+                result = RegisterService.invite_new_member(
+                    tenant=mock_tenant,
+                    email="removed@example.com",
+                    language="en-US",
+                    role="admin",
+                    inviter=mock_inviter,
+                    session=sqlite_session,
+                )
+
+                assert result == "invite-token-123"
+                mock_create_member.assert_called_once_with(
+                    mock_tenant,
+                    mock_removed_account,
+                    sqlite_session,
+                    "admin",
+                    operator_account_id=mock_inviter.id,
+                )
+                mock_generate_token.assert_called_once_with(
+                    mock_tenant, mock_removed_account, "admin", requires_setup=False
                 )
                 mock_task_dependencies.delay.assert_called_once()
 

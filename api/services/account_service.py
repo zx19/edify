@@ -2101,7 +2101,21 @@ class RegisterService:
             )
             requires_setup = account.status == AccountStatus.PENDING
 
-            if not ta and (account.status == AccountStatus.PENDING or dify_config.RBAC_ENABLED):
+            # Re-inviting a member whose account lost every workspace membership (e.g. removed
+            # from their only workspace) must restore the membership at invite time: both login
+            # and per-request session loading reject workspace-less accounts, so deferring the
+            # join to POST /activate would leave the invitation unusable.
+            has_membership = (
+                session.scalar(
+                    select(TenantAccountJoin.id)
+                    .where(TenantAccountJoin.account_id == account.id)
+                    .limit(1)
+                )
+                is not None
+            )
+            if not ta and (
+                account.status == AccountStatus.PENDING or not has_membership or dify_config.RBAC_ENABLED
+            ):
                 TenantService.create_tenant_member(
                     tenant,
                     account,
