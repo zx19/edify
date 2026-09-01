@@ -187,7 +187,39 @@
   .drawer-body { flex:1; overflow-y:auto; padding:18px 24px; }
   .drawer-sec-title { font-size:11.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; margin:18px 0 10px; }
   .drawer-sec-title:first-child { margin-top:0; }
-  .action-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:11px; margin-bottom:8px; width:100%; text-align:left; cursor:default; }
+  .action-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:11px; margin-bottom:8px; width:100%; text-align:left; }
+  .action-item:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .drawer-back { display:inline-flex; align-items:center; gap:4px; font-size:12.5px; font-weight:600; color:var(--text-3); margin-bottom:14px; }
+  .drawer-back:hover { color:var(--text-1); }
+  .param-row { padding:10px 0; border-bottom:1px dashed var(--border); }
+  .param-row:last-child { border-bottom:0; }
+  .param-head { display:flex; align-items:center; gap:8px; }
+  .param-name { font-weight:700; font-size:13px; }
+  .param-type { font-size:11.5px; color:var(--text-3); }
+  .param-desc { font-size:12px; color:var(--text-3); margin-top:2px; }
+
+  /* 标签筛选下拉（照 QA：搜索 + checkbox 多选） */
+  .tag-menu { position:absolute; top:calc(100% + 6px); left:0; width:220px; max-height:320px; overflow-y:auto; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); padding:10px; z-index:80; display:none; }
+  .tag-menu.open { display:block; }
+  .tag-item { display:flex; align-items:center; gap:8px; height:30px; padding:0 8px; border-radius:8px; font-size:13px; color:var(--text-2); cursor:pointer; }
+  .tag-item:hover { background:var(--bg-soft); }
+  .tag-item input { accent-color:var(--accent); }
+
+  /* 空态引导（照 QA 工作流作为工具页） */
+  .empty-state { text-align:center; padding:56px 24px 40px; }
+  .empty-title-lg { font-size:19px; font-weight:800; }
+  .step-cards { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; max-width:760px; margin:26px auto 0; text-align:left; }
+  .step-card { border:1px solid var(--border); border-radius:var(--radius-card); padding:16px; background:#fff; }
+  .step-no { width:22px; height:22px; border-radius:50%; background:var(--bg-soft); color:var(--text-2); display:grid; place-items:center; font-size:12px; font-weight:700; margin-bottom:10px; }
+  .step-text { font-size:13px; font-weight:600; color:var(--text-2); line-height:1.6; }
+  .empty-cta { display:inline-flex; align-items:center; gap:6px; margin-top:22px; color:var(--accent-deep); font-weight:700; font-size:13.5px; }
+  .empty-help { margin-top:18px; font-size:12px; color:var(--text-3); }
+
+  /* 列表行卡片（照 QA Swagger API 页） */
+  .row-card { display:flex; align-items:center; gap:12px; border:1px solid var(--border); border-radius:var(--radius-card); background:#fff; padding:16px 18px; font-size:14px; font-weight:600; width:100%; text-align:left; margin-bottom:10px; }
+  .row-card:hover { border-color:var(--border-strong); }
+  .row-card .plus { width:28px; height:28px; border-radius:8px; background:var(--bg-soft); display:grid; place-items:center; color:var(--text-3); font-size:15px; flex:none; }
+  .row-card .ext { margin-left:auto; color:var(--text-3); }
   .action-icon { width:32px; height:32px; border-radius:9px; background:var(--bg-soft); display:grid; place-items:center; font-size:14px; flex:none; }
   .action-name { font-size:13.5px; font-weight:700; }
   .action-desc { font-size:12px; color:var(--text-3); margin-top:1px; }
@@ -195,6 +227,59 @@
   .kv:last-child { border-bottom:0; }
   .kv .k { color:var(--text-3); }
   .kv .v { font-weight:600; }
+
+  /* 工作室卡片（照 QA：图标角标 + 添加标签 + 完整时间） */
+  .app-icon-wrap { position:relative; width:40px; height:40px; border-radius:10px; background:var(--bg-soft); border:1px solid var(--border); display:grid; place-items:center; font-size:18px; flex:none; }
+  .app-type-badge { position:absolute; right:-4px; bottom:-4px; width:16px; height:16px; border-radius:5px; background:var(--violet-pill-bg); color:var(--violet-pill-fg); font-size:9px; font-weight:800; display:grid; place-items:center; border:1px solid #fff; }
+  .app-tag-add { display:inline-flex; align-items:center; gap:4px; margin-top:12px; padding:3px 10px; border:1px dashed var(--border-strong); border-radius:8px; font-size:11.5px; color:var(--text-3); width:fit-content; }
+  .app-card-head-row { display:flex; align-items:center; gap:12px; }
+
+  /* 标注盒可收起 */
+  .anno-head { display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:800; font-size:12.5px; user-select:none; }
+  .anno-head .anno-toggle { margin-left:auto; color:var(--accent); }
+  .anno-chip { display:none; background:var(--accent); color:#fff; border-radius:6px; padding:1px 8px; font-size:11px; }
+  .anno.collapsed { width:auto; padding:10px 14px; }
+  .anno.collapsed .anno-title, .anno.collapsed .anno-body-wrap { display:none; }
+  .anno.collapsed .anno-chip { display:inline; }
+  .anno.collapsed .anno-toggle { transform:rotate(180deg); }
+  .anno-demo { margin-top:8px; border-top:1px solid rgb(255 255 255 / .14); padding-top:8px; }
+  .anno-demo a { color:var(--accent); cursor:pointer; font-weight:700; }
+  .anno-demo a:hover { text-decoration:underline; }
+
+  /* 向下展开的菜单（工具栏筛选/创建下拉） */
+  .menu-down { top:calc(100% + 6px); bottom:auto; left:0; right:auto; min-width:200px; }
+  .flt-check { margin-left:auto; color:var(--accent-deep); font-weight:800; }
+
+  /* ===== 居中模态框（默认模型设置 / 添加 MCP / 创建 Swagger 工具） ===== */
+  .modal-mask { position:fixed; inset:0; background:rgb(10 10 11 / .28); z-index:60; opacity:0; pointer-events:none; transition:opacity .2s; }
+  .modal-mask.open { opacity:1; pointer-events:auto; }
+  .modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.98); width:560px; max-width:92vw; max-height:84vh; background:#fff; border-radius:14px; box-shadow:var(--shadow-md); z-index:70; opacity:0; pointer-events:none; transition:opacity .15s, transform .15s; display:flex; flex-direction:column; }
+  .modal.open { opacity:1; transform:translate(-50%,-50%); pointer-events:auto; }
+  .modal-head { padding:18px 24px 12px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .modal-title { font-size:16px; font-weight:800; }
+  .modal-sub { font-size:12.5px; color:var(--text-3); margin-top:4px; }
+  .modal-body { flex:1; overflow-y:auto; padding:6px 24px 18px; }
+  .modal-foot { padding:14px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; }
+  .field { margin-bottom:16px; }
+  .field-label { font-size:13px; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:4px; }
+  .field-label .req { color:var(--danger); }
+  .field-help { font-size:12px; color:var(--text-3); margin-top:5px; line-height:1.6; }
+  .text-input { height:36px; padding:0 12px; border:1px solid var(--border-strong); border-radius:10px; font-size:13px; width:100%; background:#fff; color:var(--text-1); }
+  .text-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .text-input::placeholder { color:var(--text-3); }
+  .select-input { height:36px; padding:0 12px; border:1px solid var(--border-strong); border-radius:10px; background:#fff; font-size:13px; width:100%; display:flex; align-items:center; justify-content:space-between; color:var(--text-1); cursor:pointer; }
+  .select-input.placeholder { color:var(--text-3); }
+  .seg-tabs { display:flex; background:var(--bg-soft); border-radius:10px; padding:3px; margin:4px 0 14px; }
+  .seg-tab { flex:1; height:28px; border-radius:8px; font-size:12.5px; font-weight:600; color:var(--text-2); display:flex; align-items:center; justify-content:center; }
+  .seg-tab.on { background:#fff; color:var(--text-1); box-shadow:var(--shadow-xs); }
+  .toggle { width:36px; height:20px; border-radius:999px; background:var(--accent); position:relative; flex:none; }
+  .toggle::after { content:""; position:absolute; top:2px; left:18px; width:16px; height:16px; border-radius:50%; background:#fff; }
+  .textarea-code { width:100%; min-height:180px; border:1px solid var(--border-strong); border-radius:10px; padding:12px; font-family:var(--mono); font-size:12px; color:var(--text-2); resize:vertical; outline:none; }
+  .textarea-code::placeholder { color:var(--text-3); }
+  .mini-table { width:100%; border-collapse:collapse; }
+  .mini-table th { text-align:left; font-size:12px; font-weight:600; color:var(--text-3); padding:8px 10px; background:var(--bg-soft); }
+  .mini-table th:first-child { border-radius:8px 0 0 8px; }
+  .mini-table th:last-child { border-radius:0 8px 8px 0; }
 
   /* ===== 模型供应商卡片 ===== */
   .mp-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
@@ -230,9 +315,6 @@
   /* 标注 */
   .anno { position:fixed; right:16px; bottom:16px; z-index:50; width:280px; background:var(--text-1); color:#F5F5F6; border-radius:13px; padding:14px 16px; font-size:12px; line-height:1.8; box-shadow:var(--shadow-md); }
   .anno b { color:var(--accent); }
-  .view-switch { position:fixed; left:16px; bottom:16px; z-index:80; display:flex; gap:6px; flex-wrap:wrap; max-width:420px; }
-  .view-switch button { background:var(--text-1); color:#fff; border-radius:9px; padding:7px 13px; font-size:12px; font-weight:700; }
-  .view-switch button.on { background:var(--accent); }
 </style>
 </head>
 <body data-mode="workspace">
@@ -341,6 +423,7 @@
       <div class="nav-sub" id="intg-submenu">
         <button class="nav-sub-item" data-subnav="provider">模型供应商</button>
         <button class="nav-sub-item" data-subnav="tools-builtin">工具</button>
+        <button class="nav-sub-item" data-subnav="agent">Agent 策略</button>
       </div>
     </nav>
     <div class="webapps">
@@ -393,7 +476,6 @@
             <button class="dm-item" style="color:var(--accent-deep); font-weight:600">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z" stroke-linejoin="round"/><path d="M9.5 12l1.8 1.8 3.4-3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               系统管理
-              <span class="badge">仅系统管理员可见</span>
             </button>
           </div>
           <div class="dm-divider"></div>
@@ -468,52 +550,197 @@
       </div>
     </section>
 
-    <!-- ② Agents（保留现状，mockup 不展开） -->
+    <!-- ② Agents（照 QA：筛选 pill + 搜索 + 我创建的 + 排序 + 创建下拉；空态） -->
     <section data-view="agents" class="page" hidden>
-      <div class="page-title">Agents <span class="pill pill-gray">BETA</span></div>
-      <div class="notice notice-blue" style="margin-top:16px">新 Agent 栈（Agent App / Agent v2）。保留在导航，一期不改动，本 mockup 不展开。</div>
+      <div style="display:flex; align-items:center; justify-content:space-between">
+        <div class="page-title">Agent <span class="pill pill-gray" style="vertical-align:middle">BETA</span></div>
+        <a class="muted" href="javascript:void(0)" style="font-weight:600">了解 Agent ↗</a>
+      </div>
+      <div class="toolbar">
+        <button class="chip on">全部</button>
+        <button class="chip">已发布 <span class="muted">0</span></button>
+        <button class="chip">草稿 <span class="muted">0</span></button>
+        <input class="search-input" placeholder="按名称搜索 Agent…">
+        <label class="chip" style="cursor:pointer; gap:6px"><input type="checkbox" style="accent-color:var(--accent)"> 我创建的</label>
+        <div style="margin-left:auto; display:flex; gap:8px">
+          <div class="dropdown" style="position:relative">
+            <button class="chip" onclick="toggleMenu('agent-sort')">排序方式 最后修改
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="dropdown-menu menu-down" id="agent-sort" style="left:auto; right:0; min-width:180px">
+              <button class="dm-item">最后修改 <span class="flt-check">✓</span></button>
+              <button class="dm-item">最近创建</button>
+              <button class="dm-item">最早创建</button>
+            </div>
+          </div>
+          <div class="dropdown" style="position:relative">
+            <button class="btn btn-accent" onclick="toggleMenu('create-menu-agent')">＋ 创建
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="dropdown-menu" id="create-menu-agent" style="top:calc(100% + 6px); bottom:auto; left:auto; right:0; min-width:240px">
+              <button class="dm-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 9v6M9 12h6" stroke-linecap="round"/></svg>
+                创建空白应用
+              </button>
+              <button class="dm-item" style="align-items:flex-start">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>导入 DSL 文件<div style="font-size:11px; color:var(--text-3); font-weight:400; margin-top:2px">拖放 DSL 文件到此处创建应用</div></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; padding:110px 0">
+        <div class="tool-icon" style="margin:0 auto 14px; width:48px; height:48px; font-size:20px">🤖</div>
+        <div style="font-size:14px; font-weight:700">暂无 Agent</div>
+      </div>
     </section>
 
-    <!-- ② Skills（保留现状，mockup 不展开） -->
+    <!-- ② Skills（照 QA：标签筛选 + 搜索 + 导入 + 创建；卡片含 DRAFT 徽标与 Agent 用量） -->
     <section data-view="skills" class="page" hidden>
       <div class="page-title">Skills</div>
-      <div class="notice notice-blue" style="margin-top:16px">Agent 能力包（新 Agent 栈配套）。保留在导航，一期不改动，本 mockup 不展开。</div>
+      <div class="toolbar">
+        <div class="dropdown" style="position:relative">
+          <button class="chip" onclick="toggleMenu('flt-skill-tag')">标签
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu menu-down" id="flt-skill-tag" style="min-width:240px; padding:10px">
+            <input class="search-input" placeholder="搜索或者创建" style="width:100%; min-width:0; height:30px">
+            <div style="text-align:center; padding:18px 0 12px" class="muted">🏷️<div style="margin-top:6px">没有标签</div></div>
+            <div class="dm-divider"></div>
+            <button class="dm-item">管理标签</button>
+          </div>
+        </div>
+        <input class="search-input" placeholder="按名称或描述搜索">
+        <div style="margin-left:auto; display:flex; gap:8px">
+          <button class="btn btn-ghost">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3m0 0L8 7m4-4l4 4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            导入
+          </button>
+          <button class="btn btn-accent">＋ 创建</button>
+        </div>
+      </div>
+      <div class="grid-cards" style="margin-top:4px">
+        <a class="app-card" href="javascript:void(0)" style="position:relative">
+          <span class="pill pill-gray" style="position:absolute; top:14px; right:14px">DRAFT</span>
+          <div class="app-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke-linejoin="round"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" stroke-linejoin="round"/></svg></div>
+          <div class="app-card-title" style="margin-top:10px">Untitled skill</div>
+          <div class="muted" style="margin-top:3px">暂无描述</div>
+          <div class="app-tag-add">＋ 添加标签</div>
+          <div class="app-card-foot" style="margin-top:12px">0 个 Agent · 编辑于 3 天前</div>
+        </a>
+      </div>
     </section>
 
-    <!-- ② 工作室 -->
+    <!-- ② 工作室（照 QA：类型/标签/创建者/排序 + Snippets + 创建下拉；卡片含添加标签与完整时间） -->
     <section data-view="studio" class="page" hidden>
-      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px">
-        <div class="page-title">工作室</div>
-        <div class="toolbar" style="margin:0">
-          <button class="chip">类型</button>
-          <button class="chip">标签</button>
-          <input class="search-input" placeholder="搜索应用">
-          <button class="btn btn-primary">创建</button>
+      <div class="page-title">工作室</div>
+      <div class="toolbar">
+        <div class="dropdown" style="position:relative">
+          <button class="chip" onclick="toggleMenu('flt-type')">类型
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu menu-down" id="flt-type">
+            <button class="dm-item">全部 <span class="flt-check">✓</span></button>
+            <button class="dm-item">工作流</button>
+            <button class="dm-item">Chatflow</button>
+            <button class="dm-item">聊天助手</button>
+            <button class="dm-item">Agent</button>
+            <button class="dm-item">文本生成应用</button>
+          </div>
+        </div>
+        <div class="dropdown" style="position:relative">
+          <button class="chip" onclick="toggleMenu('flt-tag')">标签
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu menu-down" id="flt-tag" style="min-width:240px; padding:10px">
+            <input class="search-input" placeholder="搜索或者创建" style="width:100%; min-width:0; height:30px">
+            <div style="text-align:center; padding:18px 0 12px" class="muted">🏷️<div style="margin-top:6px">没有标签</div></div>
+            <div class="dm-divider"></div>
+            <button class="dm-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.6 13.4L12 22l-8.6-8.6a2 2 0 01-.6-1.4V4a1 1 0 011-1h8a2 2 0 011.4.6l7.4 7.4a2 2 0 010 2.4z" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none"/></svg>
+              管理标签
+            </button>
+          </div>
+        </div>
+        <div class="dropdown" style="position:relative">
+          <button class="chip" onclick="toggleMenu('flt-creator')">创建者
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu menu-down" id="flt-creator" style="min-width:240px; padding:10px">
+            <input class="search-input" placeholder="搜索创作者…" style="width:100%; min-width:0; height:30px; margin-bottom:6px">
+            <label class="tag-item"><input type="checkbox">
+              <span style="width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,#FF8C00,#FFB566); color:#fff; display:inline-grid; place-items:center; font-size:10px; font-weight:700; flex:none">张</span>
+              张玺 <span class="muted" style="margin-left:auto">你</span>
+            </label>
+          </div>
+        </div>
+        <div class="dropdown" style="position:relative">
+          <button class="chip" onclick="toggleMenu('flt-sort')">排序方式：最近修改
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu menu-down" id="flt-sort" style="min-width:180px">
+            <button class="dm-item">最近修改 <span class="flt-check">✓</span></button>
+            <button class="dm-item">最近创建</button>
+            <button class="dm-item">最早创建</button>
+          </div>
+        </div>
+        <input class="search-input" placeholder="搜索">
+        <div style="margin-left:auto; display:flex; gap:8px; position:relative">
+          <button class="btn btn-ghost">{ } Snippets</button>
+          <div class="dropdown" style="position:relative">
+            <button class="btn btn-accent" onclick="toggleMenu('create-menu')">＋ 创建
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="dropdown-menu" id="create-menu" style="top:calc(100% + 6px); bottom:auto; left:auto; right:0; min-width:240px">
+              <button class="dm-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 9v6M9 12h6" stroke-linecap="round"/></svg>
+                创建空白应用
+              </button>
+              <button class="dm-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
+                从应用模板创建
+              </button>
+              <div class="dm-divider"></div>
+              <button class="dm-item" style="align-items:flex-start">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>导入 DSL 文件<div style="font-size:11px; color:var(--text-3); font-weight:400; margin-top:2px">拖放 DSL 文件到此处创建应用</div></span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="grid-cards" style="margin-top:16px">
         <a class="app-card" href="javascript:void(0)">
-          <div class="app-card-head">
-            <div><div class="app-card-title">第三方</div><div class="app-card-type">Workflow</div></div>
-            <span>🤖</span>
+          <div class="app-card-head-row">
+            <div class="app-icon-wrap">🤖<span class="app-type-badge">工</span></div>
+            <div><div class="app-card-title">第三方</div><div class="app-card-type">工作流</div></div>
           </div>
-          <div class="app-card-foot">张玺 · 编辑于 08/27</div>
+          <div class="app-tag-add">＋ 添加标签</div>
+          <div class="app-card-foot" style="margin-top:12px">张玺 · 编辑于 2026/08/27 17:01</div>
         </a>
         <a class="app-card" href="javascript:void(0)">
-          <div class="app-card-head">
-            <div><div class="app-card-title">测试1</div><div class="app-card-type">Workflow</div></div>
-            <span>🤖</span>
+          <div class="app-card-head-row">
+            <div class="app-icon-wrap">🤖<span class="app-type-badge">工</span></div>
+            <div><div class="app-card-title">测试1</div><div class="app-card-type">工作流</div></div>
           </div>
-          <div class="app-card-foot">张玺 · 编辑于 08/21</div>
+          <div class="app-tag-add">＋ 添加标签</div>
+          <div class="app-card-foot" style="margin-top:12px">张玺 · 编辑于 2026/08/21 17:19</div>
         </a>
         <a class="app-card" href="javascript:void(0)">
-          <div class="app-card-head">
-            <div><div class="app-card-title">会议纪要</div><div class="app-card-type">Chatbot</div></div>
-            <span>📋</span>
+          <div class="app-card-head-row">
+            <div class="app-icon-wrap">📋<span class="app-type-badge">聊</span></div>
+            <div>
+              <div class="app-card-title">会议纪要</div>
+              <div class="app-card-type">聊天助手</div>
+            </div>
           </div>
-          <div class="app-card-foot">张玺 · 编辑于 08/20</div>
+          <div class="muted" style="margin-top:8px; font-size:12px; line-height:1.6">帮你重新组织和输出混乱复杂的会议纪要。</div>
+          <div class="app-tag-add">＋ 添加标签</div>
+          <div class="app-card-foot" style="margin-top:12px">张玺 · 编辑于 2026/08/20 10:44</div>
         </a>
       </div>
+      <div class="muted" style="text-align:center; margin-top:64px; font-size:12.5px">拖放 DSL 文件到此处创建应用</div>
     </section>
 
     <!-- ③ 知识库 -->
@@ -586,19 +813,144 @@
   <div class="drawer-body" id="d-body"><!-- JS 渲染：工具=简介+actions；供应商=模型清单+操作 --></div>
 </aside>
 
-<!-- 视图切换（演示用） -->
-<div class="view-switch" id="view-switch">
-  <button data-go="home">主页</button>
-  <button data-go="studio">工作室</button>
-  <button data-go="agents">Agents</button>
-  <button data-go="knowledge">知识库</button>
-  <button data-go="skills">Skills</button>
-  <button data-go="integrations">集成</button>
-  <button data-go="login-fail">登录失败</button>
+<!-- ===== 居中模态框（照 QA） ===== -->
+<div class="modal-mask" id="modal-mask" onclick="closeModal()"></div>
+
+<!-- 默认模型设置（供应商页工具栏） -->
+<div class="modal" id="m-default-model">
+  <div class="modal-head">
+    <div>
+      <div class="modal-title">默认模型设置</div>
+      <div class="modal-sub">当未配置特定模型时，设置整个工作空间默认使用的模型。</div>
+    </div>
+    <button class="drawer-close" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <div class="field-label">系统推理模型 <span class="muted">ⓘ</span></div>
+      <div class="select-input"><span style="display:flex; align-items:center; gap:8px"><span style="width:18px; height:18px; border-radius:5px; background:var(--bg-soft); display:grid; place-items:center; font-size:10px; font-weight:700">D</span>deepseek-v4-flash</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Embedding 模型 <span class="muted">ⓘ</span></div>
+      <div class="select-input placeholder"><span>模型设置</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Rerank 模型 <span class="muted">ⓘ</span></div>
+      <div class="select-input placeholder"><span>模型设置</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div class="field">
+      <div class="field-label">语音转文本模型 <span class="muted">ⓘ</span></div>
+      <div class="select-input placeholder"><span>模型设置</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="field-label">文本转语音模型 <span class="muted">ⓘ</span></div>
+      <div class="select-input placeholder"><span>模型设置</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+    <button class="btn btn-accent">保存</button>
+  </div>
 </div>
-<div class="anno" id="anno">
-  <div style="font-weight:800; margin-bottom:4px; font-size:12.5px">工作台重构 · 一期收窄标注</div>
-  <span id="anno-body"></span>
+
+<!-- 添加 MCP 服务 (HTTP) -->
+<div class="modal" id="m-mcp" style="width:600px">
+  <div class="modal-head">
+    <div class="modal-title">添加 MCP 服务 (HTTP)</div>
+    <button class="drawer-close" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <div class="field-label">服务端点 URL</div>
+      <input class="text-input" placeholder="服务端点的 URL">
+    </div>
+    <div class="field">
+      <div class="field-label">名称和图标</div>
+      <div style="display:flex; gap:10px; align-items:center">
+        <input class="text-input" placeholder="命名你的 MCP 服务" style="flex:1">
+        <button class="tool-icon" style="width:36px; height:36px; font-size:15px; background:var(--violet-pill-bg); color:var(--violet-pill-fg); border-color:transparent">M</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">服务器标识符</div>
+      <div class="field-help" style="margin:0 0 6px">工作空间内服务器的唯一标识。支持小写字母、数字、下划线和连字符，最多 24 个字符。</div>
+      <input class="text-input" placeholder="服务器唯一标识，例如 my-mcp-server">
+    </div>
+    <div class="seg-tabs">
+      <button class="seg-tab on">认证</button>
+      <button class="seg-tab">请求头</button>
+      <button class="seg-tab">配置</button>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px">
+      <span class="toggle"></span><span style="font-size:13px; font-weight:600">使用动态客户端注册</span>
+    </div>
+    <div class="field">
+      <div class="field-label">客户端 ID</div>
+      <input class="text-input" placeholder="客户端 ID">
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="field-label">客户端密钥</div>
+      <input class="text-input" type="password" placeholder="客户端密钥">
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+    <button class="btn btn-accent">确认</button>
+  </div>
+</div>
+
+<!-- 创建 Swagger API 作为工具 -->
+<div class="modal" id="m-api" style="width:640px">
+  <div class="modal-head">
+    <div class="modal-title">创建自定义工具</div>
+    <button class="drawer-close" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <div class="field-label">名称 <span class="req">*</span></div>
+      <div style="display:flex; gap:10px; align-items:center">
+        <button class="tool-icon" style="width:36px; height:36px; font-size:15px">🕵️</button>
+        <input class="text-input" placeholder="输入工具名称" style="flex:1">
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label" style="justify-content:space-between; width:100%">
+        <span>Schema <span class="req">*</span> <a style="color:var(--accent-deep); font-weight:600; font-size:12px; margin-left:4px" href="javascript:void(0)">查看 OpenAPI-Swagger 规范 ↗</a></span>
+        <span style="display:flex; gap:6px">
+          <button class="chip" style="height:26px; font-size:11.5px">＋ 从 URL 中导入</button>
+          <button class="chip" style="height:26px; font-size:11.5px">例子
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </span>
+      </div>
+      <textarea class="textarea-code" placeholder="在此处输入您的 OpenAPI schema"></textarea>
+    </div>
+    <div class="field">
+      <div class="field-label">可用工具</div>
+      <table class="mini-table"><thead><tr><th>名称</th><th>描述</th><th>方法</th><th>路径</th><th>操作</th></tr></thead></table>
+      <div class="muted" style="padding:10px 2px; font-size:12px">填写 Schema 后自动解析出可用工具。</div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="field-label">鉴权方法</div>
+      <div class="select-input"><span>无</span><span style="color:var(--text-3)">⚙</span></div>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+    <button class="btn btn-accent">保存</button>
+  </div>
+</div>
+
+<!-- 视图切换已由侧栏导航承担；登录失败态演示入口在标注盒内 -->
+<div class="anno collapsed" id="anno">
+  <div class="anno-head" onclick="document.getElementById('anno').classList.toggle('collapsed')">
+    <span class="anno-chip">标注</span>
+    <span class="anno-title">工作台重构 · 一期收窄标注</span>
+    <span class="anno-toggle">▾</span>
+  </div>
+  <div class="anno-body-wrap" style="margin-top:4px"><span id="anno-body"></span>
+    <div class="anno-demo"><a onclick="go('login-fail')">演示：登录失败态 →</a></div>
+  </div>
 </div>
 
 <script>
@@ -608,7 +960,7 @@ const intgViews = {
     <div class="page-sub">查看空间可用的模型，点击卡片查看模型清单。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索供应商">
-      <button class="btn btn-ghost" style="margin-left:auto">默认模型设置</button>
+      <button class="btn btn-ghost" style="margin-left:auto" onclick="openModal('m-default-model')">默认模型设置</button>
     </div>
     <div class="mp-grid">
       <button class="card mp-card" onclick="openProvider(0)">
@@ -656,9 +1008,15 @@ const intgViews = {
     ${toolTabs('tools-builtin')}
     <div class="page-sub">空间内可用的工具，点击卡片查看详情。</div>
     <div class="toolbar">
-      <button class="chip on">全部</button>
-      <button class="chip">搜索</button>
-      <button class="chip">生产力</button>
+      <div class="dropdown" style="position:relative">
+        <button class="chip" onclick="toggleTagMenu(event)">标签
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tag-menu" id="tag-menu">
+          <input class="search-input" placeholder="搜索标签" style="width:100%; min-width:0; height:30px; margin-bottom:6px">
+          ${['Agent','RAG','搜索','图片','视频','天气','金融','设计','社交','新闻','生产力','商业'].map(t => `<label class="tag-item"><input type="checkbox"> ${t}</label>`).join('')}
+        </div>
+      </div>
       <input class="search-input" placeholder="搜索">
     </div>
     <div class="tool-grid">
@@ -715,18 +1073,50 @@ const intgViews = {
         </div>
       </button>
     </div>`,
-  'tools-mcp': `
-    ${toolTabs('tools-mcp')}
-    <div class="page-sub">连接 MCP 服务器，让应用访问外部工具与服务。</div>
+  'tools-agent': `
+    <div class="page-sub">定义 AI Agent 的推理与决策方式——包括它如何选择工具、处理结果、自主解决问题。点击卡片查看详情。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
-      <button class="btn btn-primary">添加 MCP 服务 (HTTP)</button>
     </div>
     <div class="tool-grid">
-      <div class="tool-card">
+      <button class="tool-card" onclick="openAgentStrategy(0)">
         <div class="tool-card-head">
-          <div class="tool-icon">M</div>
-          <span class="pill pill-gray">未配置服务</span>
+          <div class="tool-icon">策</div>
+        </div>
+        <div>
+          <div class="tool-name">Dify Agent 策略</div>
+          <div class="tool-desc">Dify 官方 Agent 策略集合。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v0.0.47</span>
+          <span class="muted">langgenius / agent</span>
+        </div>
+      </button>
+      <button class="tool-card" onclick="openAgentStrategy(1)">
+        <div class="tool-card-head">
+          <div class="tool-icon">技</div>
+        </div>
+        <div>
+          <div class="tool-name">Agent Skill 技能插件</div>
+          <div class="tool-desc">支持多种技能的智能代理策略插件。</div>
+        </div>
+        <div class="tool-card-foot">
+          <span class="tool-ver">v1.0.1</span>
+          <span class="muted">agent-skill / agent-skill-plugin</span>
+        </div>
+      </button>
+    </div>`,
+  'tools-mcp': `
+    ${toolTabs('tools-mcp')}
+    <div class="page-sub">连接并管理 MCP 服务器，让应用可以访问外部工具与服务。</div>
+    <div class="toolbar">
+      <input class="search-input" placeholder="搜索">
+      <button class="btn btn-ghost" style="margin-left:auto" onclick="openModal('m-mcp')">＋ 添加 MCP 服务 (HTTP)</button>
+    </div>
+    <div class="tool-grid">
+      <button class="tool-card" onclick="openMcp(0)">
+        <div class="tool-card-head">
+          <div class="tool-icon" style="background:var(--violet-pill-bg); color:var(--violet-pill-fg); border-color:transparent">M</div>
         </div>
         <div>
           <div class="tool-name">AI 表单审核 MCP</div>
@@ -734,38 +1124,128 @@ const intgViews = {
         </div>
         <div class="tool-card-foot">
           <span class="muted">更新于 1 天前</span>
-          <button class="btn btn-ghost" style="height:28px;padding:0 12px;font-size:12px">管理</button>
+          <span class="pill pill-amber"><span class="dot"></span>未配置服务</span>
         </div>
-      </div>
+      </button>
     </div>`,
   'tools-workflow': `
     ${toolTabs('tools-workflow')}
-    <div class="page-sub">将工作流发布为工具，在应用与其他工作流中调用。</div>
+    <div class="page-sub">将任意已发布的工作流转化为可复用的工具，在多个应用中调用，让构建保持模块化、避免重复劳动。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
-      <button class="btn btn-primary">创建工具</button>
     </div>
-    <div class="notice notice-blue">当前空间暂无工作流工具。在工作室发布工作流后，可在此将其工具化。</div>`,
+    <div class="empty-state">
+      <div class="empty-title-lg">暂无已发布为工具的工作流</div>
+      <div class="empty-desc" style="margin-top:10px">如需将工作流作为工具使用，请先在工作室中发布。发布后它会显示在这里，并可添加到任意应用。</div>
+      <div class="step-cards">
+        <div class="step-card"><div class="step-no">1</div><div class="step-text">在工作室中创建并构建工作流</div></div>
+        <div class="step-card"><div class="step-no">2</div><div class="step-text">在发布菜单中点击「发布工作流作为工具」</div></div>
+        <div class="step-card"><div class="step-no">3</div><div class="step-text">回到此页面进行管理复用</div></div>
+      </div>
+      <a class="empty-cta" href="javascript:void(0)">前往工作室 →</a>
+      <div class="empty-help">需要帮助？了解如何将工作流发布为工具</div>
+    </div>`,
   'tools-api': `
     ${toolTabs('tools-api')}
-    <div class="page-sub">导入 Swagger/OpenAPI 定义，把外部 API 变成工具。</div>
+    <div class="page-sub">使用 OpenAPI/Swagger 规范将任意 API 导入为工具。一次配置，即可在所有工作流中复用。</div>
     <div class="toolbar">
       <input class="search-input" placeholder="搜索">
-      <button class="btn btn-primary">导入 API</button>
     </div>
-    <div class="notice notice-blue">已导入的 API 工具会出现在这里，可在应用编排中选择。</div>`,
+    <button class="row-card" onclick="openApiTool(0)">
+      <span class="plus" style="background:var(--accent-soft); color:var(--accent-deep); font-weight:700">审</span>
+      内部审批 API
+      <span class="muted" style="font-weight:400; font-size:12px">4 个操作 · 更新于 2 天前</span>
+      <span class="ext">›</span>
+    </button>
+    <button class="row-card" onclick="openModal('m-api')"><span class="plus">＋</span>创建 Swagger API 作为工具</button>
+    <a class="row-card" href="javascript:void(0)">了解 Swagger API 作为工具<span class="ext">↗</span></a>`,
 };
 
 /* ===== 详情抽屉数据（工具 + 供应商共用外壳） ===== */
 const tools = [
   { icon:'G', name:'Google Search', meta:'langgenius / google · v1.3.2', desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。',
-    actions:[{icon:'🔍', name:'搜索网页', desc:'按关键词检索网页并返回结果列表'},{icon:'🔗', name:'读取页面', desc:'抓取指定 URL 的页面正文'}] },
+    actions:[
+      { icon:'🔍', name:'搜索网页', desc:'按关键词检索网页并返回结果列表',
+        detail:'按关键词在 Google 上检索网页，返回标题、链接与摘要的结构化结果列表。当模型需要获取实时信息或验证事实时，优先使用本操作。',
+        params:[
+          { name:'搜索词', type:'字符串', required:true, desc:'要检索的关键词或自然语言问题' },
+          { name:'结果数量', type:'数字', required:false, desc:'返回结果的最大条数，默认 5，上限 10' },
+        ] },
+      { icon:'🔗', name:'读取页面', desc:'抓取指定 URL 的页面正文',
+        detail:'抓取指定 URL 的网页内容并提取正文，去除导航与广告等噪声。常与「搜索网页」串联使用：先检索，再读取重点页面。',
+        params:[
+          { name:'URL', type:'字符串', required:true, desc:'要抓取的页面地址，需以 http(s):// 开头' },
+        ] },
+    ] },
   { icon:'J', name:'Jina Reader', meta:'jina-ai / jina · v1.1.7', credMissing:true, desc:'网页正文提取与清洗，输出结构化文本。适合将网页内容喂给大模型或知识库。',
-    actions:[{icon:'📄', name:'提取正文', desc:'从 URL 提取干净正文'},{icon:'🖼', name:'提取图片', desc:'获取页面中的图片资源'}] },
+    actions:[
+      { icon:'📄', name:'提取正文', desc:'从 URL 提取干净正文',
+        detail:'读取指定网页并输出清洗后的正文 Markdown。对动态渲染页面自动启用阅读器模式，适合长文 ingest 到知识库或上下文。',
+        params:[
+          { name:'URL', type:'字符串', required:true, desc:'目标页面地址' },
+          { name:'输出格式', type:'下拉选择', required:false, desc:'markdown / text，默认 markdown' },
+        ] },
+      { icon:'🖼', name:'提取图片', desc:'获取页面中的图片资源',
+        detail:'提取页面中的图片地址与替代文本，按页面出现顺序返回。',
+        params:[
+          { name:'URL', type:'字符串', required:true, desc:'目标页面地址' },
+        ] },
+    ] },
   { icon:'GH', name:'GitHub', meta:'langgenius / github · v1.2.0', desc:'连接 GitHub 仓库，支持 Issue、PR 与代码内容的查询和管理。',
-    actions:[{icon:'🐛', name:'查询 Issue', desc:'按条件检索仓库 Issue'},{icon:'📦', name:'读取仓库', desc:'获取仓库文件与元信息'}] },
+    actions:[
+      { icon:'🐛', name:'查询 Issue', desc:'按条件检索仓库 Issue',
+        detail:'在指定仓库中按关键词与状态检索 Issue，返回编号、标题、状态与链接。需要仓库读取权限。',
+        params:[
+          { name:'仓库', type:'字符串', required:true, desc:'owner/repo 格式，如 langgenius/dify' },
+          { name:'关键词', type:'字符串', required:false, desc:'标题或正文包含的关键词' },
+          { name:'状态', type:'下拉选择', required:false, desc:'open / closed / all，默认 open' },
+        ] },
+      { icon:'📦', name:'读取仓库', desc:'获取仓库文件与元信息',
+        detail:'获取仓库的基本信息与指定路径下的文件内容，可用于让模型阅读代码或文档。',
+        params:[
+          { name:'仓库', type:'字符串', required:true, desc:'owner/repo 格式' },
+          { name:'路径', type:'字符串', required:false, desc:'文件或目录路径，默认为仓库根目录' },
+        ] },
+    ] },
   { icon:'代', name:'代码解释器', meta:'Dify / code · v1.0.0', desc:'运行一段代码并返回结果。支持 Python 沙箱执行，可处理数据转换与计算。',
-    actions:[{icon:'🐍', name:'执行代码', desc:'在沙箱中运行 Python 代码'}] },
+    actions:[
+      { icon:'🐍', name:'代码解释器', desc:'在沙箱中运行 Python 代码',
+        detail:'运行一段代码并返回结果。当您使用较低质量的模型时，请确保有一些提示帮助 LLM 理解如何编写代码。',
+        params:[
+          { name:'语言', type:'字符串', required:true, desc:'代码的编程语言' },
+          { name:'代码', type:'字符串', required:true, desc:'要执行的代码' },
+        ] },
+    ] },
+];
+const agentStrategies = [
+  { icon:'策', name:'Dify Agent 策略', meta:'langgenius / agent · v0.0.47', desc:'Dify 官方 Agent 策略集合。',
+    actions:[
+      { icon:'⚡', name:'FunctionCalling', desc:'通过模型原生函数调用能力调用工具',
+        detail:'推荐使用。通过模型原生的函数调用能力来调用工具，适用于大多数主流模型（GPT-4o、Claude、Qwen 等）。',
+        params:[{ name:'最大迭代次数', type:'数字', required:false, desc:'单次任务允许的最大推理-行动循环次数，默认 5' }] },
+      { icon:'🔁', name:'ReAct', desc:'基于文本的推理策略（Thought → Action → Observation 循环）',
+        detail:'基于文本的推理策略（Thought → Action → Observation 循环）。适用于不支持函数调用的模型。如果您的模型支持函数调用，推荐使用 FunctionCalling。',
+        params:[{ name:'最大迭代次数', type:'数字', required:false, desc:'单次任务允许的最大推理-行动循环次数，默认 5' }] },
+    ] },
+  { icon:'技', name:'Agent Skill 技能插件', meta:'agent-skill / agent-skill-plugin · v1.0.1', desc:'支持多种技能的智能代理策略插件，用于编排可复用技能。',
+    actions:[
+      { icon:'🧩', name:'SkillAgent', desc:'按技能编排的代理策略',
+        detail:'将可复用技能（Skill）注册为策略能力，Agent 按任务自动选择并执行对应技能。',
+        params:[{ name:'最大迭代次数', type:'数字', required:false, desc:'单次任务允许的最大推理-行动循环次数，默认 5' }] },
+    ] },
+];
+/* MCP 服务器与 API 工具数据 */
+const mcpServers = [
+  { icon:'M', name:'AI 表单审核 MCP', meta:'xaudit-ufrom-mcp · http://qa-xdp.xsl.link/**…', authorized:false },
+];
+const apiTools = [
+  { icon:'审', name:'内部审批 API', meta:'OpenAPI · 4 个操作', desc:'公司内部审批流的查询与操作接口，经 Swagger 规范导入。',
+    ops:[
+      { method:'GET', path:'/approvals', name:'查询审批列表', desc:'按状态分页查询审批单' },
+      { method:'GET', path:'/approvals/{id}', name:'查询审批详情', desc:'返回单个审批单的完整信息' },
+      { method:'POST', path:'/approvals/{id}/approve', name:'通过审批', desc:'将审批单标记为通过' },
+      { method:'POST', path:'/approvals/{id}/reject', name:'驳回审批', desc:'将审批单标记为驳回并附原因' },
+    ] },
 ];
 const providers = [
   { icon:'A', name:'Azure OpenAI', ok:true, groups:{ 'LLM':['gpt-5','gpt-5-mini'], 'Embedding':['text-embedding-3-large'] } },
@@ -784,19 +1264,41 @@ function showDrawer() {
   document.getElementById('drawer-mask').classList.add('open');
 }
 
-/* 工具抽屉：简介 + actions（纯展示）。凭据未配置才提示（默认不说，不可用时才说） */
-function openTool(i) {
-  const t = tools[i];
+/* 抽屉统一渲染：curList/curUnit 由入口函数设定（工具=操作 / Agent 策略=策略） */
+let curList = tools, curUnit = '操作';
+function openDetail(i) {
+  const t = curList[i];
   setHead(t.icon, t.name, t.meta);
   document.getElementById('d-body').innerHTML = `
     ${t.credMissing ? '<div class="notice notice-amber" style="margin-bottom:16px">凭据未配置，暂不可用。请联系系统管理员配置。</div>' : ''}
     <div class="drawer-sec-title">简介</div>
     <div style="font-size:13.5px; line-height:1.7; color:var(--text-2)">${t.desc}</div>
-    <div class="drawer-sec-title">包含 ${t.actions.length} 个操作</div>
-    ${t.actions.map(a => `
-      <div class="action-item">
+    <div class="drawer-sec-title">包含 ${t.actions.length} 个${curUnit}</div>
+    ${t.actions.map((a, ai) => `
+      <button class="action-item" onclick="openAction(${i}, ${ai})">
         <div class="action-icon">${a.icon}</div>
         <div><div class="action-name">${a.name}</div><div class="action-desc">${a.desc}</div></div>
+      </button>`).join('')}`;
+  showDrawer();
+}
+function openTool(i) { curList = tools; curUnit = '操作'; openDetail(i); }
+function openAgentStrategy(i) { curList = agentStrategies; curUnit = '策略'; openDetail(i); }
+
+/* 操作/策略二级详情（照 QA 结构）：返回 + 完整描述 + 参数 schema（名称/类型/必填/描述） */
+function openAction(ti, ai) {
+  const t = curList[ti], a = t.actions[ai];
+  document.getElementById('d-body').innerHTML = `
+    <button class="drawer-back" onclick="openDetail(${ti})">← 返回</button>
+    <div style="display:flex; align-items:center; gap:10px">
+      <div class="action-icon">${a.icon}</div>
+      <div><div style="font-size:15px; font-weight:700">${a.name}</div><div class="muted" style="margin-top:1px">${t.meta}</div></div>
+    </div>
+    <div style="margin-top:12px; font-size:13px; line-height:1.7; color:var(--text-2)">${a.detail}</div>
+    <div class="drawer-sec-title">参数</div>
+    ${a.params.map(p => `
+      <div class="param-row">
+        <div class="param-head"><span class="param-name">${p.name}</span><span class="param-type">${p.type}</span>${p.required ? '<span class="pill pill-amber" style="height:18px; font-size:10px">必填</span>' : ''}</div>
+        <div class="param-desc">${p.desc}</div>
       </div>`).join('')}`;
   showDrawer();
 }
@@ -814,31 +1316,72 @@ function openProvider(i) {
   showDrawer();
 }
 
+/* MCP 详情（照 QA）：头部（图标+名称+id·脱敏 URL）+ 授权按钮 + 工具区（未授权态） */
+function openMcp(i) {
+  const s = mcpServers[i];
+  setHead(s.icon, s.name, s.meta);
+  document.getElementById('d-body').innerHTML = s.authorized ? '' : `
+    <button class="btn btn-accent" style="width:100%; justify-content:center">授权</button>
+    <div style="text-align:center; margin-top:64px">
+      <div style="font-size:14px; font-weight:700">需要授权</div>
+      <div class="muted" style="margin-top:6px">授权后，工具将显示在这里。</div>
+    </div>`;
+  showDrawer();
+}
+
+/* API 工具详情：简介 + 操作列表（方法徽标 + 路径 + 描述） */
+function openApiTool(i) {
+  const t = apiTools[i];
+  setHead(t.icon, t.name, t.meta);
+  document.getElementById('d-body').innerHTML = `
+    <div class="drawer-sec-title">简介</div>
+    <div style="font-size:13.5px; line-height:1.7; color:var(--text-2)">${t.desc}</div>
+    <div class="drawer-sec-title">包含 ${t.ops.length} 个操作</div>
+    ${t.ops.map(o => `
+      <div class="action-item" style="cursor:default">
+        <span class="pill ${o.method === 'GET' ? 'pill-green' : 'pill-accent'}" style="flex:none">${o.method}</span>
+        <div><div class="action-name">${o.name}</div><div class="action-desc"><span class="mono">${o.path}</span> · ${o.desc}</div></div>
+      </div>`).join('')}`;
+  showDrawer();
+}
+
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawer-mask').classList.remove('open');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeDrawer(); closeModal(); } });
+
+/* ===== 模态框 ===== */
+function openModal(id) {
+  closeAllMenus();
+  document.getElementById(id).classList.add('open');
+  document.getElementById('modal-mask').classList.add('open');
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+  document.getElementById('modal-mask').classList.remove('open');
+}
 
 const annos = {
   home: '与真实主页一致：最近 + 模板。一期不改动。',
-  studio: '与真实工作室一致，一期不改动（卡片+标签筛选+创建）。',
-  agents: 'Agents（新 Agent 栈）：保留在导航，一期不改动，mockup 不展开。',
-  skills: 'Skills（Agent 能力包，新 Agent 栈配套）：保留在导航，一期不改动，mockup 不展开。',
+  studio: '与 QA 工作室一致：筛选四个下拉均有真实选项（类型=全部/工作流/Chatflow/聊天助手/Agent/文本生成应用；标签=搜索或创建+管理标签；创建者=成员多选含「你」标记；排序=最近修改/最近创建/最早创建）+ 搜索 + Snippets + 创建下拉；卡片含类型角标、添加标签、完整编辑时间；底部 DSL 拖放提示。一期功能不改动。',
+  agents: 'Agents（新 Agent 栈，BETA）：照 QA——筛选 pill（全部/已发布 n/草稿 n）+ 按名称搜索 + 「我创建的」+ 排序方式 + 创建下拉（创建空白应用/导入 DSL 文件）；当前空间空态「暂无 Agent」。Agent 编辑器页不展开。',
+  skills: 'Skills（Agent 能力包）：照 QA——标签筛选 + 按名称或描述搜索 + 导入（系统文件选择器直开，无自定义弹窗）+ 创建（跳 SKILL.md 编辑页：左文件树 + 中指令编辑 + 右 Skill Builder 对话面板 + 底部 Draft/发布栏，mockup 不展开）；卡片=DRAFT 徽标 + 图标 + 名称 + 描述 + 添加标签 +「N 个 Agent · 编辑时间」。',
   knowledge: '<b>知识库收窄</b>：只保留创建即用型；导入源只留「导入已有文本」（本地上传/网址抓取）；数据源同步（含 OAuth 与 Key 类）一期整体不开放。',
-  integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具）；工具页内四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API，现状已存在于二级侧栏，此处为视觉重排）；删 Marketplace 一级入口；删 数据来源/触发器/Agent 策略/扩展/自定义端点 二级页与 安装/调试/权限/自动更新 入口。<b>治理叙事不进空间侧 UI</b>（默认不说，不可用时才说）。',
+  integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具 / <b>Agent 策略</b>）；工具页内四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API，现状已存在于二级侧栏，此处为视觉重排）；删 Marketplace 一级入口；删 数据来源/触发器/扩展/自定义端点 二级页与 安装/调试/权限/自动更新 入口。<b>治理叙事不进空间侧 UI</b>（默认不说，不可用时才说）。',
   'login-fail': '登录失败提示：无会话、不进入控制台外壳；实现为 login 流程终态页（返回指向 /signin），非工作台路由。',
 };
 const intgAnno = {
-  provider: '<b>模型供应商</b>：纯查看——卡片照 QA 现状结构（版本号+类型徽标+状态），点卡片开抽屉看模型清单（按类型分组）；<b>默认模型设置保留在页面顶层</b>（工具栏右侧，空间级同现状）；无添加模型/API Key/安装入口；未配置时提示联系系统管理员。',
-  'tools-builtin': '<b>工具插件</b>：卡片网格（无来源徽标）；点卡片开只读抽屉（简介 + actions 纯展示，版本在头部）；凭据未配置才在抽屉提示。删市场精选轮播与自动更新。',
-  'tools-mcp': 'MCP 维持空间自建（一期不托管，凭据空间自管），保留添加/管理入口；不走统一详情抽屉，管理走既有 MCP UI。',
-  'tools-workflow': '工作流作为工具：空间原生功能，维持现状。',
-  'tools-api': 'Swagger API 作为工具：空间原生功能，维持现状。',
+  provider: '<b>模型供应商</b>：纯查看——卡片照 QA 现状结构（版本号+类型徽标+状态），点卡片开抽屉看模型清单（按类型分组）；<b>默认模型设置保留在页面顶层</b>（弹窗照 QA：系统推理/Embedding/Rerank/语音转文本/文本转语音五个下拉 + 取消/保存）；无添加模型/API Key/安装入口；未配置时提示联系系统管理员。',
+  'tools-builtin': '<b>工具插件</b>：卡片网格（无来源徽标）；<b>标签筛选下拉（搜索+多选，照 QA）</b>；点卡片开只读抽屉（简介 + actions，actions 可点开看<b>参数 schema</b> 二级详情，照 QA）；凭据未配置才在抽屉提示。删市场精选轮播与自动更新。',
+  'tools-agent': '<b>Agent 策略</b>（2026-09-01 用户决策：集成二级，与工具同级）：卡片 + 抽屉（简介 + 策略列表，策略可点开看参数，照 QA）；无凭据概念；删市场安装区与自动更新。',
+  'tools-mcp': 'MCP 维持空间自建（一期不托管，凭据空间自管）：搜索 + 添加 MCP 服务 (HTTP)（<b>添加弹窗照 QA</b>：端点 URL/名称和图标/服务器标识符 + 认证·请求头·配置三段）+ 卡片（状态徽标）；<b>点卡片开详情</b>（脱敏 URL + 授权按钮 + 工具区，照 QA）。',
+  'tools-workflow': '工作流作为工具：照 QA 空态——三步引导 + 前往工作室（无「创建工具」按钮，发布入口在工作室内）。',
+  'tools-api': 'Swagger API 作为工具：照 QA——搜索 + 创建行卡（<b>弹窗照 QA</b>：名称+图标 / Schema 编辑区（从 URL 导入、例子）/ 可用工具表 / 鉴权方法）+ 文档行卡；已导入 API 工具（如示例「内部审批 API」）点行卡开详情（操作列表：方法徽标 + 路径 + 描述）。',
 };
 
 let curIntg = 'provider';
-const intgTitles = { provider: '模型供应商', 'tools-builtin': '工具', 'tools-mcp': '工具', 'tools-workflow': '工具', 'tools-api': '工具' };
+const intgTitles = { provider: '模型供应商', 'tools-builtin': '工具', 'tools-agent': 'Agent 策略', 'tools-mcp': '工具', 'tools-workflow': '工具', 'tools-api': '工具' };
 function toolTabs(cur) {
   return `<div class="intg-tool-tabs">
     <button class="sub-tab ${cur === 'tools-builtin' ? 'on' : ''}" data-intg="tools-builtin">工具插件</button>
@@ -848,10 +1391,13 @@ function toolTabs(cur) {
   </div>`;
 }
 function syncSubnav() {
-  // 侧栏二级：模型供应商 vs 工具
+  // 侧栏二级：模型供应商 / 工具 / Agent 策略
   document.querySelectorAll('.nav-sub-item').forEach(x => {
-    const isProvider = x.dataset.subnav === 'provider';
-    x.classList.toggle('active', isProvider ? curIntg === 'provider' : curIntg !== 'provider');
+    const k = x.dataset.subnav;
+    const on = k === 'provider' ? curIntg === 'provider'
+      : k === 'agent' ? curIntg === 'tools-agent'
+      : curIntg !== 'provider' && curIntg !== 'tools-agent';
+    x.classList.toggle('active', on);
   });
   // 集成一级：展开态
   document.querySelectorAll('#global-nav .nav-item').forEach(b => {
@@ -870,7 +1416,6 @@ function go(v) {
   document.querySelectorAll('#global-nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === v));
   document.querySelector('[data-nav="integrations"]').classList.toggle('intg-open', v === 'integrations');
   document.body.dataset.mode = v === 'login-fail' ? 'login-fail' : 'workspace';
-  document.querySelectorAll('#view-switch button').forEach(b => b.classList.toggle('on', b.dataset.go === v));
   document.getElementById('anno-body').innerHTML = annos[v] || annos.integrations;
   document.getElementById('anno').style.display = v === 'login-fail' ? 'none' : '';
   closeAllMenus();
@@ -879,7 +1424,6 @@ function go(v) {
   document.getElementById('main').scrollTop = 0;
 }
 
-document.querySelectorAll('#view-switch button').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
 document.querySelectorAll('#global-nav .nav-item').forEach(b => b.addEventListener('click', () => go(b.dataset.nav)));
 document.getElementById('intg-body').addEventListener('click', e => {
   const b = e.target.closest('[data-intg]');
@@ -888,7 +1432,8 @@ document.getElementById('intg-body').addEventListener('click', e => {
   if (intgViews[k]) { curIntg = k; renderIntg(); }
 });
 document.querySelectorAll('[data-subnav]').forEach(b => b.addEventListener('click', () => {
-  curIntg = b.dataset.subnav === 'provider' ? 'provider' : 'tools-builtin';
+  const k = b.dataset.subnav;
+  curIntg = k === 'provider' ? 'provider' : k === 'agent' ? 'tools-agent' : 'tools-builtin';
   go('integrations');
 }));
 
@@ -899,8 +1444,15 @@ function toggleMenu(id) {
   closeAllMenus();
   if (!wasOpen) el.classList.add('open');
 }
+function toggleTagMenu(e) {
+  e.stopPropagation();
+  const el = document.getElementById('tag-menu');
+  const wasOpen = el.classList.contains('open');
+  closeAllMenus();
+  if (!wasOpen) el.classList.add('open');
+}
 function closeAllMenus() {
-  document.querySelectorAll('.dropdown-menu, .ws-panel').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.dropdown-menu, .ws-panel, .tag-menu').forEach(m => m.classList.remove('open'));
 }
 document.addEventListener('click', e => {
   if (!e.target.closest('.dropdown')) closeAllMenus();
