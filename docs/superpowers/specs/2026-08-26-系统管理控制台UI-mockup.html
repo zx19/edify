@@ -142,6 +142,21 @@
   .drawer-tab { border:0; background:none; padding:10px 4px; margin-right:14px; font-size:13.5px; font-weight:600; color:var(--text-3); border-bottom:2px solid transparent; }
   .drawer-tab.active { color:var(--accent-deep); border-bottom-color:var(--accent); font-weight:700; }
   .drawer-body { flex:1; overflow-y:auto; padding:18px 24px 24px; }
+
+  /* 插件详情：能力清单与参数（工作台同款） */
+  .act-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:11px; margin-bottom:8px; width:100%; text-align:left; background:#fff; cursor:pointer; }
+  .act-item:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .act-icon { width:32px; height:32px; border-radius:9px; background:var(--bg-soft); display:grid; place-items:center; font-size:14px; flex:none; }
+  .act-name { font-size:13.5px; font-weight:700; }
+  .act-desc { font-size:12px; color:var(--text-3); margin-top:1px; }
+  .pd-back { display:inline-flex; align-items:center; gap:4px; border:0; background:none; font-size:12.5px; font-weight:600; color:var(--text-3); margin-bottom:14px; cursor:pointer; padding:0; }
+  .pd-back:hover { color:var(--text-1); }
+  .param-row { padding:10px 0; border-bottom:1px dashed var(--border); }
+  .param-row:last-child { border-bottom:0; }
+  .param-head { display:flex; align-items:center; gap:8px; }
+  .param-name { font-weight:700; font-size:13px; }
+  .param-type { font-size:11.5px; color:var(--text-3); }
+  .param-desc { font-size:12px; color:var(--text-3); margin-top:2px; }
   .kv { display:grid; grid-template-columns:92px 1fr; row-gap:10px; font-size:13px; margin-bottom:4px; }
   .kv dt { color:var(--text-3); } .kv dd { color:var(--text-1); font-weight:500; }
   .danger-zone { margin-top:22px; border:1px solid #FECDCA; background:#FFFBFA; border-radius:11px; padding:14px 16px; }
@@ -187,6 +202,13 @@
 
   .notice { border-radius:11px; padding:12px 16px; font-size:13px; line-height:1.7; color:var(--text-2); }
   .notice-blue { background:var(--accent-soft); color:var(--accent-deep); }
+  .notice-amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
+  .install-dd { position:relative; }
+  .install-menu { position:absolute; right:0; top:calc(100% + 6px); z-index:40; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 28px rgba(16,24,40,.14); padding:6px; min-width:250px; }
+  .install-menu button { display:flex; flex-direction:column; gap:2px; width:100%; text-align:left; border:0; background:none; padding:8px 10px; border-radius:8px; cursor:pointer; }
+  .install-menu button:hover { background:var(--bg-soft); }
+  .install-menu .im-title { font-size:13px; font-weight:600; color:var(--text-1); }
+  .install-menu .im-sub { font-size:11.5px; color:var(--text-3); }
 
   ::-webkit-scrollbar { width:8px; height:8px; }
   ::-webkit-scrollbar-thumb { background:#D9D9DC; border-radius:8px; }
@@ -227,7 +249,7 @@
       </div>
       <button class="nav-item" data-view="marketplace">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7l1.5-3.5h13L20 7M4 7h16v3a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-1.5.5A2.5 2.5 0 014 10V7z"/><path d="M5.5 12.5V20h13v-7.5" stroke-linecap="round"/></svg>
-        插件中心
+        插件市场
       </button>
       <button class="nav-item" data-view="admins">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
@@ -311,12 +333,29 @@
       <div class="page-head">
         <div>
           <div class="page-title">插件管理</div>
-          <div class="page-desc">已托管插件的运营四动词：装、升、改范围、回收（含解除托管）。版本只由系统管理员统一升级——收敛波对齐托管版本（升级/回滚/修漂移同一动词）；托管插件不参与空间自动更新。</div>
+          <div class="page-desc">统一管理各空间的插件安装、版本与分发范围。安装与升级统一从「安装插件」发起（已管理的插件自动进入升级确认）；行操作：改范围、移除。版本只由系统管理员统一管理，插件不参与空间自动更新。</div>
         </div>
-        <button class="btn btn-primary" onclick="switchView('marketplace')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-          安装插件
-        </button>
+        <div class="install-dd">
+          <button class="btn btn-primary" onclick="toggleInstallMenu(event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+            安装插件
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="install-menu" id="install-menu" hidden>
+            <button onclick="toggleInstallMenu();switchView('marketplace')">
+              <span class="im-title">插件市场</span>
+              <span class="im-sub">浏览市场插件并安装</span>
+            </button>
+            <button onclick="toggleInstallMenu();openModal('modal-install-github')">
+              <span class="im-title">GitHub</span>
+              <span class="im-sub">仓库 URL + 版本号</span>
+            </button>
+            <button onclick="toggleInstallMenu();openModal('modal-install-local')">
+              <span class="im-title">本地集成包</span>
+              <span class="im-sub">上传 .difypkg 安装</span>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="toolbar">
         <div class="input-wrap">
@@ -338,9 +377,9 @@
       <div class="page-head">
         <div>
           <div class="page-title">模型提供商</div>
-          <div class="page-desc">组织级凭据：一期全量组织统一（空间侧只读、无回退链，与插件分发范围解耦），未配置的供应商空间侧不可用；凭据全程掩码、密文挂锚租户 RSA。</div>
+          <div class="page-desc">组织统一凭据：对全部空间生效（无单独配置的空间兜底，含未来新建）；在「工作空间详情 → 集成」内配置则为该空间单独配置（优先于组织统一）。支持多凭据与逐模型开关；凭据全程掩码、密文挂锚租户 RSA。</div>
         </div>
-        <button class="btn btn-ghost" onclick="switchView('marketplace')" title="提供商插件的安装/升级在「插件中心」页统一进行">
+        <button class="btn btn-ghost" onclick="switchView('marketplace')" title="提供商插件的安装/升级经「安装插件」下拉或插件市场进行">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
           安装提供商插件
         </button>
@@ -353,46 +392,25 @@
       </div>
     </section>
 
-    <!-- ====== 插件市场（安装总入口） ====== -->
+    <!-- ====== 插件市场（浏览与安装） ====== -->
     <section class="page" id="view-marketplace" hidden>
       <div class="page-head">
         <div>
-          <div class="page-title">插件中心</div>
-          <div class="page-desc">获取插件的统一入口：插件市场 / GitHub / 本地上传；安装时选择分发范围，安装后进入「插件管理」托管列表。</div>
+          <div class="page-title">插件市场</div>
+          <div class="page-desc">浏览市场插件并安装；GitHub 与本地集成包安装入口在「插件管理」页右上「安装插件」。安装时选择分发范围；插件已在管理列表时自动进入升级确认。</div>
         </div>
       </div>
-      <div style="display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px">
-        <button class="drawer-tab active" data-mkt-src="market">插件市场</button>
-        <button class="drawer-tab" data-mkt-src="github">GitHub</button>
-        <button class="drawer-tab" data-mkt-src="local">本地上传</button>
-      </div>
-      <div data-mkt-pane="market">
-        <div class="toolbar">
-          <div class="input-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <input class="input" placeholder="搜索插件…">
-          </div>
-          <div class="chip-row">
-            <button class="chip active">全部</button><button class="chip">模型</button><button class="chip">工具</button><button class="chip">数据源</button><button class="chip">触发器</button><button class="chip">Agent 策略</button>
-          </div>
+      <div class="toolbar">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input class="input" placeholder="搜索插件…">
         </div>
-        <div class="mkt-grid" id="mkt-grid"></div>
-      </div>
-      <div data-mkt-pane="github" hidden>
-        <div class="card" style="padding:20px;max-width:520px">
-          <div class="field"><label>仓库 URL</label><input class="input" style="width:100%;padding-left:12px" placeholder="https://github.com/org/dify-plugin-x"></div>
-          <div class="field"><label>版本号</label><input class="input" style="width:100%;padding-left:12px" placeholder="1.2.0"></div>
-          <button class="btn btn-primary" onclick="openScope('GitHub 插件')">下一步：选择范围</button>
+        <div class="chip-row">
+          <button class="chip active">全部</button><button class="chip">模型</button><button class="chip">工具</button><button class="chip">数据源</button><button class="chip">触发器</button><button class="chip">Agent 策略</button>
         </div>
       </div>
-      <div data-mkt-pane="local" hidden>
-        <div class="card" style="padding:32px;max-width:520px;text-align:center">
-          <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:28px;color:var(--text-3);font-size:13px;background:#FAFBFC">
-            拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
-          </div>
-          <div class="hint" style="margin-top:10px">内网环境市场不可用时，请从插件市场官网下载后从此处安装。</div>
-        </div>
-      </div>
+      <div class="mkt-grid" id="mkt-grid"></div>
+      <div class="hint" style="margin-top:14px">市场服务不可达时，请改用 插件管理 →「安装插件」→ 本地集成包。</div>
     </section>
 
     <!-- ====== 系统管理员 ====== -->
@@ -400,7 +418,7 @@
       <div class="page-head">
         <div>
           <div class="page-title">系统管理员</div>
-          <div class="page-desc">授予或撤销系统级管理权限。最后一位系统管理员不可撤销。</div>
+          <div class="page-desc">两级模型：创始人管理员（部署初始化）独占授予/撤销/转让；普通系统管理员本页只读、其余管理功能不受限。</div>
         </div>
         <button class="btn btn-primary" onclick="openModal('modal-grant')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
@@ -504,14 +522,14 @@
       <table>
         <thead><tr><th>配置项</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
         <tbody>
-          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Azure OpenAI')">配置</button></div></td></tr>
-          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('通义千问')">配置</button></div></td></tr>
-          <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-accent"><span class="dot"></span>本空间自配（二期）</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Anthropic')">配置</button></div></td></tr>
-          <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('DeepSeek')">配置</button></div></td></tr>
+          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Azure OpenAI')">单独配置</button></div></td></tr>
+          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('通义千问')">单独配置</button></div></td></tr>
+          <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-accent"><span class="dot"></span>单独配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Anthropic')">编辑</button></div></td></tr>
+          <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('DeepSeek')">单独配置</button></div></td></tr>
         </tbody>
       </table>
       <div class="notice notice-blue" style="margin:12px 16px 14px;font-size:12px">
-        一期凭据全部组织统一（本 tab 只读）；二期开放空间自配——分派切换入口在此（显式指针，无回退链）。
+        配置位置即作用域：在此处配置 = 该空间单独配置（优先于组织统一，删除即回落）；未单独配置的空间使用「模型提供商」页的组织统一凭据。工具插件凭据一期为组织级、无单独配置入口。
       </div>
     </div>
   </div>
@@ -526,59 +544,102 @@
   </div>
 </aside>
 
-<!-- ============ 插件详情抽屉 ============ -->
+<!-- ============ 插件详情抽屉（工作台同款：简介 + 能力清单 + 参数详情，无操作） ============ -->
 <aside class="drawer" id="plugin-drawer">
   <button class="drawer-close" onclick="closePluginDrawer()">✕</button>
   <div class="drawer-head">
     <div style="display:flex;align-items:center;gap:12px">
       <div class="ws-icon" id="pd-icon" style="width:40px;height:40px;font-size:16px">G</div>
       <div>
-        <div style="font-size:17px;font-weight:700" id="pd-name">Google Search</div>
-        <div style="margin-top:4px" id="pd-type"></div>
+        <div style="font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px"><span id="pd-name">Google Search</span> <span id="pd-type"></span></div>
+        <div class="muted" style="margin-top:2px" id="pd-meta"></div>
       </div>
     </div>
   </div>
-  <div class="drawer-body">
-    <div class="side-section" style="padding-left:0">简介</div>
-    <div style="font-size:13.5px;line-height:1.7;color:var(--text-2)" id="pd-desc"></div>
-
-    <div class="side-section" style="padding-left:0">托管信息</div>
-    <dl class="kv">
-      <dt>类型</dt><dd id="pd-type2"></dd>
-      <dt>版本</dt><dd><span class="mono" id="pd-ver"></span> <span class="pill pill-green" style="margin-left:4px"><span class="dot"></span>版本统一</span></dd>
-      <dt>适用范围</dt><dd id="pd-scope"></dd>
-      <dt>分发状态</dt><dd id="pd-status"></dd>
-    </dl>
-
-    <div class="side-section" style="padding-left:0">操作</div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button class="btn btn-ghost" style="justify-content:center" onclick="closePluginDrawer();openUpgradeModal(curPlugin)">升级插件</button>
-      <button class="btn btn-ghost" style="justify-content:center" onclick="closePluginDrawer();openScopeModal(curPlugin,'modify')">修改分发范围</button>
-      <button class="btn btn-ghost" style="justify-content:center" onclick="closePluginDrawer()" title="解除托管：即时删托管记录、插件留在各空间继续可用">解除托管</button>
-      <button class="btn btn-danger" style="justify-content:center" onclick="closePluginDrawer()">回收插件</button>
-    </div>
-  </div>
+  <div class="drawer-body" id="pd-body"></div>
 </aside>
 
-<!-- ============ 弹窗：插件升级 ============ -->
+<!-- ============ 弹窗：升级确认（安装流升级态：命中已管理插件时自动进入） ============ -->
 <div class="modal-wrap" id="modal-upgrade">
   <div class="modal">
-    <h3>升级插件</h3>
-    <div class="modal-sub">上传新版本包触发升级波，扇出到所有托管空间；回滚/漂移修复同一入口（确认文案显式目标版本与方向）。</div>
+    <h3 id="upg-title">升级「Google Search」</h3>
+    <div class="modal-sub" id="upg-sub">安装流程识别到该插件已在管理列表，自动进入升级确认；分发范围不随升级变化（调整请用「改范围」）。</div>
     <div class="field">
-      <label>当前版本</label>
-      <div class="mono" id="upg-cur" style="padding:8px 0">v1.3.2</div>
+      <label>版本</label>
+      <div id="upg-ver" style="display:flex;align-items:center;gap:10px;padding:6px 0">
+        <span class="mono">v1.3.2</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span class="mono" style="font-weight:700">v1.4.0</span>
+        <span class="pill pill-gray">来自 插件市场</span>
+      </div>
     </div>
     <div class="field">
-      <label>上传新版本包</label>
-      <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:24px;color:var(--text-3);font-size:13px;background:var(--bg-soft);text-align:center">
-        拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+      <label>分发范围</label>
+      <div id="upg-scope" style="padding:6px 0"><span class="pill pill-green">全部空间 · 12 个</span></div>
+    </div>
+    <div class="notice notice-amber" id="upg-confirm-copy" style="font-size:12.5px">将 12 个空间从 v1.3.2 升级到 v1.4.0。已是目标版本的空间自动跳过；各空间已配置的工具凭据保留。</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" id="upg-confirm" onclick="closeAll()">升级并分发</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：移除插件（保留在各空间 / 从所有空间卸载） ============ -->
+<div class="modal-wrap" id="modal-remove">
+  <div class="modal">
+    <h3 id="rm-title">移除「Google Search」</h3>
+    <div class="modal-sub" id="rm-sub">已安装该插件的 12 个空间，如何处理？</div>
+    <div class="field">
+      <label>已安装的插件</label>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="rmopt" checked style="margin-top:2px">
+          <span>保留在各空间
+            <span style="display:block;font-weight:400;font-size:12px;color:var(--text-3);margin-top:2px">插件留在各空间、保持当前版本继续可用；本页不再管理它的版本与分发范围。</span>
+          </span>
+        </label>
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:500;color:var(--text-1)">
+          <input type="radio" name="rmopt" style="margin-top:2px">
+          <span>从所有空间卸载
+            <span style="display:block;font-weight:400;font-size:12px;color:var(--danger);margin-top:2px">正在使用的应用将无法运行；已配置的工具凭据将一并删除，将来重新安装时需重新配置。</span>
+          </span>
+        </label>
       </div>
-      <div class="hint">升级后自动分发到全部 12 个托管空间，版本统一。</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
-      <button class="btn btn-primary" onclick="closeAll()">升级并分发</button>
+      <button class="btn btn-danger" onclick="closeAll()">确认移除</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：从 GitHub 安装 ============ -->
+<div class="modal-wrap" id="modal-install-github">
+  <div class="modal">
+    <h3>从 GitHub 安装</h3>
+    <div class="modal-sub">填写仓库与版本；插件已在管理列表时进入升级确认（演示为 Google Search）。</div>
+    <div class="field"><label>仓库 URL</label><input class="input" style="width:100%;padding-left:12px" placeholder="https://github.com/langgenius/dify-plugin-google-search"></div>
+    <div class="field"><label>版本号</label><input class="input" style="width:100%;padding-left:12px" placeholder="1.4.0"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="openUpgradeConfirm(0,'1.4.0','GitHub')">下一步</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：上传本地集成包 ============ -->
+<div class="modal-wrap" id="modal-install-local">
+  <div class="modal">
+    <h3>上传本地集成包</h3>
+    <div class="modal-sub">上传 .difypkg 安装；系统解析包内插件与版本，已在管理列表时进入升级确认（演示为 Google Search v1.4.0）。</div>
+    <div style="border:1.5px dashed var(--border-strong);border-radius:10px;padding:24px;color:var(--text-3);font-size:13px;background:var(--bg-soft);text-align:center">
+      拖拽 <span class="mono">.difypkg</span> 到此处，或点击上传
+    </div>
+    <div class="hint" style="margin-top:10px">已解析：Google Search · v1.4.0</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="openUpgradeConfirm(0,'1.4.0','本地集成包')">下一步</button>
     </div>
   </div>
 </div>
@@ -626,6 +687,31 @@
   </div>
 </div>
 
+<!-- ============ 弹窗：转让创始人 ============ -->
+<div class="modal-wrap" id="modal-transfer">
+  <div class="modal">
+    <h3>转让创始人身份</h3>
+    <div class="modal-sub">将创始人身份转让给一位现有系统管理员；<b>转让后你将变为普通系统管理员</b>（本页不再可授予/撤销/转让）。该操作会写入审计日志。</div>
+    <div class="field">
+      <label>受让管理员</label>
+      <select class="select" id="transfer-target">
+        <option>周杰 · zhoujie@x.com</option>
+        <option>李娜 · lina@x.com</option>
+      </select>
+      <div class="hint">仅列出现有普通系统管理员（不含待激活与 env 来源）。</div>
+    </div>
+    <div class="field">
+      <label>确认你的密码</label>
+      <input class="input" type="password" placeholder="输入当前账号密码以确认">
+      <div class="hint">高危操作需要验证本人身份。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-danger" onclick="closeAll()">确认转让</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 弹窗：撤销系统管理员 ============ -->
 <div class="modal-wrap" id="modal-revoke">
   <div class="modal">
@@ -643,24 +729,31 @@
   </div>
 </div>
 
-<!-- ============ 弹窗：添加/编辑凭据（行内触发） ============ -->
+<!-- ============ 弹窗：配置凭据（组织统一，行内触发） ============ -->
 <div class="modal-wrap" id="modal-credential">
   <div class="modal">
-    <h3 id="cred-title">编辑凭据</h3>
-    <div class="modal-sub">组织级凭据仅保存服务端、全程掩码；一期全量组织统一，空间侧不可自配。</div>
+    <h3 id="cred-title">配置凭据 · Azure OpenAI</h3>
+    <div class="modal-sub">组织统一凭据，对全部空间生效（无单独配置的空间兜底，含未来新建）。表单按供应商声明动态渲染（演示为 API Key）。</div>
     <div class="field">
-      <label>API Key</label>
+      <label>凭据（可添加多个）</label>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+        <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-green">使用中</span><span class="mono">sk-…a9F2</span><span class="muted">default</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-gray">备用</span><span class="mono">sk-…77Qz</span><span class="muted">backup</span></div>
+        <button class="btn btn-ghost" style="height:28px;font-size:12.5px;justify-content:flex-start">＋ 添加凭据</button>
+      </div>
+      <div class="hint">可按模型指定使用哪个凭据，或开启轮询（负载均衡）；同一表单可添加多个并随时切换。</div>
+    </div>
+    <div class="field">
+      <label>API Key（新凭据）</label>
       <input class="input" type="password" placeholder="sk-…">
       <div class="hint">保存后仅以脱敏形式展示（sk-…****），任何人不可再读取明文。</div>
     </div>
     <div class="field">
-      <label>生效范围</label>
-      <div style="font-size:13px;color:var(--text-2);line-height:1.7;padding:4px 0">
-        一期对<b>全部空间</b>生效（凭据与插件分发范围解耦，无范围选择）。二期开放按空间分派：显式指针 org / 自配，无回退链。
-      </div>
+      <label>模型清单与开关</label>
+      <div class="hint" style="margin-top:0">模型清单随凭据管理：逐模型启用/停用、添加自定义模型（此处从略，与上游供应商页同款）。</div>
     </div>
     <div class="notice notice-blue" style="margin-bottom:0">
-      <b>一期：组织统一</b> —— 所有凭据项固定组织统一，空间侧只读；密文挂锚租户 RSA（方案 A）。二期开放「空间自配」为显式分派切换（查分派表、无回退链）。
+      <b>生效范围：组织统一</b> —— 对全部空间兜底；在「工作空间详情 → 集成」内配置则仅对该空间生效（单独配置优先，删除即回落组织统一）。
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
@@ -669,30 +762,26 @@
   </div>
 </div>
 
-<!-- ============ 弹窗：空间级模型配置（单独覆盖） ============ -->
+<!-- ============ 弹窗：单独配置（空间详情集成 tab，仅对该空间生效） ============ -->
 <div class="modal-wrap" id="modal-ws-cred">
   <div class="modal">
-    <h3 id="ws-cred-title">配置模型 · 市场部</h3>
-    <div class="modal-sub">（二期·显式分派）切换该空间此提供商的凭据来源；解析按分派直查，无回退链。</div>
+    <h3 id="ws-cred-title">单独配置 · 市场部 · Azure OpenAI</h3>
+    <div class="modal-sub">在本空间详情内配置即只对该空间生效，优先于组织统一；删除单独配置后恢复使用组织统一凭据。多凭据、按模型切换与模型开关同组织级。</div>
     <div class="field">
-      <label>配置方式</label>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
-          <input type="radio" name="wscred" checked> 组织统一凭据（org）
-        </label>
-        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;color:var(--text-1)">
-          <input type="radio" name="wscred"> 本空间自配凭据（self）
-        </label>
+      <label>当前来源</label>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+        <span class="pill pill-violet"><span class="dot"></span>组织统一</span>
+        <span class="muted" style="font-size:12px">→ 保存后本空间将使用单独配置</span>
       </div>
     </div>
     <div class="field">
-      <label>API Key（自定义时填写）</label>
+      <label>API Key</label>
       <input class="input" type="password" placeholder="sk-…">
-      <div class="hint">切到 self 后本空间解析走自配凭据；切回 org 立即恢复（指针切换、不删凭据）。</div>
+      <div class="hint">表单按供应商声明动态渲染；可添加多个凭据并按模型指定使用哪个（同组织级）。</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
-      <button class="btn btn-primary" onclick="closeAll()">保存</button>
+      <button class="btn btn-primary" onclick="closeAll()">保存为该空间配置</button>
     </div>
   </div>
 </div>
@@ -756,17 +845,78 @@ const members = [
   { name:'赵敏', mail:'zhaomin@x.com', tags:[['旧版客服项目','owner'],['市场部','normal']], active:'3 天前', c:5 },
 ];
 const admins = [
-  { name:'张伟', mail:'zhangwei@x.com', source:'env', by:'—', time:'2026-08-01', c:0 },
-  { name:'李娜', mail:'lina@x.com', source:'grant', by:'张伟', time:'2026-08-12', c:1 },
+  { name:'张伟', mail:'zhangwei@x.com', source:'install', by:'—（/install）', time:'2026-08-01', c:0 },
+  { name:'李娜', mail:'lina@x.com', source:'env', by:'—', time:'2026-08-12', c:1 },
   { name:'周杰', mail:'zhoujie@x.com', source:'grant', by:'张伟', time:'2026-08-20', c:2 },
   { name:'-', mail:'newadmin@x.com', source:'invite', by:'张伟', time:'2026-08-30', pending:true, c:3 },
 ];
 const integrations = [
-  { name:'Google Search', type:'工具', ver:'1.3.2', scope:'all', n:12, ok:'12/12', c:0, desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。' },
-  { name:'Notion', type:'数据源', ver:'0.9.5', scope:'spec', n:3, ok:'3/3', c:1, desc:'同步 Notion 页面与数据库内容到知识库，支持多级页面与增量同步。' },
-  { name:'GitHub', type:'工具', ver:'2.1.0', scope:'all', n:12, ok:'11/12 · 1 失败', c:2, desc:'访问 GitHub 仓库、Issue 与 PR，为研发自动化流程提供代码库能力。' },
-  { name:'钉钉机器人', type:'触发器', ver:'0.4.1', scope:'spec', n:2, ok:'2/2', c:3, desc:'钉钉事件 Webhook 触发工作流自动执行，支持群消息、审批等事件订阅。' },
-  { name:'FunctionCall 策略', type:'Agent 策略', ver:'1.0.0', scope:'all', n:12, ok:'12/12', c:4, desc:'经典 Function Calling 推理策略，支持工具循环与结构化参数解析。' },
+  { name:'Google Search', type:'工具', ver:'1.3.2', mktVer:'1.4.0', scope:'all', n:12, ok:'12/12', c:0, desc:'为 Agent 与工作流提供实时网页搜索能力。基于 Google Programmable Search API，支持多语言检索与结果结构化输出。',
+    actions:[
+      { icon:'🔍', name:'搜索网页', desc:'按关键词检索网页并返回结果列表',
+        detail:'按关键词在 Google 上检索网页，返回标题、链接与摘要的结构化结果列表。当模型需要获取实时信息或验证事实时，优先使用本操作。',
+        params:[
+          { name:'搜索词', type:'字符串', required:true, desc:'要检索的关键词或自然语言问题' },
+          { name:'结果数量', type:'数字', required:false, desc:'返回结果的最大条数，默认 5，上限 10' },
+        ] },
+      { icon:'🔗', name:'读取页面', desc:'抓取指定 URL 的页面正文',
+        detail:'抓取指定 URL 的网页内容并提取正文，去除导航与广告等噪声。常与「搜索网页」串联使用：先检索，再读取重点页面。',
+        params:[
+          { name:'URL', type:'字符串', required:true, desc:'要抓取的页面地址，需以 http(s):// 开头' },
+        ] },
+    ] },
+  { name:'Notion', type:'数据源', ver:'0.9.5', scope:'spec', n:3, ok:'3/3', c:1, desc:'同步 Notion 页面与数据库内容到知识库，支持多级页面与增量同步。',
+    actions:[
+      { icon:'📄', name:'同步页面或数据库', desc:'将 Notion 页面/数据库内容同步到知识库',
+        detail:'选择 Notion 页面或数据库，将其内容抓取并同步至知识库流水线，支持多级页面嵌套与增量更新。',
+        params:[
+          { name:'根页面 ID', type:'字符串', required:true, desc:'Notion 页面或数据库的 ID' },
+          { name:'增量同步', type:'布尔', required:false, desc:'仅同步上次之后变更的内容，默认开启' },
+        ] },
+      { icon:'🔎', name:'搜索 Notion 内容', desc:'按关键词搜索工作区内容',
+        detail:'在当前授权的 Notion 工作区内按关键词搜索页面与数据库条目。',
+        params:[
+          { name:'关键词', type:'字符串', required:true, desc:'搜索关键词' },
+        ] },
+    ] },
+  { name:'GitHub', type:'工具', ver:'2.1.0', scope:'all', n:12, ok:'11/12 · 1 失败', c:2, desc:'访问 GitHub 仓库、Issue 与 PR，为研发自动化流程提供代码库能力。',
+    actions:[
+      { icon:'🐛', name:'查询 Issue', desc:'按条件检索仓库 Issue',
+        detail:'在指定仓库中按关键词与状态检索 Issue，返回编号、标题、状态与链接。需要仓库读取权限。',
+        params:[
+          { name:'仓库', type:'字符串', required:true, desc:'owner/repo 格式，如 langgenius/dify' },
+          { name:'关键词', type:'字符串', required:false, desc:'标题或正文包含的关键词' },
+          { name:'状态', type:'下拉选择', required:false, desc:'open / closed / all，默认 open' },
+        ] },
+      { icon:'📦', name:'读取仓库', desc:'获取仓库文件与元信息',
+        detail:'获取仓库的基本信息与指定路径下的文件内容，可用于让模型阅读代码或文档。',
+        params:[
+          { name:'仓库', type:'字符串', required:true, desc:'owner/repo 格式' },
+          { name:'路径', type:'字符串', required:false, desc:'文件或目录路径，默认为仓库根目录' },
+        ] },
+    ] },
+  { name:'钉钉机器人', type:'触发器', ver:'0.4.1', scope:'spec', n:2, ok:'2/2', c:3, desc:'钉钉事件 Webhook 触发工作流自动执行，支持群消息、审批等事件订阅。',
+    actions:[
+      { icon:'💬', name:'接收群消息', desc:'群消息事件触发工作流',
+        detail:'订阅钉钉群消息事件，机器人收到消息时触发关联工作流。',
+        params:[
+          { name:'事件类型', type:'下拉选择', required:true, desc:'群消息 / @机器人，默认全部' },
+          { name:'关键词过滤', type:'字符串', required:false, desc:'仅消息包含关键词时触发' },
+        ] },
+      { icon:'🔔', name:'审批事件订阅', desc:'审批状态变更时触发',
+        detail:'订阅钉钉审批实例的状态变更事件（发起/通过/驳回），触发关联工作流。',
+        params:[
+          { name:'审批模板 ID', type:'字符串', required:true, desc:'要订阅的审批模板' },
+        ] },
+    ] },
+  { name:'FunctionCall 策略', type:'Agent 策略', ver:'1.0.0', scope:'all', n:12, ok:'12/12', c:4, desc:'经典 Function Calling 推理策略，支持工具循环与结构化参数解析。',
+    actions:[
+      { icon:'⚡', name:'FunctionCalling', desc:'通过模型原生函数调用能力调用工具',
+        detail:'推荐使用。通过模型原生的函数调用能力来调用工具，适用于大多数主流模型（GPT-4o、Claude、Qwen 等）。',
+        params:[
+          { name:'最大迭代次数', type:'数字', required:false, desc:'单次任务允许的最大推理-行动循环次数，默认 5' },
+        ] },
+    ] },
 ];
 const providers = [
   { name:'Azure OpenAI', key:'sk-…a9F2', status:'正常', scope:'全部空间', time:'2026-08-20', c:0 },
@@ -777,7 +927,7 @@ const providers = [
 ];
 const mkt = [
   { name:'OpenAI', desc:'GPT 系列模型，含 GPT-5、o 系列推理模型与 Embedding。', type:'模型', ver:'2.4.1', c:0 },
-  { name:'Google Search', desc:'为 Agent 与工作流提供实时网页搜索能力。', type:'工具', ver:'1.3.2', c:1 },
+  { name:'Google Search', desc:'为 Agent 与工作流提供实时网页搜索能力。', type:'工具', ver:'1.4.0', c:1 },
   { name:'Notion', desc:'同步 Notion 页面与数据库内容到知识库。', type:'数据源', ver:'0.9.5', c:2 },
   { name:'钉钉机器人', desc:'钉钉事件 Webhook 触发工作流自动执行。', type:'触发器', ver:'0.4.1', c:3 },
   { name:'FunctionCall 策略', desc:'经典 Function Calling 推理策略，支持工具循环。', type:'Agent 策略', ver:'1.0.0', c:4 },
@@ -817,22 +967,23 @@ document.getElementById('member-rows').innerHTML = members.map(m=>`
   </tr>`).join('');
 
 // 在位数 = DB 来源（grant + invite 含待激活）env 来源不可撤不参与
-const grantAdmins = admins.filter(a => a.source === 'grant' || a.source === 'invite');
-const isLastGrantAdmin = (i) => grantAdmins.length === 1 && (admins[i].source === 'grant' || admins[i].source === 'invite');
+/* 两级管理员：install=创始人（独占授予/撤销/转让，不可自撤、行内只有转让）；env 来源不可撤 */
 document.getElementById('admin-rows').innerHTML = admins.map((a,i)=>`
   <tr${a.pending ? ' style="opacity:.75"' : ''}>
     <td><div class="cell-main"><div class="avatar" style="background:${palette[a.c]}">${a.name[0]}</div><div><div class="cell-title">${a.name}</div><div class="cell-sub">${a.mail}</div></div></div></td>
-    <td>${a.source==='env'
-        ? `<span class="pill pill-violet">环境变量</span>`
-        : a.source==='invite'
-          ? `<span class="pill pill-amber">邮箱邀请</span>`
-          : `<span class="pill pill-accent">系统授予</span>`}${a.pending ? ` <span class="pill pill-gray"><span class="dot"></span>待激活</span>` : ''}</td>
+    <td>${a.source==='install'
+        ? `<span class="pill pill-green">部署初始化</span>`
+        : a.source==='env'
+          ? `<span class="pill pill-violet">环境变量</span>`
+          : a.source==='invite'
+            ? `<span class="pill pill-amber">邮箱邀请</span>`
+            : `<span class="pill pill-accent">系统授予</span>`}${a.pending ? ` <span class="pill pill-gray"><span class="dot"></span>待激活</span>` : ''}</td>
     <td class="muted">${a.by}</td>
     <td class="muted">${a.time}</td>
-    <td><div class="row-actions">${a.source==='env'
-        ? `<button class="link-btn" disabled title="该管理员来自环境变量，需修改部署配置">撤销</button>`
-        : isLastGrantAdmin(i)
-          ? `<button class="link-btn" disabled title="最后一位系统管理员不可撤销，以防系统锁死">撤销</button>`
+    <td><div class="row-actions">${a.source==='install'
+        ? `<button class="link-btn" title="转让创始人身份；转让后你将变为普通系统管理员" onclick="openTransfer(${i})">转让创始人</button>`
+        : a.source==='env'
+          ? `<button class="link-btn" disabled title="该管理员来自环境变量，需修改部署配置">撤销</button>`
           : `<button class="link-btn danger" onclick="openRevoke(${i})">撤销</button>`}</div></td>
   </tr>`).join('');
 
@@ -841,9 +992,9 @@ document.getElementById('integration-rows').innerHTML = integrations.map((g,i)=>
   <tr class="clickable" onclick="openPluginDetail(${i})">
     <td><div class="cell-main"><div class="ws-icon" style="background:${palette[g.c]}">${g.name[0]}</div><div><div class="cell-title">${g.name}</div></div></div></td>
     <td><span class="pill ${typePill(g.type)}">${g.type}</span></td>
-    <td><span class="mono">v${g.ver}</span></td>
+    <td><span class="mono">v${g.ver}</span>${g.mktVer ? ` <button class="pill pill-amber" style="cursor:pointer;border:0" title="市场最新版本；点击经安装流程升级" onclick="event.stopPropagation();openUpgradeConfirm(${i},'${g.mktVer}','插件市场')">市场有 v${g.mktVer}</button>` : ''}</td>
     <td>${g.scope==='all' ? `<span class="pill pill-green">全部空间</span>` : `<span class="pill pill-accent">指定空间 · ${g.n}</span>`}</td>
-    <td><div class="row-actions" onclick="event.stopPropagation()"><button class="link-btn" onclick="openUpgradeModal(${i})">升级</button><button class="link-btn" onclick="openScopeModal(${i},'modify')">改范围</button><button class="link-btn" title="解除托管：删托管记录、插件留在各空间，无波次">解除托管</button><button class="link-btn danger" title="回收：全量卸载波">回收</button></div></td>
+    <td><div class="row-actions" onclick="event.stopPropagation()"><button class="link-btn" onclick="openScopeModal(${i},'modify')">改范围</button><button class="link-btn danger" onclick="openRemoveModal(${i})">移除</button></div></td>
   </tr>`).join('');
 
 const providerStatus = p => ({
@@ -865,18 +1016,22 @@ document.getElementById('provider-rows').innerHTML = providers.map(p=>`
     <td><div class="row-actions">${providerOps(p)}</div></td>
   </tr>`).join('');
 
-document.getElementById('mkt-grid').innerHTML = mkt.map(p=>`
+document.getElementById('mkt-grid').innerHTML = mkt.map(p=>{
+  const managed = integrations.find(x=>x.name===p.name);
+  return `
   <div class="mkt-card">
     <div class="mkt-card-head">
       <div class="ws-icon" style="background:${palette[p.c]};width:34px;height:34px">${p.name[0]}</div>
-      <div><div class="mkt-card-title">${p.name}</div><div class="mkt-card-ver">v${p.ver}</div></div>
+      <div><div class="mkt-card-title">${p.name}</div><div class="mkt-card-ver">v${p.ver}${managed ? ' · 已在管理列表' : ''}</div></div>
     </div>
     <div class="mkt-card-desc">${p.desc}</div>
     <div class="mkt-card-foot">
       <span class="pill ${typePill(p.type)}">${p.type}</span>
-      <button class="btn btn-primary" style="height:28px;font-size:12.5px" onclick="openScope('${p.name}')">安装</button>
+      ${managed
+        ? `<button class="btn btn-primary" style="height:28px;font-size:12.5px" onclick="openUpgradeConfirm(${integrations.indexOf(managed)},'${p.ver}','插件市场')">升级</button>`
+        : `<button class="btn btn-primary" style="height:28px;font-size:12.5px" onclick="openScope('${p.name}')">安装</button>`}
     </div>
-  </div>`).join('');
+  </div>`}).join('');
 
 document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="clickable" id="audit-${i}" onclick="toggleAudit(${i})">
@@ -898,11 +1053,13 @@ document.getElementById('nav').addEventListener('click', e=>{
   const btn = e.target.closest('.nav-item'); if(!btn) return;
   switchView(btn.dataset.view);
 });
-/* 市场页来源 tab */
-document.querySelectorAll('[data-mkt-src]').forEach(t=>t.addEventListener('click', ()=>{
-  document.querySelectorAll('[data-mkt-src]').forEach(x=>x.classList.toggle('active', x===t));
-  document.querySelectorAll('[data-mkt-pane]').forEach(p=>p.hidden = p.dataset.mktPane!==t.dataset.mktSrc);
-}));
+/* 安装插件下拉（三源：插件市场跳页 / GitHub / 本地集成包） */
+function toggleInstallMenu(e){
+  if(e) e.stopPropagation();
+  const m = document.getElementById('install-menu');
+  if(m) m.hidden = !m.hidden;
+}
+document.addEventListener('click', ()=>{ const m = document.getElementById('install-menu'); if(m) m.hidden = true; });
 /* 抽屉 tab 切换 */
 document.getElementById('drawer-tabs').addEventListener('click', e=>{
   const t = e.target.closest('[data-dtab]'); if(!t) return;
@@ -934,46 +1091,97 @@ function openCred(name){
 }
 /* 空间级模型配置（单独覆盖） */
 function openWsCred(name){
-  document.getElementById('ws-cred-title').textContent = `配置模型 · ${name}`;
+  document.getElementById('ws-cred-title').textContent = `单独配置 · ${name}`;
   openModal('modal-ws-cred');
 }
-/* 插件详情抽屉 */
+/* 插件详情抽屉（工作台同款：简介 + 能力清单 + 参数详情，无操作；操作留在表格行内） */
 let curPlugin = 0;
 function openPluginDetail(i){
   curPlugin = i;
   openPluginDrawer(integrations[i]);
 }
 function openWorkspacePlugin(name){
-  const p = integrations.find(x=>x.name===name) || {name, type:'工具', ver:'—', desc:'暂无详情。', c:0};
-  curPlugin = integrations.findIndex(x=>x.name===name);
-  openPluginDrawer(p);
+  const idx = integrations.findIndex(x=>x.name===name);
+  curPlugin = idx;
+  openPluginDrawer(integrations[idx] || {name, type:'工具', ver:'—', desc:'暂无详情。', c:0, actions:[]});
 }
+function pluginUnit(p){ return p.type === 'Agent 策略' ? '策略' : '操作'; }
 function openPluginDrawer(p){
   document.getElementById('pd-name').textContent = p.name;
   const ic = document.getElementById('pd-icon');
   ic.style.background = palette[p.c]||palette[0];
   ic.textContent = p.name[0];
   document.getElementById('pd-type').innerHTML = `<span class="pill ${typePill(p.type)}">${p.type}</span>`;
-  document.getElementById('pd-type2').textContent = p.type;
-  document.getElementById('pd-desc').textContent = p.desc || '暂无简介。';
-  document.getElementById('pd-ver').textContent = 'v'+p.ver;
-  document.getElementById('pd-scope').innerHTML = (p.scope==='all')
-    ? `<span class="pill pill-green">全部空间</span>`
-    : `<span class="pill pill-accent">指定空间 · ${p.n}</span>`;
-  document.getElementById('pd-status').innerHTML = `<span class="pill pill-green"><span class="dot"></span>已分发</span>`;
+  document.getElementById('pd-meta').textContent = `${p.type} · v${p.ver}`;
+  renderPluginHome();
   document.getElementById('overlay').classList.add('show');
   document.getElementById('plugin-drawer').classList.add('show');
+}
+function renderPluginHome(){
+  const p = integrations[curPlugin];
+  const acts = p.actions || [];
+  document.getElementById('pd-body').innerHTML = `
+    <div class="side-section" style="padding-left:0">简介</div>
+    <div style="font-size:13.5px;line-height:1.7;color:var(--text-2)">${p.desc || '暂无简介。'}</div>
+    <div class="side-section" style="padding-left:0">包含 ${acts.length} 个${pluginUnit(p)}</div>
+    ${acts.map((a,ai)=>`
+      <button class="act-item" onclick="renderPluginAction(${ai})">
+        <div class="act-icon">${a.icon}</div>
+        <div><div class="act-name">${a.name}</div><div class="act-desc">${a.desc}</div></div>
+      </button>`).join('')}`;
+}
+function renderPluginAction(ai){
+  const p = integrations[curPlugin], a = p.actions[ai];
+  document.getElementById('pd-body').innerHTML = `
+    <button class="pd-back" onclick="renderPluginHome()">← 返回</button>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="act-icon">${a.icon}</div>
+      <div><div style="font-size:15px;font-weight:700">${a.name}</div><div class="muted" style="margin-top:1px">${p.type} · v${p.ver}</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;line-height:1.7;color:var(--text-2)">${a.detail}</div>
+    <div class="side-section" style="padding-left:0">参数</div>
+    ${a.params.map(x=>`
+      <div class="param-row">
+        <div class="param-head"><span class="param-name">${x.name}</span><span class="param-type">${x.type}</span>${x.required ? '<span class="pill pill-amber" style="height:18px;font-size:10px">必填</span>' : ''}</div>
+        <div class="param-desc">${x.desc}</div>
+      </div>`).join('')}`;
 }
 function closePluginDrawer(){
   document.getElementById('plugin-drawer').classList.remove('show');
   const anyOpen = document.querySelector('.drawer.show, .modal-wrap.show');
   if(!anyOpen) document.getElementById('overlay').classList.remove('show');
 }
-/* 插件升级弹窗 */
-function openUpgradeModal(i){
+/* 升级确认弹窗（安装流升级态：命中已管理插件时进入；三态确认文案 升级/回滚/同版本幂等分发） */
+function cmpVer(a,b){
+  const A=a.split('.').map(Number), B=b.split('.').map(Number);
+  for(let k=0;k<Math.max(A.length,B.length);k++){ const d=(A[k]||0)-(B[k]||0); if(d) return d; }
+  return 0;
+}
+function openUpgradeConfirm(i, targetVer, source){
   const g = integrations[i];
-  document.getElementById('upg-cur').textContent = `v${g.ver}`;
+  const d = cmpVer(targetVer, g.ver);
+  document.getElementById('upg-title').textContent = `升级「${g.name}」`;
+  document.getElementById('upg-ver').innerHTML = `
+    <span class="mono">v${g.ver}</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <span class="mono" style="font-weight:700">v${targetVer}</span>
+    <span class="pill pill-gray">来自 ${source}</span>`;
+  document.getElementById('upg-scope').innerHTML = g.scope==='all'
+    ? `<span class="pill pill-green">全部空间 · ${g.n} 个</span>`
+    : `<span class="pill pill-accent">指定空间 · ${g.n} 个</span>`;
+  const head = d>0 ? `将 ${g.n} 个空间从 v${g.ver} 升级到 v${targetVer}。`
+    : d<0 ? `回滚 ${g.n} 个空间到 v${targetVer}。`
+    : `向 ${g.n} 个空间分发 v${targetVer}（已是该版本的空间自动跳过）。`;
+  document.getElementById('upg-confirm-copy').textContent = head + '已是目标版本的空间自动跳过；各空间已配置的工具凭据保留。';
+  document.getElementById('upg-confirm').textContent = d<0 ? '回滚并分发' : '升级并分发';
   openModal('modal-upgrade');
+}
+/* 移除弹窗（二选一：保留在各空间 / 从所有空间卸载） */
+function openRemoveModal(i){
+  const g = integrations[i];
+  document.getElementById('rm-title').textContent = `移除「${g.name}」`;
+  document.getElementById('rm-sub').textContent = `已安装该插件的 ${g.n} 个空间，如何处理？`;
+  openModal('modal-remove');
 }
 /* 撤销系统管理员弹窗 */
 function openRevoke(i){
@@ -981,6 +1189,15 @@ function openRevoke(i){
   document.getElementById('revoke-name').textContent = a.name;
   document.getElementById('revoke-mail').textContent = a.mail;
   openModal('modal-revoke');
+}
+/* 转让创始人弹窗 */
+function openTransfer(i){
+  const a = admins[i];
+  const sel = document.getElementById('transfer-target');
+  sel.innerHTML = admins
+    .filter(x=>x.source==='grant' && !x.pending)
+    .map(x=>`<option>${x.name} · ${x.mail}</option>`).join('');
+  openModal('modal-transfer');
 }
 
 function openDrawer(i){
