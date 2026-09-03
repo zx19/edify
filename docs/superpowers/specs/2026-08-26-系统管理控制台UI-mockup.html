@@ -139,7 +139,7 @@
   .input-wrap { position:relative; }
   .input-wrap svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--text-3); }
   .select { height:34px; padding:0 12px; border:1px solid var(--border-strong); border-radius:10px; background:#fff; font-size:13px; color:var(--text-2); outline:none; }
-  .btn { height:34px; padding:0 16px; border-radius:var(--radius-btn); font-size:13.5px; font-weight:700; border:1px solid transparent; display:inline-flex; align-items:center; gap:7px; transition:background .12s, box-shadow .12s; }
+  .btn { height:34px; padding:0 16px; border-radius:var(--radius-btn); font-size:13.5px; font-weight:700; border:1px solid transparent; display:inline-flex; align-items:center; gap:7px; transition:background .12s, box-shadow .12s; white-space:nowrap; flex:none; }
   .btn-primary { background:var(--text-1); color:#fff; }
   .btn-primary:hover { background:#26262B; }
   .btn-accent { background:var(--accent); color:#fff; }
@@ -326,7 +326,7 @@
   .notice { border-radius:11px; padding:12px 16px; font-size:13px; line-height:1.7; color:var(--text-2); }
   .notice-blue { background:var(--accent-soft); color:var(--accent-deep); }
   .notice-amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
-  .install-dd { position:relative; }
+  .install-dd { position:relative; flex:none; }
   .install-menu { position:absolute; right:0; top:calc(100% + 6px); z-index:40; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 28px rgba(16,24,40,.14); padding:6px; min-width:250px; }
   .install-menu button { display:flex; flex-direction:column; gap:2px; width:100%; text-align:left; border:0; background:none; padding:8px 10px; border-radius:8px; cursor:pointer; }
   .install-menu button:hover { background:var(--bg-soft); }
