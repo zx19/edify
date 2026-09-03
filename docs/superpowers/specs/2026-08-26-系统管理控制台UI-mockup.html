@@ -61,7 +61,7 @@
   .nav-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:600; box-shadow:inset 0 0 0 1px rgb(255 140 0 / .16); }
   .nav-group-label { padding:10px 12px 4px; font-size:10.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; }
   .nav-item .chev { margin-left:auto; font-size:12px; color:var(--text-3); }
-  .nav-tree { margin:2px 2px 0 20px; padding-left:10px; border-left:1px solid var(--border); }
+  .nav-tree { margin:2px 2px 0 20px; padding-left:10px; }
   .nav-tree .nav-item { height:32px; font-size:13px; padding:0 10px; border-radius:8px; }
   .side-foot { margin-top:auto; padding:10px 12px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; }
 
@@ -205,7 +205,7 @@
   /* ===== 成员页：行展开的全量空间清单 ===== */
   .member-detail { background:var(--bg-soft); }
   .member-detail > td { padding:10px 16px 16px !important; }
-  .ws-line-list { margin-left:24px; background:#fff; border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:10px; overflow:hidden; }
+  .ws-line-list { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
   .ws-line-cap { padding:8px 14px; font-size:12px; color:var(--text-3); background:var(--bg-soft); border-bottom:1px solid var(--border); }
   .ws-line { display:flex; align-items:center; gap:10px; padding:9px 14px; font-size:13px; }
   .ws-line + .ws-line { border-top:1px solid var(--border); }
@@ -284,6 +284,7 @@
   .danger-zone { margin-top:22px; border:1px solid #FECDCA; background:#FFFBFA; border-radius:11px; padding:14px 16px; }
   .danger-zone h4 { color:var(--danger); font-size:13px; margin-bottom:4px; }
   .danger-zone p { font-size:12.5px; color:var(--text-2); margin-bottom:10px; }
+  .danger-zone.restore { border-color:var(--border); background:var(--bg-soft); }
 
   /* ===== Modal ===== */
   .modal-wrap { position:fixed; inset:0; display:grid; place-items:center; z-index:60; pointer-events:none; }
@@ -488,21 +489,19 @@
       </div>
 
       <div data-wpane="members">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-          <button class="btn btn-ghost" style="height:30px;font-size:12.5px">+ 添加成员</button>
-        </div>
         <div class="card">
           <table>
-            <thead><tr><th>成员</th><th>邮箱</th><th>角色</th><th>加入时间</th><th style="text-align:right">操作</th></tr></thead>
+            <thead><tr><th>成员</th><th>邮箱</th><th>角色</th><th>加入时间</th></tr></thead>
             <tbody id="d-member-rows"></tbody>
           </table>
         </div>
+        <div class="muted" style="margin-top:10px;font-size:12px">一期只读：加人 / 改角色 / 移除由空间侧成员页承担。</div>
       </div>
 
       <div data-wpane="integration" hidden>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <div class="side-section" style="padding:0">插件与工具</div>
-          <button class="btn btn-ghost" style="height:28px;font-size:12.5px" onclick="switchView('marketplace')">+ 安装插件</button>
+          <!-- <button class="btn btn-ghost" style="height:28px;font-size:12.5px" onclick="switchView('marketplace')">+ 安装插件</button> -->
         </div>
         <div class="card" style="margin-bottom:16px">
           <table>
@@ -550,10 +549,10 @@
             <dt>成员数</dt><dd id="d-kv-members">6</dd>
           </dl>
         </div>
-        <div class="danger-zone">
-          <h4>危险操作</h4>
-          <p>归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。操作将记入审计日志。</p>
-          <button class="btn btn-danger" style="height:30px;font-size:12.5px" onclick="openModal('modal-archive')">归档此空间</button>
+        <div class="danger-zone" id="d-danger-zone">
+          <h4 id="d-dz-title">危险操作</h4>
+          <p id="d-dz-desc">归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。数据完整保留，可随时恢复。操作将记入审计日志。</p>
+          <button class="btn btn-danger" id="d-dz-btn" style="height:30px;font-size:12.5px" onclick="openModal('modal-archive')">归档此空间</button>
         </div>
       </div>
     </section>
@@ -563,7 +562,7 @@
       <div class="page-head">
         <div>
           <div class="page-title">成员</div>
-          <div class="page-desc">跨空间视角：查看每个账号在哪些空间、担任何种角色。点击行展开全量空间清单（空间名可跳空间详情）；加人/改角色/移除在各空间详情内进行。</div>
+          <div class="page-desc">跨空间视角：查看每个账号在哪些空间、担任何种角色。点击行展开全量空间清单（空间名可跳空间详情）；成员管理由空间侧成员页承担（一期管理台只读）。</div>
         </div>
       </div>
       <div class="toolbar">
@@ -1058,10 +1057,22 @@
 <div class="modal-wrap" id="modal-archive">
   <div class="modal">
     <h3 style="color:var(--danger)" id="archive-title">归档空间「市场部」？</h3>
-    <div class="modal-sub" id="archive-sub">归档后：空间内 8 个应用不可访问；6 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。</div>
+    <div class="modal-sub" id="archive-sub">归档后：空间内 8 个应用不可访问；6 名成员登录时将自动切换到其他可用空间。数据完整保留，可随时从空间详情恢复。</div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
       <button class="btn btn-danger" onclick="closeAll()">确认归档</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：恢复空间（归档态危险区入口） ============ -->
+<div class="modal-wrap" id="modal-restore">
+  <div class="modal">
+    <h3 id="restore-title">恢复空间「旧版客服项目」？</h3>
+    <div class="modal-sub" id="restore-sub">恢复后：2 名成员可重新进入该空间，11 个应用的 WebApp 链接与 API 调用立即恢复可用。归档期间数据完整保留，无需迁移。此操作会写入审计日志。</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">确认恢复</button>
     </div>
   </div>
 </div>
@@ -1250,7 +1261,7 @@ function renderMembers(){
       <td></td>
       <td colspan="3">
         <div class="ws-line-list">
-          <div class="ws-line-cap">共 ${m.tags.length} 个空间${memberWs!=='全部空间' ? `（已按空间过滤，仅显示命中项）` : ''} · 改角色 / 移除请进入对应空间详情的成员 tab</div>
+          <div class="ws-line-cap">共 ${m.tags.length} 个空间${memberWs!=='全部空间' ? `（已按空间过滤，仅显示命中项）` : ''} · 成员管理由空间侧成员页承担（一期管理台只读）</div>
           ${lines.map(([ws,r,join])=>{
             const w = workspaces.find(x=>x.name===ws) || {c:0};
             return `<div class="ws-line">
@@ -1702,14 +1713,28 @@ function openWorkspace(i, from){
   document.getElementById('d-kv-apps').textContent = w.apps;
   document.getElementById('d-kv-members').textContent = w.members;
   document.getElementById('archive-title').textContent = `归档空间「${w.name}」？`;
-  document.getElementById('archive-sub').textContent = `归档后：空间内 ${w.apps} 个应用不可访问；${w.members} 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。`;
+  document.getElementById('archive-sub').textContent = `归档后：空间内 ${w.apps} 个应用不可访问；${w.members} 名成员登录时将自动切换到其他可用空间。数据完整保留，可随时从空间详情恢复。`;
+  document.getElementById('restore-title').textContent = `恢复空间「${w.name}」？`;
+  document.getElementById('restore-sub').textContent = `恢复后：${w.members} 名成员可重新进入该空间，${w.apps} 个应用的 WebApp 链接与 API 调用立即恢复可用。归档期间数据完整保留，无需迁移。此操作会写入审计日志。`;
+  // 危险区按状态切换：正常=归档（红色危险区）；已归档=恢复（中性区、主按钮——恢复非危险操作）
+  const archived = w.status === '已归档';
+  const dz = document.getElementById('d-danger-zone');
+  dz.classList.toggle('restore', archived);
+  document.getElementById('d-dz-title').textContent = archived ? '恢复' : '危险操作';
+  document.getElementById('d-dz-title').style.color = archived ? 'var(--text-1)' : 'var(--danger)';
+  document.getElementById('d-dz-desc').textContent = archived
+    ? '恢复后：成员可重新进入该空间，应用的 WebApp 链接与 API 调用立即恢复可用；归档期间数据完整保留，无需迁移。'
+    : '归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。数据完整保留，可随时恢复。操作将记入审计日志。';
+  const dzBtn = document.getElementById('d-dz-btn');
+  dzBtn.textContent = archived ? '恢复此空间' : '归档此空间';
+  dzBtn.className = archived ? 'btn btn-primary' : 'btn btn-danger';
+  dzBtn.setAttribute('onclick', archived ? "openModal('modal-restore')" : "openModal('modal-archive')");
   document.getElementById('d-member-rows').innerHTML = members.slice(0,4).map((m,idx)=>`
     <tr>
       <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]};width:26px;height:26px;font-size:11px">${m.name[0]}</div><div><div class="cell-title" style="font-size:13px">${m.name}</div></div></div></td>
       <td class="muted mono" style="font-size:12px">${m.mail}</td>
       <td><span class="pill ${rolePill(['owner','admin','editor','normal'][idx%4])}">${['owner','admin','editor','normal'][idx%4]}</span></td>
       <td class="muted">${['2026-06-02','2026-06-15','2026-07-01','2026-07-20'][idx]}</td>
-      <td><div class="row-actions"><button class="link-btn">改角色</button><button class="link-btn danger">移除</button></div></td>
     </tr>`).join('');
   // 每次进入重置到「成员」tab
   document.querySelectorAll('#ws-tabs [data-wtab]').forEach(x=>x.classList.toggle('active', x.dataset.wtab==='members'));
