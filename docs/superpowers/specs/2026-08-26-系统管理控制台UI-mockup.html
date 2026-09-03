@@ -65,6 +65,32 @@
   .nav-sub .nav-item { height:30px; font-size:13px; padding:0 12px; }
   .nav-sub .nav-item.active::before { display:none; }
   .side-foot { margin-top:auto; padding:10px 12px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+
+  /* 导航分组可收起 */
+  .side-section.nav-toggle, .nav-group-label.nav-toggle { cursor:pointer; display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:0; text-align:left; font-family:inherit; }
+  .side-section.nav-toggle:hover, .nav-group-label.nav-toggle:hover { color:var(--text-1); }
+  .nav-toggle .chev { font-size:11px; }
+
+  /* 头像下拉菜单（偏好设置/外观/版本/登出） */
+  .dropdown { position:relative; flex:1; }
+  .side-foot-btn { display:flex; align-items:center; gap:10px; width:100%; background:none; border:0; text-align:left; padding:4px 6px; margin:-4px -6px; border-radius:10px; cursor:pointer; }
+  .side-foot-btn:hover { background:var(--bg-soft); }
+  .dropdown-menu { position:absolute; bottom:calc(100% + 8px); left:0; min-width:230px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); z-index:90; opacity:0; transform:translateY(4px); pointer-events:none; transition:opacity .15s, transform .15s; padding:0; overflow:hidden; }
+  .dropdown-menu.open { opacity:1; transform:none; pointer-events:auto; }
+  .dm-head { padding:12px 14px 10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+  .dm-head-name { font-size:13.5px; font-weight:700; }
+  .dm-head-mail { font-size:11.5px; color:var(--text-3); margin-top:1px; }
+  .dm-section { padding:6px 4px; }
+  .dm-item { display:flex; align-items:center; gap:10px; height:36px; padding:0 10px; border-radius:9px; color:var(--text-2); font-size:13px; font-weight:500; width:100%; text-align:left; border:0; background:none; cursor:pointer; }
+  .dm-item:hover { background:var(--bg-soft); color:var(--text-1); }
+  .dm-item svg { width:16px; height:16px; flex:none; color:var(--text-3); }
+  .dm-item:hover svg { color:var(--text-1); }
+  .dm-item.danger { color:var(--danger); }
+  .dm-item.danger:hover { background:var(--danger-soft); }
+  .dm-item.dm-static { cursor:default; }
+  .dm-item.dm-static:hover { background:none; color:var(--text-2); }
+  .dm-item.dm-static:hover svg { color:var(--text-3); }
+  .dm-divider { height:1px; background:var(--border); margin:2px 0; }
   .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#FF8C00,#FFB566); color:#fff; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
   .side-foot-meta { min-width:0; }
   .side-foot-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -73,6 +99,7 @@
   /* ===== Main ===== */
   .main { flex:1; overflow-y:auto; background:var(--bg); }
   .page { max-width:1120px; margin:0 auto; padding:24px 36px 56px; animation:rise .28s ease both; }
+  .page-full { max-width:none; }
   @keyframes rise { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none;} }
   .page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; }
   .page-title { font-size:22px; font-weight:800; letter-spacing:-.3px; }
@@ -138,10 +165,79 @@
   .drawer-head { padding:20px 24px 14px; border-bottom:1px solid var(--border); }
   .drawer-close { position:absolute; top:16px; right:16px; border:0; background:var(--bg-soft); width:30px; height:30px; border-radius:9px; color:var(--text-3); font-size:14px; display:grid; place-items:center; }
   .drawer-close:hover { background:#EDEDEF; color:var(--text-1); }
-  .drawer-tabs { display:flex; gap:4px; padding:0 24px; border-bottom:1px solid var(--border); margin-top:0; }
-  .drawer-tab { border:0; background:none; padding:10px 4px; margin-right:14px; font-size:13.5px; font-weight:600; color:var(--text-3); border-bottom:2px solid transparent; }
-  .drawer-tab.active { color:var(--accent-deep); border-bottom-color:var(--accent); font-weight:700; }
   .drawer-body { flex:1; overflow-y:auto; padding:18px 24px 24px; }
+
+  /* ===== 页级空间详情视图（返回 + 空间头 + 页内 tab） ===== */
+  .back-btn { display:inline-flex; align-items:center; gap:5px; border:0; background:none; font-size:13px; font-weight:600; color:var(--text-3); padding:5px 8px; margin:0 0 14px -8px; border-radius:8px; }
+  .back-btn:hover { color:var(--text-1); background:var(--bg-soft); }
+  .ws-head { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .page-tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:18px; }
+  .page-tab { border:0; background:none; padding:10px 4px; margin-right:18px; font-size:13.5px; font-weight:600; color:var(--text-3); border-bottom:2px solid transparent; cursor:pointer; }
+  .page-tab:hover { color:var(--text-1); }
+  .page-tab.active { color:var(--accent-deep); border-bottom-color:var(--accent); font-weight:700; }
+
+  /* ===== 成员页：行展开的全量空间清单 ===== */
+  .member-detail { background:var(--bg-soft); }
+  .member-detail > td { padding:10px 16px 16px !important; }
+  .ws-line-list { margin-left:24px; background:#fff; border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:10px; overflow:hidden; }
+  .ws-line-cap { padding:8px 14px; font-size:12px; color:var(--text-3); background:var(--bg-soft); border-bottom:1px solid var(--border); }
+  .ws-line { display:flex; align-items:center; gap:10px; padding:9px 14px; font-size:13px; }
+  .ws-line + .ws-line { border-top:1px solid var(--border); }
+  .ws-line .ws-link { font-weight:700; }
+  .ws-line-join { margin-left:auto; }
+
+  /* ===== 模型提供商卡片（照上游 QA 结构：凭据面板 + 模型清单展开） ===== */
+  .pv-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px 12px; margin-bottom:12px; }
+  .pv-head { display:flex; align-items:flex-start; gap:12px; }
+  .pv-name { font-weight:700; font-size:14.5px; }
+  .pv-ver { font-family:var(--mono); font-size:11px; color:var(--text-3); border:1px solid var(--border); border-radius:6px; padding:1px 6px; }
+  .m-badge { display:inline-flex; align-items:center; height:19px; padding:0 7px; border:1px solid var(--border-strong); border-radius:6px; font-size:10.5px; font-weight:700; color:var(--text-3); letter-spacing:.04em; }
+  .cred-panel { margin-left:auto; width:212px; flex:none; border:1px solid var(--border); border-radius:11px; padding:9px 10px; display:flex; flex-direction:column; gap:7px; }
+  .cred-status { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-2); min-height:18px; }
+  .cred-status .cdot { width:6px; height:6px; border-radius:50%; background:var(--success); flex:none; }
+  .cred-status.warn { color:var(--text-3); }
+  .cred-panel .btn { height:28px; font-size:12.5px; width:100%; justify-content:center; }
+  .pv-scope { margin-top:9px; font-size:12px; color:var(--text-3); }
+  .pv-scope b { color:var(--accent-deep); font-weight:600; }
+  .pv-expander { margin-top:10px; border:0; background:none; font-size:13px; font-weight:600; color:var(--text-2); display:inline-flex; align-items:center; gap:6px; padding:2px 0; cursor:pointer; }
+  .pv-expander:hover { color:var(--accent-deep); }
+  .chev.open { transform:rotate(90deg); }
+  .model-row { display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px dashed var(--border); }
+  .model-row:last-child { border-bottom:0; }
+  .pv-empty { display:flex; align-items:center; gap:7px; margin-top:12px; font-size:12.5px; color:var(--text-3); }
+
+  /* 开关 */
+  .sw { width:32px; height:18px; border-radius:999px; background:#D9D9DC; border:0; position:relative; flex:none; transition:background .15s; cursor:pointer; }
+  .sw::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; transition:left .15s; box-shadow:var(--shadow-xs); }
+  .sw.on { background:var(--accent); }
+  .sw.on::after { left:16px; }
+
+  /* 凭据管理浮层（照上游 Authorized popover：列表 + 当前✓ + hover 编辑/删除 + 底部添加） */
+  .cred-pop { position:fixed; z-index:70; width:288px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); padding:6px; }
+  .cred-pop-title { padding:6px 10px 4px; font-size:11.5px; font-weight:700; color:var(--text-3); letter-spacing:.03em; }
+  .cred-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:8px; cursor:pointer; font-size:13px; }
+  .cred-item:hover { background:var(--bg-soft); }
+  .cred-item .ci-act { margin-left:auto; display:none; gap:2px; }
+  .cred-item:hover .ci-act { display:flex; }
+  .ci-btn { border:0; background:none; width:24px; height:24px; border-radius:6px; color:var(--text-3); display:grid; place-items:center; cursor:pointer; }
+  .ci-btn:hover { background:#fff; color:var(--text-1); }
+  .ci-btn.danger:hover { color:var(--danger); }
+  .ci-btn svg { width:14px; height:14px; }
+  .cred-pop-add { width:100%; margin-top:4px; }
+  .cred-pop-hint { padding:7px 10px 4px; font-size:11.5px; color:var(--text-3); border-top:1px solid var(--border); margin-top:5px; line-height:1.5; }
+
+  /* 配置模型弹窗（照上游：供应商管理 vs 负载均衡选择卡） */
+  .sel-card { display:flex; align-items:center; gap:12px; border:1.5px solid var(--border); border-radius:12px; padding:13px 16px; cursor:pointer; margin-bottom:10px; background:#fff; }
+  .sel-card.on { border-color:var(--accent); }
+  .sel-card-icon { width:34px; height:34px; border-radius:9px; border:1px solid var(--border); background:var(--bg-soft); display:grid; place-items:center; flex:none; color:var(--text-2); }
+  .sel-card-icon svg { width:17px; height:17px; }
+  .sel-card-t { font-size:13.5px; font-weight:700; }
+  .sel-card-d { font-size:12px; color:var(--text-3); margin-top:2px; }
+  .lb-list { margin:4px 0 6px; }
+  .lb-row { display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+  .modal.modal-lg { width:600px; }
+  .enc-strip { margin:16px -22px -18px; padding:10px 22px; border-top:1px solid var(--border); background:var(--bg-soft); font-size:12px; color:var(--text-3); display:flex; align-items:center; justify-content:center; gap:6px; border-radius:0 0 14px 14px; }
+  .enc-strip svg { width:13px; height:13px; flex:none; }
 
   /* 插件详情：能力清单与参数（工作台同款） */
   .act-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:11px; margin-bottom:8px; width:100%; text-align:left; background:#fff; cursor:pointer; }
@@ -226,7 +322,7 @@
         <div class="side-brand-tag">System Administration</div>
       </div>
     </div>
-    <div class="side-section">管理</div>
+    <button class="side-section nav-toggle" id="tg-manage" onclick="toggleNavGroup('manage')">管理<span class="chev open">›</span></button>
     <nav class="nav" id="nav">
       <button class="nav-item active" data-view="workspaces">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
@@ -236,8 +332,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16 14.7c2.3.2 3.9 1.5 4.5 4"/></svg>
         成员
       </button>
-      <div class="nav-group-label">集成</div>
-      <div class="nav-sub">
+      <button class="nav-group-label nav-toggle" id="tg-integration" onclick="toggleNavGroup('integration')">集成<span class="chev open">›</span></button>
+      <div class="nav-sub" id="nav-sub-integration">
         <button class="nav-item" data-view="plugins">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
           插件管理
@@ -261,10 +357,45 @@
       </button>
     </nav>
     <div class="side-foot">
-      <div class="avatar">伟</div>
-      <div class="side-foot-meta">
-        <div class="side-foot-name">张伟</div>
-        <div class="side-foot-role">系统管理员</div>
+      <div class="dropdown">
+        <button class="side-foot-btn" onclick="toggleAccountMenu(event)">
+          <div class="avatar">伟</div>
+          <div class="side-foot-meta">
+            <div class="side-foot-name">张伟</div>
+            <div class="side-foot-role">系统管理员</div>
+          </div>
+          <svg style="margin-left:auto;color:var(--text-3)" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="dropdown-menu" id="account-menu">
+          <div class="dm-head">
+            <div class="avatar" style="width:34px;height:34px;font-size:13px">伟</div>
+            <div>
+              <div class="dm-head-name">张伟</div>
+              <div class="dm-head-mail">zhangwei@x.com</div>
+            </div>
+          </div>
+          <div class="dm-section">
+            <button class="dm-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h10M18 8h2M4 16h4M12 16h8" stroke-linecap="round"/><circle cx="16" cy="8" r="2.2"/><circle cx="10" cy="16" r="2.2"/></svg>
+              偏好设置
+            </button>
+            <button class="dm-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>
+              外观
+            </button>
+          </div>
+          <div class="dm-divider"></div>
+          <div class="dm-section">
+            <div class="dm-item dm-static">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+              版本 <span class="muted" style="margin-left:auto;font-size:12px">1.17.0-edify-3</span>
+            </div>
+            <button class="dm-item danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              登出
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </aside>
@@ -305,24 +436,117 @@
       </div>
     </section>
 
+    <!-- ====== 空间详情（页级全屏视图：空间列表行 / 成员页展开区空间名进入；对应路由 /admin/workspaces/[id]） ====== -->
+    <section class="page page-full" id="view-ws-detail" hidden>
+      <button class="back-btn" onclick="backFromWorkspace()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        返回
+      </button>
+      <div class="ws-head">
+        <div class="ws-icon" id="d-ws-icon" style="width:44px;height:44px;font-size:18px;border-radius:11px">市</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="page-title" id="d-ws-name" style="font-size:20px">市场部</span>
+            <span id="d-ws-status"></span>
+          </div>
+          <div class="page-desc" id="d-ws-meta"></div>
+        </div>
+      </div>
+      <div class="page-tabs" id="ws-tabs">
+        <button class="page-tab active" data-wtab="members">成员</button>
+        <button class="page-tab" data-wtab="integration">集成</button>
+        <button class="page-tab" data-wtab="info">基本信息</button>
+      </div>
+
+      <div data-wpane="members">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+          <button class="btn btn-ghost" style="height:30px;font-size:12.5px">+ 添加成员</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>成员</th><th>邮箱</th><th>角色</th><th>加入时间</th><th style="text-align:right">操作</th></tr></thead>
+            <tbody id="d-member-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div data-wpane="integration" hidden>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="side-section" style="padding:0">插件与工具</div>
+          <button class="btn btn-ghost" style="height:28px;font-size:12.5px" onclick="switchView('marketplace')">+ 安装插件</button>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <table>
+            <thead><tr><th>插件</th><th>类型</th><th>版本</th></tr></thead>
+            <tbody>
+              <tr class="clickable" onclick="openWorkspacePlugin('Google Search')">
+                <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#FF8C00">G</div><span style="font-weight:600">Google Search</span></div></td>
+                <td><span class="pill pill-accent">工具</span></td><td class="mono">v1.3.2</td>
+              </tr>
+              <tr class="clickable" onclick="openWorkspacePlugin('钉钉机器人')">
+                <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#6938EF">D</div><span style="font-weight:600">钉钉机器人</span></div></td>
+                <td><span class="pill pill-violet">触发器</span></td><td class="mono">v0.4.1</td>
+              </tr>
+              <tr class="clickable" onclick="openWorkspacePlugin('Notion')">
+                <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#7A5AF8">N</div><span style="font-weight:600">Notion</span></div></td>
+                <td><span class="pill pill-green">数据源</span></td><td class="mono">v0.9.5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="side-section" style="padding-left:0">凭据与授权</div>
+        <div class="card" style="margin-bottom:16px">
+          <table>
+            <thead><tr><th>配置项</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCredPop(event,'Azure OpenAI')">单独配置</button></div></td></tr>
+              <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCredPop(event,'通义千问')">单独配置</button></div></td></tr>
+              <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-accent"><span class="dot"></span>单独配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCredPop(event,'Anthropic')">编辑</button></div></td></tr>
+              <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCredPop(event,'DeepSeek')">单独配置</button></div></td></tr>
+            </tbody>
+          </table>
+          <div class="notice notice-blue" style="margin:12px 16px 14px;font-size:12px">
+            配置位置即作用域：在此处配置 = 该空间单独配置（优先于组织统一，删除即回落）；未单独配置的空间使用「模型提供商」页的组织统一凭据。工具插件凭据一期为组织级、无单独配置入口。
+          </div>
+        </div>
+      </div>
+
+      <div data-wpane="info" hidden>
+        <div class="card" style="padding:18px 20px">
+          <dl class="kv" style="margin-bottom:0">
+            <dt>空间 ID</dt><dd class="mono">7f3a9b2c-…-c21d</dd>
+            <dt>创建时间</dt><dd id="d-kv-time">2026-06-02</dd>
+            <dt>应用数</dt><dd id="d-kv-apps">8</dd>
+            <dt>知识库数</dt><dd>4</dd>
+            <dt>成员数</dt><dd id="d-kv-members">6</dd>
+          </dl>
+        </div>
+        <div class="danger-zone">
+          <h4>危险操作</h4>
+          <p>归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。操作将记入审计日志。</p>
+          <button class="btn btn-danger" style="height:30px;font-size:12.5px" onclick="openModal('modal-archive')">归档此空间</button>
+        </div>
+      </div>
+    </section>
+
     <!-- ====== 跨空间成员 ====== -->
     <section class="page" id="view-members" hidden>
       <div class="page-head">
         <div>
           <div class="page-title">成员</div>
-          <div class="page-desc">跨空间视角：查看每个账号在哪些空间、担任何种角色。</div>
+          <div class="page-desc">跨空间视角：查看每个账号在哪些空间、担任何种角色。点击行展开全量空间清单（空间名可跳空间详情）；加人/改角色/移除在各空间详情内进行。</div>
         </div>
       </div>
       <div class="toolbar">
         <div class="input-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input class="input" placeholder="搜索姓名 / 邮箱…">
+          <input class="input" id="member-q" placeholder="搜索姓名 / 邮箱…" oninput="memberQ=this.value;renderMembers()">
         </div>
-        <select class="select"><option>全部空间</option><option>市场部</option><option>研发部</option><option>数据团队</option><option>客户成功</option></select>
+        <select class="select" id="member-ws" onchange="memberWs=this.value;renderMembers()"></select>
       </div>
       <div class="card">
         <table>
-          <thead><tr><th>成员</th><th>所属空间 · 角色</th><th>最后活跃</th><th style="text-align:right">操作</th></tr></thead>
+          <thead><tr><th style="width:24px"></th><th>成员</th><th>所属空间 · 角色</th><th>最后活跃</th></tr></thead>
           <tbody id="member-rows"></tbody>
         </table>
       </div>
@@ -372,24 +596,19 @@
       </div>
     </section>
 
-    <!-- ====== 模型提供商（组织级凭据） ====== -->
+    <!-- ====== 模型提供商（组织级凭据；卡片结构与凭据/模型配置交互照上游 QA 实证 2026-09-02） ====== -->
     <section class="page" id="view-providers" hidden>
       <div class="page-head">
         <div>
           <div class="page-title">模型提供商</div>
-          <div class="page-desc">组织统一凭据：对全部空间生效（无单独配置的空间兜底，含未来新建）；在「工作空间详情 → 集成」内配置则为该空间单独配置（优先于组织统一）。支持多凭据与逐模型开关；凭据全程掩码、密文挂锚租户 RSA。</div>
+          <div class="page-desc">组织统一凭据：对全部空间生效（无单独配置的空间兜底，含未来新建）；在「工作空间详情 → 集成」内配置则为该空间单独配置（优先于组织统一）。支持多凭据、按模型指定或负载均衡与逐模型开关；凭据全程掩码、密文挂锚租户 RSA。</div>
         </div>
-        <button class="btn btn-ghost" onclick="switchView('marketplace')" title="提供商插件的安装/升级经「安装插件」下拉或插件市场进行">
+        <button class="btn btn-ghost" style="flex:none;white-space:nowrap" onclick="switchView('marketplace')" title="提供商插件的安装/升级经「安装插件」下拉或插件市场进行">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
           安装提供商插件
         </button>
       </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>提供商</th><th>凭据</th><th>状态</th><th>更新时间</th><th style="text-align:right">操作</th></tr></thead>
-          <tbody id="provider-rows"></tbody>
-        </table>
-      </div>
+      <div id="provider-cards"></div>
     </section>
 
     <!-- ====== 插件市场（浏览与安装） ====== -->
@@ -459,90 +678,8 @@
   </main>
 </div>
 
-<!-- ============ 空间详情抽屉 ============ -->
+<!-- ============ 遮罩（弹窗与插件详情抽屉共用） ============ -->
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
-<aside class="drawer" id="drawer">
-  <button class="drawer-close" onclick="closeAll()">✕</button>
-  <div class="drawer-head">
-    <div style="display:flex;align-items:center;gap:12px">
-      <div class="ws-icon" id="d-ws-icon" style="width:38px;height:38px;font-size:16px">市</div>
-      <div>
-        <div style="font-size:17px;font-weight:700" id="d-ws-name">市场部</div>
-        <div style="margin-top:3px"><span class="pill pill-green"><span class="dot"></span>正常</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="drawer-tabs" id="drawer-tabs">
-    <button class="drawer-tab active" data-dtab="members">成员</button>
-    <button class="drawer-tab" data-dtab="integration">集成</button>
-    <button class="drawer-tab" data-dtab="info">基本信息</button>
-  </div>
-  <div class="drawer-body" data-dpane="members">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-      <button class="btn btn-ghost" style="height:30px;font-size:12.5px">+ 添加成员</button>
-    </div>
-    <div class="card">
-      <table>
-        <thead><tr><th>成员</th><th>邮箱</th><th>角色</th><th>加入时间</th><th style="text-align:right">操作</th></tr></thead>
-        <tbody id="d-member-rows"></tbody>
-      </table>
-    </div>
-    <div class="danger-zone">
-      <h4>危险操作</h4>
-      <p>归档后该空间的应用将不可访问，成员登录时将自动切换到其他可用空间。操作将记入审计日志。</p>
-      <button class="btn btn-danger" style="height:30px;font-size:12.5px" onclick="openModal('modal-archive')">归档此空间</button>
-    </div>
-  </div>
-  <div class="drawer-body" data-dpane="integration" hidden>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div class="side-section" style="padding:0">插件与工具</div>
-      <button class="btn btn-ghost" style="height:28px;font-size:12.5px" onclick="closeAll();switchView('marketplace')">+ 安装插件</button>
-    </div>
-    <div class="card" style="margin-bottom:16px">
-      <table>
-        <thead><tr><th>插件</th><th>类型</th><th>版本</th></tr></thead>
-        <tbody>
-          <tr class="clickable" onclick="openWorkspacePlugin('Google Search')">
-            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#FF8C00">G</div><span style="font-weight:600">Google Search</span></div></td>
-            <td><span class="pill pill-accent">工具</span></td><td class="mono">v1.3.2</td>
-          </tr>
-          <tr class="clickable" onclick="openWorkspacePlugin('钉钉机器人')">
-            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#6938EF">D</div><span style="font-weight:600">钉钉机器人</span></div></td>
-            <td><span class="pill pill-violet">触发器</span></td><td class="mono">v0.4.1</td>
-          </tr>
-          <tr class="clickable" onclick="openWorkspacePlugin('Notion')">
-            <td><div class="cell-main"><div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:#7A5AF8">N</div><span style="font-weight:600">Notion</span></div></td>
-            <td><span class="pill pill-green">数据源</span></td><td class="mono">v0.9.5</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="side-section" style="padding-left:0">凭据与授权</div>
-    <div class="card" style="margin-bottom:16px">
-      <table>
-        <thead><tr><th>配置项</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
-        <tbody>
-          <tr><td style="font-weight:600">Azure OpenAI</td><td><span class="pill pill-violet"><span class="dot"></span>组织统一</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Azure OpenAI')">单独配置</button></div></td></tr>
-          <tr><td style="font-weight:600">通义千问</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('通义千问')">单独配置</button></div></td></tr>
-          <tr><td style="font-weight:600">Anthropic</td><td><span class="pill pill-accent"><span class="dot"></span>单独配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('Anthropic')">编辑</button></div></td></tr>
-          <tr><td style="font-weight:600">DeepSeek</td><td><span class="pill pill-gray"><span class="dot"></span>未配置</span></td><td><div class="row-actions"><button class="link-btn" onclick="openWsCred('DeepSeek')">单独配置</button></div></td></tr>
-        </tbody>
-      </table>
-      <div class="notice notice-blue" style="margin:12px 16px 14px;font-size:12px">
-        配置位置即作用域：在此处配置 = 该空间单独配置（优先于组织统一，删除即回落）；未单独配置的空间使用「模型提供商」页的组织统一凭据。工具插件凭据一期为组织级、无单独配置入口。
-      </div>
-    </div>
-  </div>
-  <div class="drawer-body" data-dpane="info" hidden>
-    <dl class="kv">
-      <dt>空间 ID</dt><dd class="mono">7f3a9b2c-…-c21d</dd>
-      <dt>创建时间</dt><dd>2026-06-02</dd>
-      <dt>应用数</dt><dd>8</dd>
-      <dt>知识库数</dt><dd>4</dd>
-      <dt>成员数</dt><dd>6</dd>
-    </dl>
-  </div>
-</aside>
 
 <!-- ============ 插件详情抽屉（工作台同款：简介 + 能力清单 + 参数详情，无操作） ============ -->
 <aside class="drawer" id="plugin-drawer">
@@ -557,6 +694,21 @@
     </div>
   </div>
   <div class="drawer-body" id="pd-body"></div>
+</aside>
+
+<!-- ============ 模型清单抽屉（按类型分组；管理台版含操作列：凭据指定状态 + 配置 + 开关 + 添加模型） ============ -->
+<aside class="drawer" id="model-drawer">
+  <button class="drawer-close" onclick="closeModelDrawer()">✕</button>
+  <div class="drawer-head">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="ws-icon" id="md-icon" style="width:40px;height:40px;font-size:16px">A</div>
+      <div>
+        <div style="font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px"><span id="md-name">Azure OpenAI</span> <span id="md-scope"></span></div>
+        <div class="muted" style="margin-top:2px" id="md-meta"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-body" id="md-body"></div>
 </aside>
 
 <!-- ============ 弹窗：升级确认（安装流升级态：命中已管理插件时自动进入） ============ -->
@@ -729,59 +881,52 @@
   </div>
 </div>
 
-<!-- ============ 弹窗：配置凭据（组织统一，行内触发） ============ -->
-<div class="modal-wrap" id="modal-credential">
-  <div class="modal">
-    <h3 id="cred-title">配置凭据 · Azure OpenAI</h3>
-    <div class="modal-sub">组织统一凭据，对全部空间生效（无单独配置的空间兜底，含未来新建）。表单按供应商声明动态渲染（演示为 API Key）。</div>
-    <div class="field">
-      <label>凭据（可添加多个）</label>
-      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
-        <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-green">使用中</span><span class="mono">sk-…a9F2</span><span class="muted">default</span></div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-gray">备用</span><span class="mono">sk-…77Qz</span><span class="muted">backup</span></div>
-        <button class="btn btn-ghost" style="height:28px;font-size:12.5px;justify-content:flex-start">＋ 添加凭据</button>
+<!-- ============ 凭据管理浮层（照上游 Authorized popover：组织页与空间详情共用，作用域徽标区分） ============ -->
+<div class="cred-pop" id="cred-pop" hidden onclick="event.stopPropagation()"></div>
+
+<!-- ============ 弹窗：API 密钥授权配置（照上游 model-modal：schema 驱动字段 + 凭据命名 + 加密通栏） ============ -->
+<div class="modal-wrap" id="modal-cred-form">
+  <div class="modal modal-lg">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
+      <h3 id="cf-title" style="margin:0">API 密钥授权配置</h3>
+      <span id="cf-scope"></span>
+    </div>
+    <div class="modal-sub" id="cf-sub"></div>
+    <div id="cf-body"></div>
+    <div class="modal-foot" style="justify-content:space-between">
+      <button class="link-btn" id="cf-getlink" style="padding-left:0" onclick="event.preventDefault()">获取 API Key ↗</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+        <button class="btn btn-primary" onclick="closeAll()">保存</button>
       </div>
-      <div class="hint">可按模型指定使用哪个凭据，或开启轮询（负载均衡）；同一表单可添加多个并随时切换。</div>
     </div>
-    <div class="field">
-      <label>API Key（新凭据）</label>
-      <input class="input" type="password" placeholder="sk-…">
-      <div class="hint">保存后仅以脱敏形式展示（sk-…****），任何人不可再读取明文。</div>
-    </div>
-    <div class="field">
-      <label>模型清单与开关</label>
-      <div class="hint" style="margin-top:0">模型清单随凭据管理：逐模型启用/停用、添加自定义模型（此处从略，与上游供应商页同款）。</div>
-    </div>
-    <div class="notice notice-blue" style="margin-bottom:0">
-      <b>生效范围：组织统一</b> —— 对全部空间兜底；在「工作空间详情 → 集成」内配置则仅对该空间生效（单独配置优先，删除即回落组织统一）。
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
-      <button class="btn btn-primary" onclick="closeAll()">保存凭据</button>
+    <div class="enc-strip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+      您的密钥将使用 PKCS1_OAEP 技术进行加密和存储，保存后仅以脱敏形式展示。
     </div>
   </div>
 </div>
 
-<!-- ============ 弹窗：单独配置（空间详情集成 tab，仅对该空间生效） ============ -->
-<div class="modal-wrap" id="modal-ws-cred">
-  <div class="modal">
-    <h3 id="ws-cred-title">单独配置 · 市场部 · Azure OpenAI</h3>
-    <div class="modal-sub">在本空间详情内配置即只对该空间生效，优先于组织统一；删除单独配置后恢复使用组织统一凭据。多凭据、按模型切换与模型开关同组织级。</div>
-    <div class="field">
-      <label>当前来源</label>
-      <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
-        <span class="pill pill-violet"><span class="dot"></span>组织统一</span>
-        <span class="muted" style="font-size:12px">→ 保存后本空间将使用单独配置</span>
+<!-- ============ 弹窗：配置模型（照上游：由模型供应商管理 vs 负载均衡选择卡 + LB 凭据组） ============ -->
+<div class="modal-wrap" id="modal-model-cfg">
+  <div class="modal modal-lg">
+    <h3>配置模型</h3>
+    <div id="mc-model" style="display:flex;align-items:center;gap:8px;margin:4px 0 16px"></div>
+    <div class="sel-card on" id="mc-card-default" onclick="mcSelect(false)">
+      <div class="sel-card-icon" id="mc-icon-a"></div>
+      <div><div class="sel-card-t">由模型供应商管理</div><div class="sel-card-d">使用模型供应商提供的单组凭据（当前凭据，见凭据管理浮层）。</div></div>
+    </div>
+    <div class="sel-card" id="mc-card-lb" onclick="mcSelect(true)">
+      <div class="sel-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 7l7-4 7 4M5 7v6a3 3 0 006 0V7M19 7v6a3 3 0 01-6 0V7" transform="scale(0.9) translate(1.3 1.3)"/></svg>
       </div>
+      <div><div class="sel-card-t">负载均衡</div><div class="sel-card-d">为模型配置多组凭据，并自动调用。</div></div>
     </div>
-    <div class="field">
-      <label>API Key</label>
-      <input class="input" type="password" placeholder="sk-…">
-      <div class="hint">表单按供应商声明动态渲染；可添加多个凭据并按模型指定使用哪个（同组织级）。</div>
-    </div>
+    <div class="lb-list" id="mc-lb-list" hidden></div>
     <div class="modal-foot">
+      <span class="muted" id="mc-hint" style="margin-right:auto;font-size:12px" hidden>负载均衡至少启用 2 组凭据</span>
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
-      <button class="btn btn-primary" onclick="closeAll()">保存为该空间配置</button>
+      <button class="btn btn-primary" id="mc-save" onclick="closeAll()">保存</button>
     </div>
   </div>
 </div>
@@ -816,8 +961,8 @@
 <!-- ============ 弹窗：归档确认 ============ -->
 <div class="modal-wrap" id="modal-archive">
   <div class="modal">
-    <h3 style="color:var(--danger)">归档空间「市场部」？</h3>
-    <div class="modal-sub">归档后：空间内 8 个应用不可访问；6 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。</div>
+    <h3 style="color:var(--danger)" id="archive-title">归档空间「市场部」？</h3>
+    <div class="modal-sub" id="archive-sub">归档后：空间内 8 个应用不可访问；6 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。</div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeAll()">取消</button>
       <button class="btn btn-danger" onclick="closeAll()">确认归档</button>
@@ -837,12 +982,12 @@ const workspaces = [
   { name:'旧版客服项目', owner:'赵敏 · zhaomin@x.com', members:2, apps:11, status:'已归档', time:'2026-03-22', c:5 },
 ];
 const members = [
-  { name:'张伟', mail:'zhangwei@x.com', tags:[['市场部','owner'],['研发部','admin']], active:'5 分钟前', c:0 },
-  { name:'李娜', mail:'lina@x.com', tags:[['研发部','owner'],['数据团队','editor']], active:'12 分钟前', c:1 },
-  { name:'王强', mail:'wangqiang@x.com', tags:[['数据团队','owner']], active:'1 小时前', c:2 },
-  { name:'陈晨', mail:'chenchen@x.com', tags:[['客户成功','owner'],['市场部','editor']], active:'3 小时前', c:3 },
-  { name:'刘洋', mail:'liuyang@x.com', tags:[['外部协作-供应商A','owner'],['研发部','normal']], active:'昨天', c:4 },
-  { name:'赵敏', mail:'zhaomin@x.com', tags:[['旧版客服项目','owner'],['市场部','normal']], active:'3 天前', c:5 },
+  { name:'张伟', mail:'zhangwei@x.com', tags:[['市场部','owner','2026-06-02'],['研发部','admin','2026-06-10'],['数据团队','editor','2026-07-01'],['客户成功','normal','2026-07-18']], active:'5 分钟前', c:0 },
+  { name:'李娜', mail:'lina@x.com', tags:[['研发部','owner','2026-06-10'],['数据团队','editor','2026-07-01']], active:'12 分钟前', c:1 },
+  { name:'王强', mail:'wangqiang@x.com', tags:[['数据团队','owner','2026-07-01']], active:'1 小时前', c:2 },
+  { name:'陈晨', mail:'chenchen@x.com', tags:[['客户成功','owner','2026-07-18'],['市场部','editor','2026-07-20']], active:'3 小时前', c:3 },
+  { name:'刘洋', mail:'liuyang@x.com', tags:[['外部协作-供应商A','owner','2026-08-05'],['研发部','normal','2026-08-06']], active:'昨天', c:4 },
+  { name:'赵敏', mail:'zhaomin@x.com', tags:[['旧版客服项目','owner','2026-03-22'],['市场部','normal','2026-04-02']], active:'3 天前', c:5 },
 ];
 const admins = [
   { name:'张伟', mail:'zhangwei@x.com', source:'install', by:'—（/install）', time:'2026-08-01', c:0 },
@@ -918,13 +1063,34 @@ const integrations = [
         ] },
     ] },
 ];
+/* 模型提供商：卡片结构照上游 QA（2026-09-02 实证）。creds=[] 已装未配置；creds=null 插件未安装；overrides=已单独配置的空间数 */
 const providers = [
-  { name:'Azure OpenAI', key:'sk-…a9F2', status:'正常', scope:'全部空间', time:'2026-08-20', c:0 },
-  { name:'通义千问', key:'sk-…77Qz', status:'正常', scope:'指定空间 · 3', time:'2026-08-15', c:2 },
-  { name:'Ollama（内网）', key:'—', status:'未配置', scope:'研发部', time:'—', c:1 },
-  { name:'Anthropic', key:'sk-…X81c', status:'配额不足', scope:'全部空间', time:'2026-07-28', c:3 },
-  { name:'DeepSeek', key:'—', status:'未安装', scope:'—', time:'—', c:4 },
+  { name:'Azure OpenAI', ver:'0.0.27', types:['LLM','TEXT EMBEDDING'], c:0, overrides:2,
+    creds:[{name:'default',key:'sk-…a9F2',current:true},{name:'backup',key:'sk-…77Qz'}],
+    models:[
+      { n:'gpt-5', t:['LLM','CHAT','272K'], on:true, lb:2 },
+      { n:'gpt-5-mini', t:['LLM','CHAT','272K'], on:true },
+      { n:'text-embedding-3-large', t:['TEXT EMBEDDING'], on:false },
+    ] },
+  { name:'深度求索', ver:'0.0.20', types:['LLM'], c:4, overrides:1,
+    creds:[{name:'apikey',key:'sk-…9xQ1',current:true},{name:'key2',key:'sk-…m2Vv'}],
+    models:[
+      { n:'deepseek-v4-flash', t:['LLM','CHAT','1000K'], on:true },
+      { n:'deepseek-v4-pro', t:['LLM','CHAT','1000K'], on:true, lb:2 },
+    ] },
+  { name:'通义千问', ver:'0.1.5', types:['LLM','TEXT EMBEDDING','RERANK','TTS'], c:2, overrides:0,
+    creds:[{name:'prod-key',key:'sk-…3Kd8',current:true}],
+    models:[
+      { n:'qwen3-max', t:['LLM','CHAT','256K'], on:true },
+      { n:'qwen3-embedding', t:['TEXT EMBEDDING'], on:true },
+      { n:'qwen3-rerank', t:['RERANK'], on:false },
+    ] },
+  { name:'Anthropic', ver:'0.3.28', types:['LLM'], c:3, overrides:0, creds:[], models:[] },
+  { name:'Ollama（内网）', ver:'0.5.7', types:['LLM','TEXT EMBEDDING'], c:1, overrides:0, creds:[], models:[] },
+  { name:'Jina', ver:'0.0.8', types:['RERANK'], c:5, overrides:0, creds:null, models:[] },
 ];
+/* 空间单独配置凭据（演示：市场部 Anthropic 已单独配置一条） */
+const wsCreds = { 'Anthropic':[{name:'ws-prod',key:'sk-…X81c',current:true}] };
 const mkt = [
   { name:'OpenAI', desc:'GPT 系列模型，含 GPT-5、o 系列推理模型与 Embedding。', type:'模型', ver:'2.4.1', c:0 },
   { name:'Google Search', desc:'为 Agent 与工作流提供实时网页搜索能力。', type:'工具', ver:'1.4.0', c:1 },
@@ -949,7 +1115,7 @@ const statusPill = s => s==='正常'
   : `<span class="pill pill-gray"><span class="dot"></span>已归档</span>`;
 
 document.getElementById('ws-rows').innerHTML = workspaces.map((w,i)=>`
-  <tr class="clickable" onclick="openDrawer(${i})">
+  <tr class="clickable" onclick="openWorkspace(${i},'workspaces')">
     <td><div class="cell-main">${wsIcon(w)}<div><div class="cell-title">${w.name}</div><div class="cell-sub">${w.apps} 个应用</div></div></div></td>
     <td class="muted">${w.owner}</td>
     <td>${w.members}</td>
@@ -958,13 +1124,55 @@ document.getElementById('ws-rows').innerHTML = workspaces.map((w,i)=>`
     <td><div class="row-actions"><button class="link-btn">详情</button></div></td>
   </tr>`).join('');
 
-document.getElementById('member-rows').innerHTML = members.map(m=>`
-  <tr>
-    <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]}">${m.name[0]}</div><div><div class="cell-title">${m.name}</div><div class="cell-sub">${m.mail}</div></div></div></td>
-    <td>${m.tags.map(([ws,r])=>`<span class="pill pill-ws">${ws} · <b>${r}</b></span>`).join('')}</td>
-    <td class="muted">${m.active}</td>
-    <td><div class="row-actions"><button class="link-btn">查看空间</button></div></td>
-  </tr>`).join('');
+/* 成员页：行展开表格（点击行展开全量空间清单：空间名可点跳空间详情 + 角色徽标 + 加入时间；
+   徽标组超 3 折叠 +N；搜索/空间过滤联动——过滤后仅显示命中空间的行，展开区同样只列命中空间；
+   展开区为纯展示，管理动作收在空间详情成员 tab） */
+const rolePill = r => ({owner:'pill-accent',admin:'pill-violet',editor:'pill-green',normal:'pill-gray'}[r]||'pill-gray');
+let memberQ = '', memberWs = '全部空间';
+function memberVisible(m){
+  const q = memberQ.trim().toLowerCase();
+  if(q && !m.name.toLowerCase().includes(q) && !m.mail.toLowerCase().includes(q)) return false;
+  if(memberWs!=='全部空间' && !m.tags.some(t=>t[0]===memberWs)) return false;
+  return true;
+}
+function renderMembers(){
+  document.getElementById('member-ws').innerHTML = ['全部空间',...workspaces.map(w=>w.name)]
+    .map(n=>`<option${n===memberWs?' selected':''}>${n}</option>`).join('');
+  const list = members.map((m,i)=>({...m,i})).filter(memberVisible);
+  document.getElementById('member-rows').innerHTML = list.length ? list.map(m=>{
+    const lines = memberWs==='全部空间' ? m.tags : m.tags.filter(t=>t[0]===memberWs);
+    const badges = m.tags.slice(0,3).map(([ws,r])=>`<span class="pill pill-ws">${ws} · <b>${r}</b></span>`).join('')
+      + (m.tags.length>3 ? `<span class="pill pill-gray" title="还有 ${m.tags.length-3} 个空间，展开行查看全部">+${m.tags.length-3}</span>` : '');
+    return `
+    <tr class="clickable" id="member-${m.i}" onclick="toggleMember(${m.i})">
+      <td style="width:24px;padding-right:0"><span class="chev">›</span></td>
+      <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]}">${m.name[0]}</div><div><div class="cell-title">${m.name}</div><div class="cell-sub">${m.mail}</div></div></div></td>
+      <td>${badges}</td>
+      <td class="muted">${m.active}</td>
+    </tr>
+    <tr class="member-detail" id="member-d-${m.i}" hidden>
+      <td></td>
+      <td colspan="3">
+        <div class="ws-line-list">
+          <div class="ws-line-cap">共 ${m.tags.length} 个空间${memberWs!=='全部空间' ? `（已按空间过滤，仅显示命中项）` : ''} · 改角色 / 移除请进入对应空间详情的成员 tab</div>
+          ${lines.map(([ws,r,join])=>{
+            const w = workspaces.find(x=>x.name===ws) || {c:0};
+            return `<div class="ws-line">
+              <div class="ws-icon" style="width:24px;height:24px;font-size:11px;background:${palette[w.c]}">${ws[0]}</div>
+              <button class="link-btn ws-link" onclick="openWorkspaceByName('${ws}','members')">${ws}</button>
+              <span class="pill ${rolePill(r)}">${r}</span>
+              <span class="muted ws-line-join">加入于 ${join}</span>
+            </div>`}).join('')}
+        </div>
+      </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--text-3)">无匹配成员</td></tr>`;
+}
+function toggleMember(i){
+  document.getElementById('member-'+i).classList.toggle('open');
+  const d = document.getElementById('member-d-'+i); d.hidden = !d.hidden;
+}
+renderMembers();
 
 // 在位数 = DB 来源（grant + invite 含待激活）env 来源不可撤不参与
 /* 两级管理员：install=创始人（独占授予/撤销/转让，不可自撤、行内只有转让）；env 来源不可撤 */
@@ -997,24 +1205,196 @@ document.getElementById('integration-rows').innerHTML = integrations.map((g,i)=>
     <td><div class="row-actions" onclick="event.stopPropagation()"><button class="link-btn" onclick="openScopeModal(${i},'modify')">改范围</button><button class="link-btn danger" onclick="openRemoveModal(${i})">移除</button></div></td>
   </tr>`).join('');
 
-const providerStatus = p => ({
-  '正常':   `<span class="pill pill-green"><span class="dot"></span>正常</span>`,
-  '未配置': `<span class="pill pill-gray"><span class="dot"></span>未配置</span>`,
-  '未安装': `<span class="pill pill-gray">未安装</span>`,
-}[p.status] || `<span class="pill" style="background:#FFFAEB;color:#B54708"><span class="dot"></span>${p.status}</span>`);
-const providerOps = p => {
-  if (p.status==='未安装') return `<button class="link-btn" onclick="switchView('marketplace')">去安装</button>`;
-  if (p.status==='未配置') return `<button class="link-btn" onclick="openCred('${p.name}')">添加凭据</button>`;
-  return `<button class="link-btn" onclick="openCred('${p.name}')">编辑凭据</button><button class="link-btn danger">删除</button>`;
-};
-document.getElementById('provider-rows').innerHTML = providers.map(p=>`
-  <tr>
-    <td><div class="cell-main"><div class="ws-icon" style="background:${palette[p.c]}">${p.name[0]}</div><div class="cell-title">${p.name}</div></div></td>
-    <td class="mono">${p.key}</td>
-    <td>${providerStatus(p)}</td>
-    <td class="muted">${p.time}</td>
-    <td><div class="row-actions">${providerOps(p)}</div></td>
-  </tr>`).join('');
+/* 模型提供商卡片（照上游 QA：凭据面板三态 + 模型清单展开 + hover 配置 + 开关） */
+const ICON_CFG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><path d="M4 8h10M18 8h2M4 16h2M8 16h12"/><circle cx="16" cy="8" r="2"/><circle cx="6" cy="16" r="2"/></svg>';
+const ICON_INFO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
+const ICON_EDIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21l4-1L19.5 8.5a2.1 2.1 0 00-3-3L5 17l-1 4z"/></svg>';
+const ICON_TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/></svg>';
+function renderProviders(){
+  document.getElementById('provider-cards').innerHTML = providers.map((p,i)=>{
+    const installed = p.creds!==null, configured = installed && p.creds.length>0;
+    const cur = configured ? (p.creds.find(c=>c.current)||p.creds[0]) : null;
+    return `
+    <div class="pv-card">
+      <div class="pv-head">
+        <div class="ws-icon" style="width:36px;height:36px;border-radius:10px;background:${palette[p.c]}">${p.name[0]}</div>
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="pv-name">${p.name}</span>
+            <span class="pv-ver">${p.ver}</span>
+          </div>
+          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">${p.types.map(t=>`<span class="m-badge">${t}</span>`).join('')}</div>
+        </div>
+        <div class="cred-panel">
+          ${!installed
+            ? `<div class="cred-status warn">插件未安装</div><button class="btn btn-ghost" onclick="switchView('marketplace')">去安装</button>`
+            : configured
+              ? `<div class="cred-status"><span class="cdot"></span><span style="font-weight:600">${cur.name}</span>${p.creds.length>1?`<span class="muted" style="font-size:11px">等 ${p.creds.length} 个</span>`:''}</div>
+                 <button class="btn btn-ghost" onclick="openCredPop(event,${i},'org')">${ICON_CFG} 配置</button>`
+              : `<div class="cred-status warn">需要配置 API Key</div>
+                 <button class="btn btn-accent" onclick="openCredPop(event,${i},'org')">＋ 添加 API 密钥</button>`}
+        </div>
+      </div>
+      <div class="pv-scope">组织统一 · 对全部空间兜底（含未来新建）${p.overrides?` · <b>${p.overrides} 个空间已单独配置</b>`:''}</div>
+      ${installed && p.models.length ? `
+        <button class="pv-expander" onclick="openModelDrawer(${i})">${p.models.length} 个模型<span class="chev">›</span></button>`
+      : installed ? `<div class="pv-empty">${ICON_INFO} 请配置 API 密钥，添加模型。</div>` : ''}
+    </div>`;
+  }).join('');
+}
+/* 模型清单抽屉（与工作台设计稿 §3.3.1 同语言：按类型分组；管理台版含操作列——凭据指定状态 + 配置 + 开关 + 添加模型） */
+function openModelDrawer(pi){
+  const p = providers[pi];
+  const ic = document.getElementById('md-icon');
+  ic.style.background = palette[p.c]; ic.textContent = p.name[0];
+  document.getElementById('md-name').textContent = p.name;
+  document.getElementById('md-scope').innerHTML = `<span class="pill pill-violet"><span class="dot"></span>组织统一</span>`;
+  document.getElementById('md-meta').textContent = `${p.ver} · ${p.types.join(' / ')} · ${p.models.length} 个模型${p.overrides ? ` · ${p.overrides} 个空间已单独配置` : ''}`;
+  const groups = {};
+  p.models.forEach((m,mi)=>{ const g=m.t[0]; (groups[g] ??= []).push({...m,mi}); });
+  document.getElementById('md-body').innerHTML = Object.entries(groups).map(([g,list])=>`
+    <div class="side-section" style="padding-left:0">${g} · ${list.length}</div>
+    ${list.map(m=>`
+      <div class="model-row">
+        <span class="mono" style="font-size:13px;color:var(--text-1)">${m.n}</span>
+        ${m.t.slice(1).map(t=>`<span class="m-badge">${t}</span>`).join('')}
+        <span style="margin-left:auto">${m.lb?`<span class="pill pill-accent">负载均衡 · ${m.lb} 组</span>`:`<span class="muted" style="font-size:12px">供应商管理</span>`}</span>
+        <button class="link-btn" onclick="openModelConfig(${pi},${m.mi})">${ICON_CFG} 配置</button>
+        <button class="sw ${m.on?'on':''}" onclick="this.classList.toggle('on')"></button>
+      </div>`).join('')}`).join('') + `
+    <button class="btn btn-ghost" style="width:100%;margin-top:14px;height:32px;font-size:12.5px">＋ 添加模型</button>`;
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('model-drawer').classList.add('show');
+}
+function closeModelDrawer(){
+  document.getElementById('model-drawer').classList.remove('show');
+  const anyOpen = document.querySelector('.drawer.show, .modal-wrap.show');
+  if(!anyOpen) document.getElementById('overlay').classList.remove('show');
+}
+renderProviders();
+
+/* 凭据管理浮层（照上游 Authorized popover；scope='org' 组织统一 / 'ws' 空间详情单独配置，两级共用） */
+let popCtx = null;
+function openCredPop(e, pi, scope){
+  e.stopPropagation();
+  popCtx = { pi, scope };
+  if(!credListOf().length){ openCredForm(); return; }  // 无凭据直达表单（上游 triggerOnlyOpenModal 同款）
+  const pop = document.getElementById('cred-pop');
+  if(!pop.hidden && pop.dataset.pi==String(pi) && pop.dataset.scope===scope){ pop.hidden=true; popCtx=null; return; }
+  renderCredPop();
+  const r = e.currentTarget.getBoundingClientRect();
+  pop.style.top = (r.bottom+6)+'px';
+  pop.style.left = Math.max(12, r.right-288)+'px';
+  pop.dataset.pi = pi; pop.dataset.scope = scope;
+  pop.hidden = false;
+}
+function openWsCredPop(e, name){
+  const map = { 'Azure OpenAI':0, '深度求索':1, '通义千问':2, 'Anthropic':3, 'DeepSeek':1 };
+  openCredPop(e, map[name] ?? 0, 'ws');
+}
+function credListOf(){ const { pi, scope } = popCtx; return scope==='ws' ? (wsCreds[providers[pi].name] ??= []) : providers[pi].creds; }
+function renderCredPop(){
+  const { pi, scope } = popCtx, isWs = scope==='ws';
+  const list = credListOf();
+  document.getElementById('cred-pop').innerHTML = `
+    <div class="cred-pop-title">API 密钥 · ${isWs ? `市场部 · <span style="color:var(--accent-deep)">单独配置</span>` : '组织统一'}</div>
+    ${list.length ? list.map((c,ci)=>`
+      <div class="cred-item" onclick="selectCred(${ci})">
+        <span style="width:14px;flex:none;color:var(--accent-deep);font-weight:700">${c.current?'✓':''}</span>
+        <span class="cdot" style="width:6px;height:6px;border-radius:50%;background:var(--success);flex:none"></span>
+        <span style="font-weight:600">${c.name}</span>
+        <span class="mono muted" style="font-size:11px">${c.key}</span>
+        <span class="ci-act">
+          <button class="ci-btn" title="编辑" onclick="event.stopPropagation();openCredForm(${ci})">${ICON_EDIT}</button>
+          <button class="ci-btn danger" title="删除" onclick="event.stopPropagation();delCred(${ci})">${ICON_TRASH}</button>
+        </span>
+      </div>`).join('')
+    : `<div style="padding:8px 10px;font-size:12.5px;color:var(--text-3)">${isWs?'该空间尚未单独配置凭据':'尚未配置凭据'}</div>`}
+    <button class="btn btn-ghost cred-pop-add" onclick="event.stopPropagation();openCredForm()">＋ 添加 API 密钥</button>
+    <div class="cred-pop-hint">${isWs?'单独配置仅对市场部生效、优先于组织统一；删除全部凭据即回落组织统一。':'组织统一凭据，对全部空间兜底（含未来新建）。'}</div>`;
+}
+function selectCred(ci){
+  credListOf().forEach((c,k)=>c.current = k===ci);
+  document.getElementById('cred-pop').hidden = true; popCtx = null;
+  renderProviders();
+}
+function delCred(ci){
+  credListOf().splice(ci,1);
+  renderCredPop(); renderProviders();
+}
+
+/* API 密钥授权配置弹窗（照上游 model-modal：schema 驱动字段——Azure 多字段演示 / 其他 API Key + Base URL） */
+function openCredForm(ci){
+  const { pi, scope } = popCtx, p = providers[pi], isWs = scope==='ws';
+  const cred = ci!==undefined ? credListOf()[ci] : null;
+  const azure = p.name.includes('Azure');
+  document.getElementById('cf-title').textContent = cred ? `编辑凭据 · ${p.name}` : 'API 密钥授权配置';
+  document.getElementById('cf-scope').innerHTML = isWs
+    ? `<span class="pill pill-accent"><span class="dot"></span>市场部 · 单独配置</span>`
+    : `<span class="pill pill-violet"><span class="dot"></span>组织统一</span>`;
+  document.getElementById('cf-sub').innerHTML = isWs
+    ? `为 <b>市场部</b> 单独配置 ${p.name} 凭据：存在即生效、优先于组织统一，删除即回落。表单按供应商声明动态渲染（演示为 ${azure?'Azure OpenAI':'DeepSeek'} schema）。`
+    : `配置后作为<b>组织统一</b>凭据，对全部空间兜底（含未来新建）。表单按供应商声明动态渲染（演示为 ${azure?'Azure OpenAI':'DeepSeek'} schema）。`;
+  document.getElementById('cf-body').innerHTML = `
+    <div class="field"><label>凭据名称</label><input class="input" style="width:100%;padding-left:12px" placeholder="请输入" value="${cred?cred.name:''}"></div>
+    ${azure ? `
+    <div class="field"><label>API Base（Endpoint）<span style="color:var(--danger)">*</span></label><input class="input" style="width:100%;padding-left:12px" placeholder="https://your-resource.openai.azure.com/"></div>
+    <div class="field"><label>API Version <span style="color:var(--danger)">*</span></label><select class="select" style="width:100%"><option>2025-04-01-preview</option><option>2024-12-01-preview</option><option>2024-10-21</option></select></div>` : ''}
+    <div class="field"><label>API Key <span style="color:var(--danger)">*</span></label><input class="input" type="password" style="width:100%;padding-left:12px" placeholder="${cred?'已加密存储，保持不变请留空':'在此输入您的 API Key'}">
+      <div class="hint">保存后仅以脱敏形式展示（sk-…****），任何人不可再读取明文。</div></div>
+    ${azure ? '' : `<div class="field"><label>API Base URL</label><input class="input" style="width:100%;padding-left:12px" placeholder="Base URL, e.g. https://api.deepseek.com/v1"></div>`}`;
+  document.getElementById('cf-getlink').textContent = `从 ${p.name} 获取 API Key ↗`;
+  document.getElementById('cred-pop').hidden = true;
+  openModal('modal-cred-form');
+}
+
+/* 配置模型弹窗（照上游 model-load-balancing-modal：供应商管理 vs 负载均衡选择卡 + LB 凭据组，<2 组启用不可保存） */
+let mcPI = 0;
+function openModelConfig(pi, mi){
+  mcPI = pi;
+  const p = providers[pi], m = p.models[mi];
+  document.getElementById('mc-icon-a').innerHTML = `<div class="ws-icon" style="width:20px;height:20px;font-size:10px;background:${palette[p.c]}">${p.name[0]}</div>`;
+  document.getElementById('mc-model').innerHTML = `
+    <div class="ws-icon" style="width:26px;height:26px;font-size:12px;background:${palette[p.c]}">${p.name[0]}</div>
+    <span class="mono" style="font-size:13.5px;font-weight:600">${m.n}</span>
+    ${m.t.map(t=>`<span class="m-badge">${t}</span>`).join('')}`;
+  mcSelect(!!m.lb);
+  openModal('modal-model-cfg');
+}
+function lbRowHtml(c, creds, on){
+  return `
+    <div class="lb-row">
+      <span class="mono muted" style="font-size:12px">${c.key}</span>
+      <select class="select" style="height:30px;flex:1">${creds.map(x=>`<option${x.name===c.name?' selected':''}>${x.name}</option>`).join('')}</select>
+      <button class="sw ${on?'on':''}" onclick="this.classList.toggle('on');mcUpdateSave()"></button>
+      <button class="ci-btn danger" title="移除" onclick="this.closest('.lb-row').remove();mcUpdateSave()">${ICON_TRASH}</button>
+    </div>`;
+}
+function mcSelect(lb){
+  document.getElementById('mc-card-default').classList.toggle('on', !lb);
+  document.getElementById('mc-card-lb').classList.toggle('on', lb);
+  const list = document.getElementById('mc-lb-list');
+  list.hidden = !lb;
+  if(lb){
+    const creds = providers[mcPI].creds;
+    list.innerHTML = creds.map((c,k)=>lbRowHtml(c, creds, true)).join('')
+      + `<button class="link-btn" style="font-size:12.5px" onclick="mcAddRow()">＋ 添加凭据</button>`;
+  }
+  mcUpdateSave();
+}
+function mcAddRow(){
+  const creds = providers[mcPI].creds;
+  document.getElementById('mc-lb-list').insertAdjacentHTML('afterbegin', lbRowHtml(creds[0], creds, true));
+  mcUpdateSave();
+}
+function mcUpdateSave(){
+  const lb = !document.getElementById('mc-lb-list').hidden;
+  const n = lb ? document.querySelectorAll('#mc-lb-list .lb-row .sw.on').length : 0;
+  const bad = lb && n<2;
+  document.getElementById('mc-save').disabled = bad;
+  document.getElementById('mc-save').style.opacity = bad?'.5':'';
+  document.getElementById('mc-hint').hidden = !bad;
+}
 
 document.getElementById('mkt-grid').innerHTML = mkt.map(p=>{
   const managed = integrations.find(x=>x.name===p.name);
@@ -1044,10 +1424,12 @@ document.getElementById('audit-rows').innerHTML = audits.map((a,i)=>`
   <tr class="audit-detail" id="audit-d-${i}" hidden><td></td><td colspan="4"><div class="audit-json">${a.d}</div></td></tr>`).join('');
 
 /* ---------- Interactions ---------- */
-const views = ['workspaces','members','plugins','providers','marketplace','admins','audit'];
+const views = ['workspaces','ws-detail','members','plugins','providers','marketplace','admins','audit'];
 function switchView(v){
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  const navKey = v==='ws-detail' ? 'workspaces' : v;   // 空间详情页归属「工作空间」导航高亮
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===navKey));
   views.forEach(x=>document.getElementById('view-'+x).hidden = x!==v);
+  document.querySelector('.main').scrollTop = 0;
 }
 document.getElementById('nav').addEventListener('click', e=>{
   const btn = e.target.closest('.nav-item'); if(!btn) return;
@@ -1059,12 +1441,33 @@ function toggleInstallMenu(e){
   const m = document.getElementById('install-menu');
   if(m) m.hidden = !m.hidden;
 }
-document.addEventListener('click', ()=>{ const m = document.getElementById('install-menu'); if(m) m.hidden = true; });
-/* 抽屉 tab 切换 */
-document.getElementById('drawer-tabs').addEventListener('click', e=>{
-  const t = e.target.closest('[data-dtab]'); if(!t) return;
-  document.querySelectorAll('#drawer-tabs [data-dtab]').forEach(x=>x.classList.toggle('active', x===t));
-  document.querySelectorAll('[data-dpane]').forEach(p=>p.hidden = p.dataset.dpane!==t.dataset.dtab);
+document.addEventListener('click', ()=>{
+  const m = document.getElementById('install-menu'); if(m) m.hidden = true;
+  const cp = document.getElementById('cred-pop'); if(cp && !cp.hidden){ cp.hidden = true; popCtx = null; }
+  const am = document.getElementById('account-menu'); if(am) am.classList.remove('open');
+});
+/* 导航分组收起/展开（管理=整组；集成=二级子项） */
+function toggleNavGroup(g){
+  if(g==='manage'){
+    const nav = document.getElementById('nav');
+    nav.hidden = !nav.hidden;
+    document.querySelector('#tg-manage .chev').classList.toggle('open', !nav.hidden);
+  } else {
+    const sub = document.getElementById('nav-sub-integration');
+    sub.hidden = !sub.hidden;
+    document.querySelector('#tg-integration .chev').classList.toggle('open', !sub.hidden);
+  }
+}
+/* 头像下拉菜单 */
+function toggleAccountMenu(e){
+  e.stopPropagation();
+  document.getElementById('account-menu').classList.toggle('open');
+}
+/* 空间详情页内 tab 切换 */
+document.getElementById('ws-tabs').addEventListener('click', e=>{
+  const t = e.target.closest('[data-wtab]'); if(!t) return;
+  document.querySelectorAll('#ws-tabs [data-wtab]').forEach(x=>x.classList.toggle('active', x===t));
+  document.querySelectorAll('[data-wpane]').forEach(p=>p.hidden = p.dataset.wpane!==t.dataset.wtab);
 });
 
 /* 市场安装 → 范围选择弹窗（安装模式） */
@@ -1083,16 +1486,6 @@ function openScopeModal(i, mode){
     document.getElementById('scope-confirm').textContent = '保存范围';
   }
   openModal('modal-scope');
-}
-/* 行内凭据弹窗 */
-function openCred(name){
-  document.getElementById('cred-title').textContent = `配置凭据 · ${name}`;
-  openModal('modal-credential');
-}
-/* 空间级模型配置（单独覆盖） */
-function openWsCred(name){
-  document.getElementById('ws-cred-title').textContent = `单独配置 · ${name}`;
-  openModal('modal-ws-cred');
 }
 /* 插件详情抽屉（工作台同款：简介 + 能力清单 + 参数详情，无操作；操作留在表格行内） */
 let curPlugin = 0;
@@ -1200,30 +1593,48 @@ function openTransfer(i){
   openModal('modal-transfer');
 }
 
-function openDrawer(i){
+/* 空间详情：页级视图（入口=空间列表行 / 成员页展开区空间名；返回回到来源视图） */
+let wsFrom = 'workspaces';
+function openWorkspace(i, from){
   const w = workspaces[i];
+  wsFrom = from || 'workspaces';
   document.getElementById('d-ws-name').textContent = w.name;
   const ic = document.getElementById('d-ws-icon');
   ic.style.background = palette[w.c]; ic.textContent = w.name[0];
+  document.getElementById('d-ws-status').innerHTML = statusPill(w.status);
+  document.getElementById('d-ws-meta').textContent = `Owner：${w.owner} · ${w.members} 名成员 · ${w.apps} 个应用 · 创建于 ${w.time}`;
+  document.getElementById('d-kv-time').textContent = w.time;
+  document.getElementById('d-kv-apps').textContent = w.apps;
+  document.getElementById('d-kv-members').textContent = w.members;
+  document.getElementById('archive-title').textContent = `归档空间「${w.name}」？`;
+  document.getElementById('archive-sub').textContent = `归档后：空间内 ${w.apps} 个应用不可访问；${w.members} 名成员登录时将自动切换到其他可用空间。此操作可从空间详情恢复。`;
   document.getElementById('d-member-rows').innerHTML = members.slice(0,4).map((m,idx)=>`
     <tr>
       <td><div class="cell-main"><div class="avatar" style="background:${palette[m.c]};width:26px;height:26px;font-size:11px">${m.name[0]}</div><div><div class="cell-title" style="font-size:13px">${m.name}</div></div></div></td>
       <td class="muted mono" style="font-size:12px">${m.mail}</td>
-      <td><span class="pill pill-accent">${['owner','admin','editor','normal'][idx%4]}</span></td>
+      <td><span class="pill ${rolePill(['owner','admin','editor','normal'][idx%4])}">${['owner','admin','editor','normal'][idx%4]}</span></td>
       <td class="muted">${['2026-06-02','2026-06-15','2026-07-01','2026-07-20'][idx]}</td>
       <td><div class="row-actions"><button class="link-btn">改角色</button><button class="link-btn danger">移除</button></div></td>
     </tr>`).join('');
-  document.getElementById('overlay').classList.add('show');
-  document.getElementById('drawer').classList.add('show');
+  // 每次进入重置到「成员」tab
+  document.querySelectorAll('#ws-tabs [data-wtab]').forEach(x=>x.classList.toggle('active', x.dataset.wtab==='members'));
+  document.querySelectorAll('[data-wpane]').forEach(p=>p.hidden = p.dataset.wpane!=='members');
+  switchView('ws-detail');
 }
+function openWorkspaceByName(name, from){
+  const i = workspaces.findIndex(w=>w.name===name);
+  if(i>=0) openWorkspace(i, from);
+}
+function backFromWorkspace(){ switchView(wsFrom); }
 function openModal(id){
   document.getElementById('overlay').classList.add('show');
   document.getElementById(id).classList.add('show');
 }
 function closeAll(){
   document.getElementById('overlay').classList.remove('show');
-  document.getElementById('drawer').classList.remove('show');
   document.getElementById('plugin-drawer').classList.remove('show');
+  document.getElementById('model-drawer').classList.remove('show');
+  const cp = document.getElementById('cred-pop'); cp.hidden = true; popCtx = null;
   document.querySelectorAll('.modal-wrap').forEach(m=>m.classList.remove('show'));
 }
 function toggleAudit(i){
