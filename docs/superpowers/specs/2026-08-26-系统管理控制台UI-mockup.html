@@ -49,27 +49,53 @@
 
   /* ===== Sidebar ===== */
   .side { width:232px; flex:none; background:var(--bg); border-right:1px solid var(--border); display:flex; flex-direction:column; }
-  .side-brand { display:flex; align-items:center; gap:10px; padding:18px 16px 14px; }
+  .side-brand { display:flex; align-items:center; gap:10px; padding:16px 16px 15px; border-bottom:1px solid var(--border); margin-bottom:10px; }
   .side-logo { width:30px; height:30px; border-radius:9px; background:var(--text-1); display:grid; place-items:center; color:#fff; font-weight:800; font-size:15px; flex:none; }
   .side-brand-name { font-weight:800; font-size:15px; letter-spacing:-.2px; }
-  .side-brand-tag { font-size:11px; color:var(--text-3); }
+  .side-brand-tag { font-size:10px; color:var(--text-3); letter-spacing:.06em; margin-top:1px; }
   .side-section { padding:6px 12px 4px; font-size:10.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; }
   .nav { padding:2px 10px; display:flex; flex-direction:column; gap:2px; }
-  .nav-item { display:flex; align-items:center; gap:10px; padding:0 12px; height:36px; border-radius:10px; color:var(--text-2); font-weight:500; border:0; background:none; width:100%; text-align:left; font-size:14px; transition:background .12s,color .12s; position:relative; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:0 12px; height:36px; border-radius:10px; color:var(--text-2); font-weight:500; border:0; background:none; width:100%; text-align:left; font-size:14px; transition:background .12s,color .12s,box-shadow .12s; position:relative; }
   .nav-item svg { width:18px; height:18px; flex:none; }
   .nav-item:hover { background:var(--bg-soft); color:var(--text-1); }
-  .nav-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
-  .nav-item.active::before { content:""; position:absolute; left:-10px; top:8px; bottom:8px; width:3px; border-radius:3px; background:var(--accent); }
+  .nav-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:600; box-shadow:inset 0 0 0 1px rgb(255 140 0 / .16); }
   .nav-group-label { padding:10px 12px 4px; font-size:10.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; }
-  .nav-sub { padding-left:22px; }
-  .nav-sub .nav-item { height:30px; font-size:13px; padding:0 12px; }
-  .nav-sub .nav-item.active::before { display:none; }
+  .nav-item .chev { margin-left:auto; font-size:12px; color:var(--text-3); }
+  .nav-tree { margin:2px 2px 0 20px; padding-left:10px; border-left:1px solid var(--border); }
+  .nav-tree .nav-item { height:32px; font-size:13px; padding:0 10px; border-radius:8px; }
   .side-foot { margin-top:auto; padding:10px 12px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px; }
 
-  /* 导航分组可收起 */
-  .side-section.nav-toggle, .nav-group-label.nav-toggle { cursor:pointer; display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:0; text-align:left; font-family:inherit; }
-  .side-section.nav-toggle:hover, .nav-group-label.nav-toggle:hover { color:var(--text-1); }
-  .nav-toggle .chev { font-size:11px; }
+  /* 导航分组可收起（集成=普通一级项样式 + 右侧 chevron；grid-rows 平滑动画） */
+  .nav-toggle { cursor:pointer; }
+  .nav-group { display:grid; grid-template-rows:1fr; transition:grid-template-rows .18s ease; }
+  .nav-group.closed { grid-template-rows:0fr; }
+  .nav-group-inner { display:flex; flex-direction:column; gap:2px; overflow:hidden; min-height:0; }
+
+  /* 偏好设置 / 外观弹窗 */
+  .modal-title-row { display:flex; align-items:center; gap:10px; margin-bottom:2px; }
+  .modal-ico { width:30px; height:30px; border-radius:9px; background:var(--accent-soft); color:var(--accent-deep); display:grid; place-items:center; flex:none; }
+  .modal-ico svg { width:15px; height:15px; }
+  .pref-group { border:1px solid var(--border); border-radius:12px; padding:2px 14px; }
+  .pref-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; }
+  .pref-row + .pref-row { border-top:1px solid var(--border); }
+  .pref-ico { width:15px; height:15px; color:var(--text-3); flex:none; }
+  .pref-label-t { font-size:13px; font-weight:600; color:var(--text-1); }
+  .pref-hint { font-size:11.5px; color:var(--text-3); margin-top:2px; }
+  .theme-row { display:flex; gap:10px; }
+  .theme-card { position:relative; flex:1; border:1.5px solid var(--border); border-radius:12px; padding:10px; cursor:pointer; text-align:center; font-size:12.5px; font-weight:600; color:var(--text-2); background:#fff; transition:border-color .12s, box-shadow .12s; }
+  .theme-card:hover { border-color:var(--border-strong); }
+  .theme-card.on { border-color:var(--accent); color:var(--accent-deep); box-shadow:0 0 0 3px var(--accent-soft); }
+  .theme-card.on::after { content:"✓"; position:absolute; top:-7px; right:-7px; width:18px; height:18px; border-radius:50%; background:var(--accent); color:#fff; font-size:10px; font-weight:700; display:grid; place-items:center; box-shadow:0 1px 3px rgb(0 0 0 / .18); }
+  .theme-ui { height:56px; border-radius:8px; border:1px solid var(--border); display:flex; overflow:hidden; margin-bottom:8px; background:#fff; }
+  .theme-ui .tu-side { width:26%; flex:none; background:#F4F4F6; border-right:1px solid var(--border); }
+  .theme-ui .tu-main { flex:1; padding:9px 8px; display:flex; flex-direction:column; gap:5px; }
+  .theme-ui .tu-main i { display:block; height:4px; border-radius:2px; background:#E4E4E8; }
+  .theme-ui .tu-main i.short { width:55%; }
+  .theme-ui.dark { background:#17171A; border-color:#2A2A2E; }
+  .theme-ui.dark .tu-side { background:#202024; border-right-color:#2A2A2E; }
+  .theme-ui.dark .tu-main i { background:#333338; }
+  .theme-ui.auto .tu-main { background:#17171A; }
+  .theme-ui.auto .tu-main i { background:#333338; }
 
   /* 头像下拉菜单（偏好设置/外观/版本/登出） */
   .dropdown { position:relative; flex:1; }
@@ -168,8 +194,8 @@
   .drawer-body { flex:1; overflow-y:auto; padding:18px 24px 24px; }
 
   /* ===== 页级空间详情视图（返回 + 空间头 + 页内 tab） ===== */
-  .back-btn { display:inline-flex; align-items:center; gap:5px; border:0; background:none; font-size:13px; font-weight:600; color:var(--text-3); padding:5px 8px; margin:0 0 14px -8px; border-radius:8px; }
-  .back-btn:hover { color:var(--text-1); background:var(--bg-soft); }
+  .back-btn { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--border); background:#fff; font-size:12.5px; font-weight:600; color:var(--text-2); padding:6px 12px; margin:0 0 16px; border-radius:9px; box-shadow:var(--shadow-xs); transition:border-color .12s, color .12s; cursor:pointer; }
+  .back-btn:hover { color:var(--text-1); border-color:var(--text-3); }
   .ws-head { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
   .page-tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:18px; }
   .page-tab { border:0; background:none; padding:10px 4px; margin-right:18px; font-size:13.5px; font-weight:600; color:var(--text-3); border-bottom:2px solid transparent; cursor:pointer; }
@@ -322,7 +348,6 @@
         <div class="side-brand-tag">System Administration</div>
       </div>
     </div>
-    <button class="side-section nav-toggle" id="tg-manage" onclick="toggleNavGroup('manage')">管理<span class="chev open">›</span></button>
     <nav class="nav" id="nav">
       <button class="nav-item active" data-view="workspaces">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
@@ -332,21 +357,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="16.8" cy="9" r="2.4"/><path d="M16 14.7c2.3.2 3.9 1.5 4.5 4"/></svg>
         成员
       </button>
-      <button class="nav-group-label nav-toggle" id="tg-integration" onclick="toggleNavGroup('integration')">集成<span class="chev open">›</span></button>
-      <div class="nav-sub" id="nav-sub-integration">
-        <button class="nav-item" data-view="plugins">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
-          插件管理
-        </button>
-        <button class="nav-item" data-view="providers">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
-          模型提供商
-        </button>
-      </div>
-      <button class="nav-item" data-view="marketplace">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7l1.5-3.5h13L20 7M4 7h16v3a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-1.5.5A2.5 2.5 0 014 10V7z"/><path d="M5.5 12.5V20h13v-7.5" stroke-linecap="round"/></svg>
-        插件市场
-      </button>
       <button class="nav-item" data-view="admins">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
         系统管理员
@@ -355,6 +365,25 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9.5 12h6M9.5 15.5h6"/></svg>
         审计日志
       </button>
+      <button class="nav-item nav-toggle" id="tg-integration" onclick="toggleNavGroup('integration')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
+        集成
+        <span class="chev open">›</span>
+      </button>
+      <div class="nav-group" id="group-integration"><div class="nav-group-inner nav-tree">
+        <button class="nav-item" data-view="plugins">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4a2 2 0 014 0v1.5h3A1.5 1.5 0 0117.5 7v3H19a2 2 0 010 4h-1.5v3a1.5 1.5 0 01-1.5 1.5h-3V20a2 2 0 01-4 0v-1.5H7A1.5 1.5 0 015.5 17v-3H4a2 2 0 010-4h1.5V7A1.5 1.5 0 017 5.5h3V4z" transform="translate(0.5 0) scale(0.96)"/></svg>
+          插件管理
+        </button>
+        <button class="nav-item" data-view="providers">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a5 5 0 015 5c2.5.5 4 2.2 4 4.5A4.5 4.5 0 0116.5 17h-9A4.5 4.5 0 013 12.5C3 10.2 4.5 8.5 7 8a5 5 0 015-5z"/><path d="M8 21h8" stroke-linecap="round"/></svg>
+          模型提供商
+        </button>
+        <button class="nav-item" data-view="marketplace">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7l1.5-3.5h13L20 7M4 7h16v3a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0 2.5 2.5 0 01-1.5.5A2.5 2.5 0 014 10V7z"/><path d="M5.5 12.5V20h13v-7.5" stroke-linecap="round"/></svg>
+          插件市场
+        </button>
+      </div></div>
     </nav>
     <div class="side-foot">
       <div class="dropdown">
@@ -375,11 +404,11 @@
             </div>
           </div>
           <div class="dm-section">
-            <button class="dm-item">
+            <button class="dm-item" onclick="openModal('modal-prefs')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h10M18 8h2M4 16h4M12 16h8" stroke-linecap="round"/><circle cx="16" cy="8" r="2.2"/><circle cx="10" cy="16" r="2.2"/></svg>
               偏好设置
             </button>
-            <button class="dm-item">
+            <button class="dm-item" onclick="openModal('modal-appearance')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg>
               外观
             </button>
@@ -958,6 +987,73 @@
   </div>
 </div>
 
+<!-- ============ 弹窗：偏好设置（头像菜单） ============ -->
+<div class="modal-wrap" id="modal-prefs">
+  <div class="modal">
+    <div class="modal-title-row">
+      <div class="modal-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h10M18 8h2M4 16h4M12 16h8" stroke-linecap="round"/><circle cx="16" cy="8" r="2.2"/><circle cx="10" cy="16" r="2.2"/></svg></div>
+      <h3 style="margin:0">偏好设置</h3>
+    </div>
+    <div class="modal-sub">仅作用于当前账号在系统管理控制台的体验。</div>
+    <div class="pref-group">
+      <div class="pref-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg class="pref-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9S14.5 18.4 12 21c-2.5-2.6-3.9-5.7-3.9-9S9.5 5.6 12 3z"/></svg>
+          <div><div class="pref-label-t">界面语言</div><div class="pref-hint">控制台界面显示语言</div></div>
+        </div>
+        <select class="select" style="height:30px"><option>简体中文</option><option>English</option></select>
+      </div>
+      <div class="pref-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg class="pref-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M10.3 21a1.94 1.94 0 003.4 0"/></svg>
+          <div><div class="pref-label-t">浏览器通知</div><div class="pref-hint">插件分发波次失败等异常实时提醒</div></div>
+        </div>
+        <button class="sw on" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="pref-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg class="pref-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <div><div class="pref-label-t">每周审计摘要邮件</div><div class="pref-hint">每周一发送上周管理操作摘要</div></div>
+        </div>
+        <button class="sw" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 弹窗：外观（头像菜单） ============ -->
+<div class="modal-wrap" id="modal-appearance">
+  <div class="modal">
+    <div class="modal-title-row">
+      <div class="modal-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></div>
+      <h3 style="margin:0">外观</h3>
+    </div>
+    <div class="modal-sub">选择控制台的主题外观。</div>
+    <div class="theme-row" id="theme-row">
+      <div class="theme-card on" data-theme="light">
+        <div class="theme-ui"><div class="tu-side"></div><div class="tu-main"><i></i><i></i><i class="short"></i></div></div>
+        浅色
+      </div>
+      <div class="theme-card" data-theme="dark">
+        <div class="theme-ui dark"><div class="tu-side"></div><div class="tu-main"><i></i><i></i><i class="short"></i></div></div>
+        深色
+      </div>
+      <div class="theme-card" data-theme="auto">
+        <div class="theme-ui auto"><div class="tu-side"></div><div class="tu-main"><i></i><i></i><i class="short"></i></div></div>
+        跟随系统
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeAll()">取消</button>
+      <button class="btn btn-primary" onclick="closeAll()">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 弹窗：归档确认 ============ -->
 <div class="modal-wrap" id="modal-archive">
   <div class="modal">
@@ -1432,7 +1528,7 @@ function switchView(v){
   document.querySelector('.main').scrollTop = 0;
 }
 document.getElementById('nav').addEventListener('click', e=>{
-  const btn = e.target.closest('.nav-item'); if(!btn) return;
+  const btn = e.target.closest('.nav-item'); if(!btn || !btn.dataset.view) return;
   switchView(btn.dataset.view);
 });
 /* 安装插件下拉（三源：插件市场跳页 / GitHub / 本地集成包） */
@@ -1446,23 +1542,22 @@ document.addEventListener('click', ()=>{
   const cp = document.getElementById('cred-pop'); if(cp && !cp.hidden){ cp.hidden = true; popCtx = null; }
   const am = document.getElementById('account-menu'); if(am) am.classList.remove('open');
 });
-/* 导航分组收起/展开（管理=整组；集成=二级子项） */
+/* 导航分组收起/展开（仅「集成」组；grid-rows 平滑动画） */
 function toggleNavGroup(g){
-  if(g==='manage'){
-    const nav = document.getElementById('nav');
-    nav.hidden = !nav.hidden;
-    document.querySelector('#tg-manage .chev').classList.toggle('open', !nav.hidden);
-  } else {
-    const sub = document.getElementById('nav-sub-integration');
-    sub.hidden = !sub.hidden;
-    document.querySelector('#tg-integration .chev').classList.toggle('open', !sub.hidden);
-  }
+  const grp = document.getElementById('group-'+g);
+  const closed = grp.classList.toggle('closed');
+  document.querySelector('#tg-'+g+' .chev').classList.toggle('open', !closed);
 }
 /* 头像下拉菜单 */
 function toggleAccountMenu(e){
   e.stopPropagation();
   document.getElementById('account-menu').classList.toggle('open');
 }
+/* 外观弹窗主题卡单选 */
+document.getElementById('theme-row').addEventListener('click', e=>{
+  const c = e.target.closest('.theme-card'); if(!c) return;
+  document.querySelectorAll('#theme-row .theme-card').forEach(x=>x.classList.toggle('on', x===c));
+});
 /* 空间详情页内 tab 切换 */
 document.getElementById('ws-tabs').addEventListener('click', e=>{
   const t = e.target.closest('[data-wtab]'); if(!t) return;
@@ -1619,13 +1714,17 @@ function openWorkspace(i, from){
   // 每次进入重置到「成员」tab
   document.querySelectorAll('#ws-tabs [data-wtab]').forEach(x=>x.classList.toggle('active', x.dataset.wtab==='members'));
   document.querySelectorAll('[data-wpane]').forEach(p=>p.hidden = p.dataset.wpane!=='members');
+  document.querySelector('.side').style.display = 'none';  // 详情全屏：隐藏左侧导航
   switchView('ws-detail');
 }
 function openWorkspaceByName(name, from){
   const i = workspaces.findIndex(w=>w.name===name);
   if(i>=0) openWorkspace(i, from);
 }
-function backFromWorkspace(){ switchView(wsFrom); }
+function backFromWorkspace(){
+  document.querySelector('.side').style.display = '';
+  switchView(wsFrom);
+}
 function openModal(id){
   document.getElementById('overlay').classList.add('show');
   document.getElementById(id).classList.add('show');
