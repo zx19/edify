@@ -78,17 +78,31 @@ ALTER TABLE sites ADD COLUMN ui_config JSONB;  -- nullable，NULL = 全部默认
 
 ## 3. UI 重构本体
 
-### 3.1 重设计范围（三族 + 一对齐 + 不动）
+### 3.1 重设计范围：**逐类型设计**（6 个设计面，2026-09-04 用户约束补强）
 
-| 页面 | 层级 | 内容 |
+三族是实现维度；设计维度按路由类型逐一出稿，每类型的独有功能面单独覆盖：
+
+| # | 类型（路由） | 组件族 | 独有功能面（设计必覆盖） |
+|---|---|---|---|
+| 1 | 普通 Chat / Chatflow（`/chat/[token]`） | chat-with-history | 会话侧栏全套（新建/列表/置顶/重命名/删除）、开场白+变量表单、chatflow 步骤过程、引用、建议问题、消息操作、附件/语音 |
+| 2 | Agent Chat（`/agent/[token]`） | chat-with-history（isNewAgent） | 上述全部 + Agent Roster 参与者渲染、agent 思考链/工具详情 |
+| 3 | 嵌入式 Chatbot（`/chatbot/[token]`） | embedded-chatbot | 无侧栏形态、header 重置会话、iframe 通信（embed.js 行为）、移动端品牌页脚 |
+| 4 | 文本生成（`/completion/[token]`） | text-generation | 变量表单、结果区、历史侧栏、品牌页脚 |
+| 5 | Workflow（`/workflow/[token]`） | text-generation（isWorkflow） | 启动变量配置（含隐藏变量）、运行过程步骤、输出（文本/文件）、工作流步骤显隐开关 |
+| 6 | 环境 Workflow（`/env/workflow/[token]`） | 同上 | 同 5；独立设计确认，不默认同稿 |
+
+| 附带 | 层级 | 说明 |
 |---|---|---|
-| `chat-with-history`（/chat、/agent） | **壳层重设计** | 会话历史侧栏（列表/项/hover/置顶/重命名交互）、header、聊天面板容器、输入区外观、开场白+建议问题呈现、inputs-form |
-| `embedded-chatbot`（/chatbot） | 壳层重设计 | header、面板容器、品牌页脚（ui_config 驱动，经优先级链） |
-| `text-generation`（/completion、/workflow、/env/workflow） | 壳层重设计 | 表单区、运行结果区、侧栏 |
-| `form/[token]`（humanInputLayout 人工介入） | 对齐级 | 轻量对齐新语言（结构不变，只换 token） |
+| `form/[token]`（humanInputLayout 人工介入） | 对齐级 | 结构不变，只换 token |
 | `webapp-signin` / `webapp-reset-password` | **不动** | 企业版 webapp_auth 专属，社区版死路径 |
 
-**功能保留红线**：会话历史（含置顶/重命名/删除）、引用浮层、点赞/复制/重新生成、建议问题、附件上传、语音（ASR/TTS）、开场白变量替换、Agent Roster 渲染、嵌入 SDK（embed.js 行为）——全部保留，只换视觉与布局形态。
+#### 3.1.1 防乱设计机制：每类型设计三件套（强制流程）
+
+1. **QA 实证先行**：真实分享码打开该类型现状页 → 截图 + **功能清单逐项登记**（每个按钮/交互/状态一行）——不凭记忆和手册想象（既定约定）。
+2. **mockup**：按清单设计新视觉，清单上每个功能必须有明确落点。
+3. **功能对照表**：现状功能 → 新设计落点的逐项映射（保留原位/换位置/交互形态变化）。**任何一行无落点 = 该类型设计不通过**。对照表是 mockup 定稿验收物 + 实施验收核销清单。
+
+**功能保留红线**（全类型适用）：会话历史（含置顶/重命名/删除）、引用浮层、点赞/复制/重新生成、建议问题、附件上传、语音（ASR/TTS）、开场白变量替换、Agent Roster 渲染、嵌入 SDK（embed.js 行为）、工作流步骤展示——全部保留，只换视觉与布局形态。
 
 ### 3.2 作用域 token 与 accent 机制
 
@@ -111,7 +125,7 @@ ALTER TABLE sites ADD COLUMN ui_config JSONB;  -- nullable，NULL = 全部默认
 
 ### 4.1 实施顺序
 
-1. **mockup（HTML）先行**：三族页面新视觉定稿（含 dark 变体、ui_config 各开关态），照既有流程（系统管理控制台/工作台先例）。**前置：拿真实应用分享码去 QA 看现状页面**（记忆约定：现状以 QA 为唯一事实来源）。
+1. **mockup（HTML）先行，逐类型出稿**：§3.1 的 6 个设计面各自出稿（含 dark 变体、ui_config 各开关态），照既有流程（系统管理控制台/工作台先例）。**每类型执行三件套（§3.1.1）：QA 实证功能清单 → mockup → 功能对照表**；前置：拿各类型真实应用分享码去 QA 看现状页面（记忆约定：现状以 QA 为唯一事实来源）。
 2. token 层 + `.webapp-theme` 挂载（含 dark、accent 覆盖）。
 3. 三族壳层重设计 + ui_config 消费。
 4. console 弹窗「界面」分区 + api 校验/下发（§2.2/2.3）。
@@ -127,7 +141,7 @@ ALTER TABLE sites ADD COLUMN ui_config JSONB;  -- nullable，NULL = 全部默认
 
 | 验收项 | 方式 |
 |---|---|
-| 功能零回归 | 既有 e2e 回归（会话/引用/反馈/建议问题/附件/语音/嵌入）+ 手工走查三族 |
+| **功能完整性（防丢功能）** | 每类型功能对照表逐项核销（§3.1.1 三件套产出）+ 既有 e2e 回归（会话/引用/反馈/建议问题/附件/语音/嵌入）+ 手工走查 6 类型 |
 | console 调试面板零影响 | 渲染断言：不挂 `.webapp-theme` 的页面视觉 token 不变 |
 | ui_config 渲染 | vitest：各开关 true/false/null 三态渲染断言（侧栏显隐/组件显隐/页脚优先级链） |
 | api 校验 | 非法 ui_config 400 用例；合法落库/下发 round-trip |
@@ -146,3 +160,4 @@ ALTER TABLE sites ADD COLUMN ui_config JSONB;  -- nullable，NULL = 全部默认
 | 6 | CAN_REPLACE_LOGO=true 已开（QA 部署生效） | 用户拍板先开启；页脚链变两级+默认 |
 | 7 | 品牌设置辨析定稿：「品牌设置」= access-point 应用级设置弹窗（本设计扩展它）；工作区级 Logo 在工作空间设置→自定义 tab（左上角工作空间卡片入口） | 三轮代码核实：设置面板 tab 显隐条件（权限=RBAC 企业依赖不开、账单=CLOUD 专属） |
 | 8 | dark 变体为硬需求 | WebApp 跟随系统无切换入口 |
+| 9 | **逐类型设计（6 面）+ 功能对照表强制流程**（2026-09-04 用户约束） | 「每种类型的 ui 都要设计；重设计前提是功能不能丢；不能乱设计」——三件套机制见 §3.1.1 |
