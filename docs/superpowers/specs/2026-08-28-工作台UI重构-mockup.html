@@ -144,6 +144,11 @@
   .pill-green { background:var(--success-soft); color:var(--success); }
   .pill-violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
   .pill-amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
+  .pill-red { background:#FEF3F2; color:var(--danger); }
+  .cdot { display:inline-block; }
+  .pref-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; }
+  .pref-row + .pref-row { border-top:1px solid var(--border); }
+  .pref-label-t { font-size:13px; font-weight:600; color:var(--text-1); }
   .pill-accent { background:var(--accent-soft); color:var(--accent-deep); }
 
   .card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-card); }
@@ -313,6 +318,95 @@
   /* 标注 */
   .anno { position:fixed; right:16px; bottom:16px; z-index:50; width:280px; background:var(--text-1); color:#F5F5F6; border-radius:13px; padding:14px 16px; font-size:12px; line-height:1.8; box-shadow:var(--shadow-md); }
   .anno b { color:var(--accent); }
+  /* ===== 二级页面壳：应用详情 / 知识库详情（照 QA：左侧栏 + 右内容） ===== */
+  .ad-shell { display:flex; height:100%; }
+  .ad-side { width:224px; flex:none; border-right:1px solid var(--border); display:flex; flex-direction:column; background:#fff; }
+  .ad-back { display:inline-flex; align-items:center; gap:6px; border:0; background:none; font-size:12.5px; font-weight:600; color:var(--text-3); padding:14px 16px 8px; cursor:pointer; text-align:left; }
+  .ad-back:hover { color:var(--text-1); }
+  .ad-app { display:flex; align-items:center; gap:10px; padding:6px 16px 14px; }
+  .ad-ico { width:34px; height:34px; border-radius:9px; background:var(--bg-soft); display:grid; place-items:center; font-size:16px; flex:none; }
+  .ad-name { font-size:14px; font-weight:700; }
+  .ad-type { font-size:11px; color:var(--text-3); margin-top:2px; }
+  .ad-nav { padding:0 10px; display:flex; flex-direction:column; gap:2px; }
+  .ad-nav-item { display:flex; align-items:center; gap:9px; height:34px; padding:0 10px; border:0; border-radius:9px; background:none; font-size:13px; font-weight:500; color:var(--text-2); text-align:left; cursor:pointer; }
+  .ad-nav-item svg { width:16px; height:16px; flex:none; }
+  .ad-nav-item:hover { background:var(--bg-soft); }
+  .ad-nav-item.on { background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
+  .ad-side-foot { margin-top:auto; padding:10px 16px 14px; border-top:1px solid var(--border); font-size:12px; color:var(--text-3); }
+  .ad-main { flex:1; overflow-y:auto; background:var(--bg-soft); }
+  .ad-page .card, .ad-page .chart-card, .ad-page .kpi, .ad-page .log-list, .ad-page .log-detail { box-shadow:var(--shadow-xs); }
+  .ad-page { padding:22px 28px 48px; }
+  .ad-pane-title { font-size:19px; font-weight:800; letter-spacing:-.2px; margin-bottom:16px; }
+  .ad-pane-sub { font-size:12.5px; color:var(--text-3); margin:-10px 0 16px; }
+  /* 编排（chatbot 配置页） */
+  .ad-cfg { display:grid; grid-template-columns:minmax(0,1fr) 400px; gap:16px; align-items:start; }
+  .cfg-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .cfg-card-head { display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:700; margin-bottom:10px; }
+  .cfg-textarea { background:var(--bg-soft); border-radius:9px; padding:12px 14px; font-size:13px; line-height:1.7; color:var(--text-2); min-height:110px; }
+  .cfg-count { text-align:right; font-size:11px; color:var(--text-3); margin-top:6px; }
+  .cfg-hint { font-size:12.5px; color:var(--text-3); line-height:1.6; }
+  .ad-debug { background:#fff; border:1px solid var(--border); border-radius:12px; display:flex; flex-direction:column; min-height:480px; }
+  .ad-debug-head { padding:14px 16px; border-bottom:1px solid var(--border); font-size:13.5px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+  .dbg-chat { flex:1; padding:16px; }
+  .dbg-msg { display:flex; gap:10px; align-items:flex-start; }
+  .dbg-ava { width:28px; height:28px; border-radius:50%; background:var(--bg-soft); display:grid; place-items:center; flex:none; }
+  .dbg-bubble { background:var(--bg-soft); border-radius:4px 12px 12px 12px; padding:10px 13px; font-size:13px; color:var(--text-1); line-height:1.6; }
+  .dbg-input { margin:0 16px; height:40px; border:1px solid var(--border-strong); border-radius:11px; display:flex; align-items:center; padding:0 12px; color:var(--text-3); font-size:13px; }
+  .dbg-feat { margin:12px 16px 14px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-3); background:var(--bg-soft); border-radius:9px; padding:9px 12px; }
+  /* 工作流编辑器壳（画布占位，不画真编辑器） */
+  .wf-shell { display:flex; flex-direction:column; height:100%; }
+  .wf-top { display:flex; align-items:center; gap:12px; padding:10px 18px; border-bottom:1px solid var(--border); font-size:12px; color:var(--text-3); background:#fff; }
+  .wf-body { flex:1; display:flex; min-height:0; }
+  .wf-rail { width:44px; flex:none; border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:6px; padding-top:12px; background:#fff; }
+  .wf-rail i { width:30px; height:30px; border-radius:8px; display:grid; place-items:center; color:var(--text-3); font-style:normal; font-size:14px; cursor:pointer; }
+  .wf-rail i:hover { background:var(--bg-soft); color:var(--text-1); }
+  .wf-canvas { flex:1; position:relative; background:radial-gradient(circle, #D9D9DC 1px, transparent 1px); background-size:18px 18px; }
+  .wf-node { position:absolute; top:110px; left:110px; background:#fff; border:1.5px solid var(--accent); border-radius:11px; padding:10px 14px; display:flex; align-items:center; gap:9px; box-shadow:var(--shadow-xs); font-size:13px; font-weight:600; }
+  .wf-node-kind { position:absolute; top:-19px; left:0; font-size:11px; color:var(--text-3); font-weight:500; }
+  .wf-node-add { position:absolute; top:110px; left:290px; background:#fff; border:1px dashed var(--border-strong); border-radius:11px; padding:10px 14px; font-size:12.5px; color:var(--text-3); }
+  .wf-panel { width:380px; flex:none; border-left:1px solid var(--border); background:#fff; overflow-y:auto; padding:16px 18px; }
+  .wf-panel-tabs { display:flex; gap:14px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+  .wf-panel-tab { padding:8px 2px; font-size:13px; font-weight:600; color:var(--text-3); border:0; background:none; border-bottom:2px solid transparent; cursor:pointer; }
+  .wf-panel-tab.on { color:var(--accent-deep); border-bottom-color:var(--accent); }
+  /* 通用表格（日志/文档/访问点） */
+  .tbl { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .tbl th { text-align:left; font-size:12px; font-weight:700; color:var(--text-3); padding:10px 14px; border-bottom:1px solid var(--border); background:var(--bg-soft); }
+  .tbl td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:13px; vertical-align:middle; }
+  .tbl tr:last-child td { border-bottom:0; }
+  .acc-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+  .mon-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+  .mon-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px 16px; }
+  .mon-num { font-size:22px; font-weight:800; letter-spacing:-.02em; }
+  .mon-label { font-size:12px; color:var(--text-3); margin-top:3px; }
+  .mon-chart { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+  .mon-bars { display:flex; align-items:flex-end; gap:8px; height:120px; margin-top:14px; }
+  .mon-bars i { flex:1; background:var(--accent-soft); border-radius:4px 4px 0 0; }
+  /* 工作空间设置弹窗（近全屏，照 QA：左 tab + 右内容） */
+  .modal.modal-fs { inset:4vh 6vw; transform:none; width:auto; max-width:none; max-height:none; }
+  .modal.modal-fs.open { transform:none; opacity:1; }
+  .wsx { display:flex; width:100%; }
+  .wsx-side { width:196px; flex:none; border-right:1px solid var(--border); padding:16px 10px; }
+  .wsx-title { font-size:17px; font-weight:800; padding:0 10px 12px; }
+  .wsx-group { font-size:10.5px; font-weight:800; letter-spacing:.08em; color:var(--text-3); text-transform:uppercase; padding:10px 10px 4px; }
+  .wsx-tab { display:flex; align-items:center; gap:9px; width:100%; height:34px; padding:0 10px; border:0; border-radius:9px; background:none; font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer; text-align:left; }
+  .wsx-tab:hover { background:var(--bg-soft); }
+  .wsx-tab.on { background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
+  .wsx-main { flex:1; overflow-y:auto; padding:20px 24px; }
+  .wsx-wscard { display:flex; align-items:center; gap:12px; border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:16px; }
+  /* ===== 日志/监测（2026-09-04 重设计 v2：功能集=QA 实证，视觉重排） ===== */
+  .sdot { width:7px; height:7px; border-radius:50%; flex:none; }
+  .lmsg { display:flex; gap:9px; align-items:flex-start; }
+  .lmsg .lava { width:28px; height:28px; border-radius:50%; background:#fff; border:1px solid var(--border); display:grid; place-items:center; flex:none; font-size:12px; }
+  .lmsg .lbub { background:#fff; border:1px solid var(--border); border-radius:4px 12px 12px 12px; padding:10px 13px; font-size:13px; line-height:1.65; color:var(--text-1); max-width:80%; }
+  .lmsg.user { flex-direction:row-reverse; }
+  .lmsg.user .lbub { background:var(--accent-soft); border-color:transparent; border-radius:12px 4px 12px 12px; }
+  .think { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--text-3); font-weight:600; margin-bottom:5px; }
+  .mgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .m-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px 12px; box-shadow:var(--shadow-xs); }
+  .m-head { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-1); }
+  .m-num { font-size:26px; font-weight:800; letter-spacing:-.02em; margin-top:6px; line-height:1.1; }
+  .m-spark { width:100%; height:44px; display:block; margin-top:10px; }
+  .m-foot { font-size:10.5px; color:var(--text-3); margin-top:8px; }
 </style>
 </head>
 <body data-mode="workspace">
@@ -335,11 +429,11 @@
           <span class="ws-panel-head-title">切换工作空间</span>
         </div>
         <div style="padding:6px 4px; border-bottom:1px solid var(--border)">
-          <button class="dm-item">
+          <button class="dm-item" onclick="openModal('m-ws-settings')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3h.1a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5h.1a1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9v.1a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.2a1.7 1.7 0 00-1.4 1z"/></svg>
             工作空间设置
           </button>
-          <button class="dm-item">
+          <button class="dm-item" onclick="openModal('m-invite')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="8" r="3.2"/><path d="M3.5 20c.7-3.2 3.2-5 6.5-5s5.8 1.8 6.5 5M18 8v6M15 11h6" stroke-linecap="round"/></svg>
             邀请成员
           </button>
@@ -742,7 +836,7 @@
         </div>
       </div>
       <div class="grid-cards" style="margin-top:16px">
-        <a class="app-card" href="javascript:void(0)">
+        <a class="app-card" href="javascript:void(0)" onclick="openWfDetail()">
           <div class="app-card-head-row">
             <div class="app-icon-wrap">🤖<span class="app-type-badge">工</span></div>
             <div><div class="app-card-title">第三方</div><div class="app-card-type">工作流</div></div>
@@ -758,7 +852,7 @@
           <div class="app-tag-add">＋ 添加标签</div>
           <div class="app-card-foot" style="margin-top:12px">张玺 · 编辑于 2026/08/21 17:19</div>
         </a>
-        <a class="app-card" href="javascript:void(0)">
+        <a class="app-card" href="javascript:void(0)" onclick="openAppDetail()">
           <div class="app-card-head-row">
             <div class="app-icon-wrap">📋<span class="app-type-badge">聊</span></div>
             <div>
@@ -791,7 +885,7 @@
         一期知识库为<b>创建即用型</b>：导入源仅保留「导入已有文本」（本地文件上传 / 网址抓取）。Notion、网盘等数据源同步<b>一期暂不开放</b>。
       </div>
       <div class="grid-cards" style="margin-top:16px">
-        <a class="app-card" href="javascript:void(0)">
+        <a class="app-card" href="javascript:void(0)" onclick="openDatasetDetail()">
           <div class="app-card-head">
             <div><div class="app-card-title">恒沐AI助理.txt...</div><div class="app-card-type">General</div></div>
             <span>🤖</span>
@@ -816,7 +910,295 @@
       <div class="intg-body" id="intg-body"><!-- JS 渲染 --></div>
     </section>
 
-    <!-- ⑤ 登录失败提示（普通账号无空间） -->
+    <!-- ⑤ 应用详情（聊天助手：编排/访问点/日志/标注/监控，照 QA 侧栏；功能不变、视觉重构） -->
+    <section data-view="app-detail" hidden style="height:100%">
+      <div class="ad-shell">
+        <aside class="ad-side">
+          <button class="ad-back" onclick="go('studio')">‹ 返回 · 工作室</button>
+          <div class="ad-app">
+            <div class="ad-ico">📋</div>
+            <div><div class="ad-name">会议纪要</div><div class="ad-type">聊天助手</div></div>
+          </div>
+          <nav class="ad-nav">
+            <button class="ad-nav-item on" data-adpane="cfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>编排</button>
+            <button class="ad-nav-item" data-adpane="access"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>访问点</button>
+            <button class="ad-nav-item" data-adpane="logs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9.5 12h6M9.5 15.5h6"/></svg>日志</button>
+            <button class="ad-nav-item" data-adpane="anno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>标注</button>
+            <button class="ad-nav-item" data-adpane="monitor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>监控</button>
+          </nav>
+          <div class="ad-side-foot">功能与 QA 现状一致<br>视觉对齐新语言（主线④）</div>
+        </aside>
+        <div class="ad-main">
+          <div data-adpane-body="cfg">
+            <div class="ad-page">
+              <div class="card empty-card">
+                <div class="empty-title" style="font-size:15px">编排页单独设计</div>
+                <div class="empty-desc">应用编排（提示词 / 变量 / 上下文 / 调试预览）与工作流编辑器信息密度高，<b>不并入本 mockup</b>——另行出独立设计稿后补画。本视图其余 tab（访问点 / 日志 / 标注 / 监控）已完成重设计。</div>
+              </div>
+            </div>
+          </div>
+          <div data-adpane-body="access" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">访问点</div>
+              <div class="acc-card"><b style="font-size:13.5px">WebApp</b><div class="cfg-hint" style="margin-top:6px">打开链接 · 自定义首页与开场白等站点配置（保持现状）</div><div class="mono" style="margin-top:8px;font-size:12px;color:var(--text-2)">https://qa-xai.xingshulin.com/…/meeting-notes</div></div>
+              <div class="acc-card"><b style="font-size:13.5px">嵌入网站</b><div class="cfg-hint" style="margin-top:6px">iframe / 气泡两种嵌入方式，代码片段同 QA 现状</div></div>
+              <div class="acc-card" style="margin-bottom:0"><b style="font-size:13.5px">Service API</b><div class="cfg-hint" style="margin-top:6px">后端服务调用，API Key 在「服务 API」入口管理（保持现状）</div></div>
+            </div>
+          </div>
+          <div data-adpane-body="logs" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">日志</div>
+              <div class="ad-pane-sub">日志记录了应用的运行情况，包括用户的输入和 AI 的回复。 <span style="color:var(--accent-deep);cursor:pointer">了解更多 ↗</span></div>
+              <div class="toolbar" style="margin-top:0">
+                <span class="chip">📅 过去 7 天 ✕</span>
+                <span class="chip">全部 ✕</span>
+                <input class="search-input" placeholder="搜索">
+                <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+                  <span class="chip">排序：创建时间 ⌄</span>
+                  <button class="chip" style="cursor:pointer" title="切换升降序">⇅</button>
+                </span>
+              </div>
+              <table class="tbl">
+                <thead><tr><th>标题</th><th>用户或账户</th><th>消息数</th><th>用户反馈</th><th>管理员反馈</th><th>更新时间</th><th>创建时间</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><span style="display:inline-flex;align-items:center;gap:8px;cursor:pointer" onclick="openConv()"><span class="sdot" style="background:var(--accent)"></span><b style="font-weight:600">问候你</b></span></td>
+                    <td class="mono" style="font-size:12px;color:var(--text-2)">cc375ceb-c887-4628-b472-e669372365a5</td>
+                    <td>1</td><td class="muted">N/A</td><td class="muted">N/A</td>
+                    <td class="muted">2026-09-04 14:47:08</td><td class="muted">2026-09-04 14:47:07</td>
+                  </tr>
+                  <tr>
+                    <td><span style="display:inline-flex;align-items:center;gap:8px;cursor:pointer" onclick="openConv()"><span class="sdot" style="background:var(--accent)"></span><b style="font-weight:600">整理周会录音为纪要</b></span></td>
+                    <td class="mono" style="font-size:12px;color:var(--text-2)">8f21a0d4-19c2-4e7a-9b31-0c5f8e2d71aa</td>
+                    <td>6</td><td>👍</td><td class="muted">N/A</td>
+                    <td class="muted">2026-09-03 15:22:40</td><td class="muted">2026-09-03 15:19:02</td>
+                  </tr>
+                  <tr>
+                    <td><span style="display:inline-flex;align-items:center;gap:8px;cursor:pointer" onclick="openConv()"><span class="sdot" style="background:var(--accent)"></span><b style="font-weight:600">输出行动项清单</b></span></td>
+                    <td class="mono" style="font-size:12px;color:var(--text-2)">77c0be91-2d54-4f3a-8c66-9a1e4b7f02cd</td>
+                    <td>4</td><td class="muted">N/A</td><td>✔ 已标注</td>
+                    <td class="muted">2026-09-02 17:08:11</td><td class="muted">2026-09-02 17:05:36</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-adpane-body="anno" hidden>
+            <div class="ad-page">
+              <div class="card empty-card">
+                <div class="empty-title" style="font-size:15px">暂无标注</div>
+                <div class="empty-desc">标注回复可让 Bot 用预设答案回复相似问题；入口与行为保持 QA 现状。</div>
+              </div>
+            </div>
+          </div>
+          <div data-adpane-body="monitor" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">监测</div>
+              <div class="ad-pane-sub">监测记录应用的运行情况，包括性能、用户活动和成本。 <span style="color:var(--accent-deep);cursor:pointer">了解更多 ↗</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <span class="chip">过去 7 天 ⌄</span>
+                <button class="btn btn-ghost" style="height:32px" title="追踪应用性能（照 QA 入口）">📈 追踪应用性能 <span class="muted">⚙</span> <span class="muted">⌄</span></button>
+              </div>
+              <div class="mgrid">
+                <div class="m-card"><div class="m-head">全部会话数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">54</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 25 L14 22 L28 23 L42 17 L56 19 L70 12 L84 14 L100 6 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 25 L14 22 L28 23 L42 17 L56 19 L70 12 L84 14 L100 6" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">活跃用户数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">23</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 27 L14 24 L28 25 L42 20 L56 22 L70 16 L84 17 L100 10 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 27 L14 24 L28 25 L42 20 L56 22 L70 16 L84 17 L100 10" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">全部消息数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">128</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 24 L14 20 L28 22 L42 15 L56 18 L70 10 L84 13 L100 4 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 24 L14 20 L28 22 L42 15 L56 18 L70 10 L84 13 L100 4" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">Token 输出速度 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">41.2 <span style="font-size:13px;font-weight:600;color:var(--text-3)">tokens/s</span></div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 18 L14 20 L28 16 L42 19 L56 14 L70 17 L84 12 L100 15 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 18 L14 20 L28 16 L42 19 L56 14 L70 17 L84 12 L100 15" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">过去 7 天均值</div></div>
+                <div class="m-card"><div class="m-head">用户满意度 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">92%</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 14 L14 13 L28 15 L42 11 L56 13 L70 9 L84 10 L100 7 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 14 L14 13 L28 15 L42 11 L56 13 L70 9 L84 10 L100 7" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">👍 46 · 👎 4</div></div>
+                <div class="m-card"><div class="m-head">费用消耗 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">¥6.80</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 26 L14 23 L28 24 L42 18 L56 20 L70 14 L84 15 L100 8 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 26 L14 23 L28 24 L42 18 L56 20 L70 14 L84 15 L100 8" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ 工作流编辑器（编排=画布壳占位；真实编辑器 React Flow 量级不展开） -->
+    <section data-view="wf-detail" hidden style="height:100%">
+      <div class="ad-shell">
+        <aside class="ad-side">
+          <button class="ad-back" onclick="go('studio')">‹ 返回 · 工作室</button>
+          <div class="ad-app">
+            <div class="ad-ico">🤖</div>
+            <div><div class="ad-name">第三方</div><div class="ad-type">工作流</div></div>
+          </div>
+          <nav class="ad-nav">
+            <button class="ad-nav-item on" data-adpane="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>编排</button>
+            <button class="ad-nav-item" data-adpane="logs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9.5 12h6M9.5 15.5h6"/></svg>日志</button>
+            <button class="ad-nav-item" data-adpane="monitor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>监控</button>
+          </nav>
+          <div class="ad-side-foot">工作流应用侧栏同 QA<br>（编排/访问点/日志/标注/监控）</div>
+        </aside>
+        <div class="ad-main">
+          <div data-adpane-body="wf">
+            <div class="ad-page">
+              <div class="card empty-card">
+                <div class="empty-title" style="font-size:15px">工作流编排单独设计</div>
+                <div class="empty-desc">画布编辑器（节点画布 / 节点面板 / 调试运行）信息密度高，<b>不并入本 mockup</b>——另行出独立设计稿后补画。本视图其余 tab（日志 / 监控）已完成重设计。</div>
+              </div>
+            </div>
+          </div>
+          <div data-adpane-body="logs" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">日志</div>
+              <div class="ad-pane-sub">与聊天助手应用同一套日志组件；工作流运行详情的特化形态（节点执行视图）随编排页一并单独设计。</div>
+              <div class="toolbar" style="margin-top:0">
+                <span class="chip">📅 过去 7 天 ✕</span>
+                <span class="chip">全部 ✕</span>
+                <input class="search-input" placeholder="搜索">
+                <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+                  <span class="chip">排序：创建时间 ⌄</span>
+                  <button class="chip" style="cursor:pointer" title="切换升降序">⇅</button>
+                </span>
+              </div>
+              <table class="tbl">
+                <thead><tr><th>标题</th><th>用户或账户</th><th>消息数</th><th>用户反馈</th><th>管理员反馈</th><th>更新时间</th><th>创建时间</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><span style="display:inline-flex;align-items:center;gap:8px"><span class="sdot" style="background:var(--accent)"></span><b style="font-weight:600">解析上传文档并生成纪要</b></span></td>
+                    <td class="mono" style="font-size:12px;color:var(--text-2)">9c1d4e77-a3b8-4f20-8d15-6e0c92b3f411</td>
+                    <td>2</td><td class="muted">N/A</td><td class="muted">N/A</td>
+                    <td class="muted">2026-09-04 14:20:53</td><td class="muted">2026-09-04 14:20:31</td>
+                  </tr>
+                  <tr>
+                    <td><span style="display:inline-flex;align-items:center;gap:8px"><span class="sdot" style="background:var(--accent)"></span><b style="font-weight:600">批量处理知识库附件</b></span></td>
+                    <td class="mono" style="font-size:12px;color:var(--text-2)">7b33f0a2-8c14-49d6-b5e8-3a7d1c9e6024</td>
+                    <td>1</td><td>👍</td><td class="muted">N/A</td>
+                    <td class="muted">2026-09-03 18:44:19</td><td class="muted">2026-09-03 18:44:02</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-adpane-body="monitor" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">监测</div>
+              <div class="ad-pane-sub">与聊天助手应用同一套监测组件（指标集相同）。</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <span class="chip">过去 7 天 ⌄</span>
+                <button class="btn btn-ghost" style="height:32px">📈 追踪应用性能 <span class="muted">⚙</span> <span class="muted">⌄</span></button>
+              </div>
+              <div class="mgrid">
+                <div class="m-card"><div class="m-head">全部会话数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">12</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 26 L14 23 L28 24 L42 19 L56 21 L70 15 L84 16 L100 9 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 26 L14 23 L28 24 L42 19 L56 21 L70 15 L84 16 L100 9" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">活跃用户数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">5</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 27 L14 25 L28 26 L42 22 L56 24 L70 19 L84 20 L100 14 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 27 L14 25 L28 26 L42 22 L56 24 L70 19 L84 20 L100 14" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">全部消息数 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">57</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 25 L14 21 L28 23 L42 17 L56 19 L70 12 L84 14 L100 6 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 25 L14 21 L28 23 L42 17 L56 19 L70 12 L84 14 L100 6" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+                <div class="m-card"><div class="m-head">Token 输出速度 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">38.4 <span style="font-size:13px;font-weight:600;color:var(--text-3)">tokens/s</span></div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 17 L14 19 L28 15 L42 18 L56 13 L70 16 L84 11 L100 14 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 17 L14 19 L28 15 L42 18 L56 13 L70 16 L84 11 L100 14" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">过去 7 天均值</div></div>
+                <div class="m-card"><div class="m-head">用户满意度 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">90%</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 15 L14 14 L28 16 L42 12 L56 14 L70 10 L84 11 L100 8 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 15 L14 14 L28 16 L42 12 L56 14 L70 10 L84 11 L100 8" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">👍 38 · 👎 4</div></div>
+                <div class="m-card"><div class="m-head">费用消耗 <span class="muted" style="font-weight:400">ⓘ</span></div><div class="m-num">¥3.20</div>
+                  <svg class="m-spark" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 27 L14 24 L28 25 L42 20 L56 22 L70 16 L84 17 L100 10 L100 30 L0 30 Z" fill="rgb(255 140 0 / .08)"/><path d="M0 27 L14 24 L28 25 L42 20 L56 22 L70 16 L84 17 L100 10" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>
+                  <div class="m-foot">2026/08/29 – 2026/09/04</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 知识库详情（文档/流水线/召回测试/设置，照 QA） -->
+    <section data-view="dataset-detail" hidden style="height:100%">
+      <div class="ad-shell">
+        <aside class="ad-side">
+          <button class="ad-back" onclick="go('knowledge')">‹ 返回 · 知识库</button>
+          <div class="ad-app">
+            <div class="ad-ico">🤖</div>
+            <div><div class="ad-name" style="font-size:13px">恒沐AI助理.txt…</div><div class="ad-type">通用 · 经济 · 倒排索引</div></div>
+          </div>
+          <nav class="ad-nav">
+            <button class="ad-nav-item on" data-adpane="docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/></svg>文档</button>
+            <button class="ad-nav-item" data-adpane="pipeline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 7.5l8 9M6 8.5v5a3 3 0 003 3h4"/></svg>流水线</button>
+            <button class="ad-nav-item" data-adpane="hit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>召回测试</button>
+            <button class="ad-nav-item" data-adpane="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>设置</button>
+          </nav>
+          <div class="ad-side-foot">
+            <div class="mono" style="font-size:15px;font-weight:700;color:var(--text-1)">1 <span class="muted" style="font-size:11px;font-weight:400">文档</span></div>
+            <div class="mono" style="font-size:15px;font-weight:700;color:var(--text-1);margin-top:4px">0 <span class="muted" style="font-size:11px;font-weight:400">个关联应用</span></div>
+            <div style="margin-top:12px;border:1px solid var(--border);border-radius:9px;padding:8px 10px;font-size:12px;font-weight:600;display:flex;justify-content:space-between;align-items:center">访问 API <span class="cdot" style="width:6px;height:6px;border-radius:50%;background:var(--success)"></span></div>
+          </div>
+        </aside>
+        <div class="ad-main">
+          <div data-adpane-body="docs">
+            <div class="ad-page">
+              <div class="ad-pane-title">文档</div>
+              <div class="ad-pane-sub">知识库的所有文件都在这里显示，整个知识库都可以链接到 Dify 引用或通过 Chat 插件进行索引。</div>
+              <div class="toolbar" style="margin-top:0">
+                <span class="chip">全部 ✕</span>
+                <input class="search-input" placeholder="搜索">
+                <span class="chip">排序：上传时间 ⌄</span>
+                <span style="margin-left:auto;display:flex;gap:8px">
+                  <button class="btn btn-ghost">元数据</button>
+                  <button class="btn btn-accent">＋ 添加文件</button>
+                </span>
+              </div>
+              <table class="tbl">
+                <thead><tr><th style="width:28px">✓</th><th>#</th><th>名称</th><th>分段模式</th><th>字符数</th><th>召回次数</th><th>上传时间</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" style="accent-color:var(--accent)"></td><td class="muted">1</td>
+                    <td>📄 恒沐AI助理.txt</td>
+                    <td><span class="pill pill-gray">通用</span></td>
+                    <td>3.4k</td><td>0</td>
+                    <td class="muted">2026-08-28 11:50</td>
+                    <td><span class="pill pill-green"><span class="cdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>可用</span></td>
+                    <td><span class="toggle" style="width:32px;height:18px"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div data-adpane-body="pipeline" hidden>
+            <div class="ad-page">
+              <div class="card empty-card">
+                <div class="empty-title" style="font-size:15px">流水线</div>
+                <div class="empty-desc">存量展示口径（一期不开放新建）：已有管线型库仍可见可进；本库为通用型，无流水线内容。</div>
+              </div>
+            </div>
+          </div>
+          <div data-adpane-body="hit" hidden>
+            <div class="ad-page">
+              <div class="card empty-card">
+                <div class="empty-title" style="font-size:15px">召回测试</div>
+                <div class="empty-desc">输入查询语句测试知识库召回效果；交互保持 QA 现状，此处不展开。</div>
+              </div>
+            </div>
+          </div>
+          <div data-adpane-body="settings" hidden>
+            <div class="ad-page">
+              <div class="ad-pane-title">设置</div>
+              <div class="acc-card" style="margin-bottom:0">
+                <div class="pref-row"><div><div class="pref-label-t">名称</div></div><span>恒沐AI助理.txt…</span></div>
+                <div class="pref-row"><div><div class="pref-label-t">索引方式</div></div><span>经济 · 倒排索引</span></div>
+                <div class="pref-row"><div><div class="pref-label-t">检索设置</div></div><span>TopK · Score 阈值（保持 QA 现状）</span></div>
+                <div class="pref-row" style="border-top:0"><div><div class="pref-label-t">可见权限</div></div><span>全部成员</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑧ 登录失败提示（普通账号无空间） -->
     <section data-view="login-fail" class="empty-wrap" hidden>
       <div class="card empty-card">
         <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><path d="M17 16v5M14.5 18.5h5" stroke-linecap="round"/></svg></div>
@@ -842,6 +1224,28 @@
     </button>
   </div>
   <div class="drawer-body" id="d-body"><!-- JS 渲染：工具=简介+actions；供应商=模型清单+操作 --></div>
+</aside>
+
+<!-- ===== 日志会话详情（右侧滑出，照 QA：对话 ID+复制 / 模型 chip / 消息流含思考折叠） ===== -->
+<aside class="drawer" id="conv-drawer" style="width:56%; max-width:760px">
+  <div class="drawer-head" style="display:flex; align-items:center; gap:12px">
+    <div style="flex:1; min-width:0">
+      <div class="muted" style="font-size:11px">对话 ID</div>
+      <div style="display:flex; align-items:center; gap:7px; margin-top:2px">
+        <span class="mono" style="font-size:12px; color:var(--text-1)">2bc2ea25-8b96-46ca-bee8-451f0a947481</span>
+        <span class="muted" style="cursor:pointer; font-size:12px" title="复制">⧉</span>
+      </div>
+    </div>
+    <span class="chip" style="gap:6px; height:28px"><span style="width:16px; height:16px; border-radius:4px; background:var(--bg-soft); display:grid; place-items:center; font-size:9px; font-weight:700">D</span>deepseek-v4-flash <span class="pill pill-gray" style="height:16px; font-size:9px">CHAT</span></span>
+    <span class="muted" style="cursor:pointer" title="详情">ⓘ</span>
+    <button class="drawer-close" onclick="closeDrawer()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" style="background:var(--bg-soft); display:flex; flex-direction:column; gap:12px; padding:18px 20px">
+    <div class="lmsg user"><div class="lava">张</div><div class="lbub">你好</div></div>
+    <div class="lmsg"><div class="lava">🤖</div><div class="lbub"><span class="think">› 已深度思考 (0.0s)</span><br>你好！我是专注会议纪要整理的助手，可以帮你整理会议记录、提取关键信息、整理当前状态、问题及解决方案。如果有需要整理的文本，直接发给我即可。其他问题我可没法解答哦~ 😊</div></div>
+  </div>
 </aside>
 
 <!-- ===== 居中模态框（照 QA） ===== -->
@@ -969,6 +1373,79 @@
   <div class="modal-foot">
     <button class="btn btn-ghost" onclick="closeModal()">取消</button>
     <button class="btn btn-accent">保存</button>
+  </div>
+</div>
+
+<!-- ===== 工作空间设置（?settings= 体系，近全屏照 QA：左 tab + 右内容；功能保留现状） ===== -->
+<div class="modal modal-fs" id="m-ws-settings">
+  <div class="wsx" style="flex-direction:column; height:100%">
+    <div class="modal-head" style="padding:18px 24px 12px">
+      <div style="display:flex; align-items:center; gap:10px"><div class="modal-title">设置</div><span class="muted" style="font-size:11.5px">ESC</span></div>
+      <button class="drawer-close" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="wsx" style="flex:1; min-height:0">
+      <div class="wsx-side">
+        <div class="wsx-group">工作空间</div>
+        <button class="wsx-tab on">成员</button>
+        <button class="wsx-tab">定制</button>
+        <div class="wsx-group" style="margin-top:10px">账号</div>
+        <button class="wsx-tab">偏好设置</button>
+      </div>
+      <div class="wsx-main">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px">
+          <div style="font-size:17px; font-weight:800">成员</div>
+        </div>
+        <div class="wsx-wscard">
+          <div style="width:44px; height:44px; border-radius:11px; background:var(--accent); color:#fff; display:grid; place-items:center; font-weight:800; font-size:17px">张</div>
+          <div style="flex:1">
+            <div style="font-size:14.5px; font-weight:700; display:flex; align-items:center; gap:6px">张玺's Workspace <span class="muted" style="cursor:pointer">✎</span></div>
+            <div class="muted" style="font-size:12px; margin-top:2px">2 个成员</div>
+          </div>
+          <button class="btn btn-accent" style="height:32px" onclick="openModal('m-invite')">＋ 添加</button>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 140px 110px 40px; gap:10px; padding:8px 10px; font-size:12px; font-weight:700; color:var(--text-3); border-bottom:1px solid var(--border)">
+          <span>姓名</span><span>上次活动时间</span><span>角色</span><span></span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 140px 110px 40px; gap:10px; padding:12px 10px; font-size:13px; border-bottom:1px solid var(--border); align-items:center">
+          <span style="display:flex; align-items:center; gap:9px"><span style="width:26px; height:26px; border-radius:50%; background:var(--violet-pill-bg); color:var(--violet-pill-fg); display:grid; place-items:center; font-size:11px; font-weight:700">测</span>测试1</span>
+          <span class="muted" style="font-size:12.5px">1 小时前</span>
+          <span><span class="pill pill-gray">admin</span></span>
+          <span class="muted" style="cursor:pointer">⋯</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 140px 110px 40px; gap:10px; padding:12px 10px; font-size:13px; align-items:center">
+          <span style="display:flex; align-items:center; gap:9px"><span style="width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; display:grid; place-items:center; font-size:11px; font-weight:700">张</span>张玺（你）</span>
+          <span class="muted" style="font-size:12.5px">8 分钟前</span>
+          <span><span class="pill pill-gray">owner</span></span>
+          <span class="muted" style="cursor:pointer">⋯</span>
+        </div>
+        <div class="muted" style="margin-top:14px; font-size:12px">成员 / 定制 / 偏好设置等 tab 均为既有 ?settings= 弹窗体系（QA 现状功能，保留），仅视觉对齐。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 邀请成员弹窗（照 QA：邮箱 + 角色 + 发送邀请；owner/admin 视角入口） ===== -->
+<div class="modal" id="m-invite" style="width:480px">
+  <div class="modal-head">
+    <div>
+      <div class="modal-title">添加团队成员</div>
+      <div class="modal-sub">对方在登录后可以访问你的团队数据。</div>
+    </div>
+    <button class="drawer-close" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <div class="field">
+      <div class="field-label">邮箱地址</div>
+      <input class="text-input" placeholder="输入或粘贴邮箱地址…">
+      <div class="field-help">粘贴邮箱列表，或按 Enter 逐个添加。</div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="field-label">角色</div>
+      <div class="select-input placeholder"><span>请选择角色</span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+  <div class="modal-body" style="padding-top:0">
+    <button class="btn btn-accent" style="width:100%; justify-content:center">发送邀请</button>
   </div>
 </div>
 
@@ -1378,7 +1855,13 @@ function openApiTool(i) {
 
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
+  document.getElementById('conv-drawer').classList.remove('open');
   document.getElementById('drawer-mask').classList.remove('open');
+}
+function openConv() {
+  closeAllMenus();
+  document.getElementById('conv-drawer').classList.add('open');
+  document.getElementById('drawer-mask').classList.add('open');
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeDrawer(); closeModal(); } });
 
@@ -1393,6 +1876,21 @@ function closeModal() {
   document.getElementById('modal-mask').classList.remove('open');
 }
 
+/* ===== 二级页面：应用详情 / 工作流编辑器 / 知识库详情（2026-09-03 C 档；2026-09-04 起详情全屏——隐藏全局侧栏，返回恢复，与系统管理台空间详情同语言） ===== */
+function openAppDetail() { go('app-detail'); switchAdPane(document.querySelector('section[data-view="app-detail"]'), 'cfg'); document.querySelector('.side').style.display = 'none'; }
+function openWfDetail() { go('wf-detail'); switchAdPane(document.querySelector('section[data-view="wf-detail"]'), 'wf'); document.querySelector('.side').style.display = 'none'; }
+function openDatasetDetail() { go('dataset-detail'); switchAdPane(document.querySelector('section[data-view="dataset-detail"]'), 'docs'); document.querySelector('.side').style.display = 'none'; }
+function switchAdPane(root, key) {
+  root.querySelectorAll('.ad-nav-item').forEach(x => x.classList.toggle('on', x.dataset.adpane === key));
+  root.querySelectorAll('[data-adpane-body]').forEach(p => p.hidden = p.dataset.adpaneBody !== key);
+}
+document.addEventListener('click', e => {
+  const item = e.target.closest('.ad-nav-item');
+  if (!item) return;
+  const root = item.closest('section[data-view]');
+  if (root && item.dataset.adpane) switchAdPane(root, item.dataset.adpane);
+});
+
 const annos = {
   home: '与真实主页一致：最近 + 模板。一期不改动。',
   apps: '<b>应用（WEB APPS 重设计 2026-09-03 终版）</b>：一级导航项（无内嵌条目、无分隔线、无徽标），点击直达本列表页——搜索 + 全量卡片按最近使用排序，点击卡片进 /installed/&lt;id&gt; 内嵌使用页。数据源与行为维持现状；与工作室的分工：工作室=编辑门（全量应用、builder），应用=使用门（已安装子集、member）。',
@@ -1402,6 +1900,9 @@ const annos = {
   knowledge: '<b>知识库收窄</b>：只保留创建即用型；导入源只留「导入已有文本」（本地上传/网址抓取）；数据源同步（含 OAuth 与 Key 类）一期整体不开放。',
   integrations: '<b>集成重构</b>：侧栏「集成」展开二级（模型供应商 / 工具 / <b>Agent 策略</b>）；工具页内四个三级子 tab（工具插件/MCP/工作流作为工具/Swagger API，现状已存在于二级侧栏，此处为视觉重排）；删 Marketplace 一级入口；删 数据来源/触发器/扩展/自定义端点 二级页与 安装/调试/权限/自动更新 入口。<b>治理叙事不进空间侧 UI</b>（默认不说，不可用时才说）。',
   'login-fail': '登录失败提示：无会话、不进入控制台外壳；实现为 login 流程终态页（返回指向 /signin），非工作台路由。',
+  'app-detail': '<b>应用详情（2026-09-03 补画；09-04 全屏 + 09-04 二次修订）</b>：进入详情<b>隐藏全局侧栏</b>、返回恢复（与系统管理台同语言）。<b>编排 pane 留占位——单独设计另行出稿</b>；<b>日志 pane</b>：功能集=QA 实证（时间范围/用户筛选/搜索/排序升降 + 表格：标题/用户或账户/消息数/用户反馈/管理员反馈/更新/创建时间），点标题开<b>右侧滑出对话详情</b>（对话 ID+复制、模型 chip、消息流含深度思考折叠，照 QA 交互），视觉精修；<b>监测 pane</b>：功能集=QA 实证 6 指标（全部会话数/活跃用户数/全部消息数/Token 输出速度/用户满意度/费用消耗，每指标=数字+趋势），重排为 2 行 3 列指标卡（卡内 sparkline），时间范围+「追踪应用性能」入口保留；<b>编造功能已清除</b>（环比/来源分布/Top 用户为首版误加）。',
+  'wf-detail': '<b>工作流详情（2026-09-03 补画；09-04 修订）</b>：<b>编排（画布编辑器）留占位——单独设计另行出稿</b>；日志/监测与聊天助手<b>同一套组件</b>（不另编工作流特有功能），运行详情特化形态随编排页一并单独设计。',
+  'dataset-detail': '<b>知识库详情（2026-09-03 补画；09-04 全屏）</b>：侧栏照 QA（文档/流水线/召回测试/设置 + 底部统计/访问 API）。文档表=全部过滤+搜索+排序+元数据+添加文件；流水线一期不开放新建（存量展示口径）。',
 };
 const intgAnno = {
   provider: '<b>模型供应商</b>：纯查看——卡片照 QA 现状结构（版本号+类型徽标+状态），点卡片开抽屉看模型清单（按类型分组）；<b>默认模型设置保留在页面顶层</b>（弹窗照 QA：系统推理/Embedding/Rerank/语音转文本/文本转语音五个下拉 + 取消/保存）；无添加模型/API Key/安装入口；未配置时提示联系系统管理员。',
@@ -1444,6 +1945,7 @@ function renderIntg() {
 }
 
 function go(v) {
+  document.querySelector('.side').style.display = '';   // 详情全屏态由 open*Detail 决定，普通跳转恢复侧栏
   document.querySelectorAll('section[data-view]').forEach(s => s.classList.toggle('on', s.dataset.view === v));
   document.querySelectorAll('#global-nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === v));
   document.body.dataset.mode = v === 'login-fail' ? 'login-fail' : 'workspace';
