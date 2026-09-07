@@ -160,6 +160,6 @@ ALTER TABLE sites ADD COLUMN ui_config JSONB;  -- nullable，NULL = 全部默认
 | 5 | 存储定 sites 加 JSONB 列（曾议新表，否决） | 代码管线实证：泛化 setattr/_asdict 搭乘零代码 vs 新表 ~50+ 行；语义等价选小改动 |
 | 6 | CAN_REPLACE_LOGO=true 已开（QA 部署生效） | 用户拍板先开启；页脚链变两级+默认 |
 | 7 | 品牌设置辨析定稿：「品牌设置」= access-point 应用级设置弹窗（本设计扩展它）；工作区级 Logo 在工作空间设置→自定义 tab（左上角工作空间卡片入口） | 三轮代码核实：设置面板 tab 显隐条件（权限=RBAC 企业依赖不开、账单=CLOUD 专属） |
-| 8 | dark 变体为硬需求 | WebApp 跟随系统无切换入口 |
+| 8 | dark 变体为硬需求 | WebApp 跟随系统（⚠️2026-09-07 QA 实证修正：侧栏「更多」菜单**有**手动主题切换，`menu-dropdown.tsx:69-74`——dark 硬需求理由改为「用户可手动切换」，见功能清单-类型1） |
 | 9 | **逐类型设计 + 功能对照表强制流程**（2026-09-04 用户约束） | 「每种类型的 ui 都要设计；重设计前提是功能不能丢；不能乱设计」——三件套机制见 §3.1.1 |
 | 10 | 设计面 6→5：`/agent` 死路由移除，Agent App 并入 `/chat` 类型（2026-09-04 QA 实证） | 无代码生成 `/agent/<code>` 链接；新 Agent App 实际链接 `/chat/<code>`；旧 agent-chat 类型已废弃（LegacyAgentBadge） |
