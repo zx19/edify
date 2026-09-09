@@ -1,13 +1,13 @@
 # 权限体系自研总体方案-模型A：RBAC 本地化 + 组织级管理
 
-> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估；2026-08-30 修订：插件托管动作模型定稿（四动词/双向改范围/升级波双向收敛/recycling）、组织凭据加密锚点方案 A 与显式分派模型、凭据范围与插件分发解耦；2026-08-31 修订：空间侧防线三道补为四道——新增④`/permission/change` 锁改 install_permission（工作台 UI 评审发现，防 owner 改回 everyone 自装非托管插件）；2026-09-01 修订：插件管理 UI 交互定稿（升级收进安装流、移除合并解除托管/回收、漂移呈现与对账一期不做，见 §6.4）+ 部署环境公网口径修正（防线③由冗余转承重、市场新版本徽标口径）；2026-09-02 修订：凭据两级模型定稿——配置位置即作用域（组织统一兜底 + 空间详情单独配置），取消显式分派与分派表、组织凭据改锚租户原生凭据行，见 §6.4；2026-09-02 二次修订：系统管理员两级模型——创始人（/install 激活、source=install）独占授予/撤销/转让，普通系统管理员名单只读（端点 403），转让后原创始人变普通管理员，见 §6.1）。
+> 状态：设计稿（2026-08-26，合并《RBAC 自研替代方案》《组织级权限与跨空间管理方案》；2026-08-28 修订：一期收窄贯通、插件/凭据提入一期同步至数据模型与端点、MCP 不托管、login 预检缺口补录、工作量重估；2026-08-30 修订：插件托管动作模型定稿（四动词/双向改范围/升级波双向收敛/recycling）、组织凭据加密锚点方案 A 与显式分派模型、凭据范围与插件分发解耦；2026-08-31 修订：空间侧防线三道补为四道——新增④`/permission/change` 锁改 install_permission（工作台 UI 评审发现，防 owner 改回 everyone 自装非托管插件）；2026-09-01 修订：插件管理 UI 交互定稿（升级收进安装流、移除合并解除托管/回收、漂移呈现与对账一期不做，见 §6.4）+ 部署环境公网口径修正（防线③由冗余转承重、市场新版本徽标口径）；2026-09-02 修订：凭据两级模型定稿——配置位置即作用域（组织统一兜底 + 空间详情单独配置），取消显式分派与分派表、组织凭据改锚租户原生凭据行，见 §6.4；2026-09-02 二次修订：系统管理员两级模型——创始人（/install 激活、source=install）独占授予/撤销/转让，普通系统管理员名单只读（端点 403），转让后原创始人变普通管理员，见 §6.1；**2026-09-09 修订：全量代码锚点核对（25 项现状断言全部属实）+ 锚点刷新为「文件+函数名」主锚（行号改辅助标注，2026-09-09 实测）**——行号普遍漂移（上游 rebase：`_inner_call` 715→788、`_LEGACY_*_KEYS` 306-493→376-607、login 预检 180→202）；2 处文件路径失效已修正（`ext_login.py` 迁至 `api/extensions/`、`model_providers.py` 迁至 `api/controllers/console/workspace/`）；§7 补录 `_LEGACY_MY_PERMISSIONS` 聚合结构利好）。
 > **排期**：流 B 一期（系统管理员 + 跨空间管理 + 审计 + 插件托管 + 组织级凭据）为**上线前必做项**（组织级管理属上线交付内容）；流 A（RBAC 本地化）需求驱动。
 > 决策前提：完整对齐企业版 RBAC 功能（前端现有 UI 全部可用）；**严格切换**（开启后固定角色不再授予权限）。
 > 现状参考：《权限体系模型-代码核实与设计目标》；关联：《工作空间机制说明》§3.3/§3.6、《企业版与社区版功能对照》附录。
 
 ## 1. 现状与目标
 
-**现状的精确表述**：RBAC 的"管道"已通——权限点枚举（`core/rbac/entities.py`，约 50 个）、装饰器、前端 UI、45+ 端口的控制器全部存在；写死的是**两处数据**：① 角色枚举（5 档，`models/account.py:21`）；② 角色→权限点映射（`_LEGACY_*_KEYS`，`rbac_service.py:306-493`）。角色可自定义、映射入库的部分在闭源企业后端。
+**现状的精确表述**：RBAC 的"管道"已通——权限点枚举（`core/rbac/entities.py` 的 `RBACPermission`，约 50 个）、装饰器、前端 UI、45+ 端口的控制器全部存在；写死的是**两处数据**：① 角色枚举（5 档，`models/account.py` 的 `TenantAccountRole`，≈:21）；② 角色→权限点映射（`rbac_service.py` 的 `_LEGACY_*_KEYS`，:376-607）。角色可自定义、映射入库的部分在闭源企业后端。
 
 **目标**：把这两处写死搬进本地数据库，分两个交付流：
 
@@ -22,7 +22,7 @@
 流 A（判定链）：
 控制器/服务调用方（约 15 处，不动）
   └─ RbacService 嵌套类（不动）
-       └─ _inner_call(method, endpoint, ...)              ← 唯一替换点（rbac_service.py:715）
+       └─ _inner_call(method, endpoint, ...)              ← 唯一替换点（rbac_service.py，:788）
             ├─ RBAC_BACKEND=enterprise → EnterpriseRequest HTTP（保留）
             └─ RBAC_BACKEND=local     → LocalRBACRouter：(method, path模板) → 本地 handler → PG
 
@@ -81,7 +81,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 ```
 输入：tenant_id, account_id, scene, resource_type?, resource_id?
-（maintainer 短路在装饰器层，common/wraps.py:110，不在此）
+（maintainer 短路在装饰器层：common/wraps.py 的 `_is_resource_owned_by_current_user`，≈:109，不在此）
 
 1. U_org  = 组织级角色（scope=organization 绑定）权限并集   ← 流 B 启用后生效
    U_role = 该 tenant 空间级角色权限并集
@@ -106,16 +106,16 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 - **账号与密码**：不是独立账号体系——普通账号 + 提权标记，密码走现成流程（首账号 `/install` 设置、其他人邀请激活/重置密码），无独立密码通道。
 - **多位配置**：env 名单逗号分隔 / `is_system_admin` 列多行，均天然支持；**建议至少两位**防单点；移除即时生效（判定在每请求装饰器）。
 - **判定（推荐组合）**：`account.email ∈ SYSTEM_ADMIN_EMAILS`（env 静态兜底，**仅存量升级场景实际生效**，新部署名单为空）**或** `account.is_system_admin`（持久化标记，/install 置位 + 邮箱邀请授予为主通道；二期可转组织级角色绑定）。配套列 **`system_admin_source(install/env/grant/invite)`**（2026-09-02）：**install = 创始人管理员，独占授予/撤销/转让**；其余来源为普通系统管理员（名单只读，见下）。
-- **/install 改造**（小）：`RegisterService.setup()`（`account_service.py:1938`）里把首账号 `is_system_admin` 置位并写 `system_admin_source='install'`（创始人标记，2026-09-02）——装完即用、避免名单漏配导致无管理员；置位需落在 setup 自带的失败回滚范围（删 DifySetup/Join/Account/Tenant）内。/install 页面不加 UI 字段。
-- **/install 一次性**：`POST /setup` 有 `SetupAlreadyCompletedError` 保护（`console/setup.py:66-105`），只建一个账号 + 一个工作空间；`GET /setup` 返回 not_started/finished。多 tenant 不走 /install，走 admin 端点。
-- `INIT_PASSWORD` 是 `/install` 访问口令（`wraps.py:321`），与管理员密码无关。
+- **/install 改造**（小）：`RegisterService.setup()`（`account_service.py`，:1923）里把首账号 `is_system_admin` 置位并写 `system_admin_source='install'`（创始人标记，2026-09-02）——装完即用、避免名单漏配导致无管理员；置位需落在 setup 自带的失败回滚范围（删 DifySetup/Join/Account/Tenant）内。/install 页面不加 UI 字段。
+- **/install 一次性**：`POST /setup` 有 `SetupAlreadyCompletedError` 保护（`console/setup.py` :90 的 except 分支），只建一个账号 + 一个工作空间；`GET /setup` 返回 not_started/finished。多 tenant 不走 /install，走 admin 端点。
+- `INIT_PASSWORD` 是 `/install` 访问口令（`console/wraps.py` :321 的 setup 校验，注意是 console/wraps.py 非 common/wraps.py），与管理员密码无关。
 - 前端显隐：`/account/profile` 返回 `is_system_admin`（账号属性随身份接口下发；system-features 不动）；**创始人标记（source=install）一并下发**（系统管理员页按钮显隐，安全靠后端 403，2026-09-02）。
 
 **系统管理员的授予、撤销与转让（两级模型，2026-09-02 定稿；2026-08-30 修订：授予改为邮箱邀请制，QA SMTP 已就绪）**：
 
 - **两级模型**：**创始人管理员**（/install 激活、`system_admin_source=install`，全部署恒一位）独占**授予 / 撤销 / 转让**；**普通系统管理员**（env/grant/invite 来源）其余管理功能全部可用，系统管理员页**只读**（列表可见、操作按钮不出现），名单管理端点对其 403 兜底。~~「无转让概念（授予 B + 撤销 A 交接）」~~作废（2026-09-02）——交接 = 「转让」一步：创始人身份转让给一位**现有普通系统管理员**，**转让后原创始人变普通系统管理员**。
 - 端点：`GET /admin/system-admins`（@system_admin_required，普通管理员可查看名单）；`POST /admin/system-admins`、`DELETE /admin/system-admins/<account_id>`、`POST /admin/system-admins/transfer`（三个写操作 **@founder_admin_required** = is_system_admin + source=install，新增装饰器）。
-- **授予流程（邮箱邀请制）**：操作者输入目标邮箱 + **当前账号密码确认**（验证操作者身份）--邮箱**已注册且 active**：直接置 `is_system_admin` + 发通知邮件，即时生效；邮箱**未注册**：**PENDING 预创建**（复用 `invite_new_member` 的 register(status=PENDING) 路径，`account_service.py:2048`）+ 发邀请邮件（链接 `/activate?token=...`，复用 `send_invite_member_mail_task`，`tasks/mail_invite_member_task.py:15`）-> 收件人设密码激活 -> `is_system_admin` 已预置 -> 首登走「无空间管理员放行」分支直达 `/admin`。**新增系统管理员邀请 token 类型**（无空间绑定：现有 token 绑 workspace_id，系统管理员无空间）。
+- **授予流程（邮箱邀请制）**：操作者输入目标邮箱 + **当前账号密码确认**（验证操作者身份）--邮箱**已注册且 active**：直接置 `is_system_admin` + 发通知邮件，即时生效；邮箱**未注册**：**PENDING 预创建**（复用 `invite_new_member` 的 register(status=PENDING) 路径，`account_service.py` :2048）+ 发邀请邮件（链接 `/activate?token=...`，复用 `send_invite_member_mail_task`，`tasks/mail_invite_member_task.py` :15）-> 收件人设密码激活 -> `is_system_admin` 已预置 -> 首登走「无空间管理员放行」分支直达 `/admin`。**新增系统管理员邀请 token 类型**（无空间绑定：现有 token 绑 workspace_id，系统管理员无空间）。
 - 授予约束变更：放开「不预创建」（原防占位提权改由邀请 token 时效与一次性保障，既有机制）；密码确认保留（操作者身份验证）与邮件验证（接受者身份验证）**不互斥，两者都要**。
 - **邮件失败降级**：SMTP 不可达/发信失败不阻塞授予--落审计「邀请已创建、邮件发送失败」-> 控制台在授予结果处**展示邀请链接供 admin 手动转交**（复制粘贴）。
 - 撤销约束（2026-09-02 修订）：~~最后一位不可撤销~~ → **创始人不可自撤**（防无创始人锁死；创始人行无撤销入口，转让是唯一身份让渡路径）；普通管理员间撤销自由（创始人随时可再授予）；PENDING 未激活的邀请账号可撤销（等同作废邀请）不变。
@@ -132,7 +132,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
   └─ 建系统管理员账号（email+密码，is_system_admin=true，不建 tenant）
   └─ 写 DifySetup（关闭安装页，逻辑不变）
 首次登录
-  └─ login 工作空间预检：无空间但 is_system_admin → 放行（既有 "workspace not found" fail 分支，login.py:180）
+  └─ login 工作空间预检：无空间但 is_system_admin → 放行（既有 "workspace not found" fail 分支，`console/auth/login.py` `LoginApi.post` :202-212）
   └─ load_user：无空间但 is_system_admin → 放行（不带 current_tenant）
   └─ 落地 /admin（系统管理页）→ 创建首空间 + 指定 owner → 后续空间全走这里
 ```
@@ -141,9 +141,9 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 | 位置 | 改动 |
 |---|---|
-| `RegisterService.setup()`（`account_service.py:1938`） | 建账号 + 置 `is_system_admin`；**去掉** `create_owner_tenant_if_not_exist` 调用；DifySetup/回滚/遥测保留（回滚范围相应无 tenant/join） |
-| `load_user`（`account_service.py:321`） | 加窄分支：无可用空间 && `is_system_admin` → 放行（current_tenant 为空）；其他情况维持现状（无空间普通账号仍返回 None/401，不建立可用会话）——**热路径，窄分支 + 回归测试**（有空间账号行为不变） |
-| login 工作空间预检（`console/auth/login.py:180`） | **必改（易漏）**：既有逻辑 `get_join_tenants` 为空 → 直接返回 fail（"workspace not found, please contact system admin…"），瘦身后**首登系统管理员会被拒在登录层、到不了 load_user**——该分支需加 `is_system_admin` 放行；无空间普通账号**复用该 fail 响应**，前端把文案呈现为引导提示。`get_join_tenants` 只统计 NORMAL 租户（`account_service.py:1404`），归档唯一空间的成员同样落此分支 |
+| `RegisterService.setup()`（`account_service.py` :1923） | 建账号 + 置 `is_system_admin`；**去掉** `create_owner_tenant_if_not_exist` 调用；DifySetup/回滚/遥测保留（回滚范围相应无 tenant/join） |
+| `load_user`（`account_service.py` :339） | 加窄分支：无可用空间 && `is_system_admin` → 放行（current_tenant 为空）；其他情况维持现状（无空间普通账号仍返回 None/401，不建立可用会话）——**热路径，窄分支 + 回归测试**（有空间账号行为不变） |
+| login 工作空间预检（`console/auth/login.py` `LoginApi.post` 内 `get_join_tenants` 空判断，:202-212） | **必改（易漏）**：既有逻辑 `get_join_tenants` 为空 → 直接返回 fail（"workspace not found, please contact system admin…"），瘦身后**首登系统管理员会被拒在登录层、到不了 load_user**——该分支需加 `is_system_admin` 放行；无空间普通账号**复用该 fail 响应**，前端把文案呈现为引导提示。`get_join_tenants` 只统计 NORMAL 租户（`account_service.py` :1412），归档唯一空间的成员同样落此分支 |
 | 无空间的请求面防护 | 普通 console 接口假定 `current_tenant` 存在——系统管理员只允许访问 `/admin/*`（`@system_admin_required` 不依赖 tenant）；误入普通接口需返回明确错误而非 NPE |
 | 前端登录后路由 | 无空间 && 系统管理员 → `/admin`；无空间 && 非管理员 → 登录页呈现引导文案（联系管理员开通空间，复用 login fail 响应），不建立会话；`currentWorkspaceAtom` 为空时全局 providers 需兜底 |
 | /install 页面 | 文案改为「初始化系统管理员」，不加字段 |
@@ -157,7 +157,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 |---|---|---|
 | `GET /admin/workspaces` | 全空间列表/搜索/分页 | 现有 `all-workspaces` 查询 |
 | `POST /admin/workspaces` | 创建空间+指定 owner；未注册邮箱走 PENDING 预创建（复用邀请状态机） | `create_owner_tenant()` |
-| `POST /admin/workspaces/<id>/archive|unarchive` | 停用/启用（**一期不做物理删除**，级联风险） | `Tenant.status` + 既有登录切换（`account_service.py:321`） |
+| `POST /admin/workspaces/<id>/archive|unarchive` | 停用/启用（**一期不做物理删除**，级联风险） | `Tenant.status` + 既有登录切换（`load_user`，`account_service.py` :339） |
 | `GET/POST /admin/workspaces/<id>/members`、`PUT/DELETE .../members/<mid>` | 成员查看/直加/改角色/移除 | `TenantService`/`RegisterService` |
 | `GET/POST /admin/system-admins`、`DELETE /admin/system-admins/<id>`、`POST /admin/system-admins/transfer` | 系统管理员授予/撤销/**转让**（**写操作限创始人**，两级模型约束见 §6.1） | `Account` 标记列 |
 | `GET /admin/audit-logs` | 按 workspace_id/action/actor/时间过滤 | `admin_audit_logs` |
@@ -175,9 +175,9 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 **组织级凭据（B-P5，2026-09-02 重述）**：**组织统一凭据 = 专设锚租户（org-anchor）上的原生凭据行**（`ProviderCredential`/`ProviderModelSetting`；§3 已取消独立 `organization_credentials` 表与分派表）+ ProviderManager 解析链改造 + 掩码只进不出。**两级模型「配置位置即作用域」**：管理台「模型提供商」页配置 = 组织统一（全部空间默认兜底，含未来新建、开箱即用）；「空间详情 → 集成」tab 内配置 = 该空间单独配置（目标空间租户自己的凭据行，**存在即生效、优先于组织统一，删除即回落**；存量空间已配凭据天然落「单独配置」态，零迁移）。解析规则一条：**本租户凭据行 → 锚租户行**；两级配置变更均失效对应缓存。多凭据/按模型指定凭据/负载均衡/逐模型开关（`ProviderModelSetting.enabled`）在两级均复用上游机制（`web/.../model-provider-page/model-auth`），admin 端点做代理读写；**模型开关跟随凭据来源**（单独配置空间用本租户开关行、组织统一空间用锚租户行，一个解析维度，不做两级叠加）。空间侧（成员视角）凭据区仍只读不呈现（治理叙事不进空间侧）。**动运行时热路径，须带模型调用全链路回归**，企业版已有接缝可参考（`ENTERPRISE_DISABLE_RUNTIME_CREDENTIAL_CHECK`、`tool_manager.py`/`model_manager.py` 的 credential policy 检查）。UI：组织级在「模型提供商」页、空间级在空间详情集成 tab（设计稿 §4.7/§4.2）。
 
-**两级模型「配置位置即作用域」（2026-09-02 定稿，替代 08-30 显式分派方案）**：~~显式分派指针~~与分派表取消——管理台两处入口即两级：组织页配置 = 组织统一兜底，空间详情集成 tab 内配置 = 该空间单独配置（存在即生效、删除即回落）。08-30 否决回退链的三条理由在新形态下重新评估：① 可判定性——规则只剩一层（本租户 → 锚租户）、两级均管理员操作、空间详情三态徽标（组织统一/单独配置/未配置）直读，无优先级嵌套；② 遮蔽语义——不存在（单独配置是独立凭据行，非覆盖位）；③ 管理叙事——「谁说了算」的答案由配置位置直接给出。**为什么可以放弃指针**：指针的独特价值是「保留密文但临时切回」，两级模型里等价操作 = 删除单独配置（回落组织）；若确需「暂时回落但保留 key」，给单独配置加启用开关即可（一行状态，实施时定，无需指针表）。**策略粒度收敛 provider 级**（不做 model 级：撞 load balancing 的 `CredentialSourceType` PROVIDER/CUSTOM_MODEL 语义，场景罕见）。**凭据范围与插件分发解耦**：插件范围管「装不装」、凭据两级管「用哪份」，两维度正交（空间装了插件但单独配置、或两级均未配，都是正常形态；MCP 凭据更无处附着插件范围）。**一期边界**：仅模型供应商支持空间详情单独配置；工具插件凭据一期组织级（二期同规则跟进）；MCP 凭据（`tool_mcp_providers.encrypted_credentials`）一期维持空间自管；OAuth 类（数据源/部分触发器）组织代授权与触发器订阅共享为二期，复用同一两级模型（token 归属 = 单独配置优先/组织兜底）；「空间成员自配」（放权给空间 owner/admin，非管理员代配）为独立决策另议——上游凭据端点无角色门槛（仅 `login_required`，`model_providers.py:153` 起），放权须先加权限门。
+**两级模型「配置位置即作用域」（2026-09-02 定稿，替代 08-30 显式分派方案）**：~~显式分派指针~~与分派表取消——管理台两处入口即两级：组织页配置 = 组织统一兜底，空间详情集成 tab 内配置 = 该空间单独配置（存在即生效、删除即回落）。08-30 否决回退链的三条理由在新形态下重新评估：① 可判定性——规则只剩一层（本租户 → 锚租户）、两级均管理员操作、空间详情三态徽标（组织统一/单独配置/未配置）直读，无优先级嵌套；② 遮蔽语义——不存在（单独配置是独立凭据行，非覆盖位）；③ 管理叙事——「谁说了算」的答案由配置位置直接给出。**为什么可以放弃指针**：指针的独特价值是「保留密文但临时切回」，两级模型里等价操作 = 删除单独配置（回落组织）；若确需「暂时回落但保留 key」，给单独配置加启用开关即可（一行状态，实施时定，无需指针表）。**策略粒度收敛 provider 级**（不做 model 级：撞 load balancing 的 `CredentialSourceType` PROVIDER/CUSTOM_MODEL 语义，场景罕见）。**凭据范围与插件分发解耦**：插件范围管「装不装」、凭据两级管「用哪份」，两维度正交（空间装了插件但单独配置、或两级均未配，都是正常形态；MCP 凭据更无处附着插件范围）。**一期边界**：仅模型供应商支持空间详情单独配置；工具插件凭据一期组织级（二期同规则跟进）；MCP 凭据（`tool_mcp_providers.encrypted_credentials`）一期维持空间自管；OAuth 类（数据源/部分触发器）组织代授权与触发器订阅共享为二期，复用同一两级模型（token 归属 = 单独配置优先/组织兜底）；「空间成员自配」（放权给空间 owner/admin，非管理员代配）为独立决策另议——上游凭据端点无角色门槛（仅 `login_required`，见 `api/controllers/console/workspace/model_providers.py` 各端点，`@login_required` 从 :154 起），放权须先加权限门。
 
-**插件托管与收口（B-P4，同期纳入，设计稿 §4.6/§4.8）**：托管记录（`integration_grants`）+ 逐 tenant 扇出（复用现有安装链）+ 新建空间自动安装钩子。`TenantPluginPermission.install_permission` 一期收紧为 noone：**存量空间批量迁移 + 新建空间默认 noone**（改 `server_default` 或建空间钩子；现默认 everyone，见 `api/models/account.py:389`，不改则新空间回到全员可装）。空间侧「托管态」判定以 `integration_grants` 为唯一真相：插件 × 本租户命中分发范围即视为托管（锁定升级/卸载、不参与自动更新），与 daemon 侧安装记录通过 (tenant_id, plugin_id) 对应，不依赖 daemon 打标。
+**插件托管与收口（B-P4，同期纳入，设计稿 §4.6/§4.8）**：托管记录（`integration_grants`）+ 逐 tenant 扇出（复用现有安装链）+ 新建空间自动安装钩子。`TenantPluginPermission.install_permission` 一期收紧为 noone：**存量空间批量迁移 + 新建空间默认 noone**（改 `server_default` 或建空间钩子；现默认 everyone，见 `api/models/account.py` 的 `TenantPluginPermission`（≈:394，`install_permission` 列 `server_default="everyone"`、`debug_permission` 默认 noone），不改则新空间回到全员可装）。空间侧「托管态」判定以 `integration_grants` 为唯一真相：插件 × 本租户命中分发范围即视为托管（锁定升级/卸载、不参与自动更新），与 daemon 侧安装记录通过 (tenant_id, plugin_id) 对应，不依赖 daemon 打标。
 
 **空间侧封死的四道防线（均 api 层现成/低成本，daemon 无感、不兜底）**：① 手动升级端点（`console/workspace/plugin.py` 的 `/upgrade/marketplace|github`）挂 `plugin_permission_required(install_required=True)`，install_permission 收 noone 后天然全关；② **托管态拦截**补缝隙--install_permission 是空间 owner/admin 可改回的，console 升级/卸载端点前置检查命中 grant 即 403（防「改回 everyone 后自升已托管插件」）；③ **自动升级任务过滤**--`process_tenant_plugin_autoupgrade_check_task` 不走空间侧权限判定且 ALL 模式忽略 exclude 列表，逐租户豁免名单不可行，落点为 check task 组装完 plugin_ids 后查该租户命中 grant 减去托管项（一次查询、三种 mode 通吃）；`ENABLE_CHECK_UPGRADABLE_PLUGIN_TASK` env 开关留作部署层冗余（与 `MARKETPLACE_ENABLED` 联动注册；2026-09-01 修正：部署环境为公网、`MARKETPLACE_ENABLED` 为真时自动升级 beat 会实际运行，③的 grant 过滤为承重实现而非冗余）；④ **权限修改端点锁定**（2026-08-31 补，工作台 UI 评审发现）——①②③ 只管升级/卸载/自动升级，而 owner/admin 可经 `POST /permission/change` 把 install_permission 改回 everyone，安装端点（`/install/pkg|github|marketplace`、`/upload/pkg|github|bundle`）随之重开，空间可自装非托管插件绕过收口；一期 `/permission/change` 直接拒绝修改 install_permission（403，提示由系统管理员托管；debug 权限维持默认「无人」同样锁改），单点锁定比给安装链逐端点挂拦截便宜。空间插件列表 UI 不显示升级入口与新版本徽标（2026-09-01 理由修正：治理性不呈现——空间侧对版本不可行动，徽标是无出口的死胡同提示；市场可达与否不作依据）。
 
@@ -204,7 +204,7 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 ## 7. seeding、迁移与严格切换
 
-- **内置角色**（is_builtin）：owner/admin/editor/member/dataset-operator，权限点从 `_LEGACY_*_KEYS`（`rbac_service.py:306-493`）转置生成，保证与旧角色语义等价。
+- **内置角色**（is_builtin）：owner/admin/editor/member/dataset-operator，权限点从 `_LEGACY_*_KEYS`（`rbac_service.py` :376-607）转置生成，保证与旧角色语义等价。**利好（2026-09-09 核实）**：同文件存在 `_LEGACY_MY_PERMISSIONS` 聚合结构（:607/665，角色 → workspace/app/dataset 快照的完整字典），seeding 可直接引用此聚合层转置为内置角色 + 默认访问策略，不必自行拼装 8 个散列的 `_LEGACY_*_KEYS` 列表。
 - **内置访问策略**：按 resource_type 的 `default`（全资源域键），支撑新建资源默认全员可见（替代 `initialize_created_app_rbac_access_task` 的企业依赖）。
 - **Catalog 文案**：`core/rbac/catalog.py` 双语 dict（企业后端按 language 返回文案，本地自建）。
 - **迁移命令**（`flask rbac-local-migrate`，参考 `api/commands/rbac.py`）：seed → 存量成员按固定角色绑定内置角色 → 存量资源白名单 scope=all → dry-run + 按 tenant 灰度。
@@ -273,10 +273,36 @@ matrix（app/dataset/workspace 级）、whitelist get/replace、user-access-poli
 
 ## 12. 关键代码位置
 
-- 替换点：`api/services/enterprise/rbac_service.py:715`（`_inner_call`）；legacy 映射 `:306-493`（内置角色数据源）；DTO `:74/114`
-- 权限点枚举：`api/core/rbac/entities.py:24`；判定装饰器：`api/controllers/common/wraps.py:19-120`
-- 控制器：`api/controllers/console/workspace/rbac.py`（约 30 端点）
-- 隐式调用方：app 列表 `controllers/common/app_access.py:82`、dataset 列表 `console/datasets/datasets.py:458-467`、建资源授权 `tasks/initialize_created_app_rbac_access_task.py`、成员生命周期 `services/account_service.py:1365/1849/1890/2114`、迁移参考 `api/commands/rbac.py`
-- 流 B 复用：`TenantService.create_owner_tenant`（`account_service.py:1327`）、归档切换 `:321`、机器管理员通道 `console/admin.py:11` + `ext_login.py:73`
-- 流 B bootstrap 与插件/凭据：`RegisterService.setup`（`account_service.py:1938`）、login 工作空间预检（`console/auth/login.py:180`，`get_join_tenants` 只统计 NORMAL 租户）、插件安装链 `api/core/plugin/`（daemon 租户级安装）、`TenantPluginPermission`（`api/models/account.py:389`，`install_permission` 默认 everyone 需收口为 noone）
-- 前端契约：`web/models/access-control.ts`、`web/service/access-control/`
+> 锚点格式：`文件` + 符号/函数名为主，行号为辅助（2026-09-09 实测）。行号会随上游 rebase 漂移，**符号名稳定**——实施时按符号定位。
+
+- **流 A 替换点**：`api/services/enterprise/rbac_service.py`
+  - `_inner_call`（:788，原 :715 已漂移）— 单点传输层替换入口，全文件 ~30 处调用汇聚于此
+  - legacy 映射 `_LEGACY_*_KEYS`（:376-607，原 :306-493）+ 聚合 `_LEGACY_MY_PERMISSIONS`（:607/665）— 内置角色数据源，seeding 可直接引用聚合层
+  - DTO 契约类：`PermissionCatalogGroup`（≈:74）、`MemberRoleSummary`（≈:114）
+- **权限点枚举**：`api/core/rbac/entities.py` 的 `RBACPermission`（:24 起，约 50 个）
+- **判定装饰器**：`api/controllers/common/wraps.py`
+  - `rbac_permission_required`（:69）— RBAC 判定装饰器
+  - `_is_resource_owned_by_current_user`（:110）— maintainer/own 短路
+- **控制器**：`api/controllers/console/workspace/rbac.py`（实测 36 个路由，方案原记「约 30」）
+- **隐式调用方**（@base-ui 边界外、被 RBAC 间接依赖）：
+  - app 列表可见性：`api/controllers/common/app_access.py` 的 `MyPermissions.get` + `AppAccess.whitelist_resources`（≈:78-84）
+  - dataset 列表可见性：`api/controllers/console/datasets/datasets.py` 同上模式（:455-470）
+  - 建资源默认授权：`api/tasks/initialize_created_app_rbac_access_task.py`（`initialize_created_app_rbac_access_task` :78 + `sync_joined_workspace_member_rbac_access_task`）
+  - 成员生命周期埋点：`api/services/account_service.py`（:1365 RBAC sync / :1849 成员角色 / :1890 MemberRoles.replace / :2114 PENDING 清理）
+  - 迁移命令参考：`api/commands/rbac.py`
+- **流 B 复用**：
+  - `TenantService.create_owner_tenant`（`account_service.py` :1278，原 :1327）
+  - 归档切换经 `load_user`（`account_service.py` :339，原 :321）
+  - 机器管理员通道：`api/controllers/console/admin.py` 的 `admin_required`（:11，`ADMIN_API_KEY` 守门）+ 登录管理 `api/extensions/ext_login.py` 的 `DifyLoginManager`（⚠️ 原引用 `console/auth/ext_login.py:73` 路径已失效，文件迁至 `api/extensions/`）
+- **流 B bootstrap 与插件/凭据**：
+  - `RegisterService.setup`（`account_service.py` :1923，原 :1938）
+  - login 工作空间预检：`api/controllers/console/auth/login.py` 的 `LoginApi.post`（`get_join_tenants` 空判断分支 :202-212，原 :180）
+  - `get_join_tenants`（`account_service.py` :1412，只统计 `Tenant.status == NORMAL`）
+  - 插件安装链：`api/core/plugin/`（daemon 租户级安装）
+  - `TenantPluginPermission`（`api/models/account.py` ≈:394，`install_permission` 列 `server_default="everyone"` 需收口为 noone、`debug_permission` 默认 noone）
+  - 空间侧升级/卸载端点：`api/controllers/console/workspace/plugin.py`（`upgrade/marketplace` :1010、`upgrade/github` :1033、`permission/change` :1086）
+  - 自动升级任务：`api/tasks/process_tenant_plugin_autoupgrade_check_task.py`（同名函数 :162）+ `api/schedule/check_upgradable_plugin_task.py`
+  - 凭据端点：`api/controllers/console/workspace/model_providers.py`（⚠️ 原引用 `console/model_providers.py:153` 路径已失效，迁至 `console/workspace/`，`@login_required` 从 :154 起，无角色门槛）
+  - 组织凭据接缝参考：`api/configs/enterprise/__init__.py` 的 `ENTERPRISE_DISABLE_RUNTIME_CREDENTIAL_CHECK`（:32）+ `api/services/enterprise/plugin_manager_service.py` 的 `check_credential_policy_compliance` + `api/core/entities/provider_configuration.py` 的 `CredentialSourceType`（PROVIDER/CUSTOM_MODEL）
+- **前端契约**：`web/models/access-control.ts`、`web/service/access-control/`（含 `normalizers.ts`，DTO 容错点作反向用例）
+- **env 待新增**：`RBAC_BACKEND`（enterprise|local，默认 enterprise，与上游一致；当前不存在，§2 决策 2）
