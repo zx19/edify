@@ -2,8 +2,8 @@
 
 import type { App } from '@/models/explore'
 import type { TryAppSelection } from '@/types/try-app'
-import { cn } from '@langgenius/dify-ui/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { trackEvent } from '@/app/components/base/amplitude'
 import AppIcon from '@/app/components/base/app-icon'

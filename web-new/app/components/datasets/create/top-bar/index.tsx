@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { StepperProps } from '../stepper'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowLeftLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from '@/next/link'

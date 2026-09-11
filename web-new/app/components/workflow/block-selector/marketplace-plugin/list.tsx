@@ -1,7 +1,7 @@
 'use client'
 import type { RefObject } from 'react'
 import type { Plugin, PluginCategoryEnum } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getMarketplaceCategoryUrl } from '@/app/components/plugins/marketplace/utils'

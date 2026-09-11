@@ -3,7 +3,7 @@
 import type { Dayjs } from 'dayjs'
 import type { DatePickerProps } from '@/app/components/base/date-and-time-picker/types'
 import type { I18nKeysWithPrefix } from '@/types/i18n'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import dayjs from 'dayjs'
 import { noop } from 'es-toolkit/function'
 import { useState } from 'react'

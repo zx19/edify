@@ -2,8 +2,8 @@
 
 import type { FC } from 'react'
 import type { StepTwoProps } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { toast } from '@langgenius/dify-ui/toast'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

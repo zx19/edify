@@ -1,5 +1,7 @@
 import type { Dayjs } from 'dayjs'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Button } from '@xsl/ui/button'
 import {
   Select,
   SelectContent,
@@ -8,9 +10,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useChatContext } from '@/app/components/base/chat/chat/context'

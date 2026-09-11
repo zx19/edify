@@ -1,5 +1,5 @@
 import type { PluginPayload } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useQueryState } from 'nuqs'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'

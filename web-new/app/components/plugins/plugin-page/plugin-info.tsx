@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { IconButton } from '@xsl/ui/icon-button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import KeyValueItem from '../base/key-value-item'

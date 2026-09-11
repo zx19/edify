@@ -4,8 +4,8 @@ import type {
   CollapsibleTriggerProps,
 } from '@langgenius/dify-ui/collapsible'
 import type { ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+import { cn } from '@xsl/ui/cn'
 
 type CollapseProps = Omit<CollapsibleProps, 'open' | 'onOpenChange'> & {
   collapsed?: boolean

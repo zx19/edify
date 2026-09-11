@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 
 type RoleBadgeProps = {

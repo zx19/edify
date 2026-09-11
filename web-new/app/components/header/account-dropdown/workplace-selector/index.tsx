@@ -5,7 +5,7 @@ import {
   SelectGroupLabel,
   SelectItem,
   SelectItemText,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WorkspaceAvatar } from '@/app/components/base/workspace-avatar'

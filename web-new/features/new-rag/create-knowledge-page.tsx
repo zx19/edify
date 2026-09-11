@@ -16,6 +16,10 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '@langgenius/dif
 import { Form } from '@langgenius/dify-ui/form'
 import { Input } from '@langgenius/dify-ui/input'
 import { RadioGroup } from '@langgenius/dify-ui/radio-group'
+import { Textarea } from '@langgenius/dify-ui/textarea'
+import { toast } from '@langgenius/dify-ui/toast'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import {
   Select,
   SelectContent,
@@ -24,11 +28,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

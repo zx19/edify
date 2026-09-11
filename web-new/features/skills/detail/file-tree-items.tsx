@@ -7,7 +7,6 @@ import type {
 import type { DragEvent, MouseEvent, ReactElement } from 'react'
 import type { SkillDropTarget } from './file-tree-dnd'
 import type { FileTreeInlineAction, FileTreeNode } from './shared'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -23,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { setSkillFileDragPreview } from './file-tree-drag-preview'

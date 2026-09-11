@@ -1,6 +1,6 @@
 import type { VariablePayload } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { capitalize } from 'es-toolkit/string'
 import { memo } from 'react'
 import { Warning } from '@/app/components/base/icons/src/vender/line/alertsAndFeedback'

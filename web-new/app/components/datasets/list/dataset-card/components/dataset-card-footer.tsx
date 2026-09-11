@@ -1,7 +1,7 @@
 import type { DataSet } from '@/models/datasets'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiFileTextFill, RiRobot2Fill } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

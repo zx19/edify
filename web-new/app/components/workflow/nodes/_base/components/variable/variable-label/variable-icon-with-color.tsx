@@ -1,5 +1,5 @@
 import type { VariableIconProps } from './base/variable-icon'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import VariableIcon from './base/variable-icon'
 import { useVarColor } from './hooks'

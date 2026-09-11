@@ -1,7 +1,11 @@
 'use client'
 import type { Locale } from '@/i18n-config'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Input } from '@langgenius/dify-ui/input'
+import { toast } from '@langgenius/dify-ui/toast'
+import { RiAccountCircleLine } from '@remixicon/react'
+import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -9,11 +13,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { toast } from '@langgenius/dify-ui/toast'
-import { RiAccountCircleLine } from '@remixicon/react'
-import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import { noop } from 'es-toolkit/function'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

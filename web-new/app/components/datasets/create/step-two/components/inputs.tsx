@@ -5,7 +5,6 @@ import type {
 } from '@langgenius/dify-ui/number-field'
 import type { FC, PropsWithChildren, ReactNode } from 'react'
 import type { InputProps } from '@/app/components/base/input'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   NumberField,
   NumberFieldControls,
@@ -15,6 +14,7 @@ import {
   NumberFieldInput,
   NumberFieldUnit,
 } from '@langgenius/dify-ui/number-field'
+import { cn } from '@xsl/ui/cn'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

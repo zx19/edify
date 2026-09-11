@@ -1,6 +1,5 @@
 'use client'
 import { Dialog, DialogClose, DialogContent } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -9,6 +8,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { IconButton } from '@xsl/ui/icon-button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetPricingPageLanguage } from '@/context/i18n'

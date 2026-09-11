@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { PluginDetail } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   RiArrowRightUpLine,
@@ -11,6 +10,7 @@ import {
   RiLoginCircleLine,
 } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

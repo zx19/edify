@@ -12,7 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useBoolean } from 'ahooks'
 import { produce } from 'immer'
 import * as React from 'react'

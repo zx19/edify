@@ -1,8 +1,8 @@
 'use client'
 
 import type { ButtonProps } from '@xsl/ui/button'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useAgentOrchestrateViewingVersion } from '../read-only-context'
 

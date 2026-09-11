@@ -1,6 +1,6 @@
 import type { I18nKeysWithPrefix } from '@/types/i18n'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiLock2Fill } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import Link from '@/next/link'
 

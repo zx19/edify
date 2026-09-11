@@ -2,7 +2,8 @@
 
 import type { FC, ReactElement } from 'react'
 import type { SelectItem } from './form-input-item.helpers'
-import { cn } from '@langgenius/dify-ui/cn'
+import { RiLoader4Line } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import {
   SelectItem as DifySelectItem,
   Select,
@@ -13,8 +14,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiLoader4Line } from '@remixicon/react'
+} from '@xsl/ui/select'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'
 import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'
 

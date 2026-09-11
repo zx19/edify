@@ -6,7 +6,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

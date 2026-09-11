@@ -1,9 +1,9 @@
 import type { ComponentPropsWithRef, FC } from 'react'
 import type { ModelAndParameter } from '../types'
 import type { FormValue } from '@/app/components/header/account-setting/model-provider-page/declarations'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

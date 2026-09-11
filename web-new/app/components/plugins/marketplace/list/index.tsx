@@ -1,7 +1,7 @@
 'use client'
 import type { MarketplaceCollection, SearchParamsFromCollection } from '@dify/contracts/marketplace'
 import type { Plugin } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useMemo } from 'react'
 import { PluginInstallPermissionProviderGuard } from '@/app/components/plugins/install-plugin/components/plugin-install-permission-provider'
 import useCheckInstalled from '@/app/components/plugins/install-plugin/hooks/use-check-installed'

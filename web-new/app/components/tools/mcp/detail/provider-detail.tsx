@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { ToolWithProvider } from '../../../workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -10,6 +9,7 @@ import {
   DrawerPortal,
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import MCPDetailContent from './content'
 

@@ -1,5 +1,5 @@
 import type { GlobalVariable } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { capitalize } from 'es-toolkit/string'
 import { memo } from 'react'
 import { GlobalVariable as GlobalVariableIcon } from '@/app/components/base/icons/src/vender/line/others'

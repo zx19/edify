@@ -1,5 +1,5 @@
 import type { VariablePayload } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import VariableLabel from './base/variable-label'
 import { useVarBgColorInEditor } from './hooks'

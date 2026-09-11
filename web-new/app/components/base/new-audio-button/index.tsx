@@ -1,6 +1,6 @@
 'use client'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { IconButton } from '@xsl/ui/icon-button'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { AudioPlayerManager } from '@/app/components/base/audio-btn/audio.player.manager'

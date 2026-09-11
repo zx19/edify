@@ -1,6 +1,6 @@
 'use client'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { Infotip } from '@/app/components/base/infotip'
 
 type CheckboxWithLabelProps = {

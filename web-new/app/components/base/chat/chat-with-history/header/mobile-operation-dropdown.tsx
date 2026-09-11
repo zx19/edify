@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useTranslation } from 'react-i18next'
 
 type Props = Readonly<{

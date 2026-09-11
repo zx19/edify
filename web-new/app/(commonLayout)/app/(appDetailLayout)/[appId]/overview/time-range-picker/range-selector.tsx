@@ -2,6 +2,7 @@
 import type { FC } from 'react'
 import type { PeriodParamsWithTimeRange, TimeRange } from '@/app/components/app/overview/app-chart'
 import type { I18nKeysByPrefix } from '@/types/i18n'
+import { RiArrowDownSLine } from '@remixicon/react'
 import {
   Select,
   SelectItem,
@@ -12,8 +13,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiArrowDownSLine } from '@remixicon/react'
+} from '@xsl/ui/select'
 import dayjs from 'dayjs'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'

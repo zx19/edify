@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 
 export function MissingReferenceWarning({
   className,

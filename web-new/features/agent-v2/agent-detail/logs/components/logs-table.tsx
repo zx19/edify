@@ -1,6 +1,5 @@
 import type { AgentLogConversationItemResponse } from '@dify/contracts/api/console/agent/types.gen'
 import type { ReactNode, TdHTMLAttributes, ThHTMLAttributes } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -9,6 +8,7 @@ import {
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import useTimestamp from '@/hooks/use-timestamp'
 import { LogSourceCell } from './source-cell'

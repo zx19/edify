@@ -1,7 +1,7 @@
 import type { ButtonProps } from '@xsl/ui/button'
 import type { MouseEventHandler } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import checkTaskStatus from '@/app/components/plugins/install-plugin/base/check-task-status'

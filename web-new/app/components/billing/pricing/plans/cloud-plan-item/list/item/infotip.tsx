@@ -1,5 +1,5 @@
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { IconButton } from '@xsl/ui/icon-button'
 
 export function PlanFeatureInfotip({ label, content }: { label: string; content: string }) {
   if (!content) return null

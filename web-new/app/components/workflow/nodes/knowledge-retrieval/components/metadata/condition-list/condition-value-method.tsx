@@ -1,7 +1,7 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiArrowDownSLine } from '@remixicon/react'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { capitalize } from 'es-toolkit/string'
 import { useState } from 'react'
 

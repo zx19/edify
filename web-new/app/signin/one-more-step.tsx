@@ -1,6 +1,9 @@
 'use client'
 import type { Reducer } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { toast } from '@langgenius/dify-ui/toast'
+import { useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import {
   Select,
   SelectContent,
@@ -8,10 +11,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import { useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { resolvePostLoginRedirect } from '@/app/signin/utils/post-login-redirect'

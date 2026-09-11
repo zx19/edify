@@ -14,7 +14,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/context/i18n'

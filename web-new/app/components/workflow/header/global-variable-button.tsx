@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInputFieldPanel } from '@/app/components/rag-pipeline/hooks/use-input-field-panel'

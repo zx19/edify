@@ -7,7 +7,6 @@ import type {
 } from '@/models/log'
 import type { App } from '@/types/app'
 import { ArrowDownIcon } from '@heroicons/react/24/outline'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -17,6 +16,7 @@ import {
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

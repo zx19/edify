@@ -1,5 +1,5 @@
 import type { SkeletonRow } from './data'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { ACCESS_POINT_ICONS, SKELETON_HEADER_LABELS, SKELETON_ROWS } from './data'
 
 const SKELETON_CLASS_NAME = 'bg-text-quaternary opacity-20'

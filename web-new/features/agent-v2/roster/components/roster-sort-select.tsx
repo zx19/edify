@@ -7,7 +7,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { rosterQueryParamNames, rosterSortByQueryParser } from '../query-params'

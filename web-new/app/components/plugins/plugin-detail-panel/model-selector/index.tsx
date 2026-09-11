@@ -4,9 +4,9 @@ import type {
   ModelFeatureEnum,
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { ModelSelectorValue } from '@/app/components/header/account-setting/model-provider-page/model-selector/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent } from '@langgenius/dify-ui/popover'
 import { toast } from '@langgenius/dify-ui/toast'
+import { cn } from '@xsl/ui/cn'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

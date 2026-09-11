@@ -23,10 +23,10 @@ import type {
   VariableBlockType,
   WorkflowVariableBlockType,
 } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { CodeNode } from '@lexical/code'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { cn } from '@xsl/ui/cn'
 import { $getRoot, TextNode } from 'lexical'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'

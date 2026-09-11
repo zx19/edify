@@ -1,10 +1,10 @@
 import type { Node } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NodeActionsDropdownContent } from './dropdown-content'

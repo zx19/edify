@@ -2,9 +2,9 @@
 
 import type { ReactNode } from 'react'
 import type { AccessPointStatus } from './access-point-status'
-import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot, StatusDotSkeleton } from '@langgenius/dify-ui/status-dot'
 import { Switch } from '@langgenius/dify-ui/switch'
+import { cn } from '@xsl/ui/cn'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 

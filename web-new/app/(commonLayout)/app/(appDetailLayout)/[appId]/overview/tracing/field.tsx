@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Input } from '@langgenius/dify-ui/input'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 
 type Props = Readonly<{

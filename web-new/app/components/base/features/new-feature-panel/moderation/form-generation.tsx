@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import type { CodeBasedExtensionForm } from '@/models/common'
 import type { ModerationConfig } from '@/models/debug'
+import { Textarea } from '@langgenius/dify-ui/textarea'
 import {
   Select,
   SelectContent,
@@ -8,8 +9,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+} from '@xsl/ui/select'
 import { useLocale } from '@/context/i18n'
 
 type FormGenerationProps = {

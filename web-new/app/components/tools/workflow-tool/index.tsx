@@ -7,7 +7,6 @@ import type {
   WorkflowToolProviderParameter,
   WorkflowToolProviderRequest,
 } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -22,6 +21,7 @@ import { Textarea } from '@langgenius/dify-ui/textarea'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useMemo, useState } from 'react'

@@ -1,12 +1,12 @@
 import type { Recipient as RecipientItem } from '../../../types'
 import type { Member } from '@/models/common'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Popover,
   PopoverPopup,
   PopoverPortal,
   PopoverPositioner,
 } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

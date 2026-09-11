@@ -1,19 +1,8 @@
 import type { ModelParameterRule } from '../declarations'
 import type { Node, NodeOutPutVar } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
 import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectItemIndicator,
-  SelectItemText,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@langgenius/dify-ui/select'
 import {
   Slider,
   SliderControl,
@@ -23,6 +12,17 @@ import {
   SliderTrack,
 } from '@langgenius/dify-ui/slider'
 import { Switch } from '@langgenius/dify-ui/switch'
+import { cn } from '@xsl/ui/cn'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@xsl/ui/select'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

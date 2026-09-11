@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import PluginTypeSwitch from './plugin-type-switch'
 import SearchBoxWrapper from './search-box/search-box-wrapper'
 

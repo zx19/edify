@@ -1,7 +1,7 @@
 'use client'
 import type { ToolWithProvider } from '../../workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Icon from '@/app/components/plugins/card/base/card-icon'

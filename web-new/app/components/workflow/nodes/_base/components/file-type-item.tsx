@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useCallback } from 'react'

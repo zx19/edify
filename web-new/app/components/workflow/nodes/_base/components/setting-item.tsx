@@ -1,8 +1,8 @@
 import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
 import type { PropsWithChildren, ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 
 type SettingItemProps = PropsWithChildren<{

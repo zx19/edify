@@ -9,7 +9,6 @@ import type {
 import type { Tool } from '@/app/components/tools/types'
 import type { TriggerWithProvider } from '@/app/components/workflow/block-selector/types'
 import type { Node, ToolWithProvider, ValueSelector, Var } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   PreviewCard,
@@ -26,6 +25,7 @@ import {
   RiLoader4Line,
   RiMoreLine,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'
 import { Line3 } from '@/app/components/base/icons/src/public/common'

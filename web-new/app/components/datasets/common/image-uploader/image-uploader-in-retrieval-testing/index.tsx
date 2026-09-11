@@ -1,6 +1,6 @@
 import type { FileEntity } from '../types'
 import type { ImageInfo } from '@/app/components/datasets/common/image-previewer'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ImagePreviewer from '@/app/components/datasets/common/image-previewer'

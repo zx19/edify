@@ -15,12 +15,12 @@ import type {
   AgentSkill,
   AgentTool,
 } from '@/features/agent-v2/agent-composer/form-state'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Kbd } from '@langgenius/dify-ui/kbd'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { mergeRegister } from '@lexical/utils'
+import { cn } from '@xsl/ui/cn'
 import { useClipboard } from 'foxact/use-clipboard'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {

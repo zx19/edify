@@ -8,7 +8,7 @@ import {
   DropdownMenuRadioItemIndicator,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useTheme } from 'next-themes'
 import { useTranslation } from 'react-i18next'
 

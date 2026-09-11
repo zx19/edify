@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { PluginDetail } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -10,6 +9,7 @@ import {
   DrawerPortal,
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useEffect } from 'react'
 import { PluginCategoryEnum } from '@/app/components/plugins/types'
 import { ReadmeEntrance } from '../readme-panel/entrance'

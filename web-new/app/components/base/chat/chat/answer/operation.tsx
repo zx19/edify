@@ -1,6 +1,5 @@
 import type { ReactElement, ReactNode } from 'react'
 import type { ChatItem, Feedback } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Dialog,
   DialogClose,
@@ -8,12 +7,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Toggle } from '@langgenius/dify-ui/toggle'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import copy from 'copy-to-clipboard'
 import { memo, useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

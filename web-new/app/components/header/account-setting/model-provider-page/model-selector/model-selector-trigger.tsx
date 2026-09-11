@@ -1,8 +1,8 @@
 import type { ModelSelectorModel, ModelSelectorProvider, ModelSelectorValue } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'
 import {

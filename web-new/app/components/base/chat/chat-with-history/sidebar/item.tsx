@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { ConversationItem } from '@/models/share'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useHover } from 'ahooks'
 import { memo, useRef } from 'react'
 import Operation from '@/app/components/base/chat/chat-with-history/sidebar/operation'

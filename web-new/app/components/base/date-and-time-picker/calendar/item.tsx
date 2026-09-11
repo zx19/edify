@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { CalendarItemProps } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import dayjs from '../utils/dayjs'
 

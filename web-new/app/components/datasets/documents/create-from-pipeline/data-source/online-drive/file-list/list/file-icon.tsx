@@ -1,4 +1,4 @@
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useMemo } from 'react'
 import FileTypeIcon from '@/app/components/base/file-uploader/file-type-icon'

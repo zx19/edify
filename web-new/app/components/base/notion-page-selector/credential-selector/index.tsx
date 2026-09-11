@@ -9,7 +9,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { CredentialIcon } from '@/app/components/datasets/common/credential-icon'
 
 export type NotionCredential = {

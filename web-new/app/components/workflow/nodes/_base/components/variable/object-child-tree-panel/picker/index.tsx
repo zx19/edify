@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { StructuredOutput } from '../../../../../llm/types'
 import type { ValueSelector } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useHover } from 'ahooks'
 import * as React from 'react'
 import { useRef } from 'react'

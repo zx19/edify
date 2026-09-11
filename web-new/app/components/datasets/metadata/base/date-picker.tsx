@@ -2,9 +2,9 @@ import type {
   DatePickerProps,
   TriggerProps,
 } from '@/app/components/base/date-and-time-picker/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiCalendarLine, RiCloseCircleFill } from '@remixicon/react'
 import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import dayjs from 'dayjs'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

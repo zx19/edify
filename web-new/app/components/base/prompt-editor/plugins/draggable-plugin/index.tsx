@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { DraggableBlockPlugin_EXPERIMENTAL } from '@lexical/react/LexicalDraggableBlockPlugin'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useRef, useState } from 'react'
 
 const DRAGGABLE_BLOCK_MENU_CLASSNAME = 'draggable-block-menu'

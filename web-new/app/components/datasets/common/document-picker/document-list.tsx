@@ -1,7 +1,7 @@
 'use client'
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { cn } from '@langgenius/dify-ui/cn'
 import { ComboboxItem, ComboboxItemText, ComboboxList } from '@langgenius/dify-ui/combobox'
+import { cn } from '@xsl/ui/cn'
 import FileIcon from '../document-file-icon'
 
 type Props = Readonly<{

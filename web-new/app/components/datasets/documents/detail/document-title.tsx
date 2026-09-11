@@ -1,5 +1,5 @@
 import type { ParentMode, SimpleDocumentDetail } from '@/models/datasets'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useRouter } from '@/next/navigation'
 import { DocumentPicker } from '../../common/document-picker'
 

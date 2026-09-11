@@ -3,7 +3,7 @@ import {
   DeploymentOperationStatus,
   DeploymentOperationType,
 } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { getWorkflowVersionName } from '@/app/components/workflow/utils/version'
 import { useFormatTimeFromNow } from '@/hooks/use-format-time-from-now'

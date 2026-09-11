@@ -1,6 +1,6 @@
 'use client'
-import { cn } from '@langgenius/dify-ui/cn'
 import { buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { KeyValue } from '../../../types'
 import type { ValueSelector, Var } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -14,7 +14,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback } from 'react'

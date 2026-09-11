@@ -1,7 +1,7 @@
 import type { Step } from './step-indicator'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowLeftLine } from '@remixicon/react'
 import { buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import Effect from '@/app/components/base/effect'
 import Link from '@/next/link'

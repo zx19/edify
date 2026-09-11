@@ -8,7 +8,7 @@ vi.mock('@/hooks/use-i18n', () => ({
   useRenderI18nObject: () => (obj: Record<string, string>) => obj?.en_US || '',
 }))
 
-vi.mock('@langgenius/dify-ui/cn', () => ({
+vi.mock('@xsl/ui/cn', () => ({
   cn: (...args: (string | undefined | false | null)[]) => args.filter(Boolean).join(' '),
 }))
 

@@ -2,7 +2,6 @@
 
 import type { Role } from '@/models/access-control'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RadioControl, RadioGroup, RadioItem } from '@langgenius/dify-ui/radio-group'
 import {
   ScrollArea,
@@ -11,6 +10,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/app/components/base/search-input'

@@ -2,10 +2,10 @@
 
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
-import { cn } from '@langgenius/dify-ui/cn'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiArrowDownSLine, RiCloseCircleFill } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCategories } from '../../hooks'

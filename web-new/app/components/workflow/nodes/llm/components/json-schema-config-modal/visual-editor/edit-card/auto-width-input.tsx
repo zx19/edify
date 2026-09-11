@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 

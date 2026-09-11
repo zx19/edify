@@ -7,10 +7,10 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getEnterpriseDocUrl, useLocale } from '@/context/i18n'

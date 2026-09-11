@@ -1,5 +1,5 @@
 import type { Role, RoleCategory } from '@/models/access-control'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import RowMenu from './row-menu'

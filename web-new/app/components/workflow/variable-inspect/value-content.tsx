@@ -1,5 +1,5 @@
 import type { VarInInspect } from '@/types/workflow'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useDebounceFn } from 'ahooks'
 import * as React from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'

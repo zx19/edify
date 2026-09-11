@@ -1,5 +1,5 @@
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useFieldContext } from '../..'
 
 type CheckboxFieldProps = {

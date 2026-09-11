@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiHashtag, RiTextSnippet, RiTimeLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { MetadataFilteringVariableType } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 

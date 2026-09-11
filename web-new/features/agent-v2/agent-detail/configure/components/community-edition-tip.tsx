@@ -1,9 +1,9 @@
 'use client'
 
 import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 
 type CommunityEditionTipProps = Pick<PopoverContentProps, 'className' | 'placement'> & {

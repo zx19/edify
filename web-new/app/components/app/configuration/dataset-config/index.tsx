@@ -9,8 +9,8 @@ import type {
   MetadataFilteringModeEnum,
 } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import type { DataSet } from '@/models/datasets'
-import { cn } from '@langgenius/dify-ui/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { intersectionBy } from 'es-toolkit/compat'
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'

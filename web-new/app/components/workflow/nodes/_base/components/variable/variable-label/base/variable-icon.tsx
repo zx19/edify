@@ -1,5 +1,5 @@
 import type { VarInInspectType } from '@/types/workflow'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useVarIcon } from '../hooks'
 

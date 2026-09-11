@@ -2,7 +2,7 @@
 import type { AnnotationItem } from './type'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { IconButton } from '@xsl/ui/icon-button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import useTimestamp from '@/hooks/use-timestamp'

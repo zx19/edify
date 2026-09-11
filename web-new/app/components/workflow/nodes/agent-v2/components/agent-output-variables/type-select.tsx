@@ -7,7 +7,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useTranslation } from 'react-i18next'
 import { getOutputTypeOption, OUTPUT_TYPE_OPTIONS } from './utils'
 

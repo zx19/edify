@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -10,7 +10,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useTranslation } from 'react-i18next'
 
 type ItemValue = number | string

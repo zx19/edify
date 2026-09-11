@@ -8,7 +8,6 @@ import type { ReactNode } from 'react'
 import type { AgentBuildDraftChangedKey } from './build-draft-changes-context'
 import type { ModelSelectorProvider } from '@/app/components/header/account-setting/model-provider-page/model-selector/types'
 import type { AgentComposerModel } from '@/features/agent-v2/agent-composer/form-state'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -16,6 +15,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { cn } from '@xsl/ui/cn'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ENABLE_AGENT_KNOWLEDGE_RETRIEVAL } from '@/features/agent-v2/agent-detail/configure/feature-flags'

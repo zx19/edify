@@ -1,5 +1,6 @@
 import type { DeclaredOutputConfig } from '@dify/contracts/api/console/apps/types.gen'
 import type { AgentOutputTypeOptionValue } from './utils'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import {
   Select,
   SelectContent,
@@ -8,8 +9,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+} from '@xsl/ui/select'
 import { $getNodeByKey, $getRoot } from 'lexical'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

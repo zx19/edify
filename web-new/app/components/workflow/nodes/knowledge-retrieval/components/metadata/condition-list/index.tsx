@@ -1,6 +1,6 @@
 import type { MetadataShape } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiLoopLeftLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { LogicalOperator } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import ConditionItem from './condition-item'
 

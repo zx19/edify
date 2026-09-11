@@ -1,7 +1,7 @@
 'use client'
 import type { Plugin } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useBoolean } from 'ahooks'
 import { useTheme } from 'next-themes'
 import * as React from 'react'

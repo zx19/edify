@@ -3,7 +3,7 @@
 import type { ResourceUserAccessSetting } from '@/models/access-control'
 import { Avatar } from '@langgenius/dify-ui/avatar'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ACCESS_RULE_TABLE_GRID, DEFAULT_ACCESS_POLICY_ID } from './constants'

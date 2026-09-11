@@ -1,4 +1,4 @@
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 type Props = Readonly<{
   className?: string

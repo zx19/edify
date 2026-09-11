@@ -1,12 +1,12 @@
 import type { BlockEnum, CommonNodeType } from '../types'
 import type { TriggerDefaultValue } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   createPreviewCardHandle,
   PreviewCard,
   PreviewCardTrigger,
 } from '@langgenius/dify-ui/preview-card'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { Fragment, memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useNodes from '@/app/components/workflow/store/workflow/use-nodes'

@@ -1,10 +1,10 @@
 'use client'
 
 import type { AccessPolicyWithBindings } from '@/models/access-control'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useAtomValue } from 'jotai'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

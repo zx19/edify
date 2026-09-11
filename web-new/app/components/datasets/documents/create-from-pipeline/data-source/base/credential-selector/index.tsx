@@ -1,6 +1,6 @@
 import type { DataSourceCredential } from '@/types/pipeline'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo } from 'react'

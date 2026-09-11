@@ -13,7 +13,9 @@ import type {
   HandleUpdateSubVariableCondition,
   LogicalOperator,
 } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { RiAddLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -23,9 +25,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiAddLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

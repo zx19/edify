@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { debounce } from 'es-toolkit/compat'
 import { useCallback, useMemo } from 'react'
 import { useResizePanel } from '../nodes/_base/hooks/use-resize-panel'

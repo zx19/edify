@@ -20,12 +20,12 @@ import type {
   VariableBlockType,
   WorkflowVariableBlockType,
 } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { AgentOutputBlock, AgentOutputBlockReplacementBlock } from './plugins/agent-output-block'
 import ComponentPickerBlock from './plugins/component-picker-block'

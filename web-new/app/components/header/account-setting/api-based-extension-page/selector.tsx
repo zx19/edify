@@ -1,4 +1,3 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Popover,
   PopoverPopup,
@@ -7,6 +6,7 @@ import {
   PopoverTrigger,
 } from '@langgenius/dify-ui/popover'
 import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useQueryState } from 'nuqs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

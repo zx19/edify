@@ -1,6 +1,6 @@
 import type { DropdownMenuContentProps } from '@langgenius/dify-ui/dropdown-menu'
 import type { SyntheticEvent } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 
 const STEP_BY_STEP_TOUR_HIGHLIGHT_PART_DATA_ATTR = 'data-step-by-step-tour-highlight-part'

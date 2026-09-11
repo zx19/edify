@@ -2,7 +2,6 @@
 import type { AgentConfig } from '@/models/debug'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import {
   Slider,
   SliderControl,
@@ -12,6 +11,7 @@ import {
   SliderTrack,
 } from '@langgenius/dify-ui/slider'
 import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CuteRobot } from '@/app/components/base/icons/src/vender/solid/communication'

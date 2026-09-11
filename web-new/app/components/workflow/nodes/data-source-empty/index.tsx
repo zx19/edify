@@ -1,6 +1,6 @@
 import type { NodeProps } from 'reactflow'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockSelector from '@/app/components/workflow/block-selector'

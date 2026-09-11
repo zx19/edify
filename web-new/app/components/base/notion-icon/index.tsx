@@ -1,6 +1,6 @@
 import type { DataSourceNotionPage } from '@/models/common'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiFileTextLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 
 type IconTypes = 'workspace' | 'page'
 type NotionIconProps = {

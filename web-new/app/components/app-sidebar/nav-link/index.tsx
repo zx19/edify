@@ -1,6 +1,6 @@
 'use client'
 import type { RemixiconComponentType } from '@remixicon/react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import Link from '@/next/link'
 import { useSelectedLayoutSegment } from '@/next/navigation'

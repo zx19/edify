@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { Collection } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -15,6 +14,7 @@ import {
 } from '@langgenius/dify-ui/drawer'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useEffect, useState } from 'react'

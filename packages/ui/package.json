@@ -6,7 +6,9 @@
   "type": "module",
   "exports": {
     "./cn": "./src/cn.ts",
-    "./button": "./src/button/index.tsx"
+    "./button": "./src/button/index.tsx",
+    "./icon-button": "./src/icon-button/index.tsx",
+    "./select": "./src/select/index.tsx"
   },
   "scripts": {
     "test": "vp test --project unit",

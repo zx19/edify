@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 export function setSkillFileDragPreview(
   event: DragEvent<HTMLElement>,

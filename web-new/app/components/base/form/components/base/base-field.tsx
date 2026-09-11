@@ -1,9 +1,10 @@
 import type { AnyFieldApi } from '@tanstack/react-form'
 import type { FieldState, FormSchema, TypeWithI18N } from '@/app/components/base/form/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
 import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
+import { useStore } from '@tanstack/react-form'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -12,8 +13,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
-import { useStore } from '@tanstack/react-form'
+} from '@xsl/ui/select'
 import { isValidElement, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CheckboxList } from '@/app/components/base/checkbox-list'

@@ -9,7 +9,8 @@ import type {
   HandleUpdateSubVariableCondition,
 } from '../../types'
 import type { Node, NodeOutPutVar, ValueSelector, Var } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { RiDeleteBinLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -20,8 +21,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiDeleteBinLine } from '@remixicon/react'
+} from '@xsl/ui/select'
 import { produce } from 'immer'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

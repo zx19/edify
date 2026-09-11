@@ -1,4 +1,3 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,6 +5,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { cn } from '@xsl/ui/cn'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

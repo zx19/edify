@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { Memory } from '../../../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
 import {
   Slider,
@@ -12,6 +11,7 @@ import {
   SliderTrack,
 } from '@langgenius/dify-ui/slider'
 import { Switch } from '@langgenius/dify-ui/switch'
+import { cn } from '@xsl/ui/cn'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback } from 'react'

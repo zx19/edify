@@ -1,7 +1,7 @@
 import type { Ref } from 'react'
 import type { VoiceRecorder } from './recorder'
 import type { SpeechToTextTarget } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { transcribeAudio } from './api'

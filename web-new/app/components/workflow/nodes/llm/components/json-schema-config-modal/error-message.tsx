@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiErrorWarningFill } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 
 type ErrorMessageProps = {

@@ -1,8 +1,8 @@
 'use client'
 
 import type { ComponentType, ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
+import { cn } from '@xsl/ui/cn'
 import styles from './style.module.css'
 
 type UpgradeModalClassNames = {

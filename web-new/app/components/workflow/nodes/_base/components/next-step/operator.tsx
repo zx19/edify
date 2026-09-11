@@ -6,8 +6,8 @@ import {
   DropdownMenuPositioner,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { intersection } from 'es-toolkit/array'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

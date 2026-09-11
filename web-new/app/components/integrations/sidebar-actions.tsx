@@ -7,10 +7,10 @@ import type {
   PermissionType,
   PluginCategoryEnum,
 } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import DebugInfo from '@/app/components/plugins/plugin-page/debug-info'

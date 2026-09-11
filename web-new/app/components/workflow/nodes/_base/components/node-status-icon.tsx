@@ -1,10 +1,10 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   RiAlertFill,
   RiCheckboxCircleFill,
   RiErrorWarningLine,
   RiLoader2Line,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 
 type NodeStatusIconProps = {
   status: string

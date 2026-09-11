@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

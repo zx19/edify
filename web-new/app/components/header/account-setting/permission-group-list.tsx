@@ -2,7 +2,6 @@
 
 import type { PermissionGroup } from '@/models/access-control'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -10,6 +9,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { cn } from '@xsl/ui/cn'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

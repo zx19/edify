@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { SortField, SortOrder } from '../hooks'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 
 type SortHeaderProps = {

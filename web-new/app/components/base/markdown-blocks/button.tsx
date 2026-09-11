@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 import type { ExtraProps } from 'streamdown'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useChatContext } from '@/app/components/base/chat/chat/context'
 import { getMarkdownButtonAppearance } from './button-appearance'
 import { isValidUrl } from './utils'

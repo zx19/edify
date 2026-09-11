@@ -3,8 +3,8 @@
 import type { DeploymentStatus as DeploymentStatusValue } from '@dify/contracts/enterprise-app-deploy/types.gen'
 import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
 import { DeploymentStatus as DeploymentStatusEnum } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 
 const STATUS_TEXT_CLASS_NAMES: Record<DeploymentStatusValue, string> = {

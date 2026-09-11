@@ -2,7 +2,6 @@ import type { FC } from 'react'
 import type { WriteMode } from '../types'
 import type { Item } from '../utils'
 import type { VarType } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { cn } from '@xsl/ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getOperationItems, isOperationItem } from '../utils'

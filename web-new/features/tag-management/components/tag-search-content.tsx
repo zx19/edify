@@ -11,8 +11,8 @@ import {
   ComboboxSeparator,
   useComboboxFilteredItems,
 } from '@langgenius/dify-ui/combobox'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useAtomValue } from 'jotai'
 import { Fragment, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

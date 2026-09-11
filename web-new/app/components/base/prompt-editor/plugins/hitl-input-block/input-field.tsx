@@ -5,11 +5,11 @@ import type {
   ParagraphFormInput,
 } from '@/app/components/workflow/nodes/human-input/types'
 import type { UploadFileSetting, ValueSelector } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Input } from '@langgenius/dify-ui/input'
 import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
 import { formatForDisplay } from '@tanstack/react-hotkeys'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'

@@ -82,7 +82,7 @@ vi.mock('@/context/event-emitter', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/cn', () => ({
+vi.mock('@xsl/ui/cn', () => ({
   cn: (...args: unknown[]) => args.filter((a) => typeof a === 'string').join(' '),
 }))
 

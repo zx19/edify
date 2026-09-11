@@ -5,8 +5,8 @@ import type {
   MetadataFilteringCondition,
   MetadataShape,
 } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiDeleteBinLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useMemo, useState } from 'react'
 import { MetadataFilteringVariableType } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import MetadataIcon from '../metadata-icon'

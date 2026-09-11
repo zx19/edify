@@ -1,7 +1,7 @@
 'use client'
 import type { StrategyDetail } from '@/app/components/plugins/types'
 import type { Locale } from '@/i18n-config'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useState } from 'react'
 import { useRenderI18nObject } from '@/hooks/use-i18n'

@@ -1,4 +1,4 @@
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useRef } from 'react'
 import { sleep } from '@/utils'
 

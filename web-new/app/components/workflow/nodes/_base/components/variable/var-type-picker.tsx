@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -12,7 +12,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { VarType } from '@/app/components/workflow/types'
 

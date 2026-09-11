@@ -120,7 +120,7 @@ describe('LanguageSelect', () => {
         expect(onSelect).not.toHaveBeenCalled()
       })
 
-      vi.doUnmock('@langgenius/dify-ui/select')
+      vi.doUnmock('@xsl/ui/select')
     })
   })
 

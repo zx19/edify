@@ -1,7 +1,6 @@
 'use client'
 import type { ComboboxChangeEventDetails } from '@langgenius/dify-ui/combobox'
 import type { ParentMode, SimpleDocumentDetail } from '@/models/datasets'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Combobox,
   ComboboxEmpty,
@@ -14,6 +13,7 @@ import {
   ComboboxTrigger,
   ComboboxValue,
 } from '@langgenius/dify-ui/combobox'
+import { cn } from '@xsl/ui/cn'
 import { useDebounce } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

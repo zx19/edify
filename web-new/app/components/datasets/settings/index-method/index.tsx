@@ -1,6 +1,6 @@
 'use client'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { Economic, HighQuality } from '@/app/components/base/icons/src/vender/knowledge'
 import { IndexingType } from '../../create/step-two'

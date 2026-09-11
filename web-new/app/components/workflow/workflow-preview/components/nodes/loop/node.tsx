@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { LoopNodeType } from '@/app/components/workflow/nodes/loop/types'
 import type { NodeProps } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo, useEffect } from 'react'
 import { Background, useNodesInitialized, useViewport } from 'reactflow'
 import { useNodeLoopInteractions } from './hooks'

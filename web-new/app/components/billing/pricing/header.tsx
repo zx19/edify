@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { DifyLogo } from '../../base/logo/dify-logo'

@@ -2,7 +2,6 @@
 
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentSkill } from '@/features/agent-v2/agent-composer/form-state'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog } from '@langgenius/dify-ui/dialog'
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { useQueryClient } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'

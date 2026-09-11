@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { IChatItem } from '@/app/components/base/chat/chat/type'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { RiFileList3Line } from '@remixicon/react'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useTranslation } from 'react-i18next'
 import { useStore as useAppStore } from '@/app/components/app/store'
 

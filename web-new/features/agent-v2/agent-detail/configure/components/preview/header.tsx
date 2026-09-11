@@ -1,5 +1,4 @@
 import type { MouseEvent, ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   SegmentedControl,
@@ -7,6 +6,7 @@ import {
   SegmentedControlItem,
 } from '@langgenius/dify-ui/segmented-control'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'
 import { AgentConfigureClearSessionConfirmDialog } from '../confirm-clear-session-dialog'

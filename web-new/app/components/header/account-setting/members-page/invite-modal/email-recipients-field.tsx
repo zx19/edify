@@ -2,9 +2,9 @@
 
 import type { KeyboardEvent } from 'react'
 import type { EmailRecipient } from './email-recipients'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
 import { Input } from '@langgenius/dify-ui/input'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { hasEmailDelimiter, mergeEmailRecipients } from './email-recipients'

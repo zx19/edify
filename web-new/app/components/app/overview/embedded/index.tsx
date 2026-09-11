@@ -5,11 +5,11 @@ import type {
   WorkflowLaunchInputValue,
 } from '../app-card-utils'
 import type { SiteInfo } from '@/models/share'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import copy from 'copy-to-clipboard'
 import { Suspense, use, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

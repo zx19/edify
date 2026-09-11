@@ -1,12 +1,12 @@
 import type { FC } from 'react'
 import type { NodeProps } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   RiAlertFill,
   RiCheckboxCircleFill,
   RiErrorWarningFill,
   RiLoader2Line,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { memo, useMemo } from 'react'
 import BlockIcon from '@/app/components/workflow/block-icon'
 import NodeControl from '@/app/components/workflow/nodes/_base/components/node-control'

@@ -1,7 +1,7 @@
 'use client'
 
 import type { SkillUploadQueueItem } from './shared'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 
 export type SkillDropOperation = 'move' | 'upload'

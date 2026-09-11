@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import type { ArrayType, Type } from '../../../../types'
+import { RiCheckLine } from '@remixicon/react'
 import {
   Select,
   SelectItem,
@@ -11,8 +12,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
-import { RiCheckLine } from '@remixicon/react'
+} from '@xsl/ui/select'
 import { useState } from 'react'
 
 export type TypeItem = {

@@ -190,7 +190,7 @@ vi.mock('@/service/use-workflow', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/cn', () => ({
+vi.mock('@xsl/ui/cn', () => ({
   cn: (...args: string[]) => args.filter(Boolean).join(' '),
 }))
 

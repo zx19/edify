@@ -1,6 +1,6 @@
 import type { GlobalVariable } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiCloseLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '@/app/components/workflow/store'

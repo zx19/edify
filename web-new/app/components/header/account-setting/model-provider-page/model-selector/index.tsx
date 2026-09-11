@@ -4,8 +4,8 @@ import type {
   ModelSelectorProvider,
   ModelSelectorValue,
 } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTitle } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 import { useQueryState } from 'nuqs'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

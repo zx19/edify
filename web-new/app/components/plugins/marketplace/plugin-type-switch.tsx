@@ -1,6 +1,5 @@
 'use client'
 import type { ActivePluginType } from './constants'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   RiArchive2Line,
   RiBrain2Line,
@@ -9,6 +8,7 @@ import {
   RiPuzzle2Line,
   RiSpeakAiLine,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useSetAtom } from 'jotai'
 import { Fragment } from 'react'
 import { useTranslation } from '#i18n'

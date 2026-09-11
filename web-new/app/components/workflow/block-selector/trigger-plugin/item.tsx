@@ -5,7 +5,6 @@ import type {
   TriggerDefaultValue,
   TriggerWithProvider,
 } from '@/app/components/workflow/block-selector/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -14,6 +13,7 @@ import {
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
 import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

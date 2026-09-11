@@ -1,5 +1,5 @@
 import type { ChangeEvent, RefObject } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useProviderContextSelector } from '@/context/provider-context'
 

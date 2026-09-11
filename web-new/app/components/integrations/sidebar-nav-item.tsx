@@ -2,7 +2,7 @@
 
 import type { ComponentType } from 'react'
 import type { IntegrationSection } from '@/app/components/integrations/routes'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import Link from '@/next/link'
 import { buildIntegrationPath } from './routes'
 import {

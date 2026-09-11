@@ -1,6 +1,6 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiFontSize } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check } from '@/app/components/base/icons/src/vender/line/general'

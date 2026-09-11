@@ -1,7 +1,6 @@
 'use client'
 
 import type { RemixiconComponentType } from '@remixicon/react'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   RiEqualizer2Fill,
   RiEqualizer2Line,
@@ -13,6 +12,7 @@ import {
   RiLock2Line,
 } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,4 @@
 'use client'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -10,6 +9,7 @@ import {
   DrawerTitle,
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 
 type IFloatRightContainerProps = {

@@ -1,7 +1,7 @@
 'use client'
 
 import type { RefObject } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useEffectEvent, useRef } from 'react'
 
 type PreloadDistance = number | ((scrollContainer: Element) => number)

@@ -1,6 +1,6 @@
 import type { Node } from '@/app/components/workflow/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiAlertFill, RiCheckboxCircleFill, RiLoader2Line } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NodeRunningStatus } from '@/app/components/workflow/types'

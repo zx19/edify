@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { Field } from '../../../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowDropDownLine, RiArrowDropRightLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useDebounceFn } from 'ahooks'
 import * as React from 'react'
 import { useMemo, useState } from 'react'

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog, DialogClose, DialogContent } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -4,8 +4,8 @@ import type {
   FocusEvent as ReactFocusEvent,
   PointerEvent as ReactPointerEvent,
 } from 'react'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { trackEvent } from '@/app/components/base/amplitude'

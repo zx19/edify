@@ -3,15 +3,6 @@ import type { IterationNodeType } from './types'
 import type { NodePanelProps } from '@/app/components/workflow/types'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectItemIndicator,
-  SelectItemText,
-  SelectLabel,
-  SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import {
   Slider,
   SliderControl,
   SliderIndicator,
@@ -20,6 +11,15 @@ import {
   SliderTrack,
 } from '@langgenius/dify-ui/slider'
 import { Switch } from '@langgenius/dify-ui/switch'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectTrigger,
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Input from '@/app/components/base/input'

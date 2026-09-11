@@ -5,7 +5,7 @@ import type {
   DatePickerProps,
   TriggerProps,
 } from '@/app/components/base/date-and-time-picker/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { noop } from 'es-toolkit/function'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

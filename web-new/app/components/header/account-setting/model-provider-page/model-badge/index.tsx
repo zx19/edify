@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 type ModelBadgeProps = {
   className?: string

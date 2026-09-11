@@ -1,6 +1,6 @@
 import type { AppPublisherProps } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { AppModeEnum } from '@/types/app'
 import SuggestedAction from '../suggested-action'

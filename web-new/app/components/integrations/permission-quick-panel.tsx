@@ -1,8 +1,8 @@
 'use client'
 
 import type { Permissions } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RadioGroup, RadioItem } from '@langgenius/dify-ui/radio-group'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { PluginSidecarPanel } from '@/app/components/plugins/plugin-page/plugin-sidecar-panel'
 import { PermissionType } from '@/app/components/plugins/types'

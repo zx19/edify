@@ -1,5 +1,4 @@
 import type { FileAppearanceType } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   RiFile3Fill,
   RiFileCodeFill,
@@ -14,6 +13,7 @@ import {
   RiFileWordFill,
   RiMarkdownFill,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { FileAppearanceTypeEnum } from './types'
 

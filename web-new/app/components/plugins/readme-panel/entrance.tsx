@@ -1,6 +1,6 @@
 import type { PluginDetail } from '../types'
 import type { ReadmePanelPresentation } from './store'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BUILTIN_TOOLS_ARRAY } from './constants'

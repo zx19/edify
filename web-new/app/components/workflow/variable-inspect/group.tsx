@@ -1,8 +1,5 @@
 import type { currentVarType } from './panel'
 import type { NodeWithVar, VarInInspect } from '@/types/workflow'
-import { cn } from '@langgenius/dify-ui/cn'
-// import { Button } from '@xsl/ui/button'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {
   RiArrowRightSLine,
@@ -11,6 +8,9 @@ import {
   RiLoader2Line,
   // RiErrorWarningFill,
 } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
+// import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockIcon from '@/app/components/workflow/block-icon'

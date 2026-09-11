@@ -1,6 +1,6 @@
 import type { DataSourceAuth } from './types'
 import type { Plugin } from '@/app/components/plugins/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTheme } from 'next-themes'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

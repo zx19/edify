@@ -1,5 +1,5 @@
 import type { ChatItem, WorkflowProcess } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import TracingPanel from '@/app/components/workflow/run/tracing-panel'

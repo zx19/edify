@@ -1,7 +1,7 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { PopoverClose } from '@langgenius/dify-ui/popover'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { CopyFeedback } from '@/app/components/base/copy-feedback'
 import { useDatasetApiAccessUrl } from '@/hooks/use-api-access-url'

@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { cn } from '@xsl/ui/cn'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../store'

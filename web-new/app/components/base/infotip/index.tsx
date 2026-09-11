@@ -1,8 +1,8 @@
 'use client'
 
 import type { MouseEvent, ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 
 const iconClassNames = {
   question: 'i-ri-question-line',

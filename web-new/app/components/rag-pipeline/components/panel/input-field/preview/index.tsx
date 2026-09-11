@@ -1,6 +1,6 @@
 import type { Datasource } from '../../test-run/types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiCloseLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

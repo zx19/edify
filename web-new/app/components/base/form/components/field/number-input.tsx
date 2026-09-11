@@ -5,7 +5,6 @@ import type {
 } from '@langgenius/dify-ui/number-field'
 import type { ReactNode } from 'react'
 import type { LabelProps } from '../label'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   NumberField,
   NumberFieldControls,
@@ -15,6 +14,7 @@ import {
   NumberFieldInput,
   NumberFieldUnit,
 } from '@langgenius/dify-ui/number-field'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useFieldContext } from '../..'
 import Label from '../label'

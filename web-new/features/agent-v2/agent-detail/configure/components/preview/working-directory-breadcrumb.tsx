@@ -1,12 +1,12 @@
 'use client'
 
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 
 export const AGENT_SAVED_FILES_ROOT_PATH = '~'

@@ -2,7 +2,6 @@
 
 import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
 import type { BuiltInMetadataItem, MetadataItem } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Combobox,
   ComboboxEmpty,
@@ -13,9 +12,10 @@ import {
   ComboboxList,
   ComboboxSeparator,
 } from '@langgenius/dify-ui/combobox'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDatasetMetaData } from '@/service/knowledge/use-metadata'

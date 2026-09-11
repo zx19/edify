@@ -1,6 +1,6 @@
 import type { VariantProps } from 'class-variance-authority'
 import type { ChangeEventHandler, CSSProperties, FocusEventHandler } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { cva } from 'class-variance-authority'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'

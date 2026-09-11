@@ -1,7 +1,7 @@
 import type { ComponentProps, FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { Editor } from '@monaco-editor/react'
+import { cn } from '@xsl/ui/cn'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'

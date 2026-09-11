@@ -1,8 +1,8 @@
 'use client'
 
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { cn } from '@langgenius/dify-ui/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import AccountDropdown from '@/app/components/header/account-dropdown'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 

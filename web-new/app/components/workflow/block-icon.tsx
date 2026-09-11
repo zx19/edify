@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import AppIcon from '@/app/components/base/app-icon'
 import {

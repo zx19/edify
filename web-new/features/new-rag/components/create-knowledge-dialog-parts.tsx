@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react'
 import type { NewKnowledgeStartMode } from '../routes'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RadioControl, RadioItem } from '@langgenius/dify-ui/radio-group'
+import { cn } from '@xsl/ui/cn'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -12,7 +12,9 @@ import type {
   HandleUpdateCondition,
   HandleUpdateSubVariableCondition,
 } from '../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { RiAddLine, RiDeleteBinLine, RiDraggable } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -22,9 +24,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiAddLine, RiDeleteBinLine, RiDraggable } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

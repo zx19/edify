@@ -1,5 +1,5 @@
 import type { DeploymentVersion } from '@/app/components/app/deploy/version'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { PublisherDeployingMarker } from '../publisher-deploying-marker'
 import { PublisherTimelineMarker } from '../shared/timeline-marker'

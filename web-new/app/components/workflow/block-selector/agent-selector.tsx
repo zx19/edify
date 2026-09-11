@@ -2,7 +2,6 @@ import type { AgentInviteOptionResponse } from '@dify/contracts/api/console/agen
 import type { ComboboxChangeEventDetails } from '@langgenius/dify-ui/combobox'
 import type { NodeDefault } from '../types'
 import type { AgentRosterNodeData } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Combobox,
   ComboboxInput,
@@ -16,6 +15,7 @@ import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgeni
 import { toast } from '@langgenius/dify-ui/toast'
 import { useQuery } from '@tanstack/react-query'
 import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useDebounce } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

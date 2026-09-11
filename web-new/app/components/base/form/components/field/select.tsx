@@ -1,5 +1,5 @@
 import type { LabelProps } from '../label'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useTranslation } from 'react-i18next'
 import { useFieldContext } from '../..'
 import Label from '../label'

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 type DataAttributes = {
   [key: `data-${string}`]: string | undefined

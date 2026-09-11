@@ -1,5 +1,5 @@
 import type { MermaidConfig } from 'mermaid'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import mermaid from 'mermaid'
 import * as React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'

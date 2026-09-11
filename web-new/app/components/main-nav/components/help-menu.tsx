@@ -1,8 +1,7 @@
 'use client'
 
-import type { IconButtonProps } from '@langgenius/dify-ui/icon-button'
+import type { IconButtonProps } from '@xsl/ui/icon-button'
 import type { ReactElement, Ref } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,9 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Switch } from '@langgenius/dify-ui/switch'
 import { skipToken, useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -2,7 +2,9 @@
 import type { FC } from 'react'
 import type { InputVar } from '../../../../types'
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { Textarea } from '@langgenius/dify-ui/textarea'
+import { RiDeleteBinLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -11,9 +13,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { RiDeleteBinLine } from '@remixicon/react'
+} from '@xsl/ui/select'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'

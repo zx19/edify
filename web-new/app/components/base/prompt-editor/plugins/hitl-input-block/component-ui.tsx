@@ -5,7 +5,7 @@ import type { FormInputItem } from '@/app/components/workflow/nodes/human-input/
 import type { Type } from '@/app/components/workflow/nodes/llm/types'
 import type { ValueSelector, Var } from '@/app/components/workflow/types'
 import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'

@@ -2,6 +2,7 @@
 
 import type { PluginDeclaration, UpdateFromGitHubPayload } from '../../../types'
 import { Field } from '@langgenius/dify-ui/field'
+import { Button } from '@xsl/ui/button'
 import {
   Select,
   SelectContent,
@@ -10,8 +11,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

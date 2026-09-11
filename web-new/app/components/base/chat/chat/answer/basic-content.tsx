@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { ChatItem } from '../../types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { Markdown } from '@/app/components/base/markdown'
 

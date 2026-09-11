@@ -7,7 +7,6 @@ import type {
 import type { UIEvent } from 'react'
 import type { AgentOrchestrateAddActionOptions } from '../add-actions-context'
 import type { AgentSkill } from '@/features/agent-v2/agent-composer/form-state'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +24,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useDebounce } from 'ahooks'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo, useRef, useState } from 'react'

@@ -1,8 +1,8 @@
 'use client'
 import type { FC, ReactNode } from 'react'
 import type { inputType } from '@/hooks/use-metadata'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Input } from '@langgenius/dify-ui/input'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useTranslation } from 'react-i18next'
 import AutoHeightTextarea from '@/app/components/base/auto-height-textarea'
 import { getTextWidthWithCanvas } from '@/utils'

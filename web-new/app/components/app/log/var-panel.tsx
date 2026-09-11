@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useState } from 'react'

@@ -3,6 +3,7 @@ import type {
   LogicalDocumentRevision,
 } from '@dify/contracts/knowledge-fs/types.gen'
 import type { RefObject } from 'react'
+import { Button } from '@xsl/ui/button'
 import {
   Select,
   SelectContent,
@@ -11,8 +12,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/ui/select'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from '@/next/link'

@@ -1,4 +1,3 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
 import {
   Slider,
@@ -8,6 +7,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from '@langgenius/dify-ui/slider'
+import { cn } from '@xsl/ui/cn'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Economic, HighQuality } from '@/app/components/base/icons/src/vender/knowledge'

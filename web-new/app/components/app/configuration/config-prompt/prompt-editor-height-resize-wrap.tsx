@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useDebounceFn } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'

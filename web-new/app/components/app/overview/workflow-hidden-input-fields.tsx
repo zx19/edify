@@ -1,13 +1,7 @@
 import type { ChangeEvent } from 'react'
 import type { WorkflowHiddenStartVariable, WorkflowLaunchInputValue } from './app-card-utils'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@langgenius/dify-ui/select'
 import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@xsl/ui/select'
 import Input from '@/app/components/base/input'
 import { InputVarType } from '@/app/components/workflow/types'
 

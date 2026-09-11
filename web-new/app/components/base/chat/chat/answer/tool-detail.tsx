@@ -1,6 +1,6 @@
 import type { ToolInfoInThought } from '../type'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowDownSLine, RiArrowRightSLine, RiHammerFill, RiLoader2Line } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

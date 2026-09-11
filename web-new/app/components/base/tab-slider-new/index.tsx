@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
+import { cn } from '@xsl/ui/cn'
 
 type Option = {
   value: string

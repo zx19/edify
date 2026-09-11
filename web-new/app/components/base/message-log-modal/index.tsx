@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { IChatItem } from '@/app/components/base/chat/chat/type'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
+import { cn } from '@xsl/ui/cn'
 import { useClickAway } from 'ahooks'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

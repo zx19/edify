@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { SkeletonContainer, SkeletonPoint, SkeletonRectangle } from '@/app/components/base/skeleton'
 

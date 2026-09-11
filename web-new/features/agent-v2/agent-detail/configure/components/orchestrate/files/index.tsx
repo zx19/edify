@@ -4,7 +4,6 @@ import type { MouseEvent, ReactNode } from 'react'
 import type { AgentOrchestrateAddActionOptions } from '../add-actions-context'
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentFileNode } from '@/features/agent-v2/agent-composer/form-state'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Dialog, DialogTrigger } from '@langgenius/dify-ui/dialog'
 import {
   FileTreeBadge,
@@ -13,6 +12,7 @@ import {
   FileTreeLabel,
 } from '@langgenius/dify-ui/file-tree'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'

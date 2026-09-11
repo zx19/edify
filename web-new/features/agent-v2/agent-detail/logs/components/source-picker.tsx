@@ -3,7 +3,6 @@ import type {
   AgentLogSourceResponse,
 } from '@dify/contracts/api/console/agent/types.gen'
 import type { TFunction } from 'i18next'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   Combobox,
   ComboboxCollection,
@@ -23,6 +22,7 @@ import {
   ComboboxValue,
 } from '@langgenius/dify-ui/combobox'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LogSourceIcon } from './source-icon'

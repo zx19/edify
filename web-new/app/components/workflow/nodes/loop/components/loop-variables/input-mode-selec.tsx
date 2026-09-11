@@ -5,7 +5,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
+} from '@xsl/ui/select'
 import { useTranslation } from 'react-i18next'
 
 type InputModeSelectProps = {

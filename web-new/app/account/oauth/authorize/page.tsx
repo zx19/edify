@@ -1,7 +1,6 @@
 'use client'
 
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { cn } from '@langgenius/dify-ui/cn'
 import { toast } from '@langgenius/dify-ui/toast'
 import {
   RiAccountCircleLine,
@@ -12,6 +11,7 @@ import {
 } from '@remixicon/react'
 import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
 import { Button, buttonVariants } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

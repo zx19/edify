@@ -13,8 +13,8 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react'
-import { cn } from '@langgenius/dify-ui/cn'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SliceContainer, SliceContent, SliceDivider, SliceLabel } from './shared'

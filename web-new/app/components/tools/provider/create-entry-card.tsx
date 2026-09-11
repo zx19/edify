@@ -1,6 +1,6 @@
 'use client'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiAddLine, RiArrowRightUpLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 
 type CreateEntryCardProps = {
   className?: string

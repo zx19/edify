@@ -5,7 +5,7 @@ import type {
   EnvironmentDeployment,
 } from '@dify/contracts/enterprise-app-deploy/types.gen'
 import type { UndeployHandler } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

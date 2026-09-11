@@ -1,8 +1,8 @@
 'use client'
 
 import type { SelectorKey } from 'i18next'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/ui/cn'
 import { memo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 

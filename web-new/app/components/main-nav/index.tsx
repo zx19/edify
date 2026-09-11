@@ -1,8 +1,8 @@
 'use client'
 
 import type { MainNavItem, MainNavProps } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useAtomValue } from 'jotai'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

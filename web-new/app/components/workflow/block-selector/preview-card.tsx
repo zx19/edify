@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   PreviewCardPopup,
   PreviewCardPortal,
   PreviewCardPositioner,
   PreviewCardViewport,
 } from '@langgenius/dify-ui/preview-card'
+import { cn } from '@xsl/ui/cn'
 
 export function BlockSelectorPreviewCardContent({ children }: { children: ReactNode }) {
   return (

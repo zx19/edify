@@ -2,10 +2,10 @@
 
 import type { ComponentProps, RefObject } from 'react'
 import type { StepByStepTourTaskId, StepByStepTourTaskView } from './types'
-import { cn } from '@langgenius/dify-ui/cn'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { PopoverDescription, PopoverTitle } from '@langgenius/dify-ui/popover'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useEffect } from 'react'
 
 export type FloatingChecklistProps = {

@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { cn } from '@xsl/ui/cn'
 
 type WorkflowToolStateLabelProps = {
   label: string

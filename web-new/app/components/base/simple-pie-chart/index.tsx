@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { CSSProperties } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import ReactECharts from 'echarts-for-react'
 import { memo, useMemo } from 'react'
 import style from './index.module.css'

@@ -5,6 +5,7 @@ import type { SelectorTranslate } from '@/app/components/app/configuration/utils
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { InputVar, UploadFileSetting } from '@/app/components/workflow/types'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Textarea } from '@langgenius/dify-ui/textarea'
 import {
   Select,
   SelectItem,
@@ -16,8 +17,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@langgenius/dify-ui/select'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { Trans } from 'react-i18next'
 import { getStringSelectorTranslate } from '@/app/components/app/configuration/utils'

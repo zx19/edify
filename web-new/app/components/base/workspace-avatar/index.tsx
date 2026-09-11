@@ -2,7 +2,7 @@
 
 import type { AvatarSize } from '@langgenius/dify-ui/avatar'
 import { AvatarFallback, AvatarRoot } from '@langgenius/dify-ui/avatar'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 export type WorkspaceAvatarSize = Extract<AvatarSize, 'xs' | 'sm' | 'lg' | '2xl'>
 

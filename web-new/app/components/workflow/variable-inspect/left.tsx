@@ -1,7 +1,7 @@
 import type { currentVarType } from './panel'
 import type { VarInInspect } from '@/types/workflow'
-import { cn } from '@langgenius/dify-ui/cn'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 // import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VarInInspectType } from '@/types/workflow'

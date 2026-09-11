@@ -1,7 +1,8 @@
 'use client'
 import type { FC, ReactNode } from 'react'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@langgenius/dify-ui/cn'
+import { RiDeleteBinLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import {
   Select,
   SelectItem,
@@ -12,8 +13,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { RiDeleteBinLine } from '@remixicon/react'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'
 import Input from '@/app/components/base/input'

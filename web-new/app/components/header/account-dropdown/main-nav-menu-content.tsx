@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react'
 import type { Theme } from '@/app/components/base/theme-selector'
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -17,6 +16,7 @@ import {
   DropdownMenuSubTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/ui/cn'
 import { useTheme } from 'next-themes'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'

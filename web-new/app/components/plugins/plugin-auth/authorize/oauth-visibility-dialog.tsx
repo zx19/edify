@@ -6,8 +6,8 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Button } from '@xsl/ui/button'
+import { IconButton } from '@xsl/ui/icon-button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import PermissionSelector from './permission-selector'

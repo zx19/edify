@@ -1,7 +1,5 @@
 import type { OnNodeAdd } from '../../types'
 import type { SnippetListItem as SnippetListItemData } from '@/types/snippet'
-import { cn } from '@langgenius/dify-ui/cn'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import {
   createPreviewCardHandle,
   PreviewCard,
@@ -14,6 +12,8 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { cn } from '@xsl/ui/cn'
+import { IconButton } from '@xsl/ui/icon-button'
 import { useInfiniteScroll } from 'ahooks'
 import { memo, useCallback, useDeferredValue, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

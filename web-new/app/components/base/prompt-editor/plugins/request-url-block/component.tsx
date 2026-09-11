@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiGlobalLine } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useSelectOrDelete } from '../../hooks'
 import { DELETE_REQUEST_URL_BLOCK_COMMAND } from './index'

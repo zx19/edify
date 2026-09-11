@@ -1,5 +1,5 @@
 import type { RefObject } from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 
 type IndexBarProps = {
   letters: string[]

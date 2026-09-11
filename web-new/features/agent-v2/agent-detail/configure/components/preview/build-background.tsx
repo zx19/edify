@@ -1,4 +1,4 @@
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { AgentBuildGridTexture } from '../build-grid-texture'
 
 export function AgentBuildPanelBackground({ visible }: { visible: boolean }) {

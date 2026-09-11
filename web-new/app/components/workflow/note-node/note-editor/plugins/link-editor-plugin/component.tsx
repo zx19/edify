@@ -1,7 +1,7 @@
 import { flip, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiEditLine, RiExternalLinkLine, RiLinkUnlinkM } from '@remixicon/react'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useClickAway } from 'ahooks'
 import { escape } from 'es-toolkit/string'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'

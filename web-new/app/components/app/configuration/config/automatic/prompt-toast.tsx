@@ -1,5 +1,5 @@
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowDownSLine, RiSparklingFill } from '@remixicon/react'
+import { cn } from '@xsl/ui/cn'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

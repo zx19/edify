@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import type { LLMNodeType } from './types'
 import type { NodePanelProps } from '@/app/components/workflow/types'
+import { toast } from '@langgenius/dify-ui/toast'
 import {
   Select,
   SelectContent,
@@ -8,8 +9,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@langgenius/dify-ui/select'
-import { toast } from '@langgenius/dify-ui/toast'
+} from '@xsl/ui/select'
 import * as React from 'react'
 import { useCallback, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

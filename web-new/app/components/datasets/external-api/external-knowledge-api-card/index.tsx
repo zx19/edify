@@ -9,8 +9,8 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { useQueryClient } from '@tanstack/react-query'
+import { IconButton } from '@xsl/ui/icon-button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

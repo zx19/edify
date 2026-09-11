@@ -2,7 +2,7 @@
 
 import type { AppPartial } from '@dify/contracts/api/console/apps/types.gen'
 import { zIconType } from '@dify/contracts/api/console/apps/zod.gen'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/ui/cn'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'
 

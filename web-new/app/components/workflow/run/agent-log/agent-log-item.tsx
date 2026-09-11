@@ -1,7 +1,7 @@
 import type { AgentLogItemWithChildren } from '@/types/workflow'
-import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowRightSLine, RiListView } from '@remixicon/react'
 import { Button } from '@xsl/ui/button'
+import { cn } from '@xsl/ui/cn'
 import { useMemo, useState } from 'react'
 import useGetIcon from '@/app/components/plugins/install-plugin/base/use-get-icon'
 import BlockIcon from '@/app/components/workflow/block-icon'
