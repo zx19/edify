@@ -1,0 +1,1357 @@
+{
+  "generatedAt": "2026-09-11",
+  "commit": "7cef5287ec",
+  "stage": "seed-routes-only",
+  "stagePlan": "种子（W2）→ WebApp 行（W3，design 三件套填充）→ 全量（W6 前）",
+  "summary": {
+    "pages": 106,
+    "layouts": 33,
+    "total": 139,
+    "byZone": {
+      "console": 75,
+      "education": 2,
+      "human-input": 1,
+      "webapp": 11,
+      "misc": 9,
+      "auth": 8
+    }
+  },
+  "notes": [
+    "计划头部实测基线「路由 140」含 web/app/components/main-nav/layout.tsx——该文件位于非路由目录（app/components/），App Router 下不产生路由；本矩阵按语义计 139（106 page + 33 路由 layout）"
+  ],
+  "rows": [
+    {
+      "id": "/@detailSidebar/agents/[agentId]/access",
+      "route": "/@detailSidebar/agents/[agentId]/access",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/agents/[agentId]/access/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/agents/[agentId]/configure",
+      "route": "/@detailSidebar/agents/[agentId]/configure",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/agents/[agentId]/configure/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/agents/[agentId]/logs",
+      "route": "/@detailSidebar/agents/[agentId]/logs",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/agents/[agentId]/logs/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/agents/[agentId]/monitoring",
+      "route": "/@detailSidebar/agents/[agentId]/monitoring",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/agents/[agentId]/monitoring/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/agents/[agentId]",
+      "route": "/@detailSidebar/agents/[agentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/agents/[agentId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/access-config",
+      "route": "/@detailSidebar/app/[appId]/access-config",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/access-config/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/access-point",
+      "route": "/@detailSidebar/app/[appId]/access-point",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/access-point/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/annotations",
+      "route": "/@detailSidebar/app/[appId]/annotations",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/annotations/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/configuration",
+      "route": "/@detailSidebar/app/[appId]/configuration",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/configuration/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/deploy",
+      "route": "/@detailSidebar/app/[appId]/deploy",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/deploy/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/logs",
+      "route": "/@detailSidebar/app/[appId]/logs",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/logs/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/overview",
+      "route": "/@detailSidebar/app/[appId]/overview",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/overview/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/app/[appId]/workflow",
+      "route": "/@detailSidebar/app/[appId]/workflow",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/app/[appId]/workflow/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/access-config",
+      "route": "/@detailSidebar/datasets/[datasetId]/access-config",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/access-config/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/api",
+      "route": "/@detailSidebar/datasets/[datasetId]/api",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/api/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/documents/[documentId]",
+      "route": "/@detailSidebar/datasets/[datasetId]/documents/[documentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/documents/[documentId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/documents/[documentId]/settings",
+      "route": "/@detailSidebar/datasets/[datasetId]/documents/[documentId]/settings",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/documents/[documentId]/settings/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/documents/create",
+      "route": "/@detailSidebar/datasets/[datasetId]/documents/create",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/documents/create/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/documents/create-from-pipeline",
+      "route": "/@detailSidebar/datasets/[datasetId]/documents/create-from-pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/documents/create-from-pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/documents",
+      "route": "/@detailSidebar/datasets/[datasetId]/documents",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/documents/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/hitTesting",
+      "route": "/@detailSidebar/datasets/[datasetId]/hitTesting",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/hitTesting/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/pipeline",
+      "route": "/@detailSidebar/datasets/[datasetId]/pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/[datasetId]/settings",
+      "route": "/@detailSidebar/datasets/[datasetId]/settings",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/[datasetId]/settings/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/connect",
+      "route": "/@detailSidebar/datasets/connect",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/connect/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/create",
+      "route": "/@detailSidebar/datasets/create",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/create/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/datasets/create-from-pipeline",
+      "route": "/@detailSidebar/datasets/create-from-pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/datasets/create-from-pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/snippets/[snippetId]/orchestrate",
+      "route": "/@detailSidebar/snippets/[snippetId]/orchestrate",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/snippets/[snippetId]/orchestrate/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/@detailSidebar/snippets/[snippetId]",
+      "route": "/@detailSidebar/snippets/[snippetId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/@detailSidebar/snippets/[snippetId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents/[agentId]/access",
+      "route": "/agents/[agentId]/access",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/access/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents/[agentId]/configure",
+      "route": "/agents/[agentId]/configure",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/configure/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents/[agentId]/logs",
+      "route": "/agents/[agentId]/logs",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/logs/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents/[agentId]/monitoring",
+      "route": "/agents/[agentId]/monitoring",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/monitoring/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents/[agentId]",
+      "route": "/agents/[agentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agents",
+      "route": "/agents",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/access-config",
+      "route": "/app/[appId]/access-config",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/access-config/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/access-point",
+      "route": "/app/[appId]/access-point",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/access-point/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/annotations",
+      "route": "/app/[appId]/annotations",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/annotations/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/configuration",
+      "route": "/app/[appId]/configuration",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/configuration/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/deploy",
+      "route": "/app/[appId]/deploy",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/deploy/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/logs",
+      "route": "/app/[appId]/logs",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/logs/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/overview",
+      "route": "/app/[appId]/overview",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/overview/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/app/[appId]/workflow",
+      "route": "/app/[appId]/workflow",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/workflow/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/apps",
+      "route": "/apps",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/apps/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/access-config",
+      "route": "/datasets/[datasetId]/access-config",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/access-config/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/api",
+      "route": "/datasets/[datasetId]/api",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/api/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/documents/[documentId]",
+      "route": "/datasets/[datasetId]/documents/[documentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/documents/[documentId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/documents/[documentId]/settings",
+      "route": "/datasets/[datasetId]/documents/[documentId]/settings",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/documents/[documentId]/settings/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/documents/create",
+      "route": "/datasets/[datasetId]/documents/create",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/documents/create/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/documents/create-from-pipeline",
+      "route": "/datasets/[datasetId]/documents/create-from-pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/documents/create-from-pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/documents",
+      "route": "/datasets/[datasetId]/documents",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/documents/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/hitTesting",
+      "route": "/datasets/[datasetId]/hitTesting",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/hitTesting/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/pipeline",
+      "route": "/datasets/[datasetId]/pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/[datasetId]/settings",
+      "route": "/datasets/[datasetId]/settings",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/settings/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/connect",
+      "route": "/datasets/connect",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/connect/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/create",
+      "route": "/datasets/create",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/create/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/create-from-pipeline",
+      "route": "/datasets/create-from-pipeline",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/create-from-pipeline/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/[knowledgeSpaceId]/documents/[documentId]",
+      "route": "/datasets/new/[knowledgeSpaceId]/documents/[documentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/documents/[documentId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/[knowledgeSpaceId]/documents",
+      "route": "/datasets/new/[knowledgeSpaceId]/documents",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/documents/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/[knowledgeSpaceId]",
+      "route": "/datasets/new/[knowledgeSpaceId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/[knowledgeSpaceId]/sources/new",
+      "route": "/datasets/new/[knowledgeSpaceId]/sources/new",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/sources/new/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/[knowledgeSpaceId]/sources",
+      "route": "/datasets/new/[knowledgeSpaceId]/sources",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/sources/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets/new/create",
+      "route": "/datasets/new/create",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/create/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/datasets",
+      "route": "/datasets",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/explore/installed/[appId]",
+      "route": "/explore/installed/[appId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/explore/installed/[appId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/installed/[appId]",
+      "route": "/installed/[appId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/installed/[appId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/integrations/[[...slug]]",
+      "route": "/integrations/[[...slug]]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/integrations/[[...slug]]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/marketplace",
+      "route": "/marketplace",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/marketplace/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/",
+      "route": "/",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/plugins",
+      "route": "/plugins",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/plugins/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/skills/[skillId]",
+      "route": "/skills/[skillId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/skills/[skillId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/skills",
+      "route": "/skills",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/skills/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/snippets/[snippetId]/orchestrate",
+      "route": "/snippets/[snippetId]/orchestrate",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/snippets/[snippetId]/orchestrate/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/snippets/[snippetId]",
+      "route": "/snippets/[snippetId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/snippets/[snippetId]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/snippets",
+      "route": "/snippets",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/snippets/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/tools",
+      "route": "/tools",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/tools/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/education/apply",
+      "route": "/education/apply",
+      "zone": "education",
+      "file": "web/app/(education)/education/apply/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/education/verify",
+      "route": "/education/verify",
+      "zone": "education",
+      "file": "web/app/(education)/education/verify/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/form/[token]",
+      "route": "/form/[token]",
+      "zone": "human-input",
+      "file": "web/app/(humanInputLayout)/form/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/agent/[token]",
+      "route": "/agent/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/agent/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/chat/[token]",
+      "route": "/chat/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/chat/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/chatbot/[token]",
+      "route": "/chatbot/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/chatbot/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/completion/[token]",
+      "route": "/completion/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/completion/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/env/workflow/[token]",
+      "route": "/env/workflow/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/env/workflow/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/webapp-reset-password/check-code",
+      "route": "/webapp-reset-password/check-code",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/check-code/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/webapp-reset-password",
+      "route": "/webapp-reset-password",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/webapp-reset-password/set-password",
+      "route": "/webapp-reset-password/set-password",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/set-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/webapp-signin/check-code",
+      "route": "/webapp-signin/check-code",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-signin/check-code/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/webapp-signin",
+      "route": "/webapp-signin",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-signin/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/workflow/[token]",
+      "route": "/workflow/[token]",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/workflow/[token]/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/account",
+      "route": "/account",
+      "zone": "misc",
+      "file": "web/app/account/(commonLayout)/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/account/oauth/authorize",
+      "route": "/account/oauth/authorize",
+      "zone": "misc",
+      "file": "web/app/account/oauth/authorize/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/activate",
+      "route": "/activate",
+      "zone": "auth",
+      "file": "web/app/activate/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/device",
+      "route": "/device",
+      "zone": "auth",
+      "file": "web/app/device/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/forgot-password",
+      "route": "/forgot-password",
+      "zone": "auth",
+      "file": "web/app/forgot-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/init",
+      "route": "/init",
+      "zone": "misc",
+      "file": "web/app/init/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/install",
+      "route": "/install",
+      "zone": "auth",
+      "file": "web/app/install/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/oauth-callback",
+      "route": "/oauth-callback",
+      "zone": "auth",
+      "file": "web/app/oauth-callback/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/reset-password/check-code",
+      "route": "/reset-password/check-code",
+      "zone": "misc",
+      "file": "web/app/reset-password/check-code/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/reset-password",
+      "route": "/reset-password",
+      "zone": "misc",
+      "file": "web/app/reset-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/reset-password/set-password",
+      "route": "/reset-password/set-password",
+      "zone": "misc",
+      "file": "web/app/reset-password/set-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signin/check-code",
+      "route": "/signin/check-code",
+      "zone": "auth",
+      "file": "web/app/signin/check-code/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signin/invite-settings",
+      "route": "/signin/invite-settings",
+      "zone": "auth",
+      "file": "web/app/signin/invite-settings/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signin",
+      "route": "/signin",
+      "zone": "auth",
+      "file": "web/app/signin/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signup/check-code",
+      "route": "/signup/check-code",
+      "zone": "misc",
+      "file": "web/app/signup/check-code/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signup",
+      "route": "/signup",
+      "zone": "misc",
+      "file": "web/app/signup/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    },
+    {
+      "id": "/signup/set-password",
+      "route": "/signup/set-password",
+      "zone": "misc",
+      "file": "web/app/signup/set-password/page.tsx",
+      "contracts": [],
+      "i18nKeys": [],
+      "tests": [],
+      "e2e": [],
+      "status": "pending"
+    }
+  ],
+  "layouts": [
+    {
+      "route": "/agents/[agentId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/[agentId]/layout.tsx"
+    },
+    {
+      "route": "/agents",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/agents/layout.tsx"
+    },
+    {
+      "route": "/app/[appId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/layout.tsx"
+    },
+    {
+      "route": "/app",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/app/(appDetailLayout)/layout.tsx"
+    },
+    {
+      "route": "/datasets/[datasetId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/layout.tsx"
+    },
+    {
+      "route": "/datasets",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/(datasetDetailLayout)/layout.tsx"
+    },
+    {
+      "route": "/datasets",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/layout.tsx"
+    },
+    {
+      "route": "/datasets/new/[knowledgeSpaceId]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/[knowledgeSpaceId]/layout.tsx"
+    },
+    {
+      "route": "/datasets/new",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/datasets/new/layout.tsx"
+    },
+    {
+      "route": "/integrations/[[...slug]]",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/integrations/[[...slug]]/layout.tsx"
+    },
+    {
+      "route": "/integrations",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/integrations/layout.tsx"
+    },
+    {
+      "route": "/",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/layout.tsx"
+    },
+    {
+      "route": "/marketplace",
+      "zone": "console",
+      "file": "web/app/(commonLayout)/marketplace/layout.tsx"
+    },
+    {
+      "route": "/",
+      "zone": "education",
+      "file": "web/app/(education)/layout.tsx"
+    },
+    {
+      "route": "/",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/layout.tsx"
+    },
+    {
+      "route": "/webapp-reset-password/check-code",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/check-code/layout.tsx"
+    },
+    {
+      "route": "/webapp-reset-password",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/layout.tsx"
+    },
+    {
+      "route": "/webapp-reset-password/set-password",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-reset-password/set-password/layout.tsx"
+    },
+    {
+      "route": "/webapp-signin",
+      "zone": "webapp",
+      "file": "web/app/(shareLayout)/webapp-signin/layout.tsx"
+    },
+    {
+      "route": "/account",
+      "zone": "misc",
+      "file": "web/app/account/(commonLayout)/layout.tsx"
+    },
+    {
+      "route": "/account/oauth/authorize",
+      "zone": "misc",
+      "file": "web/app/account/oauth/authorize/layout.tsx"
+    },
+    {
+      "route": "/device",
+      "zone": "auth",
+      "file": "web/app/device/layout.tsx"
+    },
+    {
+      "route": "/install",
+      "zone": "auth",
+      "file": "web/app/install/layout.tsx"
+    },
+    {
+      "route": "/layout.tsx",
+      "zone": "misc",
+      "file": "web/app/layout.tsx"
+    },
+    {
+      "route": "/oauth-callback",
+      "zone": "auth",
+      "file": "web/app/oauth-callback/layout.tsx"
+    },
+    {
+      "route": "/reset-password/check-code",
+      "zone": "misc",
+      "file": "web/app/reset-password/check-code/layout.tsx"
+    },
+    {
+      "route": "/reset-password",
+      "zone": "misc",
+      "file": "web/app/reset-password/layout.tsx"
+    },
+    {
+      "route": "/reset-password/set-password",
+      "zone": "misc",
+      "file": "web/app/reset-password/set-password/layout.tsx"
+    },
+    {
+      "route": "/signin/check-code",
+      "zone": "auth",
+      "file": "web/app/signin/check-code/layout.tsx"
+    },
+    {
+      "route": "/signin",
+      "zone": "auth",
+      "file": "web/app/signin/layout.tsx"
+    },
+    {
+      "route": "/signup/check-code",
+      "zone": "misc",
+      "file": "web/app/signup/check-code/layout.tsx"
+    },
+    {
+      "route": "/signup",
+      "zone": "misc",
+      "file": "web/app/signup/layout.tsx"
+    },
+    {
+      "route": "/signup/set-password",
+      "zone": "misc",
+      "file": "web/app/signup/set-password/layout.tsx"
+    }
+  ]
+}

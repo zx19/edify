@@ -1,0 +1,735 @@
+{
+  "generatedAt": "2026-09-11",
+  "commit": "7cef5287ec",
+  "method": "regex 级提取（非全量 AST）；动态拼接 key / 跨文件转发 keys 对象不追踪，误差由单元边界评审抽查兜底（计划口径）",
+  "summary": {
+    "atomExportFiles": 21,
+    "crossModuleAtomFiles": 17,
+    "queryKeyFiles": 60,
+    "queryKeyClustersWithMultipleReaders": 18,
+    "crossDirClusters": 15
+  },
+  "sharedAtoms": [
+    {
+      "file": "web/context/permission-state.ts",
+      "atomsDefined": 8,
+      "exports": [
+        "workspacePermissionKeysAtom",
+        "datasetDefaultPermissionKeysAtom",
+        "workspacePermissionKeysLoadingAtom",
+        "workspacePermissionKeysFetchingAtom",
+        "workspacePermissionKeysErrorAtom",
+        "retryWorkspacePermissionKeysAtom",
+        "refreshWorkspacePermissionKeysAfterMutationDenialAtom"
+      ],
+      "importerCount": 83,
+      "externalImporterCount": 83,
+      "externalImporters": [
+        "web/app/(commonLayout)/agents/agents-access-guard.tsx",
+        "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/overview/chart-view.tsx",
+        "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/overview/tracing/panel.tsx",
+        "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/overview/view.tsx",
+        "web/app/components/app-sidebar/app-detail-section.tsx",
+        "web/app/components/app-sidebar/app-info/app-info-trigger.tsx",
+        "web/app/components/app-sidebar/dataset-detail-section.tsx",
+        "web/app/components/app-sidebar/dataset-info/dropdown.tsx",
+        "web/app/components/app-sidebar/snippet-info/dropdown.tsx",
+        "web/app/components/app/access-config/index.tsx",
+        "web/app/components/app/access-point/built-in-access-points/index.tsx",
+        "web/app/components/app/access-point/index.tsx",
+        "web/app/components/app/app-publisher/index.tsx",
+        "web/app/components/app/configuration/dataset-config/index.tsx",
+        "web/app/components/app/configuration/dataset-config/select-dataset/index.tsx",
+        "web/app/components/app/configuration/hooks/configuration-lifecycle/use-configuration-app-context.ts",
+        "web/app/components/app/create-app-dialog/app-list/index.tsx",
+        "web/app/components/app/create-app-modal/index.tsx",
+        "web/app/components/app/create-from-dsl-modal/index.tsx",
+        "web/app/components/app/deploy/index.tsx",
+        "web/app/components/app/log/empty-element.tsx",
+        "web/app/components/apps/app-card/action-bar/index.tsx",
+        "web/app/components/apps/app-card/index.tsx",
+        "web/app/components/apps/index.tsx",
+        "web/app/components/apps/list.tsx",
+        "web/app/components/apps/starred-app-card.tsx",
+        "web/app/components/custom/custom-web-app-brand/hooks/use-web-app-brand.ts",
+        "web/app/components/datasets/access-config/index.tsx",
+        "web/app/components/datasets/documents/components/document-list/components/document-table-row.tsx",
+        "web/app/components/datasets/documents/components/list.tsx",
+        "web/app/components/datasets/documents/detail/index.tsx",
+        "web/app/components/datasets/documents/index.tsx",
+        "web/app/components/datasets/extra-info/api-access/card.tsx",
+        "web/app/components/datasets/extra-info/service-api/index.tsx",
+        "web/app/components/datasets/hit-testing/index.tsx",
+        "web/app/components/datasets/list/dataset-card/components/operations-dropdown.tsx",
+        "web/app/components/datasets/list/dataset-card/index.tsx",
+        "web/app/components/datasets/list/index.tsx",
+        "web/app/components/datasets/settings/form/hooks/use-form-state.ts",
+        "web/app/components/header/account-setting/access-rules-page/access-rule-section.tsx",
+        "web/app/components/header/account-setting/api-based-extension-page/index.tsx",
+        "web/app/components/header/account-setting/index.tsx",
+        "web/app/components/header/account-setting/members-page/index.tsx",
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/index.tsx",
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/model-list-item.tsx",
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/model-list.tsx",
+        "web/app/components/header/account-setting/model-provider-page/system-model-selector/index.tsx",
+        "web/app/components/header/account-setting/permissions-page/index.tsx",
+        "web/app/components/header/account-setting/permissions-page/role-list/row-menu.tsx",
+        "web/app/components/main-nav/components/web-apps-section.tsx",
+        "web/app/components/main-nav/components/workspace-card.tsx",
+        "web/app/components/plugins/install-plugin/hooks/use-workspace-plugin-install-permission.ts",
+        "web/app/components/plugins/marketplace/marketplace-install-permission-provider.tsx",
+        "web/app/components/rag-pipeline/components/conversion.tsx",
+        "web/app/components/rag-pipeline/components/rag-pipeline-main.tsx",
+        "web/app/components/snippet-list/components/snippet-card.tsx",
+        "web/app/components/snippet-list/index.tsx",
+        "web/app/components/snippets/components/snippet-main.tsx",
+        "web/app/components/snippets/hooks/use-create-snippet.ts",
+        "web/app/components/snippets/import-snippet-dsl-dialog.tsx",
+        "web/app/components/step-by-step-tour/mount.tsx",
+        "web/app/components/tools/hooks/use-tool-permissions.ts",
+        "web/app/components/workflow-app/components/workflow-main.tsx",
+        "web/app/components/workflow-app/hooks/use-workflow-init.ts",
+        "web/app/components/workflow-app/index.tsx",
+        "web/app/components/workflow/nodes/knowledge-retrieval/components/dataset-list.tsx",
+        "web/app/components/workflow/selection-contextmenu.tsx",
+        "web/features/agent-v2/agent-detail/access/components/web-app-access-control-button.tsx",
+        "web/features/agent-v2/permissions.ts",
+        "web/features/home/continue-work/item.tsx",
+        "web/features/home/home-content/home-content.tsx",
+        "web/features/new-rag/create-knowledge-page.tsx",
+        "web/features/new-rag/document-detail-page.tsx",
+        "web/features/new-rag/new-knowledge-list.tsx",
+        "web/features/new-rag/sources-page.tsx",
+        "web/features/new-rag/use-document-reindex.ts",
+        "web/features/skills/permissions.ts",
+        "web/features/tag-management/components/tag-management-modal.tsx",
+        "web/features/tag-management/components/tag-search-content.tsx",
+        "web/features/tag-management/components/tag-selector.tsx",
+        "web/hooks/use-credential-permissions.ts",
+        "web/hooks/use-import-dsl.ts",
+        "web/service/use-plugins.ts"
+      ]
+    },
+    {
+      "file": "web/context/workspace-state.ts",
+      "atomsDefined": 9,
+      "exports": [
+        "currentWorkspaceAtom",
+        "currentWorkspaceIdAtom",
+        "isCurrentWorkspaceOwnerAtom",
+        "isCurrentWorkspaceManagerAtom",
+        "isCurrentWorkspaceEditorAtom",
+        "isCurrentWorkspaceDatasetOperatorAtom",
+        "currentWorkspaceLoadingAtom"
+      ],
+      "importerCount": 33,
+      "externalImporterCount": 32,
+      "externalImporters": [
+        "web/app/(commonLayout)/agents/agents-access-guard.tsx",
+        "web/app/(commonLayout)/app/(appDetailLayout)/[appId]/layout-main.tsx",
+        "web/app/(commonLayout)/datasets/(datasetDetailLayout)/[datasetId]/layout-main.tsx",
+        "web/app/(commonLayout)/datasets/layout.tsx",
+        "web/app/(commonLayout)/external-service-sync.tsx",
+        "web/app/components/api-key/api-key-modal.tsx",
+        "web/app/components/app/configuration/hooks/configuration-lifecycle/use-configuration-app-context.ts",
+        "web/app/components/app/log/archived-logs-notice.tsx",
+        "web/app/components/billing/billing-page/index.tsx",
+        "web/app/components/billing/hooks/use-education-discount.ts",
+        "web/app/components/billing/plan/index.tsx",
+        "web/app/components/billing/pricing/content.tsx",
+        "web/app/components/billing/pricing/plans/cloud-plan-item/index.tsx",
+        "web/app/components/datasets/list/index.tsx",
+        "web/app/components/goto-anything/actions/commands/slash-provider.tsx",
+        "web/app/components/goto-anything/index.tsx",
+        "web/app/components/header/account-setting/members-page/edit-workspace-modal/index.tsx",
+        "web/app/components/header/account-setting/members-page/index.tsx",
+        "web/app/components/header/account-setting/members-page/invite-button.tsx",
+        "web/app/components/header/account-setting/members-page/transfer-ownership-modal/index.tsx",
+        "web/app/components/main-nav/index.tsx",
+        "web/app/components/main-nav/layout.tsx",
+        "web/app/components/plugins/card/index.tsx",
+        "web/app/components/plugins/install-plugin/base/use-get-icon.ts",
+        "web/app/components/snippet-list/index.tsx",
+        "web/app/components/step-by-step-tour/mount.tsx",
+        "web/app/components/step-by-step-tour/state.ts",
+        "web/app/components/workflow-app/index.tsx",
+        "web/app/components/workflow/nodes/human-input/components/delivery-method/recipient/index.tsx",
+        "web/app/components/workflow/nodes/human-input/components/delivery-method/test-email-sender.tsx",
+        "web/app/education/apply/application-form.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/prompt-editor/hooks.ts"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store.ts",
+      "atomsDefined": 4,
+      "exports": [
+        "agentComposerSavedDraftAtom",
+        "agentComposerDraftAtom",
+        "rebaseAgentComposerDraftAtom",
+        "isAgentComposerDirtyAtom"
+      ],
+      "importerCount": 13,
+      "externalImporterCount": 12,
+      "externalImporters": [
+        "web/features/agent-v2/agent-composer/store-modules/app-features.ts",
+        "web/features/agent-v2/agent-composer/store-modules/env.ts",
+        "web/features/agent-v2/agent-composer/store-modules/files.ts",
+        "web/features/agent-v2/agent-composer/store-modules/knowledge.ts",
+        "web/features/agent-v2/agent-composer/store-modules/model.ts",
+        "web/features/agent-v2/agent-composer/store-modules/prompt.ts",
+        "web/features/agent-v2/agent-composer/store-modules/skills.ts",
+        "web/features/agent-v2/agent-composer/store-modules/tools.ts",
+        "web/features/agent-v2/agent-detail/configure/components/composer-session.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/files/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/publish-bar/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/preview/chat-session.tsx"
+      ]
+    },
+    {
+      "file": "web/app/components/app/deploy/state.ts",
+      "atomsDefined": 24,
+      "exports": [
+        "AppDeployStateBoundary",
+        "latestAppWorkflowVersionAtom",
+        "appWorkflowVersionsAtom",
+        "appWorkflowVersionsErrorAtom",
+        "appWorkflowVersionsFetchNextPageAtom",
+        "appWorkflowVersionsHasNextPageAtom",
+        "appWorkflowVersionsIsFetchingAtom",
+        "appWorkflowVersionsIsFetchingNextPageAtom",
+        "appWorkflowVersionsIsLoadingAtom",
+        "appEnvironmentUsageAtom",
+        "undeployedAppEnvironmentsAtom",
+        "isEnvironmentDeploymentInProgress",
+        "hasInProgressEnvironmentDeployments",
+        "appEnvironmentDeploymentsAtom",
+        "appEnvironmentDeploymentsIsLoadingAtom",
+        "appEnvironmentDeploymentsIsErrorAtom",
+        "appEnvironmentDeploymentsIsFetchingAtom",
+        "appEnvironmentDeploymentsRefetchAtom",
+        "getEnvironmentDeploymentActions"
+      ],
+      "importerCount": 7,
+      "externalImporterCount": 5,
+      "externalImporters": [
+        "web/app/components/app/app-publisher/hooks/use-refresh-app-environments-after-deployment-polling.ts",
+        "web/app/components/app/app-publisher/state.ts",
+        "web/app/components/app/deploy/environment-deployment-flow/index.tsx",
+        "web/app/components/app/deploy/environment-table/deploy-menu/index.tsx",
+        "web/app/components/app/deploy/environment-table/row-actions.tsx"
+      ]
+    },
+    {
+      "file": "web/features/system-features/state.ts",
+      "atomsDefined": 3,
+      "exports": ["deploymentEditionAtom"],
+      "importerCount": 4,
+      "externalImporterCount": 4,
+      "externalImporters": [
+        "web/app/components/step-by-step-tour/state.ts",
+        "web/context/i18n.ts",
+        "web/context/provider-context-provider.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/preview/chat-session.tsx"
+      ]
+    },
+    {
+      "file": "web/app/components/plugins/marketplace/atoms.ts",
+      "atomsDefined": 2,
+      "exports": [
+        "useMarketplaceSort",
+        "useMarketplaceSortValue",
+        "useSearchPluginText",
+        "useActivePluginType",
+        "useFilterPluginTags",
+        "searchModeAtom",
+        "useMarketplaceSearchMode",
+        "useMarketplaceMoreClick"
+      ],
+      "importerCount": 4,
+      "externalImporterCount": 3,
+      "externalImporters": [
+        "web/app/components/plugins/marketplace/list/list-with-collection.tsx",
+        "web/app/components/plugins/marketplace/search-box/search-box-wrapper.tsx",
+        "web/app/components/plugins/marketplace/sort-dropdown/index.tsx"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/model.ts",
+      "atomsDefined": 1,
+      "exports": ["agentComposerModelAtom"],
+      "importerCount": 3,
+      "externalImporterCount": 3,
+      "externalImporters": [
+        "web/app/components/workflow/nodes/agent-v2/components/agent-orchestrate-panel-content.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/preview/chat-session.tsx",
+        "web/features/agent-v2/agent-detail/configure/hooks.ts"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/tools.ts",
+      "atomsDefined": 10,
+      "exports": [
+        "agentComposerToolsAtom",
+        "agentComposerToolPresentationIdentitiesAtom",
+        "addProviderTools",
+        "addProviderToolsAtom",
+        "saveCliToolAtom",
+        "removeCliToolAtom",
+        "agentComposerToolSettingsAtom",
+        "removeProviderToolAtom",
+        "removeProviderToolActionAtom",
+        "setProviderToolCredentialAtom",
+        "saveProviderToolActionSettingsAtom"
+      ],
+      "importerCount": 3,
+      "externalImporterCount": 3,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/prompt-editor/slash.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/tools/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/use-agent-configure-sync.ts"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/app-features.ts",
+      "atomsDefined": 1,
+      "exports": ["agentComposerAppFeaturesAtom", "useAppFeatures", "useSetAppFeatures"],
+      "importerCount": 2,
+      "externalImporterCount": 2,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/preview/chat-features-panel.tsx",
+        "web/features/agent-v2/agent-detail/configure/hooks.ts"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/knowledge.ts",
+      "atomsDefined": 4,
+      "exports": [
+        "agentComposerKnowledgeRetrievalsAtom",
+        "addKnowledgeRetrievalAtom",
+        "updateKnowledgeRetrievalAtom",
+        "removeKnowledgeRetrievalAtom"
+      ],
+      "importerCount": 2,
+      "externalImporterCount": 2,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/knowledge/dialog.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/prompt-editor/index.tsx"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/prompt.ts",
+      "atomsDefined": 1,
+      "exports": ["agentComposerPromptAtom"],
+      "importerCount": 2,
+      "externalImporterCount": 2,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/prompt-editor/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/preview/chat-session.tsx"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-detail/configure/state.ts",
+      "atomsDefined": 11,
+      "exports": [
+        "AGENT_CONFIGURE_RIGHT_PANEL_MODES",
+        "agentConfigureSelectedVersionIdAtom",
+        "agentConfigureComposerRebaseRevisionAtom",
+        "agentConfigureSoulSourceOverrideAtom",
+        "agentConfigureShowChatFeaturesAtom",
+        "agentConfigureShowPreviewVersionsAtom",
+        "agentConfigureRightPanelModeAtom",
+        "agentConfigureConversationIdsAtom",
+        "agentConfigureSelectVersionAtom",
+        "rebaseAgentConfigureComposerAtom",
+        "setAgentConfigureConversationIdAtom",
+        "resetAgentConfigureConversationAtom",
+        "agentConfigureScopedAtoms",
+        "workflowInlineAgentConfigureScopedAtoms"
+      ],
+      "importerCount": 6,
+      "externalImporterCount": 2,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/composer-session.tsx",
+        "web/features/agent-v2/agent-detail/configure/components/preview/right-panel-chat.tsx"
+      ]
+    },
+    {
+      "file": "web/app/components/app/app-publisher/state.ts",
+      "atomsDefined": 30,
+      "exports": [
+        "BUILT_IN_ENVIRONMENT_ID",
+        "appPublisherOpenAtom",
+        "AppPublisherStateBoundary",
+        "appPublisherEnvironmentsAtom",
+        "selectedPublisherEnvironmentIdAtom",
+        "selectedPublisherEnvironmentAtom",
+        "joinedPublisherEnvironmentIdsAtom",
+        "addPublisherEnvironmentAtom",
+        "publisherEnvironmentDeploymentPollingAtom",
+        "startPublisherEnvironmentDeploymentPollingAtom",
+        "finishPublisherEnvironmentDeploymentPollingAtom",
+        "isDeploymentOperationTerminal",
+        "selectedEnvironmentDeploymentAtom",
+        "selectedEnvironmentDeploymentIsLoadingAtom",
+        "selectedEnvironmentDeploymentIsErrorAtom"
+      ],
+      "importerCount": 2,
+      "externalImporterCount": 1,
+      "externalImporters": ["web/app/components/app/app-publisher/environment-tabs/index.tsx"]
+    },
+    {
+      "file": "web/app/components/header/account-setting/model-provider-page/atoms.ts",
+      "atomsDefined": 1,
+      "exports": [
+        "useModelProviderListExpanded",
+        "useSetModelProviderListExpanded",
+        "useExpandModelProviderList"
+      ],
+      "importerCount": 2,
+      "externalImporterCount": 1,
+      "externalImporters": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/index.tsx"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/files.ts",
+      "atomsDefined": 4,
+      "exports": [
+        "agentComposerFilesAtom",
+        "upsertAgentFileAtom",
+        "removeAgentFileAtom",
+        "clearAgentConfigNoteAtom"
+      ],
+      "importerCount": 1,
+      "externalImporterCount": 1,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/config-context.ts"
+      ]
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/skills.ts",
+      "atomsDefined": 3,
+      "exports": ["agentComposerSkillsAtom", "upsertAgentSkillAtom", "removeAgentSkillAtom"],
+      "importerCount": 1,
+      "externalImporterCount": 1,
+      "externalImporters": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/config-context.ts"
+      ]
+    },
+    {
+      "file": "web/utils/query-atoms.ts",
+      "atomsDefined": 1,
+      "exports": ["atomWithResolvedSuspenseQuery"],
+      "importerCount": 1,
+      "externalImporterCount": 1,
+      "externalImporters": ["web/features/system-features/state.ts"]
+    },
+    {
+      "file": "web/app/components/app/access-point/state.ts",
+      "atomsDefined": 5,
+      "exports": [
+        "BUILT_IN_ENVIRONMENT_ID",
+        "AccessPointStateBoundary",
+        "inUseAppEnvironmentsAtom"
+      ],
+      "importerCount": 0,
+      "externalImporterCount": 0,
+      "externalImporters": []
+    },
+    {
+      "file": "web/app/components/step-by-step-tour/state.ts",
+      "atomsDefined": 26,
+      "exports": [
+        "completedStepByStepTourTaskIdsAtom",
+        "stepByStepTourSkippedAtom",
+        "stepByStepTourFirstWorkspaceIdAtom",
+        "stepByStepTourEnabledForCurrentWorkspaceAtom",
+        "stepByStepTourSessionAtom",
+        "activeStepByStepTourTaskIdAtom",
+        "activeStepByStepTourGuideIndexAtom",
+        "activeStepByStepTourGuideGroupAtom",
+        "activeStepByStepTourGuideIndexesAtom",
+        "stepByStepTourSkipRecoveryVisibleAtom",
+        "startStepByStepTourTaskAtom",
+        "advanceStepByStepTourGuideAtom",
+        "resolveStepByStepTourGuideGroupAtom",
+        "resetStepByStepTourSessionAtom",
+        "stepByStepTourStateUpdatingAtom",
+        "skipStepByStepTourAtom",
+        "completeStepByStepTourTaskAtom",
+        "uncompleteStepByStepTourTaskAtom",
+        "enableStepByStepTourForCurrentWorkspaceAtom",
+        "disableStepByStepTourForCurrentWorkspaceAtom"
+      ],
+      "importerCount": 0,
+      "externalImporterCount": 0,
+      "externalImporters": []
+    },
+    {
+      "file": "web/features/agent-v2/agent-composer/store-modules/env.ts",
+      "atomsDefined": 7,
+      "exports": [
+        "agentComposerEnvVariablesAtom",
+        "setEnvVariableKeyAtom",
+        "setEnvVariableScopeAtom",
+        "setEnvVariableValueAtom",
+        "addEnvVariableAtom",
+        "importEnvVariablesAtom",
+        "removeEnvVariableAtom"
+      ],
+      "importerCount": 0,
+      "externalImporterCount": 0,
+      "externalImporters": []
+    },
+    {
+      "file": "web/test/console/state-fixture.ts",
+      "atomsDefined": 14,
+      "exports": [
+        "seedRegisteredConsoleStateFixture",
+        "createWorkspaceStateModuleMock",
+        "createPermissionStateModuleMock",
+        "createSystemFeaturesStateModuleMock"
+      ],
+      "importerCount": 2,
+      "externalImporterCount": 0,
+      "externalImporters": []
+    }
+  ],
+  "queryKeyClusters": [
+    {
+      "key": "orpc:account.profile.get",
+      "readers": [
+        "web/app/install/installForm.tsx",
+        "web/app/signin/components/mail-and-password-auth.tsx",
+        "web/app/signin/invite-settings/page.tsx",
+        "web/app/signin/one-more-step.tsx",
+        "web/app/signup/set-password/page.tsx",
+        "web/service/client.ts"
+      ],
+      "writers": ["web/service/client.ts"],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.skills.get",
+      "readers": [
+        "web/features/skills/detail/page.tsx",
+        "web/features/skills/detail/shared.tsx",
+        "web/features/skills/detail/sidebar-actions.tsx",
+        "web/features/skills/detail/skill-display-name-editor.tsx",
+        "web/features/skills/detail/skill-metadata.tsx",
+        "web/features/skills/page.tsx"
+      ],
+      "writers": [
+        "web/features/skills/detail/page.tsx",
+        "web/features/skills/detail/shared.tsx",
+        "web/features/skills/detail/sidebar-actions.tsx",
+        "web/features/skills/detail/skill-display-name-editor.tsx",
+        "web/features/skills/detail/skill-metadata.tsx",
+        "web/features/skills/page.tsx"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:apps.get",
+      "readers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "writers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:apps.starred.get",
+      "readers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "writers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:apps.recent.get",
+      "readers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "writers": [
+        "web/app/components/app-sidebar/app-info/use-app-info-actions.ts",
+        "web/app/components/app/access-point/shared/use-access-point-actions.ts",
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:agent.get",
+      "readers": [
+        "web/app/components/workflow-app/components/workflow-header/features-trigger.tsx",
+        "web/features/agent-v2/agent-detail/configure/use-agent-configure-build-draft.ts",
+        "web/features/agent-v2/roster/components/roster-create-menu.tsx",
+        "web/service/client.ts"
+      ],
+      "writers": [
+        "web/app/components/workflow-app/components/workflow-header/features-trigger.tsx",
+        "web/features/agent-v2/agent-detail/configure/use-agent-configure-build-draft.ts",
+        "web/features/agent-v2/roster/components/roster-create-menu.tsx",
+        "web/service/client.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.modelProviders.summary.get",
+      "readers": [
+        "web/app/components/header/account-setting/model-provider-page/hooks.ts",
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/context/provider-context-provider.tsx"
+      ],
+      "writers": [
+        "web/app/components/header/account-setting/model-provider-page/hooks.ts",
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/context/provider-context-provider.tsx"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:knowledgeFs.getKnowledgeSpacesByIdSources",
+      "readers": [
+        "web/features/new-rag/crawl-selection-form.tsx",
+        "web/features/new-rag/documents-page.tsx",
+        "web/features/new-rag/sources-page.tsx"
+      ],
+      "writers": [
+        "web/features/new-rag/crawl-selection-form.tsx",
+        "web/features/new-rag/documents-page.tsx",
+        "web/features/new-rag/sources-page.tsx"
+      ],
+      "crossDir": false
+    },
+    {
+      "key": "orpc:workspaces.current.skills.tags.get",
+      "readers": [
+        "web/features/skills/detail/sidebar-actions.tsx",
+        "web/features/skills/detail/skill-metadata.tsx",
+        "web/features/skills/page.tsx"
+      ],
+      "writers": [
+        "web/features/skills/detail/sidebar-actions.tsx",
+        "web/features/skills/detail/skill-metadata.tsx",
+        "web/features/skills/page.tsx"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.plugin.installedIds.get",
+      "readers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/service/use-plugins.ts"
+      ],
+      "writers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/service/use-plugins.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.plugin.list.installations.ids.post",
+      "readers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/service/use-plugins.ts"
+      ],
+      "writers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/service/use-plugins.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "ns:marketplacePlugins",
+      "readers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/app/components/plugins/marketplace/hooks.ts"
+      ],
+      "writers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/app/components/plugins/marketplace/hooks.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "ns:marketplaceCollectionPlugins",
+      "readers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/app/components/plugins/marketplace/hooks.ts"
+      ],
+      "writers": [
+        "web/app/components/header/account-setting/model-provider-page/provider-added-card/provider-card-actions.tsx",
+        "web/app/components/plugins/marketplace/hooks.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:agent.byAgentId.versions.get",
+      "readers": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/publish-bar/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/use-agent-configure-sync.ts"
+      ],
+      "writers": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/publish-bar/index.tsx",
+        "web/features/agent-v2/agent-detail/configure/use-agent-configure-sync.ts"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.agents.byAgentId.skills.get",
+      "readers": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/skills/index.tsx",
+        "web/features/skills/detail/shared.tsx"
+      ],
+      "writers": [
+        "web/features/agent-v2/agent-detail/configure/components/orchestrate/skills/index.tsx",
+        "web/features/skills/detail/shared.tsx"
+      ],
+      "crossDir": true
+    },
+    {
+      "key": "orpc:workspaces.current.skills.bySkillId.get",
+      "readers": ["web/features/skills/detail/page.tsx", "web/features/skills/detail/shared.tsx"],
+      "writers": ["web/features/skills/detail/page.tsx", "web/features/skills/detail/shared.tsx"],
+      "crossDir": false
+    },
+    {
+      "key": "orpc:workspaces.current.skills.bySkillId.versions.get",
+      "readers": ["web/features/skills/detail/page.tsx", "web/features/skills/detail/shared.tsx"],
+      "writers": ["web/features/skills/detail/page.tsx", "web/features/skills/detail/shared.tsx"],
+      "crossDir": false
+    },
+    {
+      "key": "orpc:tags.get",
+      "readers": [
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "writers": [
+        "web/features/tag-management/hooks/use-tag-mutations.ts",
+        "web/service/client.ts"
+      ],
+      "crossDir": true
+    }
+  ]
+}
