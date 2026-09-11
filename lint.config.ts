@@ -9,6 +9,7 @@ const enableTailwindCanonicalClasses = process.env.TAILWIND_CANONICAL_CLASSES ==
 const tailwindCanonicalClassesOverride = {
   files: [
     'web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+    'web-new/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
     'packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
   ],
   rules: {
@@ -152,9 +153,13 @@ export const lintConfig = {
     'e2e/cucumber-report/**',
     'packages/contracts/**',
     'web/next/**',
+    'web-new/next/**',
     'web/next-env.d.ts',
+    'web-new/next-env.d.ts',
     'web/public/**',
+    'web-new/public/**',
     'web/types/doc-paths.ts',
+    'web-new/types/doc-paths.ts',
   ],
   plugins: ['import', 'jsdoc', 'jsx-a11y', 'node', 'react', 'typescript', 'unicorn', 'vitest'],
   // Keep JavaScript plugins ordered by rule namespace. The `-js` aliases distinguish
@@ -761,7 +766,10 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'],
+      files: [
+        'web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+      ],
       rules: {
         'no-barrel-files/no-barrel-files': 'error',
         '@tanstack/query/exhaustive-deps': 'error',
@@ -787,11 +795,16 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/**/*.tsx'],
+      files: ['web/**/*.tsx', 'web-new/**/*.tsx'],
       rules: webJsxA11yRules,
     },
     {
-      files: ['web/**/*.stories.{js,cjs,mjs,jsx,ts,tsx}', 'web/**/*.story.{js,cjs,mjs,jsx,ts,tsx}'],
+      files: [
+        'web/**/*.stories.{js,cjs,mjs,jsx,ts,tsx}',
+        'web-new/**/*.stories.{js,cjs,mjs,jsx,ts,tsx}',
+        'web/**/*.story.{js,cjs,mjs,jsx,ts,tsx}',
+        'web-new/**/*.story.{js,cjs,mjs,jsx,ts,tsx}',
+      ],
       rules: {
         'storybook/await-interactions': 'error',
         'storybook/context-in-play-function': 'error',
@@ -808,13 +821,13 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/.storybook/main.{js,cjs,mjs,ts}'],
+      files: ['web/.storybook/main.{js,cjs,mjs,ts}', 'web-new/.storybook/main.{js,cjs,mjs,ts}'],
       rules: {
         'storybook/no-uninstalled-addons': 'error',
       },
     },
     {
-      files: ['web/**/*.tsx'],
+      files: ['web/**/*.tsx', 'web-new/**/*.tsx'],
       rules: {
         'dify/prefer-tailwind-icons': [
           'warn',
@@ -853,7 +866,12 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/**/*.{ts,cts,mts}', 'web/**/*.tsx'],
+      files: [
+        'web/**/*.{ts,cts,mts}',
+        'web-new/**/*.{ts,cts,mts}',
+        'web/**/*.tsx',
+        'web-new/**/*.tsx',
+      ],
       rules: {
         'no-restricted-imports': [
           'error',
@@ -925,7 +943,12 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/service/**/*.ts', 'web/service/**/*.tsx'],
+      files: [
+        'web/service/**/*.ts',
+        'web-new/service/**/*.ts',
+        'web/service/**/*.tsx',
+        'web-new/service/**/*.tsx',
+      ],
       rules: {
         'no-restricted-imports': [
           'error',
@@ -1014,15 +1037,27 @@ export const lintConfig = {
       },
     },
     {
-      files: ['web/**/*.{ts,cts,mts}', 'web/**/*.tsx'],
+      files: [
+        'web/**/*.{ts,cts,mts}',
+        'web-new/**/*.{ts,cts,mts}',
+        'web/**/*.tsx',
+        'web-new/**/*.tsx',
+      ],
       excludeFiles: [
         'web/**/__tests__/**',
+        'web-new/**/__tests__/**',
         'web/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/**/*.test.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.test.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/**/*.bench.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.bench.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/**/*.benchmark.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.benchmark.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/vitest.setup.ts',
+        'web-new/vitest.setup.ts',
         'web/instrumentation-client.ts',
+        'web-new/instrumentation-client.ts',
       ],
       rules: {
         'no-restricted-globals': [
@@ -1053,6 +1088,7 @@ export const lintConfig = {
     {
       files: [
         'web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
       ],
       rules: {
@@ -1120,10 +1156,15 @@ export const lintConfig = {
     {
       files: [
         'web/**/__tests__/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/__tests__/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/**/*.test.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'web-new/**/*.test.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web/vitest.setup.ts',
+        'web-new/vitest.setup.ts',
         'web/test/i18n-mock.ts',
+        'web-new/test/i18n-mock.ts',
       ],
       rules: {
         'eslint-react/no-unnecessary-use-prefix': 'off',

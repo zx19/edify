@@ -33,6 +33,7 @@ trustPolicyExclude:
   - semver@6.3.1
 packages:
   - web
+  - web-new
   - e2e
   - sdks/nodejs-client
   - packages/*

@@ -1620,6 +1620,484 @@ importers:
         specifier: 'catalog:'
         version: 1.1.5(vitest@4.1.11)
 
+  web-new:
+    dependencies:
+      '@amplitude/analytics-browser':
+        specifier: 'catalog:'
+        version: 2.45.6
+      '@amplitude/plugin-session-replay-browser':
+        specifier: 'catalog:'
+        version: 1.33.8(@amplitude/rrweb@2.1.1)
+      '@base-ui/react':
+        specifier: 'catalog:'
+        version: 1.7.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@emoji-mart/data':
+        specifier: 'catalog:'
+        version: 1.2.1
+      '@floating-ui/react':
+        specifier: 'catalog:'
+        version: 0.27.20(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@formatjs/intl-localematcher':
+        specifier: 'catalog:'
+        version: 0.8.13
+      '@heroicons/react':
+        specifier: 'catalog:'
+        version: 2.2.0(react@19.2.8)
+      '@lexical/code':
+        specifier: npm:lexical-code-no-prism@0.41.0
+        version: lexical-code-no-prism@0.41.0(@lexical/utils@0.47.0(@typescript/typescript6@6.0.2))(lexical@0.47.0(@typescript/typescript6@6.0.2))
+      '@lexical/link':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      '@lexical/list':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      '@lexical/react':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@lexical/selection':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      '@lexical/text':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      '@lexical/utils':
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      '@mediabunny/mp3-encoder':
+        specifier: 'catalog:'
+        version: 1.55.2(mediabunny@1.55.2)
+      '@monaco-editor/react':
+        specifier: 'catalog:'
+        version: 4.7.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@orpc/client':
+        specifier: 'catalog:'
+        version: 1.15.0
+      '@orpc/contract':
+        specifier: 'catalog:'
+        version: 1.15.0
+      '@orpc/openapi-client':
+        specifier: 'catalog:'
+        version: 1.15.0
+      '@orpc/tanstack-query':
+        specifier: 'catalog:'
+        version: 1.15.0(@orpc/client@1.15.0)(@tanstack/query-core@5.102.2)
+      '@remixicon/react':
+        specifier: 'catalog:'
+        version: 4.9.0(react@19.2.8)
+      '@sentry/react':
+        specifier: 'catalog:'
+        version: 10.70.0(react@19.2.8)
+      '@streamdown/math':
+        specifier: 'catalog:'
+        version: 1.0.2(react@19.2.8)(supports-color@11.0.0)
+      '@svgdotjs/svg.js':
+        specifier: 'catalog:'
+        version: 3.2.8
+      '@t3-oss/env-nextjs':
+        specifier: 'catalog:'
+        version: 0.13.11(@typescript/typescript6@6.0.2)(valibot@1.4.2(@typescript/typescript6@6.0.2))(zod@4.4.3)
+      '@tanstack/query-core':
+        specifier: 'catalog:'
+        version: 5.102.2
+      '@tanstack/react-form':
+        specifier: 'catalog:'
+        version: 1.33.5(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-hotkeys':
+        specifier: 'catalog:'
+        version: 0.10.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.102.2(react@19.2.8)
+      '@tanstack/react-virtual':
+        specifier: 'catalog:'
+        version: 3.14.10(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      abcjs:
+        specifier: 'catalog:'
+        version: 6.7.0
+      ahooks:
+        specifier: 'catalog:'
+        version: 3.9.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      class-variance-authority:
+        specifier: 'catalog:'
+        version: 0.7.1
+      copy-to-clipboard:
+        specifier: 'catalog:'
+        version: 4.0.2
+      cron-parser:
+        specifier: 'catalog:'
+        version: 5.6.2
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.23
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
+      dompurify:
+        specifier: 'catalog:'
+        version: 3.4.14
+      echarts:
+        specifier: 'catalog:'
+        version: 6.1.0
+      echarts-for-react:
+        specifier: 'catalog:'
+        version: 3.0.6(echarts@6.1.0)(react@19.2.8)
+      elkjs:
+        specifier: 'catalog:'
+        version: 0.11.1
+      embla-carousel-autoplay:
+        specifier: 'catalog:'
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-fade:
+        specifier: 'catalog:'
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: 'catalog:'
+        version: 8.6.0(react@19.2.8)
+      emoji-mart:
+        specifier: 'catalog:'
+        version: 5.6.0
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.51.0
+      fast-deep-equal:
+        specifier: 'catalog:'
+        version: 3.1.3
+      foxact:
+        specifier: 'catalog:'
+        version: 0.3.9(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      fuse.js:
+        specifier: 'catalog:'
+        version: 7.5.0
+      hast-util-to-jsx-runtime:
+        specifier: 'catalog:'
+        version: 2.3.6(supports-color@11.0.0)
+      html-entities:
+        specifier: 'catalog:'
+        version: 2.6.0
+      html-to-image:
+        specifier: 'catalog:'
+        version: 1.11.13
+      i18next:
+        specifier: 'catalog:'
+        version: 26.4.0(@typescript/typescript6@6.0.2)
+      i18next-resources-to-backend:
+        specifier: 'catalog:'
+        version: 1.2.3
+      immer:
+        specifier: 'catalog:'
+        version: 11.1.18
+      jotai:
+        specifier: 'catalog:'
+        version: 2.20.2(@babel/core@7.29.7(supports-color@11.0.0))(@babel/template@7.29.7)(@types/react@19.2.18)(react@19.2.8)
+      jotai-scope:
+        specifier: 'catalog:'
+        version: 0.11.0(jotai@2.20.2(@babel/core@7.29.7(supports-color@11.0.0))(@babel/template@7.29.7)(@types/react@19.2.18)(react@19.2.8))(react@19.2.8)
+      jotai-tanstack-query:
+        specifier: 'catalog:'
+        version: 0.11.0(@tanstack/query-core@5.102.2)(@tanstack/react-query@5.102.2(react@19.2.8))(jotai@2.20.2(@babel/core@7.29.7(supports-color@11.0.0))(@babel/template@7.29.7)(@types/react@19.2.18)(react@19.2.8))(react@19.2.8)
+      js-cookie:
+        specifier: 'catalog:'
+        version: 3.0.8
+      js-yaml:
+        specifier: 'catalog:'
+        version: 5.3.0
+      jsonschema:
+        specifier: 'catalog:'
+        version: 1.5.0
+      katex:
+        specifier: 'catalog:'
+        version: 0.17.0
+      ky:
+        specifier: 'catalog:'
+        version: 2.0.2
+      lexical:
+        specifier: 'catalog:'
+        version: 0.47.0(@typescript/typescript6@6.0.2)
+      loro-crdt:
+        specifier: 'catalog:'
+        version: 1.14.1
+      mediabunny:
+        specifier: 'catalog:'
+        version: 1.55.2
+      mermaid:
+        specifier: 'catalog:'
+        version: 11.17.0
+      mime:
+        specifier: 'catalog:'
+        version: 4.1.0
+      mitt:
+        specifier: 'catalog:'
+        version: 3.0.1
+      motion:
+        specifier: 'catalog:'
+        version: 12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      negotiator:
+        specifier: 'catalog:'
+        version: 1.1.0
+      next:
+        specifier: 'catalog:'
+        version: 16.3.3(@babel/core@7.29.7(supports-color@11.0.0))(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next-themes:
+        specifier: 'catalog:'
+        version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      nuqs:
+        specifier: 'catalog:'
+        version: 2.10.0(next@16.3.3(@babel/core@7.29.7(supports-color@11.0.0))(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      pinyin-pro:
+        specifier: 'catalog:'
+        version: 3.29.3
+      qrcode.react:
+        specifier: 'catalog:'
+        version: 4.2.0(react@19.2.8)
+      qs:
+        specifier: 'catalog:'
+        version: 6.15.3
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.8(react@19.2.8)
+      react-easy-crop:
+        specifier: 'catalog:'
+        version: 6.2.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-i18next:
+        specifier: 'catalog:'
+        version: 17.0.12(@typescript/typescript6@6.0.2)(i18next@26.4.0(@typescript/typescript6@6.0.2))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-papaparse:
+        specifier: 'catalog:'
+        version: 4.4.0
+      react-pdf-highlighter:
+        specifier: 'catalog:'
+        version: 8.0.0-rc.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react-sortablejs:
+        specifier: 'catalog:'
+        version: 6.1.4(@types/sortablejs@1.15.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sortablejs@1.15.7)
+      react-textarea-autosize:
+        specifier: 'catalog:'
+        version: 8.5.9(@types/react@19.2.18)(react@19.2.8)
+      reactflow:
+        specifier: 'catalog:'
+        version: 11.11.4(@types/react@19.2.18)(immer@11.1.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      remark-breaks:
+        specifier: 'catalog:'
+        version: 4.0.0
+      remark-directive:
+        specifier: 'catalog:'
+        version: 4.0.0(supports-color@11.0.0)
+      scheduler:
+        specifier: 'catalog:'
+        version: 0.27.0
+      server-only:
+        specifier: 'catalog:'
+        version: 0.0.1
+      shiki:
+        specifier: 'catalog:'
+        version: 4.4.2
+      socket.io-client:
+        specifier: 'catalog:'
+        version: 4.8.3(supports-color@11.0.0)
+      sortablejs:
+        specifier: 'catalog:'
+        version: 1.15.7
+      std-semver:
+        specifier: 'catalog:'
+        version: 1.0.8
+      streamdown:
+        specifier: 'catalog:'
+        version: 2.5.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@11.0.0)
+      string-ts:
+        specifier: 'catalog:'
+        version: 2.3.1
+      tldts:
+        specifier: 'catalog:'
+        version: 7.4.10
+      unist-util-visit:
+        specifier: 'catalog:'
+        version: 5.1.0
+      use-context-selector:
+        specifier: 'catalog:'
+        version: 2.0.0(react@19.2.8)(scheduler@0.27.0)
+      uuid:
+        specifier: 'catalog:'
+        version: 14.0.2
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+      zundo:
+        specifier: 'catalog:'
+        version: 2.3.0(zustand@5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8)))
+      zustand:
+        specifier: 'catalog:'
+        version: 5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+    devDependencies:
+      '@chromatic-com/storybook':
+        specifier: 'catalog:'
+        version: 5.3.0(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
+      '@dify/contracts':
+        specifier: workspace:*
+        version: link:../packages/contracts
+      '@dify/iconify-collections':
+        specifier: workspace:*
+        version: link:../packages/iconify-collections
+      '@dify/tsconfig':
+        specifier: workspace:*
+        version: link:../packages/tsconfig
+      '@egoist/tailwindcss-icons':
+        specifier: 'catalog:'
+        version: 1.9.2(tailwindcss@4.3.3)
+      '@iconify-json/heroicons':
+        specifier: 'catalog:'
+        version: 1.2.3
+      '@iconify-json/ri':
+        specifier: 'catalog:'
+        version: 1.2.10
+      '@langgenius/dev-proxy':
+        specifier: workspace:*
+        version: link:../packages/dev-proxy
+      '@langgenius/dify-ui':
+        specifier: workspace:*
+        version: link:../packages/dify-ui
+      '@rgrove/parse-xml':
+        specifier: 'catalog:'
+        version: 4.2.3
+      '@storybook/addon-docs':
+        specifier: 'catalog:'
+        version: 10.5.10(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
+      '@storybook/addon-links':
+        specifier: 'catalog:'
+        version: 10.5.10(@types/react@19.2.18)(react@19.2.8)(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
+      '@storybook/addon-onboarding':
+        specifier: 'catalog:'
+        version: 10.5.10(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
+      '@storybook/addon-themes':
+        specifier: 'catalog:'
+        version: 10.5.10(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
+      '@storybook/nextjs-vite':
+        specifier: 'catalog:'
+        version: 10.5.10(@babel/core@7.29.7(supports-color@11.0.0))(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(next@16.3.3(@babel/core@7.29.7(supports-color@11.0.0))(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(supports-color@11.0.0)
+      '@storybook/react':
+        specifier: 'catalog:'
+        version: 10.5.10(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(@typescript/typescript6@6.0.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(storybook@10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(supports-color@11.0.0)
+      '@tailwindcss/postcss':
+        specifier: 'catalog:'
+        version: 4.3.3
+      '@tailwindcss/vite':
+        specifier: 'catalog:'
+        version: 4.3.3(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
+      '@testing-library/dom':
+        specifier: 'catalog:'
+        version: 10.4.1
+      '@testing-library/jest-dom':
+        specifier: 'catalog:'
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: 'catalog:'
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@testing-library/user-event':
+        specifier: 'catalog:'
+        version: 14.6.6(@testing-library/dom@10.4.1)
+      '@tsslint/cli':
+        specifier: 'catalog:'
+        version: 3.1.4(@tsslint/compat-eslint@3.1.4(@typescript/typescript6@6.0.2))(@typescript/typescript6@6.0.2)
+      '@tsslint/compat-eslint':
+        specifier: 'catalog:'
+        version: 3.1.4(@typescript/typescript6@6.0.2)
+      '@tsslint/config':
+        specifier: 'catalog:'
+        version: 3.1.4(@tsslint/compat-eslint@3.1.4(@typescript/typescript6@6.0.2))
+      '@types/js-cookie':
+        specifier: 'catalog:'
+        version: 3.0.6
+      '@types/negotiator':
+        specifier: 'catalog:'
+        version: 0.6.5
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.5
+      '@types/qs':
+        specifier: 'catalog:'
+        version: 6.15.1
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.5(@types/react@19.2.18)
+      '@types/sortablejs':
+        specifier: 'catalog:'
+        version: 1.15.9
+      '@typescript/native':
+        specifier: 'catalog:'
+        version: typescript@7.0.2
+      '@vitejs/plugin-react':
+        specifier: 'catalog:'
+        version: 6.1.0(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
+      '@vitejs/plugin-rsc':
+        specifier: 'catalog:'
+        version: 0.5.34(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      '@vitest/browser-playwright':
+        specifier: 'catalog:'
+        version: 4.1.11(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(playwright@1.62.1)(vitest@4.1.11)
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
+      agentation:
+        specifier: 'catalog:'
+        version: 3.0.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      code-inspector-plugin:
+        specifier: 'catalog:'
+        version: 1.6.6(supports-color@11.0.0)
+      happy-dom:
+        specifier: 'catalog:'
+        version: 20.11.6
+      playwright:
+        specifier: 'catalog:'
+        version: 1.62.1
+      postcss:
+        specifier: 'catalog:'
+        version: 8.5.26
+      react-server-dom-webpack:
+        specifier: 'catalog:'
+        version: 19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      storybook:
+        specifier: 'catalog:'
+        version: 10.5.10(@types/react@19.2.18)(react@19.2.8)(vite-plus@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.3
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.12
+      typescript:
+        specifier: 'catalog:'
+        version: '@typescript/typescript6@6.0.2'
+      uglify-js:
+        specifier: 'catalog:'
+        version: 3.19.3
+      vinext:
+        specifier: 'catalog:'
+        version: 1.0.0-beta.8(@vitejs/plugin-react@6.1.0(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(@vitejs/plugin-rsc@0.5.34(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(next@16.3.3(@babel/core@7.29.7(supports-color@11.0.0))(@playwright/test@1.62.1)(@types/node@25.9.5)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      vite:
+        specifier: 'catalog:'
+        version: '@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)'
+      vite-plugin-inspect:
+        specifier: 'catalog:'
+        version: 12.0.2(@typescript/typescript6@6.0.2)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(srvx@0.12.5)
+      vite-plus:
+        specifier: 'catalog:'
+        version: 0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(esbuild@0.28.2)(happy-dom@20.11.6)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.11(@types/node@25.9.5)(@vitest/browser-playwright@4.1.11)(@vitest/browser-preview@4.1.11)(@vitest/coverage-v8@4.1.11)(@voidzero-dev/vite-plus-core@0.3.0(@types/node@25.9.5)(@typescript/typescript6@6.0.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(happy-dom@20.11.6)
+      vitest-browser-react:
+        specifier: 'catalog:'
+        version: 2.2.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(vitest@4.1.11)
+      vitest-canvas-mock:
+        specifier: 'catalog:'
+        version: 1.1.5(vitest@4.1.11)
+
 packages:
 
   '@adobe/css-tools@4.5.0':

@@ -40,9 +40,17 @@ const generatedIgnores = [
   'web/public/embed.min.js',
   'web/public/pdf.worker.min.mjs',
   'web/public/vs/**',
+  'web-new/next/**',
+  'web-new/next-env.d.ts',
+  'web-new/public/embed.min.js',
+  'web-new/public/pdf.worker.min.mjs',
+  'web-new/public/vs/**',
 ]
 
-const formatterUnstableInputs = ['web/app/components/develop/template/*.mdx']
+const formatterUnstableInputs = [
+  'web/app/components/develop/template/*.mdx',
+  'web-new/app/components/develop/template/*.mdx',
+]
 
 export default defineConfig({
   lint: lintConfig,

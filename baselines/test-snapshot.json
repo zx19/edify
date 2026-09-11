@@ -1,0 +1,41 @@
+{
+  "frozenAt": "2026-09-10",
+  "purpose": "前端重写双轨对照 锚点②（防退步）单测基线 —— 执行计划 v2 §3.1；2a 首个闭环「旧测试仍绿」判定基准",
+  "commit": "2dc3af56b8",
+  "command": "cd web && NODE_OPTIONS=--max-old-space-size=8192 corepack pnpm exec vitest run --project unit --coverage --pool=forks --maxWorkers=4",
+  "environment": {
+    "node": "v22.23.2",
+    "pnpm": "11.23.0",
+    "vitest": "4.1.11",
+    "os": "darwin arm64"
+  },
+  "tests": {
+    "files": { "total": 2111, "passed": 2111, "failed": 0 },
+    "cases": { "total": 23398, "passed": 23397, "skipped": 1, "failed": 0 },
+    "passRate": "100%",
+    "durationSeconds": 907
+  },
+  "coverage": {
+    "lines": 87.42,
+    "statements": 85.65,
+    "branches": 77.24,
+    "functions": 84.5,
+    "perDirectoryLines": {
+      "app": 88.61,
+      "context": 81.1,
+      "features": 88.64,
+      "hooks": 76.6,
+      "i18n": 100.0,
+      "scripts": 79.01,
+      "service": 53.9,
+      "test": 97.45,
+      "utils": 90.75
+    }
+  },
+  "notes": [
+    "vp test 不透传 --coverage（vp 包装层不产出 coverage 文件）——基线标准跑法为 pnpm exec vitest run 直跑",
+    "threads 默认池高并发下出现 5s 超时 flaky（features/skills/detail-page.spec.tsx、base/voice-input 等，孤立复跑 151/151 绿）；--pool=forks --maxWorkers=4 本机全绿，定为基线跑法",
+    "计划头部「测试 ~2114」为测试文件数旧值；实测 2111 文件 / 23398 用例，以本快照为准",
+    "web/ 旧轨在本快照冻结时零业务改动（git 可查）"
+  ]
+}

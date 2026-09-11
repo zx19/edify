@@ -1,0 +1,36 @@
+name: Old track (web/) readonly guard
+
+# 旧轨只读铁律（docs/guide/前端重写-功能保全与测试执行计划-v2.md C5）：
+# 重写期间 web/ 零业务提交。紧急热修例外（§8）：给 PR 加 `old-track-exception`
+# 标签放行，并须登记基线漂移 + 重冻受影响页基线。
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  web-readonly:
+    name: web/ 旧轨只读守卫
+    runs-on: depot-ubuntu-24.04
+
+    steps:
+      - name: Check changed files
+        id: changed
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+        with:
+          files: |
+            web/**
+
+      - name: Fail when web/ touched without exception label
+        if: steps.changed.outputs.any_changed == 'true' && !contains(github.event.pull_request.labels.*.name, 'old-track-exception')
+        run: |
+          echo "::error::旧轨只读铁律：本 PR 改动了 web/。重写期间 web/ 零业务提交（执行计划 v2 C5）。紧急热修请给 PR 加 old-track-exception 标签，并按 §8 登记基线漂移。"
+          exit 1
+
+      - name: Notice when exception label present
+        if: steps.changed.outputs.any_changed == 'true' && contains(github.event.pull_request.labels.*.name, 'old-track-exception')
+        run: |
+          echo "::notice::web/ 改动凭 old-track-exception 标签放行——请确认已按 §8 登记基线漂移并重冻受影响页基线。"
