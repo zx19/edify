@@ -33,7 +33,7 @@
     }
   },
   "notes": [
-    "vp test 不透传 --coverage（vp 包装层不产出 coverage 文件）——基线标准跑法为 pnpm exec vitest run 直跑",
+    "vp test --coverage 实证可透传（2026-09-11 更正：首轮 vp 跑死于 coverage 合并阶段内存耗尽，与透传无关，此前「不透传」结论系误判）；CI 即 vp test run --coverage 跑法，本地 16G 机器全量以 command 字段配方（forks+4 workers）为准",
     "threads 默认池高并发下出现 5s 超时 flaky（features/skills/detail-page.spec.tsx、base/voice-input 等，孤立复跑 151/151 绿）；--pool=forks --maxWorkers=4 本机全绿，定为基线跑法",
     "计划头部「测试 ~2114」为测试文件数旧值；实测 2111 文件 / 23398 用例，以本快照为准",
     "web/ 旧轨在本快照冻结时零业务改动（git 可查）"
