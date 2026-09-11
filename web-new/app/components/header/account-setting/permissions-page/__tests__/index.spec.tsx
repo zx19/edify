@@ -1,7 +1,7 @@
 import type { Role } from '@/models/access-control'
-import { toast } from '@langgenius/dify-ui/toast'
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import {
   useCreateWorkspaceRole,
   useUpdateWorkspaceRole,
@@ -16,7 +16,7 @@ const mocks = vi.hoisted(() => ({
   updateWorkspaceRole: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
   },

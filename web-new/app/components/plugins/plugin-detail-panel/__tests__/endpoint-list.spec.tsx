@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { renderWithConsoleQuery as render } from '@/test/console/query-data'
 import EndpointList from '../endpoint-list'
 
-vi.mock('@xsl/ui/cn', () => ({
+vi.mock('@xsl/lomva-ui/cn', () => ({
   cn: (...args: (string | undefined | false | null)[]) => args.filter(Boolean).join(' '),
 }))
 

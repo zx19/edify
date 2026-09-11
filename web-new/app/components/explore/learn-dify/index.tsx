@@ -3,7 +3,7 @@
 import type { App } from '@/models/explore'
 import type { TryAppSelection } from '@/types/try-app'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

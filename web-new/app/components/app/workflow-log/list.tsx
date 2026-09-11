@@ -7,6 +7,7 @@ import type {
 } from '@/models/log'
 import type { App } from '@/types/app'
 import { ArrowDownIcon } from '@heroicons/react/24/outline'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -14,9 +15,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

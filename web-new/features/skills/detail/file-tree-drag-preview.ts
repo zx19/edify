@@ -1,5 +1,5 @@
 import type { DragEvent } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 export function setSkillFileDragPreview(
   event: DragEvent<HTMLElement>,

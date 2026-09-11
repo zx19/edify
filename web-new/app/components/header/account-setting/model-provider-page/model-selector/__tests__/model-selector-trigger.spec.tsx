@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Model, ModelItem } from '../../declarations'
-import { Popover } from '@langgenius/dify-ui/popover'
 import { render as renderComponent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Popover } from '@xsl/lomva-ui/popover'
 import {
   ConfigurationMethodEnum,
   ModelFeatureEnum,

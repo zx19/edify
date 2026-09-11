@@ -9,7 +9,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { $getNodeByKey, $getRoot } from 'lexical'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

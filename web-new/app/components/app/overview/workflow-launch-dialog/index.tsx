@@ -2,8 +2,8 @@
 
 import type { FormEvent } from 'react'
 import type { WorkflowHiddenStartVariable, WorkflowLaunchInputValue } from '../app-card-utils'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@xsl/lomva-ui/dialog'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import {

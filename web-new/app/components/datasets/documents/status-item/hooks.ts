@@ -1,4 +1,4 @@
-import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
+import type { StatusDotStatus } from '@xsl/lomva-ui/status-dot'
 import { useTranslation } from 'react-i18next'
 
 export const useIndexStatus = () => {

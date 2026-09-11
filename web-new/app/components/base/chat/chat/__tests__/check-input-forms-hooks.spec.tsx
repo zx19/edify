@@ -5,7 +5,7 @@ import { TransferMethod } from '@/types/app'
 import { useCheckInputsForms } from '../check-input-forms-hooks'
 
 const mockNotify = vi.fn()
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: {
     notify: (args: unknown) => mockNotify(args),
   },

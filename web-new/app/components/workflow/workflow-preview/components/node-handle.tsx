@@ -1,5 +1,5 @@
 import type { Node } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
 import { Handle, Position } from 'reactflow'
 import { BlockEnum } from '@/app/components/workflow/types'

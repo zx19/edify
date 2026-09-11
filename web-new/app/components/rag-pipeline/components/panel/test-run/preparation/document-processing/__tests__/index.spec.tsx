@@ -61,7 +61,7 @@ vi.mock('@/app/components/base/form/form-scenarios/base/utils', () => ({
 
 const mockToastNotify = vi.fn()
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (message: string) => mockToastNotify({ type: 'error', message }),
   },

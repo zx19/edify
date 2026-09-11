@@ -2,9 +2,9 @@ import type { ModelProviderSummaryResponse } from '@dify/contracts/api/console/w
 import type { ReactElement } from 'react'
 import type { Model, ModelItem } from '../../declarations'
 import type { PopupProps } from '../popup'
-import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useState } from 'react'
 import { renderWithConsoleQuery } from '@/test/console/query-data'
 import {

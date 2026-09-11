@@ -1,6 +1,6 @@
 import type { ChecklistItem } from '../../hooks/use-checklist'
 import type { BlockEnum } from '../../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockIcon from '../../block-icon'

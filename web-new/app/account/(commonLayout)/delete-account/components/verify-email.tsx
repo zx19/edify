@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Input from '@/app/components/base/input'

@@ -1,6 +1,6 @@
 'use client'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 import Header from './_header'
 

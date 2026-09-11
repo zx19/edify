@@ -1,7 +1,7 @@
 /* oxlint-disable react/only-export-components */
 import type { TFunction } from 'i18next'
 import type { FormInputItem } from '../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectItem,
@@ -13,7 +13,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TransferMethod } from '@/types/app'

@@ -129,7 +129,7 @@ vi.mock('@/service/datasets', () => ({
   deleteDataset: (...args: unknown[]) => mockDeleteDataset(...args),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (...args: unknown[]) => mockToast(...args),
   },

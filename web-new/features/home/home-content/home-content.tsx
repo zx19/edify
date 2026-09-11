@@ -5,7 +5,7 @@ import type { CreateAppModalProps } from '@/app/components/explore/create-app-mo
 import type { StepByStepTourTaskId } from '@/app/components/step-by-step-tour/types'
 import type { TrackCreateAppParams } from '@/utils/create-app-tracking'
 import { useQueryClient, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useDebouncedValue } from 'foxact/use-debounced-value'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQueryState } from 'nuqs'

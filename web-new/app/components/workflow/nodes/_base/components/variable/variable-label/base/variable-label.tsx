@@ -1,6 +1,6 @@
 import type { VariablePayload } from '../types'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { capitalize } from 'es-toolkit/string'
 import { memo } from 'react'
 import { Warning } from '@/app/components/base/icons/src/vender/line/alertsAndFeedback'

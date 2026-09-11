@@ -1,9 +1,9 @@
 'use client'
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { getAgentDetailPath } from '@/features/agent-v2/agent-detail/routes'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'

@@ -1,5 +1,5 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiImageAddLine } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ACCEPT_TYPES } from '../constants'

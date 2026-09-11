@@ -1,5 +1,5 @@
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@xsl/ui/cn'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useFieldContext } from '../..'
 
 type CheckboxFieldProps = {

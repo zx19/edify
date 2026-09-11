@@ -5,15 +5,15 @@ import type {
   TriggerDefaultValue,
   TriggerWithProvider,
 } from '@/app/components/workflow/block-selector/types'
+import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import * as React from 'react'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

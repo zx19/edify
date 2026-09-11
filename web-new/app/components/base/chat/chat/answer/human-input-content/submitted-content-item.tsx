@@ -11,7 +11,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { FileList } from '@/app/components/base/file-uploader'
 import { getProcessedFilesFromResponse } from '@/app/components/base/file-uploader/utils'

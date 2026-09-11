@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { ChatItem } from '../../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
 import { useChatContext } from '../context'
 

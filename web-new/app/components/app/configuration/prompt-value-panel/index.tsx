@@ -2,11 +2,9 @@
 import type { FC } from 'react'
 import type { Inputs } from '@/models/debug'
 import type { VisionFile, VisionSettings } from '@/types/app'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiArrowDownSLine, RiArrowRightSLine, RiPlayLargeFill } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectContent,
@@ -15,7 +13,9 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

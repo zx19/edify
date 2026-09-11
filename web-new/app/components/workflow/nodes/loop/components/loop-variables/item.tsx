@@ -2,10 +2,10 @@ import type {
   LoopVariable,
   LoopVariablesComponentShape,
 } from '@/app/components/workflow/nodes/loop/types'
-import { Input } from '@langgenius/dify-ui/input'
-import { toast } from '@langgenius/dify-ui/toast'
 import { RiDeleteBinLine } from '@remixicon/react'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ValueType, VarType } from '@/app/components/workflow/types'

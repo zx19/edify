@@ -3,6 +3,7 @@ import type { FormValue } from '@/app/components/header/account-setting/model-pr
 import type { CodeLanguage } from '@/app/components/workflow/nodes/code/types'
 import type { GenRes } from '@/service/debug'
 import type { AppModeEnum, CompletionParams, Model, ModelModeType } from '@/types/app'
+import { useQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -11,10 +12,9 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { useQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import { useBoolean, useSessionStorageState } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'

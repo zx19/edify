@@ -1,5 +1,5 @@
-import { DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { DialogDescription, DialogTitle } from '@xsl/lomva-ui/dialog'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { DifyLogo } from '../../base/logo/dify-logo'

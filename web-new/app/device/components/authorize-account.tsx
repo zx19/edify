@@ -1,8 +1,8 @@
 'use client'
 
 import type { FC } from 'react'
-import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@xsl/ui/button'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { Button } from '@xsl/lomva-ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { deviceApproveAccount, deviceDenyAccount } from '@/service/device-flow'

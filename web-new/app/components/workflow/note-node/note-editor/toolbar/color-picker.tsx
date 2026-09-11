@@ -1,5 +1,5 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { memo, useState } from 'react'
 import { THEME_MAP } from '../../constants'
 import { NoteTheme } from '../../types'

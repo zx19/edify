@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@xsl/ui/cn'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

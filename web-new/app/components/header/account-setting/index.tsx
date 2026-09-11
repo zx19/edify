@@ -1,14 +1,14 @@
 'use client'
 import type { AccountSettingTab } from '@/app/components/header/account-setting/constants'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useAtomValue } from 'jotai'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

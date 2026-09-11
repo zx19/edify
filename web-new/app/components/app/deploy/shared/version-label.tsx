@@ -7,8 +7,8 @@ import {
   PopoverDescription,
   PopoverTitle,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+} from '@xsl/lomva-ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { getWorkflowVersionName } from '@/app/components/workflow/utils/version'
 import { useFormatTimeFromNow } from '@/hooks/use-format-time-from-now'

@@ -3,6 +3,7 @@
 import type { SkillResponse } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { QueryClient } from '@tanstack/react-query'
 import type { UIEvent } from 'react'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -11,27 +12,26 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useDebounce } from 'ahooks'
 import { useQueryState } from 'nuqs'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'

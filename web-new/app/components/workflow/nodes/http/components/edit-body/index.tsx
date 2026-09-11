@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { Body, BodyPayload, KeyValue as KeyValueType } from '../../types'
 import type { ValueSelector, Var } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { uniqueId } from 'es-toolkit/compat'
 import { produce } from 'immer'
 import * as React from 'react'

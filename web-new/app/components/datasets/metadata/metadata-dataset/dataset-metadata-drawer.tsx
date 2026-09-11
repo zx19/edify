@@ -1,6 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { BuiltInMetadataItem, MetadataItemWithValueLength } from '../types'
+import { RiAddLine, RiDeleteBinLine, RiEditLine } from '@remixicon/react'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,8 +10,10 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 import {
   Drawer,
   DrawerBackdrop,
@@ -20,13 +23,10 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Input } from '@langgenius/dify-ui/input'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { toast } from '@langgenius/dify-ui/toast'
-import { RiAddLine, RiDeleteBinLine, RiEditLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { Input } from '@xsl/lomva-ui/input'
+import { Switch } from '@xsl/lomva-ui/switch'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean, useHover } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useRef, useState } from 'react'

@@ -1,8 +1,8 @@
 'use client'
 
 import type { VersionHistory } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

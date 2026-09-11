@@ -1,6 +1,6 @@
 import type { AfterResponseHook, BeforeRequestHook, Hooks } from 'ky'
 import type { IOtherOptions } from './base'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import Cookies from 'js-cookie'
 import ky, { HTTPError } from 'ky'
 import {

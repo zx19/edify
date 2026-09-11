@@ -2,7 +2,7 @@
 import type { ChangeEvent, FC } from 'react'
 import type { Item as SelectItem } from './type-select'
 import type { InputVar, InputVarType, MoreInfo } from '@/app/components/workflow/types'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
 'use client'
 import type { SchemaRoot } from '@/app/components/workflow/nodes/llm/types'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 import { useTranslation } from 'react-i18next'
 import VisualEditor from '@/app/components/workflow/nodes/llm/components/json-schema-config-modal/visual-editor'
 import {

@@ -2,7 +2,7 @@
 import type { BlockEnum } from '../../types'
 import type { TriggerDefaultValue, TriggerWithProvider } from '../types'
 import type { TriggerPluginActionPreviewPayload } from './action-item'
-import { createPreviewCardHandle, PreviewCard } from '@langgenius/dify-ui/preview-card'
+import { createPreviewCardHandle, PreviewCard } from '@xsl/lomva-ui/preview-card'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useGetLanguage } from '@/context/i18n'
 import { useAllTriggerPlugins } from '@/service/use-triggers'

@@ -1,6 +1,6 @@
 import type { ChecklistItem } from '../../../hooks/use-checklist'
-import { Popover, PopoverContent } from '@langgenius/dify-ui/popover'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { Popover, PopoverContent } from '@xsl/lomva-ui/popover'
 import { beforeEach, describe, expect, it } from 'vite-plus/test'
 import { useStore as usePluginDependencyStore } from '../../../plugin-dependency/store'
 import { BlockEnum } from '../../../types'

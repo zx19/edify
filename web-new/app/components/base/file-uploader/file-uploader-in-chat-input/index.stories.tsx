@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { FileEntity } from '../types'
 import type { FileUpload } from '@/app/components/base/features/types'
-import { ToastHost } from '@langgenius/dify-ui/toast'
+import { ToastHost } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { SupportUploadFileTypes } from '@/app/components/workflow/types'
 import { TransferMethod } from '@/types/app'

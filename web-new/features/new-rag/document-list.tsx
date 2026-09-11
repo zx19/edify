@@ -3,17 +3,17 @@
 import type { LogicalDocument } from '@dify/contracts/knowledge-fs/types.gen'
 import type { FocusEventHandler } from 'react'
 import type { DocumentDisplayStatus } from './document-model'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

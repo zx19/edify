@@ -10,14 +10,14 @@ import type {
   WorkflowAgentComposerResponse,
 } from '@dify/contracts/api/console/apps/types.gen'
 import type { AgentPreviewChatController } from '@/features/agent-v2/agent-detail/configure/components/preview/chat-conversation'
+import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtom, useAtomValue, useStore as useJotaiStore, useSetAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
 import { useCallback, useRef, useState } from 'react'

@@ -1,6 +1,6 @@
-import type { ContextMenuActions } from '@langgenius/dify-ui/context-menu'
+import type { ContextMenuActions } from '@xsl/lomva-ui/context-menu'
 import type { ReactNode } from 'react'
-import { ContextMenu, ContextMenuTrigger } from '@langgenius/dify-ui/context-menu'
+import { ContextMenu, ContextMenuTrigger } from '@xsl/lomva-ui/context-menu'
 import { useCallback, useRef } from 'react'
 import { EdgeContextmenu } from './edge-contextmenu'
 import { NodeContextmenu } from './node-contextmenu'

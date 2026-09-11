@@ -1,6 +1,6 @@
 import type { EnvironmentVariable } from '@/app/components/workflow/types'
 import { RiDeleteBinLine, RiEditLine, RiLock2Line } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { capitalize } from 'es-toolkit/string'
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

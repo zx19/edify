@@ -1,6 +1,7 @@
 'use client'
-import type { ComboboxChangeEventDetails } from '@langgenius/dify-ui/combobox'
+import type { ComboboxChangeEventDetails } from '@xsl/lomva-ui/combobox'
 import type { ParentMode, SimpleDocumentDetail } from '@/models/datasets'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxEmpty,
@@ -12,8 +13,7 @@ import {
   ComboboxStatus,
   ComboboxTrigger,
   ComboboxValue,
-} from '@langgenius/dify-ui/combobox'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/combobox'
 import { useDebounce } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

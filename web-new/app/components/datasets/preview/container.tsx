@@ -1,5 +1,5 @@
 import type { ComponentProps, FC, ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type PreviewContainerProps = ComponentProps<'div'> & {
   header: ReactNode

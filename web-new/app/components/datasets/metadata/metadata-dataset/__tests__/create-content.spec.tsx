@@ -1,6 +1,6 @@
 import type { Props as CreateContentProps } from '../create-content'
-import { Popover } from '@langgenius/dify-ui/popover'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { Popover } from '@xsl/lomva-ui/popover'
 import { describe, expect, it, vi } from 'vite-plus/test'
 import { DataType } from '../../types'
 import { CreateContent } from '../create-content'

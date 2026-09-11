@@ -7,10 +7,10 @@ import type {
   PermissionType,
   PluginCategoryEnum,
 } from '@/app/components/plugins/types'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import DebugInfo from '@/app/components/plugins/plugin-page/debug-info'

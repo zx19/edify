@@ -1,7 +1,7 @@
 import type { TriggerOption } from '../test-run-menu'
-import { DropdownMenu, DropdownMenuContent } from '@langgenius/dify-ui/dropdown-menu'
 import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { DropdownMenu, DropdownMenuContent } from '@xsl/lomva-ui/dropdown-menu'
 import { TriggerType } from '../test-run-menu'
 import {
   getNormalizedShortcutKey,

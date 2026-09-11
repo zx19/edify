@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Input } from '@langgenius/dify-ui/input'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Input } from '@xsl/lomva-ui/input'
 import * as React from 'react'
 
 type Props = Readonly<{

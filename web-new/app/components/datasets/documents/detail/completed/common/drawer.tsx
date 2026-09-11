@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -6,8 +7,7 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
 
 type DrawerSide = 'right' | 'left' | 'bottom' | 'top'
 type DrawerSwipeDirection = 'right' | 'left' | 'down' | 'up'

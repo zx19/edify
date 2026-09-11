@@ -7,7 +7,7 @@ import type {
   TriggerLogEntity,
   TriggerSubscriptionBuilder,
 } from '@/app/components/workflow/block-selector/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { debounce } from 'es-toolkit/compat'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

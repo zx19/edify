@@ -1,12 +1,12 @@
 import type { FC } from 'react'
+import { RiLoader2Line } from '@remixicon/react'
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { RiLoader2Line } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
 import { useCountDown } from 'ahooks'
 import * as React from 'react'
 import { useRef, useState } from 'react'

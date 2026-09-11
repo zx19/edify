@@ -8,7 +8,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import { useTranslation } from 'react-i18next'
 
 type UndeployConfirmDialogProps = {

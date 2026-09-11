@@ -8,6 +8,7 @@ import type { FormEventHandler } from 'react'
 import type { DuplicateAppModalProps } from '@/app/components/app/duplicate-modal'
 import type { CreateAppModalProps } from '@/app/components/explore/create-app-modal'
 import { zIconType } from '@dify/contracts/api/console/apps/zod.gen'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -16,21 +17,16 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Toggle } from '@langgenius/dify-ui/toggle'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Toggle } from '@xsl/lomva-ui/toggle'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useAtomValue } from 'jotai'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'

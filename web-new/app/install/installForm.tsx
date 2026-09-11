@@ -1,19 +1,13 @@
 'use client'
 import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
 import { zPostSetupBody } from '@dify/contracts/api/console/setup/zod.gen'
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldValidity,
-} from '@langgenius/dify-ui/field'
-import { Form } from '@langgenius/dify-ui/form'
-import { Input } from '@langgenius/dify-ui/input'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
 import { useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Field, FieldDescription, FieldError, FieldLabel, FieldValidity } from '@xsl/lomva-ui/field'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

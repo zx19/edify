@@ -5,11 +5,11 @@ import type {
   WorkflowRunArchiveDownloadTaskResponse,
   WorkflowRunArchiveMonthResponse,
 } from '@dify/contracts/api/console/workflow-run-archives/types.gen'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { skipToken, useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SkeletonRectangle } from '@/app/components/base/skeleton'

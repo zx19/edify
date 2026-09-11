@@ -1,13 +1,13 @@
 'use client'
 import type { FC } from 'react'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

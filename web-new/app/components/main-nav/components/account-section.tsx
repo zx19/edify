@@ -1,8 +1,8 @@
 'use client'
 
-import { Avatar } from '@langgenius/dify-ui/avatar'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import AccountDropdown from '@/app/components/header/account-dropdown'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 

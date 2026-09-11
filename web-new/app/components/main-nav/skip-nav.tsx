@@ -1,7 +1,7 @@
 'use client'
 
 import type { ComponentProps, MouseEventHandler } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 export const MAIN_CONTENT_ID = 'main-content'
 const MAIN_CONTENT_HREF = `#${MAIN_CONTENT_ID}`

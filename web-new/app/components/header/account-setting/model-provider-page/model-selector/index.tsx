@@ -4,8 +4,8 @@ import type {
   ModelSelectorProvider,
   ModelSelectorValue,
 } from './types'
-import { Popover, PopoverContent, PopoverTitle } from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTitle } from '@xsl/lomva-ui/popover'
 import { useQueryState } from 'nuqs'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

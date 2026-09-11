@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
-import { Popover } from '@langgenius/dify-ui/popover'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Popover } from '@xsl/lomva-ui/popover'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { ToolItem } from '../tool-item'
 

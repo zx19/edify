@@ -1,6 +1,5 @@
 'use client'
 import type { Locale } from '@/i18n-config'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
   Select,
@@ -9,7 +8,8 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

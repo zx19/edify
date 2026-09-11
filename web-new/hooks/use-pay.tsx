@@ -7,7 +7,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter, useSearchParams } from '@/next/navigation'

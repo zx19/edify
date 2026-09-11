@@ -1,7 +1,7 @@
 'use client'
 
-import { Tabs, TabsList, TabsTab } from '@langgenius/dify-ui/tabs'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Tabs, TabsList, TabsTab } from '@xsl/lomva-ui/tabs'
 import { useAtomValue } from 'jotai'
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import { useTranslation } from 'react-i18next'

@@ -4,11 +4,11 @@ import type {
   MemberInviteResponse,
   MemberInviteSuccessResponse,
 } from '@dify/contracts/api/console/workspaces/types.gen'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 import InvitationLink from './invitation-link'

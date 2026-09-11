@@ -7,8 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExportAppDsl } from '@/app/components/app/use-export-app-dsl'

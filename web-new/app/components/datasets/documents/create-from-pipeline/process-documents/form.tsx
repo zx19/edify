@@ -1,6 +1,6 @@
 import type { ZodSchema } from 'zod'
 import type { BaseConfiguration } from '@/app/components/base/form/form-scenarios/base/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useImperativeHandle } from 'react'
 import { useAppForm } from '@/app/components/base/form'
 import BaseField from '@/app/components/base/form/form-scenarios/base/field'

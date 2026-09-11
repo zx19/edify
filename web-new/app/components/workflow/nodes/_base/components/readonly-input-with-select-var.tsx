@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { VariableLabelInText } from '@/app/components/workflow/nodes/_base/components/variable/variable-label'
 import { useWorkflow } from '../../../hooks/use-workflow'

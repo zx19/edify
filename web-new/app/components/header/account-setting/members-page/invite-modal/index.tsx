@@ -2,6 +2,8 @@
 import type { MemberInviteResponse } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { ReactElement } from 'react'
 import type { EmailRecipient } from './email-recipients'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,11 +11,9 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from '@langgenius/dify-ui/dialog'
-import { Form } from '@langgenius/dify-ui/form'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/context/i18n'

@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLinkItem,
   DropdownMenuSeparator,
-} from '@langgenius/dify-ui/dropdown-menu'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { ChangeBlockMenuTrigger } from './change-block-menu-trigger'
 import {

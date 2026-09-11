@@ -8,7 +8,7 @@ import {
   RiPuzzle2Line,
   RiSpeakAiLine,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useSetAtom } from 'jotai'
 import { Fragment } from 'react'
 import { useTranslation } from '#i18n'

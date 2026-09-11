@@ -2,9 +2,10 @@ import type {
   NumberFieldInputProps,
   NumberFieldProps,
   NumberFieldSize,
-} from '@langgenius/dify-ui/number-field'
+} from '@xsl/lomva-ui/number-field'
 import type { FC, PropsWithChildren, ReactNode } from 'react'
 import type { InputProps } from '@/app/components/base/input'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   NumberField,
   NumberFieldControls,
@@ -13,8 +14,7 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
   NumberFieldUnit,
-} from '@langgenius/dify-ui/number-field'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/number-field'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

@@ -2,6 +2,7 @@
 
 import type { AppPartial } from '@dify/contracts/api/console/apps/types.gen'
 import { zIconType } from '@dify/contracts/api/console/apps/zod.gen'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -10,14 +11,13 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { Input } from '@langgenius/dify-ui/input'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
+import { Input } from '@xsl/lomva-ui/input'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore as useAppStore } from '@/app/components/app/store'

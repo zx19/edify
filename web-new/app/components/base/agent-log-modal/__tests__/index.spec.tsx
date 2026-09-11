@@ -21,7 +21,7 @@ vi.mock('@/service/log', () => ({
   fetchAgentLogDetail: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 

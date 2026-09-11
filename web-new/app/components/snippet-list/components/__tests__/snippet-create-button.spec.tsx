@@ -28,7 +28,7 @@ vi.mock('@/next/navigation', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: mockToastSuccess,
     error: mockToastError,

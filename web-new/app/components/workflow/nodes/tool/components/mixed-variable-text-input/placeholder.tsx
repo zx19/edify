@@ -1,6 +1,6 @@
-import { Kbd } from '@langgenius/dify-ui/kbd'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Kbd } from '@xsl/lomva-ui/kbd'
 import { $insertNodes, FOCUS_COMMAND } from 'lexical'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

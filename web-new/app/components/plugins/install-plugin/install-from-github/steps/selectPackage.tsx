@@ -1,8 +1,8 @@
 'use client'
 
 import type { PluginDeclaration, UpdateFromGitHubPayload } from '../../../types'
-import { Field } from '@langgenius/dify-ui/field'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Field } from '@xsl/lomva-ui/field'
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

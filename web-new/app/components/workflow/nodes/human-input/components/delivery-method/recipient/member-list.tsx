@@ -2,9 +2,9 @@
 import type { FC } from 'react'
 import type { Recipient } from '@/app/components/workflow/nodes/human-input/types'
 import type { Member } from '@/models/common'
-import { Avatar } from '@langgenius/dify-ui/avatar'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
-import { cn } from '@xsl/ui/cn'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

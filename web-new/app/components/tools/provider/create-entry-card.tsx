@@ -1,6 +1,6 @@
 'use client'
 import { RiAddLine, RiArrowRightUpLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type CreateEntryCardProps = {
   className?: string

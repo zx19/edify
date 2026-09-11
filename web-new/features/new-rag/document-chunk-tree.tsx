@@ -2,8 +2,8 @@
 
 import type { DocumentChunkTree } from './document-detail-model'
 import { defaultRangeExtractor, useVirtualizer } from '@tanstack/react-virtual'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

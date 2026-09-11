@@ -1,7 +1,7 @@
-import type { IconButtonProps } from '@xsl/ui/icon-button'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import type { IconButtonProps } from '@xsl/lomva-ui/icon-button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import DownloadingIcon from '@/app/components/header/plugins-nav/downloading-icon'
 import styles from './task-status-indicator.module.css'
 

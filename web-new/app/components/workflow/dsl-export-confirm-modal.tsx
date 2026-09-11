@@ -6,9 +6,9 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

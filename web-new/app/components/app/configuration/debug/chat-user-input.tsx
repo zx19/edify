@@ -1,6 +1,5 @@
 import type { Inputs } from '@/models/debug'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectContent,
@@ -9,7 +8,8 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

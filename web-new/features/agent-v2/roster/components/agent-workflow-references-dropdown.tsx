@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLinkItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'
 import Link from '@/next/link'

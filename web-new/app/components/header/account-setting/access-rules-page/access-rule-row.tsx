@@ -1,7 +1,7 @@
 'use client'
 
 import type { AccessPolicyWithBindings } from '@/models/access-control'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import AccessRuleRowMenu from './access-rule-row-menu'

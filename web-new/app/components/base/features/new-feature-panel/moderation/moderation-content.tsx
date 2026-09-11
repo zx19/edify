@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ModerationContentConfig } from '@/models/debug'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Switch } from '@xsl/lomva-ui/switch'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

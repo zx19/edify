@@ -1,7 +1,7 @@
 import type { GetAccountProfileResponse } from '@dify/contracts/api/console/account/types.gen'
-import { toast } from '@langgenius/dify-ui/toast'
 import { cleanup, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import EducationApplyPage from '@/app/education/apply/application-form'
 import { createConsoleQueryWrapper } from '@/test/console/query-data'
 import { render } from '@/test/console/render'

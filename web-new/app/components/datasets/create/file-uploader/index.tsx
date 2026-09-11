@@ -1,6 +1,6 @@
 'use client'
 import type { CustomFile as File, FileItem } from '@/models/datasets'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import FileListItem from './components/file-list-item'
 import UploadDropzone from './components/upload-dropzone'

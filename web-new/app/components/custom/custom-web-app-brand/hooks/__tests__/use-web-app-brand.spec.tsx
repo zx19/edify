@@ -53,7 +53,7 @@ const consoleStateRef = vi.hoisted(() => ({
 }))
 const mockUpdateCustomConfig = vi.hoisted(() => vi.fn())
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 vi.mock('@/service/client', async (importOriginal) => {

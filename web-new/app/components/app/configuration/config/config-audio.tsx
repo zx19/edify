@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { Switch } from '@langgenius/dify-ui/switch'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback } from 'react'

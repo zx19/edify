@@ -1,5 +1,6 @@
 import type { ChecklistItem } from '../../hooks/use-checklist'
 import type { CommonEdgeType } from '../../types'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Popover,
   PopoverClose,
@@ -7,8 +8,7 @@ import {
   PopoverDescription,
   PopoverTitle,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/popover'
 import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEdges } from 'reactflow'

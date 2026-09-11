@@ -14,10 +14,10 @@ import type {
   WeaveConfig,
 } from './type'
 import type { TracingStatus } from '@/models/app'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'

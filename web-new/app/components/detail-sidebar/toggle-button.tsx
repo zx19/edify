@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { formatForDisplay } from '@tanstack/react-hotkeys'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { DETAIL_SIDEBAR_TOGGLE_HOTKEY } from './hotkeys'
 

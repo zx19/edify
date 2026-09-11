@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useState } from 'react'
 import { useTranslation } from '#i18n'
 import { useMarketplaceSort } from '../atoms'

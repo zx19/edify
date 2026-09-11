@@ -1,7 +1,7 @@
 'use client'
 import type { AppData } from '@/models/share'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import ChatWrapper from '@/app/components/base/chat/embedded-chatbot/chat-wrapper'
 import Header from '@/app/components/base/chat/embedded-chatbot/header'

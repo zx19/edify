@@ -52,7 +52,7 @@ vi.mock('@/service/access-control/use-workspace-roles', () => ({
   useGetMembersOfRole: membersOfRoleQueryMock.useGetMembersOfRole,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
   },

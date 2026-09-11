@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useId } from 'react'
 import CornerLabel from '@/app/components/base/corner-label'
 import Link from '@/next/link'

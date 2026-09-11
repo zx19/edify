@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type IntegrationPageHeaderProps = {
   align?: 'start' | 'center'

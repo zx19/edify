@@ -58,8 +58,8 @@ vi.mock('@/context/provider-context', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@langgenius/dify-ui/toast')>()
+vi.mock('@xsl/lomva-ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@xsl/lomva-ui/toast')>()
   return {
     ...actual,
     toast: {

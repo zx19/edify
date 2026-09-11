@@ -1,12 +1,12 @@
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverDescription,
   PopoverTitle,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/popover'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'

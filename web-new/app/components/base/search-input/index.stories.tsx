@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { ComponentProps } from 'react'
-import { Kbd } from '@langgenius/dify-ui/kbd'
+import { Kbd } from '@xsl/lomva-ui/kbd'
 import { useState } from 'react'
 import { SearchInput } from '.'
 

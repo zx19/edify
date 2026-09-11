@@ -1,7 +1,7 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiArrowDownSLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { capitalize } from 'es-toolkit/string'
 import { useState } from 'react'
 

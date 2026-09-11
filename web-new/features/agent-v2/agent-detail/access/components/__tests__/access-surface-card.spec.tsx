@@ -12,7 +12,7 @@ vi.mock('foxact/use-clipboard', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

@@ -7,7 +7,7 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import { memo, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

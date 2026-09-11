@@ -54,7 +54,7 @@ vi.mock('../authorized', () => ({
   ),
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => <div data-testid={`indicator-${status}`} />,
 }))
 

@@ -7,7 +7,7 @@ import type {
   SetFieldsParam,
 } from '@/app/components/base/form/types'
 import { useForm, useStore } from '@tanstack/react-form'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useCallback, useImperativeHandle, useMemo, useState } from 'react'
 import { useGetFormValues, useGetValidators } from '@/app/components/base/form/hooks'
 import { FormItemValidateStatusEnum } from '@/app/components/base/form/types'

@@ -1,15 +1,15 @@
 import type { NodeOutPutVar, ValueSelector } from '@/app/components/workflow/types'
+import { RiArrowDownSLine } from '@remixicon/react'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { RiArrowDownSLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useBoolean } from 'ahooks'
 import { capitalize } from 'es-toolkit/string'
 import { memo, useCallback, useState } from 'react'

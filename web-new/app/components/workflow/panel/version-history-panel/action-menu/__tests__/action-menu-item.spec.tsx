@@ -1,6 +1,6 @@
-import { DropdownMenu, DropdownMenuContent } from '@langgenius/dify-ui/dropdown-menu'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { DropdownMenu, DropdownMenuContent } from '@xsl/lomva-ui/dropdown-menu'
 import { VersionHistoryContextMenuOptions } from '../../../../types'
 import ActionMenuItem from '../action-menu-item'
 

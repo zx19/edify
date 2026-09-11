@@ -1,5 +1,5 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useTranslation } from 'react-i18next'
 import InputsFormContent from '@/app/components/base/chat/chat-with-history/inputs-form/content'
 

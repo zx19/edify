@@ -1,7 +1,7 @@
 import type { Tag } from '../../../../hooks'
-import { Popover } from '@langgenius/dify-ui/popover'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Popover } from '@xsl/lomva-ui/popover'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 import MarketplaceTrigger from '../marketplace'

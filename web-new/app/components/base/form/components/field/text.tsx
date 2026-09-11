@@ -1,6 +1,6 @@
 import type { InputProps } from '../../../input'
 import type { LabelProps } from '../label'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useFieldContext } from '../..'
 import Input from '../../../input'

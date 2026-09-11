@@ -1,5 +1,5 @@
 import type { ChildChunkDetail, SegmentDetailModel } from '@/models/datasets'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -9,12 +9,12 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useBoolean } from 'ahooks'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'

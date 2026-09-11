@@ -1,5 +1,5 @@
 import type { SchemaRoot } from '../../types'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import { JsonSchemaConfig } from './json-schema-config'
 
 type JsonSchemaConfigModalProps = {

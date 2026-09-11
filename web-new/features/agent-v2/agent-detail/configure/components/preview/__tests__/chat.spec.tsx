@@ -4,10 +4,10 @@ import type { AgentChatRuntimeEmptyStateProps } from '../chat-runtime'
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { SpeechToTextTarget } from '@/app/components/base/voice-input/types'
 import type { AgentSoulConfigFormState } from '@/features/agent-v2/agent-composer/form-state'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { createStore, Provider as JotaiProvider } from 'jotai'
 import { createRef, useState } from 'react'
 import { SupportUploadFileTypes } from '@/app/components/workflow/types'
@@ -38,7 +38,7 @@ const mockConsoleState = vi.hoisted(() => ({
   deploymentEdition: 'COMMUNITY' as 'CLOUD' | 'COMMUNITY' | 'ENTERPRISE',
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

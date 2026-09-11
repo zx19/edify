@@ -4,10 +4,10 @@ import type {
   UpdateFromMarketPlacePayload,
   UpdatePluginModalType,
 } from '../../types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { render } from '@/test/console/render'

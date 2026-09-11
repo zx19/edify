@@ -1,9 +1,9 @@
 'use client'
 import type { CrawlResultItem as CrawlResultItemType } from '@/models/datasets'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { Radio } from '@langgenius/dify-ui/radio-group'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Radio } from '@xsl/lomva-ui/radio-group'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

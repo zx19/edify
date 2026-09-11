@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import { RiEqualizer2Line } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useEffect } from 'react'

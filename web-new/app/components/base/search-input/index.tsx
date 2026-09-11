@@ -1,7 +1,7 @@
-import type { InputGroupInputProps } from '@langgenius/dify-ui/input-group'
+import type { InputGroupInputProps } from '@xsl/lomva-ui/input-group'
 import type { Ref } from 'react'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
 import { useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

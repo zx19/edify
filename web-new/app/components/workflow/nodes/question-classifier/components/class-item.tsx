@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { Topic } from '../types'
 import type { ValueSelector, Var } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import CornerLabel from '@/app/components/base/corner-label'

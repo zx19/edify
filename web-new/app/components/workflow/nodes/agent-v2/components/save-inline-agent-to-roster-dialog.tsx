@@ -8,18 +8,18 @@ import type {
   AgentFormValues,
   AgentIconSelection,
 } from '@/features/agent-v2/roster/components/agent-form'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Form } from '@langgenius/dify-ui/form'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIconPicker from '@/app/components/base/app-icon-picker'

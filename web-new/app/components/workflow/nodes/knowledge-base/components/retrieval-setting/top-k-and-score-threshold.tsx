@@ -1,5 +1,5 @@
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   NumberField,
   NumberFieldControls,
@@ -7,8 +7,8 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@langgenius/dify-ui/number-field'
-import { Switch } from '@langgenius/dify-ui/switch'
+} from '@xsl/lomva-ui/number-field'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'
 import { env } from '@/env'

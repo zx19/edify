@@ -5,6 +5,8 @@ import type {
   LogicalDocument,
 } from '@dify/contracts/knowledge-fs/types.gen'
 import type { TaskProgressStore } from './task-progress-store'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Drawer,
   DrawerBackdrop,
@@ -15,9 +17,7 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { useMutation } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/drawer'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

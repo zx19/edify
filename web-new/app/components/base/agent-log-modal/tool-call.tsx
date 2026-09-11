@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { ToolCall } from '@/models/log'
 import { RiCheckboxCircleLine, RiErrorWarningLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useState } from 'react'
 import { ChevronRight } from '@/app/components/base/icons/src/vender/line/arrows'
 import BlockIcon from '@/app/components/workflow/block-icon'

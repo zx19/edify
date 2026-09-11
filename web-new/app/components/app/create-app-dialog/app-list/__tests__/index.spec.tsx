@@ -122,7 +122,7 @@ vi.mock('@/app/components/explore/create-app-modal', () => ({
       </div>
     ) : null,
 }))
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: (...args: unknown[]) => mockToastSuccess(...args),
     error: (...args: unknown[]) => mockToastError(...args),

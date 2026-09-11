@@ -44,7 +44,7 @@ vi.mock('@/service/base', () => ({
   request: (...args: unknown[]) => queryMocks.request(...args),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (message: string) => queryMocks.toastError(message),
   },

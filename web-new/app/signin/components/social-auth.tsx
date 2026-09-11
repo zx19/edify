@@ -1,5 +1,5 @@
-import { buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { API_PREFIX } from '@/config'
 import { useLocale } from '@/context/i18n'

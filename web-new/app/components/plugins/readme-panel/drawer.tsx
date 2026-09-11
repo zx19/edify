@@ -10,7 +10,7 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
+} from '@xsl/lomva-ui/drawer'
 import { useTranslation } from 'react-i18next'
 import { ReadmePanelContent } from './content'
 

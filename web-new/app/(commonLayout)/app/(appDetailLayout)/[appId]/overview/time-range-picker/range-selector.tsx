@@ -13,7 +13,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import dayjs from 'dayjs'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'

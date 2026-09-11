@@ -14,8 +14,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'
 import Divider from '@/app/components/base/divider'

@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { Var } from '../../../types'
 import { RiArrowDownSLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

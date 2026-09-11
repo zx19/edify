@@ -1,7 +1,7 @@
 'use client'
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { ComboboxItem, ComboboxItemText, ComboboxList } from '@langgenius/dify-ui/combobox'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { ComboboxItem, ComboboxItemText, ComboboxList } from '@xsl/lomva-ui/combobox'
 import FileIcon from '../document-file-icon'
 
 type Props = Readonly<{

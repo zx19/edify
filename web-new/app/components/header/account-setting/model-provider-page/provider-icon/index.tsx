@@ -1,6 +1,6 @@
 import type { ModelProviderSummaryResponse } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { AnthropicDark, AnthropicLight } from '@/app/components/base/icons/src/public/llm'
 import { Openai } from '@/app/components/base/icons/src/vender/other'
 import useTheme from '@/hooks/use-theme'

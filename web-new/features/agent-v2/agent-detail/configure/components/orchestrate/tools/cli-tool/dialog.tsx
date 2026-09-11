@@ -4,19 +4,19 @@ import type {
   EnvScope,
   EnvVariable,
 } from '@/features/agent-v2/agent-composer/form-state'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Field, FieldDescription, FieldLabel } from '@langgenius/dify-ui/field'
-import { Form } from '@langgenius/dify-ui/form'
-import { Input } from '@langgenius/dify-ui/input'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { Field, FieldDescription, FieldLabel } from '@xsl/lomva-ui/field'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'

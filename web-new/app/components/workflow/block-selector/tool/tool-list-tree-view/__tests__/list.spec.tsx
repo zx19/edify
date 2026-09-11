@@ -1,5 +1,5 @@
-import { createPreviewCardHandle } from '@langgenius/dify-ui/preview-card'
 import { render, screen } from '@testing-library/react'
+import { createPreviewCardHandle } from '@xsl/lomva-ui/preview-card'
 import { CollectionType } from '@/app/components/tools/types'
 import { useGetLanguage } from '@/context/i18n'
 import useTheme from '@/hooks/use-theme'

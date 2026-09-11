@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect } from 'react'
 import { DELETE_ERROR_MESSAGE_COMMAND, ErrorMessageBlockNode } from '.'
 import { Variable02 } from '../../../icons/src/vender/solid/development'

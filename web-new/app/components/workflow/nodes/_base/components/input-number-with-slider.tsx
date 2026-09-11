@@ -1,5 +1,5 @@
 'use client'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   Slider,
   SliderControl,
@@ -7,7 +7,7 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
+} from '@xsl/lomva-ui/slider'
 import * as React from 'react'
 import { useCallback } from 'react'
 

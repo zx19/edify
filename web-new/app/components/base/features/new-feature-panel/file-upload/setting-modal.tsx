@@ -1,6 +1,6 @@
 'use client'
 import type { OnFeaturesChange } from '@/app/components/base/features/types'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { memo } from 'react'
 import SettingContent from '@/app/components/base/features/new-feature-panel/file-upload/setting-content'
 

@@ -1,9 +1,9 @@
 // 双轨对照 stories（执行计划 v2 §5.2 视觉层）：同 props 渲染旧版（@langgenius/dify-ui）
-// 与新版（@xsl/ui）Button 并排——screenshot:diff 脚本（W3）对两列截图做像素比对。
+// 与新版（@xsl/lomva-ui）Button 并排——screenshot:diff 脚本（W3）对两列截图做像素比对。
 // 无作用域类挂载 = 两版都应呈现 Dify 现行视觉（§4 token 注记：新值仅在三主题类下覆盖）。
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Button as LegacyButton } from '@langgenius/dify-ui/button'
-import { Button as NewButton } from '@xsl/ui/button'
+import { Button as NewButton } from '@xsl/lomva-ui/button'
 import { Fragment } from 'react'
 
 const variants = [
@@ -36,7 +36,7 @@ export const ParityMatrix: Story = {
     >
       <strong>props</strong>
       <strong>legacy（dify-ui）</strong>
-      <strong>new（@xsl/ui）</strong>
+      <strong>new（@xsl/lomva-ui）</strong>
       {variants.flatMap((variant) =>
         sizes.flatMap((size) =>
           tones.map((tone) => (

@@ -11,8 +11,8 @@ import type {
   AgentFileNode,
   AgentSoulConfigFormState,
 } from '@/features/agent-v2/agent-composer/form-state'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import isEqual from 'fast-deep-equal'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,8 +1,8 @@
 'use client'
 
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTranslation } from 'react-i18next'
 import { CopyFeedback } from '@/app/components/base/copy-feedback'
 import ShareQRCode from '@/app/components/base/qrcode'

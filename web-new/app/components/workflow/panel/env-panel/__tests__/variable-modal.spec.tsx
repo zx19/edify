@@ -5,9 +5,9 @@ import type {
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { Shape } from '@/app/components/workflow/store/workflow'
 import type { EnvironmentVariable } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import {
   ConfigurationMethodEnum,
   ModelStatusEnum,
@@ -78,7 +78,7 @@ vi.mock(
   }),
 )
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

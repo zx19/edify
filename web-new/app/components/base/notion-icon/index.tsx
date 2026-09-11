@@ -1,6 +1,6 @@
 import type { DataSourceNotionPage } from '@/models/common'
 import { RiFileTextLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type IconTypes = 'workspace' | 'page'
 type NotionIconProps = {

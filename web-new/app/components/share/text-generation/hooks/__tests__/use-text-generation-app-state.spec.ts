@@ -28,7 +28,7 @@ const {
   useDocumentTitleMock: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: {
     notify: notifyMock,
   },

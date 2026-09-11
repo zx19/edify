@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { PluginCategoryEnum } from '../../types'
 import { RiAddLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'

@@ -1,13 +1,13 @@
 'use client'
+import { useMutation } from '@tanstack/react-query'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLinkItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useMutation } from '@tanstack/react-query'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTheme } from 'next-themes'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'

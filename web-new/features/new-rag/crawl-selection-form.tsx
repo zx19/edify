@@ -8,9 +8,9 @@ import type {
   SourceWorkflowRun,
 } from '@dify/contracts/knowledge-fs/types.gen'
 import type { FormEvent } from 'react'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import { useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from '@/next/navigation'

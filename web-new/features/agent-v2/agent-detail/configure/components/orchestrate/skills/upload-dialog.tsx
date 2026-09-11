@@ -5,18 +5,18 @@ import type { PostAppsByAppIdAgentConfigSkillsUploadResponse } from '@dify/contr
 import type { ChangeEvent, DragEvent } from 'react'
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentSkill } from '@/features/agent-v2/agent-composer/form-state'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useFileSizeLimit } from '@/app/components/base/file-uploader/hooks'

@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import { RiPlayLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ClockPlay } from '@/app/components/base/icons/src/vender/line/time'

@@ -1,6 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Input } from '@langgenius/dify-ui/input'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Input } from '@xsl/lomva-ui/input'
 import {
   NumberField,
   NumberFieldControls,
@@ -8,8 +9,7 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@langgenius/dify-ui/number-field'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/number-field'
 import * as React from 'react'
 import Datepicker from '../base/date-picker'
 import { DataType } from '../types'

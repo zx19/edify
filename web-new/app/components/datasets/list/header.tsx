@@ -1,14 +1,14 @@
 'use client'
 
 import type { KnowledgeViewSwitcherProps } from '@/features/new-rag/components/knowledge-view-switcher'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/app/components/base/search-input'
 import CheckboxWithLabel from '@/app/components/datasets/create/website/base/checkbox-with-label'

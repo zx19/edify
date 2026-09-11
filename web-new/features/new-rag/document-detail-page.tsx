@@ -1,7 +1,7 @@
 'use client'
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useAtomValue } from 'jotai'
 import { createParser, useQueryState } from 'nuqs'
 import { useMemo, useRef } from 'react'

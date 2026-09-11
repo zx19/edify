@@ -34,7 +34,7 @@ const {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: Object.assign(
     (message: string, options?: { type?: string }) =>
       mockToastNotify({ type: options?.type, message }),

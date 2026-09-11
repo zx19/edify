@@ -1,7 +1,7 @@
 'use client'
 import { zSsoProtocol } from '@dify/contracts/api/console/system-features/zod.gen'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useCallback, useEffect } from 'react'
 import { resolveWebAppLoginRedirect } from '@/app/(shareLayout)/webapp-signin/login-redirect'

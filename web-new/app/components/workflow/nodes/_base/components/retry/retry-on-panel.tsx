@@ -1,11 +1,11 @@
 import type { Node } from '@/app/components/workflow/types'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   NumberField,
   NumberFieldGroup,
   NumberFieldInput,
   NumberFieldUnit,
-} from '@langgenius/dify-ui/number-field'
+} from '@xsl/lomva-ui/number-field'
 import {
   Slider,
   SliderControl,
@@ -13,8 +13,8 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Switch } from '@langgenius/dify-ui/switch'
+} from '@xsl/lomva-ui/slider'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import Split from '@/app/components/workflow/nodes/_base/components/split'

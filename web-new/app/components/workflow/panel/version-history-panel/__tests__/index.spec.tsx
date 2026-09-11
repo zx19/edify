@@ -84,7 +84,7 @@ vi.mock('@/context/provider-context', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({ toast: mockToast }))
+vi.mock('@xsl/lomva-ui/toast', () => ({ toast: mockToast }))
 
 vi.mock('@/service/use-workflow', () => ({
   useDeleteWorkflow: () => ({ mutateAsync: vi.fn() }),

@@ -13,8 +13,8 @@ import type {
   HandleUpdateSubVariableCondition,
 } from '../types'
 import { RiAddLine, RiDeleteBinLine, RiDraggable } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectItem,
@@ -24,7 +24,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

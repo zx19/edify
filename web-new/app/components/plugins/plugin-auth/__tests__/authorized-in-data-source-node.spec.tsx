@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import AuthorizedInDataSourceNode from '../authorized-in-data-source-node'
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => (
     <span data-testid="indicator" data-status={status} />
   ),

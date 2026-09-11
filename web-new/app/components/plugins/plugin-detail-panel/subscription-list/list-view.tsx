@@ -1,6 +1,6 @@
 'use client'
 import type { PluginDetail } from '@/app/components/plugins/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

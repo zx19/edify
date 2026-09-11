@@ -1,6 +1,6 @@
 /* oxlint-disable eslint-react/set-state-in-effect */
 import type { UseEmblaCarouselType } from 'embla-carousel-react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import Autoplay from 'embla-carousel-autoplay'
 import Fade from 'embla-carousel-fade'
 import useEmblaCarousel from 'embla-carousel-react'

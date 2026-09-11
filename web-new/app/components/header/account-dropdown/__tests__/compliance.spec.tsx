@@ -1,12 +1,8 @@
 import type { ModalContextState } from '@/context/modal-context'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useModalContext } from '@/context/modal-context'
 import { baseProviderContextValue, useProviderContext } from '@/context/provider-context'
 import { getDocDownloadUrl } from '@/service/common'

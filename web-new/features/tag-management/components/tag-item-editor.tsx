@@ -1,4 +1,5 @@
 import type { TagResponse as Tag } from '@dify/contracts/api/console/tags/types.gen'
+import { useMutation } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -7,11 +8,10 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { useMutation } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useDebounceFn } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

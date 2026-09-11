@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react'
 import type { ModelSelectorModel } from '../model-selector/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { renderI18nObject } from '@/i18n-config'
 import { useLanguage } from '../hooks'
 import ModelBadge from '../model-badge'

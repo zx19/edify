@@ -1,6 +1,6 @@
 import type { PermissionSetFormValues, PermissionSetModalMode } from './permission-set-modal'
 import type { AccessPolicyWithBindings } from '@/models/access-control'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/context/i18n'

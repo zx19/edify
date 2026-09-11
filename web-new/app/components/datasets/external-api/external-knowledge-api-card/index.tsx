@@ -1,5 +1,6 @@
 import type { ExternalKnowledgeApiResponse } from '@dify/contracts/api/console/datasets/types.gen'
 import type { CreateExternalAPIReq } from '../declarations'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -8,9 +9,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { useQueryClient } from '@tanstack/react-query'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

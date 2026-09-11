@@ -1,6 +1,6 @@
 import type { Edge, Node } from '../types'
-import { ContextMenu } from '@langgenius/dify-ui/context-menu'
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import { ContextMenu } from '@xsl/lomva-ui/context-menu'
 import { useEffect } from 'react'
 import { useNodes } from 'reactflow'
 import { PipelineInputVarType } from '@/models/pipeline'

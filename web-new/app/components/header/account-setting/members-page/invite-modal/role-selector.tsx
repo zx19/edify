@@ -1,7 +1,7 @@
 'use client'
 
 import type { Role } from '@/models/access-control'
-import { Field, FieldError } from '@langgenius/dify-ui/field'
+import { Field, FieldError } from '@xsl/lomva-ui/field'
 import {
   Select,
   SelectItem,
@@ -14,7 +14,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/context/i18n'

@@ -2,7 +2,7 @@ import type { Props as FormProps } from '@/app/components/workflow/nodes/_base/c
 import type { Params as OneStepRunParams } from '@/app/components/workflow/nodes/_base/hooks/use-one-step-run'
 // import
 import type { CommonNodeType, ValueSelector } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useEffect, useState } from 'react'
 import useOneStepRun from '@/app/components/workflow/nodes/_base/hooks/use-one-step-run'
 import useVariableAssignerSingleRunFormParams from '@/app/components/workflow/nodes/assigner/use-single-run-form-params'

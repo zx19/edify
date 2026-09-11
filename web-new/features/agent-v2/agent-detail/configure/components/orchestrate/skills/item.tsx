@@ -2,16 +2,16 @@
 
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentSkill } from '@/features/agent-v2/agent-composer/form-state'
-import { Dialog } from '@langgenius/dify-ui/dialog'
+import { useQueryClient } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog } from '@xsl/lomva-ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useQueryClient } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'

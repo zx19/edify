@@ -1,4 +1,3 @@
-import { Textarea } from '@langgenius/dify-ui/textarea'
 import {
   Select,
   SelectContent,
@@ -7,7 +6,8 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

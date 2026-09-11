@@ -3,7 +3,7 @@
 import type { FormValue } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { ModelSelectorProvider } from '@/app/components/header/account-setting/model-provider-page/model-selector/types'
 import type { AgentComposerModel } from '@/features/agent-v2/agent-composer/form-state'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
 import { useTranslation } from 'react-i18next'
 import ModelParameterModal from '@/app/components/header/account-setting/model-provider-page/model-parameter-modal'
 import { isAgentCompatibleModel, isAgentSuggestedModel } from '../../../model-compatibility'

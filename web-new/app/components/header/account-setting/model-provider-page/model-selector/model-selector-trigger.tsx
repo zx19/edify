@@ -1,8 +1,8 @@
 import type { ModelSelectorModel, ModelSelectorProvider, ModelSelectorValue } from './types'
-import { PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'
 import {

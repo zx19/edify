@@ -1,6 +1,6 @@
 import type { Node } from '../types'
-import { ContextMenu } from '@langgenius/dify-ui/context-menu'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { ContextMenu } from '@xsl/lomva-ui/context-menu'
 import { NodeContextmenu } from '../node-contextmenu'
 
 const mockUseNodes = vi.hoisted(() => vi.fn())

@@ -55,7 +55,7 @@ vi.mock('@/context/provider-context', () => ({
 vi.mock('@/context/modal-context', () => ({
   useModalContext: vi.fn(),
 }))
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { SimpleSubscription } from '@/app/components/plugins/plugin-detail-panel/subscription-list'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { CreateSubscriptionButton } from '@/app/components/plugins/plugin-detail-panel/subscription-list/create'
 import { CreateButtonType } from '@/app/components/plugins/plugin-detail-panel/subscription-list/create/types'
 import { SubscriptionSelectorEntry } from '@/app/components/plugins/plugin-detail-panel/subscription-list/selector-entry'

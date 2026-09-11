@@ -7,6 +7,8 @@ import type {
   WorkflowToolProviderResponse,
 } from '../types'
 import type { WorkflowToolDrawerPayload } from '@/app/components/tools/workflow-tool'
+import { RiCloseLine } from '@remixicon/react'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -15,21 +17,19 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerContent,
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { toast } from '@langgenius/dify-ui/toast'
-import { RiCloseLine } from '@remixicon/react'
-import { useQueryClient } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/drawer'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

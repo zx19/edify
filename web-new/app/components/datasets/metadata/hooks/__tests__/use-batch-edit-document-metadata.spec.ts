@@ -34,7 +34,7 @@ vi.mock('@/service/knowledge/use-metadata', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

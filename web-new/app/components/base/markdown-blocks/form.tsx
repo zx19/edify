@@ -1,7 +1,6 @@
 import type { Dayjs } from 'dayjs'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -10,7 +9,8 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useChatContext } from '@/app/components/base/chat/chat/context'

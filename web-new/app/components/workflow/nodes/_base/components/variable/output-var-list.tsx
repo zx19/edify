@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { OutputVar } from '../../../code/types'
 import type { VarType } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useDebounceFn } from 'ahooks'
 import { produce } from 'immer'
 import * as React from 'react'

@@ -1,5 +1,5 @@
 import type { AgentLogItemWithChildren } from '@/types/workflow'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import AgentLogNavMore from './agent-log-nav-more'
 

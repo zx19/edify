@@ -1,7 +1,7 @@
 import type { DataSourceNodeType } from '@/app/components/workflow/nodes/data-source/types'
 import type { DataSourceNotionPageMap, DataSourceNotionWorkspace } from '@/models/common'
 import type { DataSourceNodeCompletedResponse, DataSourceNodeErrorResponse } from '@/types/pipeline'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useQueryState } from 'nuqs'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useShallow } from 'zustand/react/shallow'

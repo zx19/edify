@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import type { Var } from '../../../types'
 import type { Param, ParameterExtractorNodeType } from '../types'
 import type { PanelProps } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useTextGenerationCurrentProviderAndModelAndModelList } from '@/app/components/header/account-setting/model-provider-page/hooks'
 import { AppModeEnum } from '@/types/app'
 import { BlockEnum } from '../../../types'
@@ -20,7 +20,7 @@ const reasoningModeFunctionToolCallingLabel =
   'workflow.nodes.parameterExtractor.reasoningModeFunctionToolCalling'
 const reasoningModePromptLabel = 'workflow.nodes.parameterExtractor.reasoningModePrompt'
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

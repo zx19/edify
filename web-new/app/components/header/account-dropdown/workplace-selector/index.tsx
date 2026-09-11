@@ -5,7 +5,7 @@ import {
   SelectGroupLabel,
   SelectItem,
   SelectItemText,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WorkspaceAvatar } from '@/app/components/base/workspace-avatar'

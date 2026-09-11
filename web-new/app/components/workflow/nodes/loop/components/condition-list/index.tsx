@@ -10,7 +10,7 @@ import type {
 } from '../../types'
 import type { Node, NodeOutPutVar } from '@/app/components/workflow/types'
 import { RiLoopLeftLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useMemo } from 'react'
 import { LogicalOperator } from '../../types'
 import ConditionItem from './condition-item'

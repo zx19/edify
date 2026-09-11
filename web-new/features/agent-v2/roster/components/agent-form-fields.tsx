@@ -1,7 +1,7 @@
 import type { AgentIconSelection } from './agent-form'
-import { Field, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
-import { Input } from '@langgenius/dify-ui/input'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Field, FieldError, FieldLabel } from '@xsl/lomva-ui/field'
+import { Input } from '@xsl/lomva-ui/input'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'
 

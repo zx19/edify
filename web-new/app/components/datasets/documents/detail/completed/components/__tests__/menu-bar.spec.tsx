@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
-import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { CheckboxGroup } from '@xsl/lomva-ui/checkbox-group'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import MenuBar from '../menu-bar'
 

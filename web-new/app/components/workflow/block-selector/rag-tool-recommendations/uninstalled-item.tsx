@@ -1,6 +1,6 @@
 'use client'
 import type { Plugin } from '@/app/components/plugins/types'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

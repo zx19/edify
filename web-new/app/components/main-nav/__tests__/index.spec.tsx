@@ -15,9 +15,9 @@ import type { ModalContextState } from '@/context/modal-context'
 import type { ProviderContextState } from '@/context/provider-context'
 import type { UserProfileWithMeta } from '@/features/account-profile/client'
 import type { ConsoleStateFixture } from '@/test/console/state-fixture'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 import { createStore, Provider as JotaiProvider } from 'jotai'
 import { queryClientAtom } from 'jotai-tanstack-query'
 import { DETAIL_SIDEBAR_STORAGE_KEY } from '@/app/components/detail-sidebar/storage'
@@ -371,8 +371,8 @@ vi.mock('@/service/client', async (importOriginal) => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@langgenius/dify-ui/toast')>()
+vi.mock('@xsl/lomva-ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@xsl/lomva-ui/toast')>()
   return {
     ...actual,
     toast: {

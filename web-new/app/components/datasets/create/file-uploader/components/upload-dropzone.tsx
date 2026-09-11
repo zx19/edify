@@ -1,7 +1,7 @@
 'use client'
 import type { RefObject } from 'react'
 import type { FileUploadConfig } from '../hooks/use-file-upload'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useProviderContextSelector } from '@/context/provider-context'
 

@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiAlertFill } from '@remixicon/react'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

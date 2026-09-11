@@ -1,13 +1,13 @@
 'use client'
 
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import {
   getStepByStepTourDropdownMenuContentProps,

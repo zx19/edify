@@ -5,9 +5,9 @@ import type {
   AccessControlSubjectsStatus,
 } from './specific-groups-or-members'
 import type { AccessMode } from '@/models/access-control'
-import { DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { DialogDescription, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccessMode as AccessModeValue } from '@/models/access-control'

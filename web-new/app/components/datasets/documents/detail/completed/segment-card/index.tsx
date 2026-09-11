@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import type { ChildChunkDetail, SegmentDetailModel } from '@/models/datasets'
+import { RiDeleteBinLine, RiEditLine } from '@remixicon/react'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -7,11 +8,10 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { RiDeleteBinLine, RiEditLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Switch } from '@xsl/lomva-ui/switch'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

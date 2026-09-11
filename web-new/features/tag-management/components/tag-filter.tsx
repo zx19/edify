@@ -1,15 +1,15 @@
 import type { TagResponse as Tag, TagType } from '@dify/contracts/api/console/tags/types.gen'
-import type { ComboboxPortalProps, ComboboxProps } from '@langgenius/dify-ui/combobox'
+import type { ComboboxPortalProps, ComboboxProps } from '@xsl/lomva-ui/combobox'
+import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxPopup,
   ComboboxPortal,
   ComboboxPositioner,
   ComboboxTrigger,
-} from '@langgenius/dify-ui/combobox'
-import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/combobox'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import XCircleIcon from '@/app/components/base/icons/src/vender/solid/general/XCircle'

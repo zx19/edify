@@ -1,7 +1,7 @@
 import type { ModalContextState } from '@/context/modal-context'
 import type { ProviderContextState } from '@/context/provider-context'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { AuthHeaderPrefix, AuthType } from '@/app/components/tools/types'
 import { parseParamsSchema } from '@/service/tools'

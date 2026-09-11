@@ -1,8 +1,8 @@
 import type { Recipient as RecipientItem } from '../../../types'
 import type { Member } from '@/models/common'
-import { Avatar } from '@langgenius/dify-ui/avatar'
 import { RiCloseCircleFill, RiErrorWarningFill } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

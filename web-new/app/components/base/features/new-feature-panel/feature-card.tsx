@@ -1,4 +1,4 @@
-import { Switch } from '@langgenius/dify-ui/switch'
+import { Switch } from '@xsl/lomva-ui/switch'
 import * as React from 'react'
 import { Infotip } from '@/app/components/base/infotip'
 

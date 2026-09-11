@@ -1,5 +1,6 @@
 'use client'
 import type { ApiKeyItem } from '@dify/contracts/api/console/apps/types.gen'
+import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -8,17 +9,16 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

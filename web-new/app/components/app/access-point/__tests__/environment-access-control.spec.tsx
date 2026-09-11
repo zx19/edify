@@ -64,7 +64,7 @@ vi.mock('@/service/access-control', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
     success: vi.fn(),

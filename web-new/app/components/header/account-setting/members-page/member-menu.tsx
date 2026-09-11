@@ -1,6 +1,7 @@
 'use client'
 import type { Role } from '@/models/access-control'
 import type { Member } from '@/models/common'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,17 +10,16 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useQueryClient } from '@tanstack/react-query'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUpdateRolesOfMember } from '@/service/access-control/use-member-roles'

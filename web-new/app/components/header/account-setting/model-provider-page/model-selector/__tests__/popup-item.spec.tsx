@@ -1,9 +1,9 @@
 import type { ReactElement, ReactNode } from 'react'
 import type { DefaultModel, Model, ModelItem } from '../../declarations'
 import type { ModelSelectorPreviewPayload } from '../popup-item'
-import { createPreviewCardHandle } from '@langgenius/dify-ui/preview-card'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createPreviewCardHandle } from '@xsl/lomva-ui/preview-card'
 import { commonQueryKeys } from '@/service/use-common'
 import { createConsoleQueryClient, renderWithConsoleQuery } from '@/test/console/query-data'
 import {

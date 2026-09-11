@@ -1,5 +1,5 @@
 import { RiCheckLine, RiCloseLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import AppIcon from '@/app/components/base/app-icon'
 import { Mcp } from '@/app/components/base/icons/src/vender/other'
 import { shouldUseMcpIcon } from '@/utils/mcp'

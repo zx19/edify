@@ -2,7 +2,7 @@
 import type { FileAppearanceTypeEnum } from '@/app/components/base/file-uploader/types'
 import type { HitTesting } from '@/models/datasets'
 import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useMemo } from 'react'

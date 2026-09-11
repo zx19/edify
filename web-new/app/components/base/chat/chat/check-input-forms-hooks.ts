@@ -1,5 +1,5 @@
 import type { InputForm } from './type'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InputVarType } from '@/app/components/workflow/types'

@@ -8,9 +8,7 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@langgenius/dify-ui/number-field'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+} from '@xsl/lomva-ui/number-field'
 import {
   Select,
   SelectContent,
@@ -19,7 +17,9 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'

@@ -17,6 +17,9 @@ import type {
 } from '@/models/log'
 import type { App } from '@/types/app'
 import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/outline'
+import { RiCloseLine, RiEditFill } from '@remixicon/react'
+import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -24,14 +27,11 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { RiCloseLine, RiEditFill } from '@remixicon/react'
-import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/drawer'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'

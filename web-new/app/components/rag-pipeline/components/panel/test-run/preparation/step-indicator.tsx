@@ -1,4 +1,4 @@
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import Divider from '@/app/components/base/divider'
 

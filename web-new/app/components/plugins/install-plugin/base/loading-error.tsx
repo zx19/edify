@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { CheckboxSkeleton } from '@langgenius/dify-ui/checkbox'
 import { RiCloseLine } from '@remixicon/react'
+import { CheckboxSkeleton } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoadingPlaceholder } from '@/app/components/plugins/card/base/placeholder'

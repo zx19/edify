@@ -3,7 +3,7 @@
 import type { Dayjs } from 'dayjs'
 import type { FC } from 'react'
 import type { DatePickerProps, TriggerProps } from '../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

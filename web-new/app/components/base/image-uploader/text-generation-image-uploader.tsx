@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { ImageFile, VisionSettings } from '@/types/app'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link03 } from '@/app/components/base/icons/src/vender/line/general'

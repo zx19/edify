@@ -1,16 +1,16 @@
 import type { TriggerSubscriptionBuilder } from '@/app/components/workflow/block-selector/types'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectItemIndicator,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useBoolean } from 'ahooks'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

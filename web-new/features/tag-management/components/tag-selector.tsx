@@ -1,16 +1,16 @@
 import type { TagResponse as Tag, TagType } from '@dify/contracts/api/console/tags/types.gen'
-import type { ComboboxProps, ComboboxTriggerProps } from '@langgenius/dify-ui/combobox'
+import type { ComboboxProps, ComboboxTriggerProps } from '@xsl/lomva-ui/combobox'
 import type { TagComboboxItem } from './tag-combobox-item'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxPopup,
   ComboboxPortal,
   ComboboxPositioner,
   ComboboxTrigger,
-} from '@langgenius/dify-ui/combobox'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/combobox'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

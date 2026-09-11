@@ -1,5 +1,7 @@
 'use client'
 import type { Credential } from '@/app/components/tools/types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -9,20 +11,18 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { Input } from '@langgenius/dify-ui/input'
-import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
+} from '@xsl/lomva-ui/drawer'
+import { Field, FieldItem, FieldLabel } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { Input } from '@xsl/lomva-ui/input'
+import { Radio, RadioGroup } from '@xsl/lomva-ui/radio-group'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

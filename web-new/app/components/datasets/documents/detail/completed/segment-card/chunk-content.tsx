@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { SegmentListContextValue } from '..'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { Markdown } from '@/app/components/base/markdown'
 import { useSegmentListContext } from '..'

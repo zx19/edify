@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   updateAppSiteStatus: vi.fn().mockResolvedValue({}),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@xsl/lomva-ui/toast', () => ({ toast: vi.fn() }))
 
 vi.mock('@/app/components/app/store', () => ({
   useStore: (selector: (state: { setAppDetail: typeof mocks.setAppDetail }) => unknown) =>

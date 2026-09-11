@@ -1,4 +1,4 @@
-import type { ButtonProps } from '@xsl/ui/button'
+import type { ButtonProps } from '@xsl/lomva-ui/button'
 
 type MarkdownButtonAppearance = Pick<ButtonProps, 'size' | 'tone' | 'variant'>
 

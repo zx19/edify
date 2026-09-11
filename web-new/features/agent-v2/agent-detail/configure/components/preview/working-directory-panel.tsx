@@ -11,10 +11,10 @@ import type {
   AgentWorkingDirectoryRootPath,
 } from './working-directory-breadcrumb'
 import type { AgentFileNode } from '@/features/agent-v2/agent-composer/form-state'
-import { Dialog } from '@langgenius/dify-ui/dialog'
-import { Tabs, TabsIndicator, TabsList, TabsPanel, TabsTab } from '@langgenius/dify-ui/tabs'
-import { toast } from '@langgenius/dify-ui/toast'
 import { skipToken, useMutation, useQueries, useQuery } from '@tanstack/react-query'
+import { Dialog } from '@xsl/lomva-ui/dialog'
+import { Tabs, TabsIndicator, TabsList, TabsPanel, TabsTab } from '@xsl/lomva-ui/tabs'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

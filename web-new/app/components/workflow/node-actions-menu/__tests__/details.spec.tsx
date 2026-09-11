@@ -1,11 +1,7 @@
-/* oxlint-disable typescript/no-explicit-any */
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+/* oxlint-disable typescript/no-explicit-any */
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
 import { renderWorkflowFlowComponent } from '@/app/components/workflow/__tests__/workflow-test-env'
 import { useHooksStore } from '@/app/components/workflow/hooks-store'
 import useNodes from '@/app/components/workflow/store/workflow/use-nodes'

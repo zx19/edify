@@ -11,8 +11,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useBoolean } from 'ahooks'
 import { produce } from 'immer'
 import * as React from 'react'

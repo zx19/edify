@@ -4,8 +4,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -10,7 +10,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => mockUseTranslation(),
 }))
 
-vi.mock('@langgenius/dify-ui/input', () => ({
+vi.mock('@xsl/lomva-ui/input', () => ({
   Input: (props: {
     value: string
     placeholder?: string
@@ -26,7 +26,7 @@ vi.mock('@langgenius/dify-ui/input', () => ({
   ),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   __esModule: true,
   toast: {
     success: (message: string) => mockNotify({ type: 'success', message }),

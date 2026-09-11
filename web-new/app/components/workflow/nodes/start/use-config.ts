@@ -1,6 +1,6 @@
 import type { StartNodeType } from './types'
 import type { InputVar, MoreInfo, ValueSelector } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { produce } from 'immer'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

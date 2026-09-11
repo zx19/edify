@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import Editor, { loader } from '@monaco-editor/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'

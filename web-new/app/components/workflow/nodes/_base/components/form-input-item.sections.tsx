@@ -3,7 +3,7 @@
 import type { FC, ReactElement } from 'react'
 import type { SelectItem } from './form-input-item.helpers'
 import { RiLoader4Line } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   SelectItem as DifySelectItem,
   Select,
@@ -14,7 +14,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'
 import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'
 

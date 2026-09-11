@@ -1,4 +1,4 @@
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 export function PublisherTimelineMarker({ position }: { position: 'top' | 'bottom' }) {
   return (

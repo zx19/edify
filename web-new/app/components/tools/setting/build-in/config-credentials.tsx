@@ -1,6 +1,8 @@
 'use client'
 import type { FC } from 'react'
 import type { Collection } from '../../types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -11,10 +13,8 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { toast } from '@xsl/lomva-ui/toast'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useEffect, useState } from 'react'

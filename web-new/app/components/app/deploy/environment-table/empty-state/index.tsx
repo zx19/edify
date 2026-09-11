@@ -1,7 +1,7 @@
 'use client'
 
 import type { AppEnvironment } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import { EnvironmentDeployMenu } from '../deploy-menu'
 import { EmptyTableSkeleton } from './skeleton'

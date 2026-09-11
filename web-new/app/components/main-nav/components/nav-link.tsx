@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import type { MainNavItem } from '../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import Link from '@/next/link'
 
 const NavIcon = ({ icon, className }: { icon: string; className?: string }) => (

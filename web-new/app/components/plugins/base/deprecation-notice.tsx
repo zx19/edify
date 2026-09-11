@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { RiAlertFill } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { camelCase } from 'es-toolkit/string'
 import * as React from 'react'
 import { useMemo } from 'react'

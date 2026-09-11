@@ -1,5 +1,5 @@
-import { Meter, MeterIndicator, MeterLabel, MeterTrack } from '@langgenius/dify-ui/meter'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Meter, MeterIndicator, MeterLabel, MeterTrack } from '@xsl/lomva-ui/meter'
 import { Trans, useTranslation } from 'react-i18next'
 import { CreditsCoin } from '@/app/components/base/icons/src/vender/line/financeAndECommerce'
 import { useModalContextSelector } from '@/context/modal-context'

@@ -19,23 +19,9 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="11.5"
-        y="1"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect x="15" y="1" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
-      <rect
-        x="18.5"
-        y="1"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="11.5" y="1" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="15" y="1" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="18.5" y="1" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="22"
@@ -72,15 +58,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="4.5"
-        y="4.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect x="8" y="4.5" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
+      <rect x="4.5" y="4.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="8" y="4.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="11.5"
@@ -108,22 +87,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="22"
-        y="4.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect
-        x="25.5"
-        y="4.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="22" y="4.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="25.5" y="4.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="29"
@@ -187,14 +152,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="25.5"
-        y="8"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="25.5" y="8" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="29"
@@ -204,14 +162,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="1"
-        y="11.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="1" y="11.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="8"
@@ -329,15 +280,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect x="29" y="15" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
-      <rect
-        x="1"
-        y="18.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="29" y="15" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="1" y="18.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="4.5"
@@ -401,14 +345,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="29"
-        y="18.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="29" y="18.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="1"
@@ -418,14 +355,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="4.5"
-        y="22"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="4.5" y="22" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="8"
@@ -471,14 +401,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="25.5"
-        y="22"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="25.5" y="22" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="29"
@@ -497,22 +420,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="4.5"
-        y="25.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect
-        x="8"
-        y="25.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="4.5" y="25.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="8" y="25.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="11.5"
@@ -540,22 +449,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="22"
-        y="25.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect
-        x="25.5"
-        y="25.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="22" y="25.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="25.5" y="25.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="29"
@@ -592,23 +487,9 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="11.5"
-        y="29"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect x="15" y="29" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
-      <rect
-        x="18.5"
-        y="29"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
+      <rect x="11.5" y="29" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="15" y="29" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="18.5" y="29" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="22"
@@ -645,7 +526,7 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect x="1" y="15" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
+      <rect x="1" y="15" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
       <rect
         opacity="0.18"
         x="4.5"
@@ -655,15 +536,8 @@ const Professional = () => {
         rx="1"
         fill="var(--color-text-quaternary)"
       />
-      <rect
-        x="29"
-        y="11.5"
-        width="2"
-        height="2"
-        rx="1"
-        fill="var(--color-saas-dify-blue-inverted)"
-      />
-      <rect x="4.5" y="8" width="2" height="2" rx="1" fill="var(--color-saas-dify-blue-inverted)" />
+      <rect x="29" y="11.5" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
+      <rect x="4.5" y="8" width="2" height="2" rx="1" fill="var(--color-saas-blue-inverted)" />
     </svg>
   )
 }

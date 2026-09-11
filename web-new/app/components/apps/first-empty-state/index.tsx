@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import type { App } from '@/models/explore'
 import type { TryAppSelection } from '@/types/try-app'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import LearnDify from '@/app/components/explore/learn-dify'
 import { MAIN_NAV_APP_CARD_GRID_CLASS_NAME } from '@/app/components/main-nav/app-card-grid'

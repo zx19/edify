@@ -11,7 +11,7 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
+} from '@xsl/lomva-ui/scroll-area'
 import { useDebounce } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import { useQueryStates } from 'nuqs'

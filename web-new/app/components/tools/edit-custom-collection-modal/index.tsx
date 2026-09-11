@@ -1,6 +1,8 @@
 'use client'
 import type { FC } from 'react'
 import type { Credential, CustomCollectionBackend, CustomParamSchema, Emoji } from '../types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -10,12 +12,10 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Input } from '@langgenius/dify-ui/input'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { Input } from '@xsl/lomva-ui/input'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useDebounce, useGetState } from 'ahooks'
 import { produce } from 'immer'
 import * as React from 'react'

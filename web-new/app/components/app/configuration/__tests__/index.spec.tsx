@@ -1,5 +1,5 @@
-import { ToastHost } from '@langgenius/dify-ui/toast'
 import { act, render, screen } from '@testing-library/react'
+import { ToastHost } from '@xsl/lomva-ui/toast'
 import Configuration from '../index'
 import { toast } from '../toast'
 

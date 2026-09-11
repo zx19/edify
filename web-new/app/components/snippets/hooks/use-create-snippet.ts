@@ -1,5 +1,5 @@
 import type { CreateSnippetDialogPayload } from '@/app/components/snippets/create-snippet-dialog'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

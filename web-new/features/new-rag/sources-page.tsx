@@ -1,7 +1,8 @@
 'use client'
 
 import type { Source } from '@dify/contracts/knowledge-fs/types.gen'
-import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
+import type { StatusDotStatus } from '@xsl/lomva-ui/status-dot'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -10,8 +11,10 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,12 +22,9 @@ import {
   DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

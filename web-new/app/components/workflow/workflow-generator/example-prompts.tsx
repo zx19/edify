@@ -1,6 +1,6 @@
 'use client'
 import type { WorkflowGeneratorMode } from './types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useSessionStorageState } from 'ahooks'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

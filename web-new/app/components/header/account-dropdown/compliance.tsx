@@ -1,16 +1,16 @@
 import type { CloudPlan } from '@dify/contracts/api/console/features/types.gen'
 import type { ReactNode } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { useMutation } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useQueryState } from 'nuqs'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

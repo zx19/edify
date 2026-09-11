@@ -1,7 +1,7 @@
 import type { LoopNodeType } from './types'
 import type { OnSelectBlock } from '@/app/components/workflow/types'
 import { RiAddLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockSelector from '@/app/components/workflow/block-selector'

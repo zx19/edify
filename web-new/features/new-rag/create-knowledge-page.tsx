@@ -5,21 +5,19 @@ import type { CreateKnowledgeExitReason } from './components/create-knowledge-ex
 import type { KnowledgeVisibility } from './create-knowledge-workflow'
 import type { QueuedUpload } from './create-upload-queue'
 import type { NewKnowledgeSourceDraft, NewKnowledgeStartMode } from './routes'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogBackdrop,
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Field, FieldDescription, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
-import { Form } from '@langgenius/dify-ui/form'
-import { Input } from '@langgenius/dify-ui/input'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dialog'
+import { Field, FieldDescription, FieldError, FieldLabel } from '@xsl/lomva-ui/field'
+import { Form } from '@xsl/lomva-ui/form'
+import { Input } from '@xsl/lomva-ui/input'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -28,7 +26,9 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

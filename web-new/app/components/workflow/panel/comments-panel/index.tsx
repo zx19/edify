@@ -1,5 +1,4 @@
 import type { WorkflowCommentList } from '@/app/components/workflow/comment/types'
-import { Switch } from '@langgenius/dify-ui/switch'
 import {
   RiCheckboxCircleFill,
   RiCheckboxCircleLine,
@@ -8,7 +7,8 @@ import {
   RiFilter3Line,
 } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

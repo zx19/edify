@@ -7,7 +7,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { rosterQueryParamNames, rosterSortByQueryParser } from '../query-params'

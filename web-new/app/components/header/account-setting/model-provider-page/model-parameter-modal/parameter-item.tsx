@@ -1,18 +1,9 @@
 import type { ModelParameterRule } from '../declarations'
 import type { Node, NodeOutPutVar } from '@/app/components/workflow/types'
-import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
-import {
-  Slider,
-  SliderControl,
-  SliderIndicator,
-  SliderLabel,
-  SliderThumb,
-  SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Field, FieldItem, FieldLabel } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { Radio, RadioGroup } from '@xsl/lomva-ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -22,7 +13,16 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import {
+  Slider,
+  SliderControl,
+  SliderIndicator,
+  SliderLabel,
+  SliderThumb,
+  SliderTrack,
+} from '@xsl/lomva-ui/slider'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Infotip } from '@/app/components/base/infotip'

@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectContent,
@@ -9,7 +9,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { languages } from '@/i18n-config/language'
 

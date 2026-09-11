@@ -70,7 +70,7 @@ vi.mock('@/app/components/app/use-export-app-dsl', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: Object.assign(toastMocks.api, {
     success: vi.fn((message, options) => toastMocks.call({ type: 'success', message, ...options })),
     error: vi.fn((message, options) => toastMocks.call({ type: 'error', message, ...options })),

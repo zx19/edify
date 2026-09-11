@@ -1,8 +1,8 @@
 'use client'
 import type { PropsWithChildren } from 'react'
 import type { AccessMode } from '@/models/access-control'
-import { RadioItem } from '@langgenius/dify-ui/radio-group'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { RadioItem } from '@xsl/lomva-ui/radio-group'
 
 type AccessControlItemProps = PropsWithChildren<{
   type: AccessMode

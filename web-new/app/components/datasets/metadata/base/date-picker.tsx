@@ -4,7 +4,7 @@ import type {
 } from '@/app/components/base/date-and-time-picker/types'
 import { RiCalendarLine, RiCloseCircleFill } from '@remixicon/react'
 import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import dayjs from 'dayjs'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

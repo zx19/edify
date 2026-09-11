@@ -1,6 +1,6 @@
 import type { LabelProps } from '../label'
 import type { InputNumberWithSliderProps } from '@/app/components/workflow/nodes/_base/components/input-number-with-slider'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import InputNumberWithSlider from '@/app/components/workflow/nodes/_base/components/input-number-with-slider'
 import { useFieldContext } from '../..'
 import Label from '../label'

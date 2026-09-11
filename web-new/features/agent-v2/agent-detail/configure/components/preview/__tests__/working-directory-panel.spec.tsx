@@ -1,8 +1,8 @@
 import type { AgentWorkingDirectorySource } from '../working-directory-panel'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { AgentWorkingDirectoryPanel } from '../working-directory-panel'
 
@@ -182,7 +182,7 @@ vi.mock('@/utils/download', () => ({
   downloadUrl: mocks.downloadUrl,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: mocks.toastSuccess,
   },

@@ -1,12 +1,12 @@
+import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { ErrorHandleTypeEnum } from './types'
 

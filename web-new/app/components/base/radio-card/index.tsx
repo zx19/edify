@@ -1,8 +1,8 @@
 'use client'
-import type { RadioItemProps } from '@langgenius/dify-ui/radio-group'
+import type { RadioItemProps } from '@xsl/lomva-ui/radio-group'
 import type { ReactNode } from 'react'
-import { RadioControl, RadioItem } from '@langgenius/dify-ui/radio-group'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { RadioControl, RadioItem } from '@xsl/lomva-ui/radio-group'
 
 type BaseProps = {
   className?: string

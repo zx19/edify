@@ -1,8 +1,8 @@
 'use client'
 
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

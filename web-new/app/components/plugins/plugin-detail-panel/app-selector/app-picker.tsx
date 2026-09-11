@@ -1,9 +1,10 @@
 'use client'
 
 import type { AppPartial } from '@dify/contracts/api/console/apps/types.gen'
-import type { ComboboxPositionerProps } from '@langgenius/dify-ui/combobox'
+import type { ComboboxPositionerProps } from '@xsl/lomva-ui/combobox'
 import type { ReactNode } from 'react'
 import { zIconType } from '@dify/contracts/api/console/apps/zod.gen'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Combobox,
   ComboboxEmpty,
@@ -17,16 +18,15 @@ import {
   ComboboxPositioner,
   ComboboxStatus,
   ComboboxTrigger,
-} from '@langgenius/dify-ui/combobox'
+} from '@xsl/lomva-ui/combobox'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/scroll-area'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

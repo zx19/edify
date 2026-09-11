@@ -1,4 +1,4 @@
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { render } from 'vitest-browser-react'
 import { APP_LIST_GRID_CLASS_NAME } from '@/app/components/apps/constants'
 import { MAIN_NAV_APP_CARD_GRID_CLASS_NAME } from '../app-card-grid'

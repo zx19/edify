@@ -1,16 +1,16 @@
 'use client'
 import type { GetBillingSubscriptionData } from '@dify/contracts/api/console/billing/types.gen'
 import type { CloudPlan } from '@dify/contracts/api/console/features/types.gen'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,7 @@
 'use client'
 
 import type { SkillVersionResponse } from '@dify/contracts/api/console/workspaces/types.gen'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,30 +10,29 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
+} from '@xsl/lomva-ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { Input } from '@langgenius/dify-ui/input'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useTimestamp from '@/hooks/use-timestamp'

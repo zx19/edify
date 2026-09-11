@@ -1,8 +1,8 @@
 'use client'
 
 import type { FC } from 'react'
-import { buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { setPostLoginRedirect } from '@/app/signin/utils/post-login-redirect'
 import Link from '@/next/link'

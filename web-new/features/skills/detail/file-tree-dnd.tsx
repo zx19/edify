@@ -1,7 +1,7 @@
 'use client'
 
 import type { SkillUploadQueueItem } from './shared'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 
 export type SkillDropOperation = 'move' | 'upload'

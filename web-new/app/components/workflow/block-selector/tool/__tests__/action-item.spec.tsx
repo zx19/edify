@@ -1,6 +1,6 @@
-import { createPreviewCardHandle } from '@langgenius/dify-ui/preview-card'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createPreviewCardHandle } from '@xsl/lomva-ui/preview-card'
 import { trackEvent } from '@/app/components/base/amplitude'
 import { useGetLanguage } from '@/context/i18n'
 import useTheme from '@/hooks/use-theme'

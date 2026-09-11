@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

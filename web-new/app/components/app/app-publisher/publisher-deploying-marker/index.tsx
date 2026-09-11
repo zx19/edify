@@ -1,4 +1,4 @@
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import styles from './index.module.css'
 
 export function PublisherDeployingMarker() {

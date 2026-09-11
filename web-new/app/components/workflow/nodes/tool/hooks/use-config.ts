@@ -1,6 +1,6 @@
 import type { ToolNodeType, ToolVarInputs } from '../types'
 import type { InputVar } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { capitalize } from 'es-toolkit/string'
 import { produce } from 'immer'
 import { useCallback, useEffect, useMemo, useState } from 'react'

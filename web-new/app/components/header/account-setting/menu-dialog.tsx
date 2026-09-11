@@ -7,8 +7,8 @@ import {
   DialogPortal,
   DialogTitle,
   DialogViewport,
-} from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTranslation } from 'react-i18next'
 
 type MenuDialogProps = {

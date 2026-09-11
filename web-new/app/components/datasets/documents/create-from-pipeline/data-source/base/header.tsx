@@ -1,6 +1,6 @@
 import type { CredentialSelectorProps } from './credential-selector'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

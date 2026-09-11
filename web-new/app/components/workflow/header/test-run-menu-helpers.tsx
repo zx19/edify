@@ -1,7 +1,7 @@
 /* oxlint-disable react/only-export-components */
 import type { MouseEvent, MouseEventHandler, ReactElement } from 'react'
 import type { TriggerOption } from './test-run-menu'
-import { DropdownMenuItem } from '@langgenius/dify-ui/dropdown-menu'
+import { DropdownMenuItem } from '@xsl/lomva-ui/dropdown-menu'
 import { cloneElement, isValidElement, useEffect } from 'react'
 import { ShortcutKbd } from '../shortcuts/shortcut-kbd'
 

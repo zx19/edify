@@ -5,7 +5,7 @@ import type {
   Var,
   VarType,
 } from '@/app/components/workflow/types'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import VariableTag from '@/app/components/workflow/nodes/_base/components/variable-tag'
 import VarReferenceVars from '@/app/components/workflow/nodes/_base/components/variable/var-reference-vars'
 

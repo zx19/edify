@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiResetLeftLine } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useHover } from 'ahooks'
 import * as React from 'react'
 import { useRef } from 'react'

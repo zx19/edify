@@ -8,7 +8,7 @@ import type {
 } from '@/app/components/workflow/types'
 import type { FlowType } from '@/types/common'
 import type { NodeRunResult, NodeTracing } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { unionBy } from 'es-toolkit/compat'
 import { noop } from 'es-toolkit/function'
 import { produce } from 'immer'

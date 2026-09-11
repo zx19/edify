@@ -1,11 +1,7 @@
 'use client'
 
 import type { ReactElement } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
 import { useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { resetUser } from '@/app/components/base/amplitude/utils'

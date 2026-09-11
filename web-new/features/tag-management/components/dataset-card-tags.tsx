@@ -1,5 +1,5 @@
 import type { TagResponse as Tag } from '@dify/contracts/api/console/tags/types.gen'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { TagSelector } from '@/features/tag-management/components/tag-selector'
 
 type DatasetCardTagsProps = {

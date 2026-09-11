@@ -8,7 +8,7 @@ import {
   EnvVarValueSource as EnvVarValueSourceEnum,
   EnvVarValueType,
 } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { Input } from '@langgenius/dify-ui/input'
+import { Input } from '@xsl/lomva-ui/input'
 import {
   Select,
   SelectContent,
@@ -16,7 +16,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useTranslation } from 'react-i18next'
 
 export function EnvironmentVariableField({

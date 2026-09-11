@@ -13,7 +13,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'
 import { FormTypeEnum } from '@/app/components/header/account-setting/model-provider-page/declarations'

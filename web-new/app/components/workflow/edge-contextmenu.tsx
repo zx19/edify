@@ -1,4 +1,4 @@
-import { ContextMenuContent, ContextMenuItem } from '@langgenius/dify-ui/context-menu'
+import { ContextMenuContent, ContextMenuItem } from '@xsl/lomva-ui/context-menu'
 import { useTranslation } from 'react-i18next'
 import { useEdges } from 'reactflow'
 import { useEdgesInteractions } from './hooks/use-edges-interactions'

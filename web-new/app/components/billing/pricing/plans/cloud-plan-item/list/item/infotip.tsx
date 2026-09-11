@@ -1,5 +1,5 @@
-import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@xsl/lomva-ui/popover'
 
 export function PlanFeatureInfotip({ label, content }: { label: string; content: string }) {
   if (!content) return null

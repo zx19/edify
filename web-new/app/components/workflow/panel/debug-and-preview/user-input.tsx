@@ -1,5 +1,5 @@
 import type { StartNodeType } from '../../nodes/start/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
 import { useNodes } from 'reactflow'
 import FormItem from '../../nodes/_base/components/before-run-form/form-item'

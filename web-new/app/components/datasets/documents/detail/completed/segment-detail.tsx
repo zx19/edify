@@ -1,7 +1,7 @@
 import type { FileEntity } from '@/app/components/datasets/common/image-uploader/types'
 import type { SegmentDetailModel } from '@/models/datasets'
 import { RiCloseLine, RiCollapseDiagonalLine, RiExpandDiagonalLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuid4 } from 'uuid'

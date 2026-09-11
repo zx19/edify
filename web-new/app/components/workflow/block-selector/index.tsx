@@ -1,4 +1,4 @@
-import type { PopoverPositionerProps, PopoverTriggerProps } from '@langgenius/dify-ui/popover'
+import type { PopoverPositionerProps, PopoverTriggerProps } from '@xsl/lomva-ui/popover'
 import type { CSSProperties, KeyboardEvent, MouseEventHandler } from 'react'
 import type {
   CommonNodeType,
@@ -8,6 +8,8 @@ import type {
   ToolWithProvider,
 } from '../types'
 import type { TabType } from './types'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   Popover,
   PopoverClose,
@@ -16,9 +18,7 @@ import {
   PopoverPositioner,
   PopoverTitle,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/popover'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHooksStore } from '@/app/components/workflow/hooks-store'

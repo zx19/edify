@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { DataSet } from '@/models/datasets'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'
 import { useEffect } from 'react'

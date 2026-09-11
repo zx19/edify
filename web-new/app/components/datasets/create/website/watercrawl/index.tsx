@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { CrawlOptions, CrawlResultItem } from '@/models/datasets'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useQueryState } from 'nuqs'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

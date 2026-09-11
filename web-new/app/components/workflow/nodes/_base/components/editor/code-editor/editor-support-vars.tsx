@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { Props as EditorProps } from '.'
 import type { NodeOutPutVar, Variable } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'

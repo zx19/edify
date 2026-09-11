@@ -1,10 +1,6 @@
 import type { Mock } from 'vite-plus/test'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
 import { fireEvent, screen } from '@testing-library/react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
 import { openZendeskWindow } from '@/app/components/base/zendesk/utils'
 import { mailToSupport } from '@/app/components/header/utils/util'
 import { useModalContext } from '@/context/modal-context'

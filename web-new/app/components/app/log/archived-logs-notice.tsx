@@ -1,7 +1,7 @@
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useAtomValue } from 'jotai'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'

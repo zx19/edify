@@ -10,10 +10,10 @@ import type {
   FormValue,
 } from '../declarations'
 import type { NodeOutPutVar } from '@/app/components/workflow/types'
-import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Field, FieldItem, FieldLabel } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { Radio, RadioGroup } from '@xsl/lomva-ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -22,7 +22,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useCallback, useState } from 'react'
 import { Infotip } from '@/app/components/base/infotip'
 import { AppSelector } from '@/app/components/plugins/plugin-detail-panel/app-selector'

@@ -1,6 +1,6 @@
 import type { SortableItem } from './types'
 import type { InputVar } from '@/models/pipeline'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { isEqual } from 'es-toolkit/predicate'
 import { memo, useCallback, useMemo } from 'react'
 import { ReactSortable } from 'react-sortablejs'

@@ -4,10 +4,10 @@ import type {
   LLMCompletionParams,
   LLMEnvironmentVariableValue,
 } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { RiCloseLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

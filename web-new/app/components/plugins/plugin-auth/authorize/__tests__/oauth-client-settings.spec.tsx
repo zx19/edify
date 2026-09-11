@@ -1,8 +1,8 @@
 import type { OAuthClientSettingsProps } from '../oauth-client-settings'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { AuthCategory } from '../../types'
@@ -22,7 +22,7 @@ const mockToast = {
   promise: vi.fn(),
 }
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 const mockSetPluginOAuthCustomClient = vi.fn().mockResolvedValue({})

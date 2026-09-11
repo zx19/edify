@@ -3,23 +3,23 @@
 import type { AppImportPayload, Import } from '@dify/contracts/api/console/apps/types.gen'
 import type { Hotkey } from '@tanstack/react-hotkeys'
 import type { AppModeEnum } from '@/types/app'
+import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogBackdrop,
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Field, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
-import { Form } from '@langgenius/dify-ui/form'
-import { Input } from '@langgenius/dify-ui/input'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { Tabs, TabsList, TabsPanel, TabsTab } from '@langgenius/dify-ui/tabs'
-import { toast } from '@langgenius/dify-ui/toast'
-import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { Field, FieldError, FieldLabel } from '@xsl/lomva-ui/field'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { Tabs, TabsList, TabsPanel, TabsTab } from '@xsl/lomva-ui/tabs'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

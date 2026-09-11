@@ -1,6 +1,6 @@
-import { Popover } from '@langgenius/dify-ui/popover'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Popover } from '@xsl/lomva-ui/popover'
 import { ServiceApiCard } from '../card'
 
 vi.mock('@/hooks/use-api-access-url', () => ({

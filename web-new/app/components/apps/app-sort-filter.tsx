@@ -8,7 +8,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuRadioItemIndicator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

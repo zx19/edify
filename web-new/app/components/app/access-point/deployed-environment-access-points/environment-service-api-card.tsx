@@ -1,7 +1,7 @@
 'use client'
 
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useTranslation } from 'react-i18next'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import { consoleQuery } from '@/service/client'

@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { Brush01 } from '@/app/components/base/icons/src/vender/solid/editor'
 import { Scales02 } from '@/app/components/base/icons/src/vender/solid/FinanceAndECommerce'

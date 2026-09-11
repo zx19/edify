@@ -1,8 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 
 type CreateAppDialogShellProps = {
   children: ReactNode

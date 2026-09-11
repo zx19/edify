@@ -29,7 +29,7 @@ vi.mock('@/app/components/header/account-setting/model-provider-page/model-selec
   ),
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => <div>{`indicator:${status}`}</div>,
 }))
 

@@ -34,7 +34,7 @@ vi.mock('@/utils/download', () => ({
   downloadBlob: mocks.downloadBlob,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: mocks.toastError,
     promise: mocks.toastPromise,

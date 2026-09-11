@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react'
-import { Toggle } from '@langgenius/dify-ui/toggle'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Toggle } from '@xsl/lomva-ui/toggle'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '../../base/divider'

@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   NumberField,
   NumberFieldControls,
@@ -8,7 +8,7 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@langgenius/dify-ui/number-field'
+} from '@xsl/lomva-ui/number-field'
 import {
   Slider,
   SliderControl,
@@ -16,8 +16,8 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Switch } from '@langgenius/dify-ui/switch'
+} from '@xsl/lomva-ui/slider'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { Infotip } from '@/app/components/base/infotip'
 
 type Props = Readonly<{

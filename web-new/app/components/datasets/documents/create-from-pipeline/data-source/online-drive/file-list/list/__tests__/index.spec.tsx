@@ -1,7 +1,7 @@
 import type { Mock } from 'vite-plus/test'
 import type { OnlineDriveFile } from '@/models/pipeline'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import * as React from 'react'
 import { OnlineDriveFileType } from '@/models/pipeline'
 import List from '../index'

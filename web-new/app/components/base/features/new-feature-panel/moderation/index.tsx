@@ -1,6 +1,6 @@
 import type { OnFeaturesChange } from '@/app/components/base/features/types'
 import { RiEqualizer2Line } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { produce } from 'immer'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

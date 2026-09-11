@@ -2,7 +2,7 @@ import type { Features as FeaturesData } from '@/app/components/base/features/ty
 import type { TriggerNodeType } from '@/app/components/workflow/types'
 import type { IOtherOptions } from '@/service/base'
 import type { VersionHistory } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { noop } from 'es-toolkit/function'
 import { isInstalledAppPath } from '@/app/components/explore/installed-app/routes'
 import { TriggerType } from '@/app/components/workflow/header/test-run-menu'

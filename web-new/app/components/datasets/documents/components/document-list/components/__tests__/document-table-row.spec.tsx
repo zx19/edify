@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
 import { fireEvent, screen } from '@testing-library/react'
+import { CheckboxGroup } from '@xsl/lomva-ui/checkbox-group'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { DataSourceType } from '@/models/datasets'
 import { createConsoleQueryWrapper } from '@/test/console/query-data'

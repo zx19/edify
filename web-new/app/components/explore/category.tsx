@@ -1,7 +1,7 @@
 'use client'
 import type { AppCategory } from '@/models/explore'
-import { RadioGroup, RadioItem } from '@langgenius/dify-ui/radio-group'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { RadioGroup, RadioItem } from '@xsl/lomva-ui/radio-group'
 import { useTranslation } from 'react-i18next'
 import exploreI18n from '@/i18n/en-US/explore.json'
 

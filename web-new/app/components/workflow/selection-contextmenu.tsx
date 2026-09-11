@@ -6,7 +6,7 @@ import {
   ContextMenuItem,
   ContextMenuLabel,
   ContextMenuSeparator,
-} from '@langgenius/dify-ui/context-menu'
+} from '@xsl/lomva-ui/context-menu'
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'

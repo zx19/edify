@@ -5,7 +5,7 @@ import type {
   MetadataItemWithValue,
 } from '../types'
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
 import { t } from 'i18next'
 import { useMemo } from 'react'

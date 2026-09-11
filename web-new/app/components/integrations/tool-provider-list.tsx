@@ -3,15 +3,15 @@ import type { ReactNode } from 'react'
 import type { ToolCategory } from '@/app/components/integrations/routes'
 import type { ToolsContentInset } from '@/app/components/tools/content-inset'
 import type { Collection } from '@/app/components/tools/types'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isSearchResultEmpty } from '@/app/components/base/search-input/search-state'

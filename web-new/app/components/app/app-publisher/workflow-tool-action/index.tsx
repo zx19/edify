@@ -1,5 +1,5 @@
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { buildIntegrationPath } from '@/app/components/integrations/routes'
 import Link from '@/next/link'

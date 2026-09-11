@@ -1,5 +1,5 @@
-// import { Button } from '@xsl/ui/button'
-// import { StatusDot } from '@langgenius/dify-ui/status-dot'
+// import { Button } from '@xsl/lomva-ui/button'
+// import { StatusDot } from '@xsl/lomva-ui/status-dot'
 // import ToolItem from '@/app/components/tools/provider/tool-item'
 // import ConfigCredential from '@/app/components/tools/setting/build-in/config-credentials'
 import type { PluginDetail } from '@/app/components/plugins/types'

@@ -1,6 +1,7 @@
 'use client'
 
 import type { AppEnvironment } from '@dify/contracts/enterprise-app-deploy/types.gen'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { undeployedAppEnvironmentsAtom } from '../../state'

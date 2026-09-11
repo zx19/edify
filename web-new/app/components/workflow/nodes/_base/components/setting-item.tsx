@@ -1,8 +1,8 @@
-import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
+import type { StatusDotStatus } from '@xsl/lomva-ui/status-dot'
 import type { PropsWithChildren, ReactNode } from 'react'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { memo } from 'react'
 
 type SettingItemProps = PropsWithChildren<{

@@ -1,5 +1,5 @@
 import type { PublisherEnvironment } from './types'
-import { DropdownMenuItem } from '@langgenius/dify-ui/dropdown-menu'
+import { DropdownMenuItem } from '@xsl/lomva-ui/dropdown-menu'
 
 export function EnvironmentMenuItem({
   environment,

@@ -1,4 +1,4 @@
-import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
+import type { PopoverContentProps } from '@xsl/lomva-ui/popover'
 import type { ComponentPropsWithRef, FC, ReactElement } from 'react'
 import type { FormValue, ModelParameterRule } from '../declarations'
 import type {
@@ -8,9 +8,9 @@ import type {
 } from '../model-selector/types'
 import type { ParameterValue } from './parameter-item'
 import type { Node, NodeOutPutVar } from '@/app/components/workflow/types'
-import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowNarrowLeft } from '@/app/components/base/icons/src/vender/line/arrows'

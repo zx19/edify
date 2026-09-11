@@ -1,4 +1,3 @@
-import { Textarea } from '@langgenius/dify-ui/textarea'
 import {
   Select,
   SelectContent,
@@ -6,7 +5,8 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileUploaderInAttachmentWrapper } from '@/app/components/base/file-uploader'

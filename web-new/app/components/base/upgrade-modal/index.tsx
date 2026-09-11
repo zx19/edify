@@ -1,8 +1,8 @@
 'use client'
 
 import type { ComponentType, ReactNode } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@xsl/lomva-ui/dialog'
 import styles from './style.module.css'
 
 type UpgradeModalClassNames = {

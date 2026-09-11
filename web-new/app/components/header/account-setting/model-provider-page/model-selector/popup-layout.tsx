@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/scroll-area'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/app/components/base/search-input'
 

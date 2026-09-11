@@ -7,17 +7,17 @@ import type {
 import type { SkillFileMutationCoordinator } from './shared'
 import type { TagComboboxItem } from '@/features/tag-management/components/tag-combobox-item'
 import type { AppIconType } from '@/types/app'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxPopup,
   ComboboxPortal,
   ComboboxPositioner,
   ComboboxTrigger,
-} from '@langgenius/dify-ui/combobox'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/combobox'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

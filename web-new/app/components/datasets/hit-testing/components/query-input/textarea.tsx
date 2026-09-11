@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Corner } from '@/app/components/base/icons/src/vender/solid/shapes'

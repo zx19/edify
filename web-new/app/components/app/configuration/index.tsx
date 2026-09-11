@@ -1,5 +1,5 @@
 'use client'
-import { ToastHost } from '@langgenius/dify-ui/toast'
+import { ToastHost } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import ConfigurationView from './configuration-view'
 import { useConfiguration } from './hooks/use-configuration'

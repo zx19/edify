@@ -19,7 +19,7 @@ const { mockNotify, mockToast } = vi.hoisted(() => {
   return { mockNotify, mockToast }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 

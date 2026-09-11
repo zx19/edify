@@ -1,13 +1,13 @@
 'use client'
-import { Avatar } from '@langgenius/dify-ui/avatar'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { resetUser } from '@/app/components/base/amplitude/utils'
 import PremiumBadge from '@/app/components/base/premium-badge'

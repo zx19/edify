@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { PluginDetail } from '../types'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   RiArrowRightUpLine,
   RiBugLine,
@@ -10,7 +9,8 @@ import {
   RiLoginCircleLine,
 } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

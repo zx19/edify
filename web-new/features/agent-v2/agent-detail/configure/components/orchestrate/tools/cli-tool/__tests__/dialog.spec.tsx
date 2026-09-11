@@ -1,10 +1,10 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { CliToolDialog } from '../dialog'
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

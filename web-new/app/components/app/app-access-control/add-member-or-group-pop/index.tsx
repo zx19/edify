@@ -7,15 +7,15 @@ import type {
   SubjectAccount,
   SubjectGroup,
 } from '@/models/access-control'
-import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Button } from '@xsl/lomva-ui/button'
+import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/scroll-area'
 import { useDebounce } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

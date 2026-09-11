@@ -12,10 +12,10 @@ import type {
   TencentConfig,
   WeaveConfig,
 } from './type'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { Switch } from '@xsl/lomva-ui/switch'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useBoolean } from 'ahooks'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

@@ -1,7 +1,7 @@
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { Combobox } from '@langgenius/dify-ui/combobox'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Combobox } from '@xsl/lomva-ui/combobox'
 import { ChunkingMode, DataSourceType } from '@/models/datasets'
 import DocumentList from '../document-list'
 

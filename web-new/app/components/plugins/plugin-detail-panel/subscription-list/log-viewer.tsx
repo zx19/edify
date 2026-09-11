@@ -1,6 +1,5 @@
 'use client'
 import type { TriggerLogEntity } from '@/app/components/workflow/block-selector/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import {
   RiArrowDownSLine,
   RiArrowRightSLine,
@@ -8,7 +7,8 @@ import {
   RiErrorWarningFill,
   RiFileCopyLine,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import dayjs from 'dayjs'
 import * as React from 'react'
 import { useState } from 'react'

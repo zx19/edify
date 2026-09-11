@@ -1,0 +1,101 @@
+/*
+ * @xsl/lomva-tokens — 三线共享视觉 token（执行计划 v2 §1.5 / design §3.2）
+ *
+ * 作用域类：.admin-theme / .webapp-theme / .console-theme —— 同一套变量值，三个入口（后续可分线微调）。
+ * light 值源自系统管理控制台 mockup（docs/superpowers/specs/2026-08-26-系统管理控制台UI-mockup.html :root）；
+ * dark 按 design §3.2「底色/灰阶反转/橙亮档」原则本次定稿，须过三线目视评审（M1 人信号）。
+ *
+ * 机制约定：
+ * - dark：作用域元素上加 .dark（如 <body class="webapp-theme dark">）
+ * - accent 运行期覆盖（chat_color_theme）：在作用域根元素 inline style 设 --accent/--accent-deep/--accent-soft，
+ *   层叠天然覆盖本文件的类级定义；WebApp 渲染时按 sites.ui_config 注入（3a/第 4 步落地）
+ * - 无作用域类 = 不出现任何新视觉值：新原语包默认值对齐 Dify 现行视觉（§4 token 注记），
+ *   本文件只定义主题类下的覆盖值，Storybook 像素 diff 在无作用域态跑不受影响
+ */
+
+.admin-theme,
+.webapp-theme,
+.console-theme {
+  /* 底与面 */
+  --bg: #ffffff;
+  --bg-soft: #f7f7f8;
+  --card: #ffffff;
+  --border: #e8e8ea;
+  --border-strong: #d9d9dc;
+
+  /* 文字三级灰 */
+  --text-1: #0a0a0b;
+  --text-2: #3d3d42;
+  --text-3: #8a8a93;
+
+  /* accent（橙）三档 */
+  --accent: #ff8c00;
+  --accent-soft: #fff3e0;
+  --accent-deep: #e67a00;
+
+  /* 状态色 */
+  --danger: #e5484d;
+  --danger-soft: #fef3f2;
+  --success: #12a150;
+  --success-soft: #e9f9ef;
+
+  /* 徽标（pill） */
+  --gray-pill-bg: #f2f2f4;
+  --gray-pill-fg: #3d3d42;
+  --accent-pill-bg: #fff3e0;
+  --accent-pill-fg: #e67a00;
+  --violet-pill-bg: #f4f3ff;
+  --violet-pill-fg: #6938ef;
+  --amber-pill-bg: #fff6e8;
+  --amber-pill-fg: #b76400;
+
+  /* 圆角：卡片 12 / 控件 9 */
+  --radius: 12px;
+  --radius-btn: 9px;
+
+  /* 三级阴影 */
+  --shadow-xs: 0 1px 2px rgb(10 10 11 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(10 10 11 / 0.06);
+  --shadow-md: 0 10px 34px rgb(10 10 11 / 0.1);
+
+  /* 字体：Inter + PingFang */
+  --font: 'Inter', 'SF Pro Text', -apple-system, 'PingFang SC', 'system-ui', sans-serif;
+  --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+}
+
+/* dark 变体：底色/灰阶反转、accent 橙亮档 */
+.admin-theme.dark,
+.webapp-theme.dark,
+.console-theme.dark {
+  --bg: #0a0a0b;
+  --bg-soft: #17171a;
+  --card: #1c1c20;
+  --border: #2a2a2f;
+  --border-strong: #3a3a41;
+
+  --text-1: #f7f7f8;
+  --text-2: #c9c9d1;
+  --text-3: #7c7c87;
+
+  --accent: #ffa940;
+  --accent-soft: #3a2a14;
+  --accent-deep: #ff8c00;
+
+  --danger: #f2555a;
+  --danger-soft: #3b1618;
+  --success: #3ecf8e;
+  --success-soft: #0f2e21;
+
+  --gray-pill-bg: #26262b;
+  --gray-pill-fg: #c9c9d1;
+  --accent-pill-bg: #3a2a14;
+  --accent-pill-fg: #ffa940;
+  --violet-pill-bg: #241f3d;
+  --violet-pill-fg: #a89cff;
+  --amber-pill-bg: #3a2a10;
+  --amber-pill-fg: #e8a33d;
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 10px 34px rgb(0 0 0 / 0.5);
+}

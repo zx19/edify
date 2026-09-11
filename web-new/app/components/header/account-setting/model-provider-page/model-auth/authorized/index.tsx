@@ -1,4 +1,4 @@
-import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
+import type { PopoverContentProps } from '@xsl/lomva-ui/popover'
 import type { MouseEvent } from 'react'
 import type {
   ConfigurationMethodEnum,
@@ -15,10 +15,10 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { Fragment, memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCredentialPermissions } from '@/hooks/use-credential-permissions'

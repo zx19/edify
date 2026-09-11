@@ -2,8 +2,8 @@ import type { ReactElement } from 'react'
 import type { LLMNodeType } from '@/app/components/workflow/nodes/llm/types'
 import type { Edge, EnvironmentVariable, Node } from '@/app/components/workflow/types'
 import type { SnippetCanvasData, SnippetInputField } from '@/models/snippet'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, renderHook } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { BlockEnum } from '@/app/components/workflow/types'
 import { PipelineInputVarType } from '@/models/pipeline'
 import { useCreateSnippetFromSelection } from '../use-create-snippet-from-selection'
@@ -26,7 +26,7 @@ vi.mock('../use-create-snippet', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: { error: vi.fn() },
 }))
 

@@ -5,10 +5,10 @@ import type {
   ProcessingTaskEvent,
   ProcessingTaskProgressEvent,
 } from './services/processing-task-events'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { debounce, parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'

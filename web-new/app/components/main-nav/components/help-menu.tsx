@@ -1,7 +1,9 @@
 'use client'
 
-import type { IconButtonProps } from '@xsl/ui/icon-button'
+import type { IconButtonProps } from '@xsl/lomva-ui/icon-button'
 import type { ReactElement, Ref } from 'react'
+import { skipToken, useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -11,11 +13,9 @@ import {
   DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { skipToken, useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

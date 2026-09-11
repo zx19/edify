@@ -1,5 +1,5 @@
 'use client'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import copy from 'copy-to-clipboard'
 import { debounce } from 'es-toolkit/compat'
 import * as React from 'react'

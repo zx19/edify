@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ExternalDataTool } from '@/models/common'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { noop } from 'es-toolkit/function'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

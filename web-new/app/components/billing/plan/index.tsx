@@ -3,7 +3,7 @@ import type { EducationStatusResponse } from '@dify/contracts/api/console/accoun
 import type { FC } from 'react'
 import { RiBook2Line, RiFileEditLine, RiGroupLine } from '@remixicon/react'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

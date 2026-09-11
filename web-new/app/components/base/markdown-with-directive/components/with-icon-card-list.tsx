@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { WithIconCardListProps } from './markdown-with-directive-schema'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type WithIconListProps = WithIconCardListProps & {
   children?: ReactNode

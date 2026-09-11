@@ -1,6 +1,6 @@
 import type { Node, ValueSelector, VarType } from '../../../types'
 import type { VariableAssignerNodeType } from '../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNodes } from 'reactflow'

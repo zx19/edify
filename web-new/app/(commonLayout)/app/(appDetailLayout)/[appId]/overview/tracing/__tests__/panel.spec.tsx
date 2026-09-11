@@ -41,11 +41,11 @@ vi.mock('@/service/apps', () => ({
   updateTracingStatus: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => <span data-testid="status-dot">{status}</span>,
 }))
 

@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -7,8 +8,7 @@ import {
   DropdownMenuPositioner,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useSuspenseQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { Fragment, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReactFlow, useViewport } from 'reactflow'

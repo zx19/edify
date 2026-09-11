@@ -59,7 +59,7 @@ const toastMocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: toastMocks.api,
 }))
 

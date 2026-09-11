@@ -1,7 +1,7 @@
 'use client'
 
 import type { Node } from '../types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from '@/next/navigation'

@@ -11,8 +11,8 @@ import type {
   DefaultModel,
   FormValue,
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
-import { toast } from '@langgenius/dify-ui/toast'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'
 import { getFileIconType } from '@/features/agent-v2/agent-detail/configure/components/orchestrate/files/file-icon'
 import { consoleClient, consoleQuery } from '@/service/client'

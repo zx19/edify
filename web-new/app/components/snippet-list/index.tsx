@@ -2,7 +2,7 @@
 
 import type { SnippetPublishStatus } from './components/snippet-publish-status-filter'
 import type { SnippetListItem } from '@/types/snippet'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useDebounce } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useRef, useState } from 'react'

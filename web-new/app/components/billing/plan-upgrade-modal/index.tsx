@@ -1,6 +1,6 @@
 'use client'
 import type { ComponentType, ReactNode } from 'react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UpgradeModal } from '@/app/components/base/upgrade-modal'

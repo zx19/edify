@@ -2,9 +2,10 @@ import type {
   NumberFieldInputProps,
   NumberFieldProps,
   NumberFieldSize,
-} from '@langgenius/dify-ui/number-field'
+} from '@xsl/lomva-ui/number-field'
 import type { ReactNode } from 'react'
 import type { LabelProps } from '../label'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   NumberField,
   NumberFieldControls,
@@ -13,8 +14,7 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
   NumberFieldUnit,
-} from '@langgenius/dify-ui/number-field'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/number-field'
 import * as React from 'react'
 import { useFieldContext } from '../..'
 import Label from '../label'

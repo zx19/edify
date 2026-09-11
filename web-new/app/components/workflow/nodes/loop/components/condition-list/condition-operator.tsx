@@ -1,15 +1,15 @@
 import type { ComparisonOperator } from '../../types'
 import type { VarType } from '@/app/components/workflow/types'
+import { RiArrowDownSLine } from '@remixicon/react'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { RiArrowDownSLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getOperators, isComparisonOperatorNeedTranslate } from '../../utils'

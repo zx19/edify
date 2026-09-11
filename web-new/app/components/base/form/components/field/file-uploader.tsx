@@ -1,7 +1,7 @@
 import type { FileUploaderInAttachmentWrapperProps } from '../../../file-uploader/file-uploader-in-attachment'
 import type { FileEntity } from '../../../file-uploader/types'
 import type { LabelProps } from '../label'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useFieldContext } from '../..'
 import FileUploaderInAttachmentWrapper from '../../../file-uploader/file-uploader-in-attachment'

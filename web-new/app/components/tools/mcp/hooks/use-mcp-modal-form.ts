@@ -2,7 +2,7 @@
 import type { HeaderItem } from '../headers-input'
 import type { AppIconSelection } from '@/app/components/base/app-icon-picker'
 import type { ToolWithProvider } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { getDomain } from 'tldts'
 import { v4 as uuid } from 'uuid'

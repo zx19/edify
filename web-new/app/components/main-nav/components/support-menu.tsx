@@ -1,5 +1,5 @@
-import { DropdownMenuItem, DropdownMenuLinkItem } from '@langgenius/dify-ui/dropdown-menu'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { DropdownMenuItem, DropdownMenuLinkItem } from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { openZendeskWindow } from '@/app/components/base/zendesk/utils'
 import {

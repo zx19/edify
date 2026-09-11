@@ -28,7 +28,7 @@ import type {
   WorkflowPausedResponse,
   WorkflowStartedResponse,
 } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import Cookies from 'js-cookie'
 import {
   API_PREFIX,

@@ -1,6 +1,6 @@
 import type { ImageInfo } from '../image-previewer'
 import type { FileEntity } from '@/app/components/base/file-thumb'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useMemo, useState } from 'react'
 import FileThumb from '@/app/components/base/file-thumb'
 import ImagePreviewer from '../image-previewer'

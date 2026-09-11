@@ -22,7 +22,7 @@ vi.mock('@/context/workspace-state', async () => {
 })
 
 vi.mock('@/service/common')
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: {
     notify: (args: unknown) => toastMocks.mockNotify(args),
   },

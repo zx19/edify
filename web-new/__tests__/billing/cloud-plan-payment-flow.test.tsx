@@ -9,9 +9,9 @@
  */
 import type { GetBillingSubscriptionData } from '@dify/contracts/api/console/billing/types.gen'
 import type { CloudPlan } from '@dify/contracts/api/console/features/types.gen'
-import { toast, ToastHost } from '@langgenius/dify-ui/toast'
 import { cleanup, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast, ToastHost } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { ALL_PLANS } from '@/app/components/billing/config'
 import { CloudPlanItem } from '@/app/components/billing/pricing/plans/cloud-plan-item'

@@ -1,7 +1,7 @@
 import type { ThoughtItem } from '@/app/components/base/chat/chat/type'
 import type { ChatItem } from '@/app/components/base/chat/types'
 import type { Locale } from '@/i18n-config'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileList } from '@/app/components/base/file-uploader'

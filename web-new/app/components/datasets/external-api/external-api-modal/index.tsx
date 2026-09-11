@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import type { CreateExternalAPIReq, FormSchema } from '../declarations'
+import { RiBook2Line, RiCloseLine, RiInformation2Line, RiLock2Fill } from '@remixicon/react'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -8,13 +9,12 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { toast } from '@langgenius/dify-ui/toast'
-import { RiBook2Line, RiCloseLine, RiInformation2Line, RiLock2Fill } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { toast } from '@xsl/lomva-ui/toast'
 import { memo, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createExternalAPI } from '@/service/datasets'

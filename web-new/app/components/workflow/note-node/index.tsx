@@ -1,6 +1,6 @@
 import type { NodeProps } from 'reactflow'
 import type { NoteNodeType } from './types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useClickAway } from 'ahooks'
 import { memo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

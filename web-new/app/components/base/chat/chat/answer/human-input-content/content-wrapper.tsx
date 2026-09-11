@@ -1,4 +1,4 @@
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockIcon from '@/app/components/workflow/block-icon'

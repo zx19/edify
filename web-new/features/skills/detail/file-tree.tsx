@@ -20,6 +20,8 @@ import type {
   SkillUploadQueueItem,
 } from './shared'
 import type { SkillUploadDecision, SkillUploadReviewItem } from './upload-workflow'
+import { formatForDisplay, matchesKeyboardEvent, useHotkey } from '@tanstack/react-hotkeys'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -28,32 +30,22 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuTrigger,
-} from '@langgenius/dify-ui/context-menu'
-import { DialogTrigger } from '@langgenius/dify-ui/dialog'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+} from '@xsl/lomva-ui/alert-dialog'
+import { cn } from '@xsl/lomva-ui/cn'
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '@xsl/lomva-ui/context-menu'
+import { DialogTrigger } from '@xsl/lomva-ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { formatForDisplay, matchesKeyboardEvent, useHotkey } from '@tanstack/react-hotkeys'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import copy from 'copy-to-clipboard'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

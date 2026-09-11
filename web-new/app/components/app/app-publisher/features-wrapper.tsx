@@ -12,7 +12,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import { produce } from 'immer'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

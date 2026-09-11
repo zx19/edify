@@ -1,7 +1,7 @@
 'use client'
 import type { PluginDetail } from '../types'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTranslation } from 'react-i18next'
 import { ReadmePanelContent } from './content'
 

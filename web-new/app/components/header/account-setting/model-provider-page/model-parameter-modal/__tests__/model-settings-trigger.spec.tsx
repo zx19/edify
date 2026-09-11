@@ -1,5 +1,5 @@
-import { Popover } from '@langgenius/dify-ui/popover'
 import { render, screen } from '@testing-library/react'
+import { Popover } from '@xsl/lomva-ui/popover'
 import { ModelSettingsTrigger } from '../model-settings-trigger'
 
 describe('ModelSettingsTrigger', () => {

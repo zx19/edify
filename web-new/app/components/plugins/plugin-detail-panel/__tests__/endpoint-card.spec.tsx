@@ -15,7 +15,7 @@ const getEditButton = () => screen.getByRole('button', { name: 'common.operation
 const getDeleteButton = () => screen.getByRole('button', { name: 'common.operation.delete' })
 const getCopyButton = () => screen.getByRole('button', { name: 'common.operation.copy' })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: Object.assign(
     (message: string, options?: { type?: string }) =>
       mockToastNotify({ type: options?.type, message }),
@@ -70,7 +70,7 @@ vi.mock('@/service/use-endpoints', () => ({
   }),
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => (
     <span data-testid="indicator" data-status={status} />
   ),

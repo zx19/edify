@@ -2,7 +2,6 @@ import type { IndexingType } from '@/app/components/datasets/create/step-two'
 import type { IndexingStatusResponse } from '@/models/datasets'
 import type { InitialDocumentDetail } from '@/models/pipeline'
 import type { RETRIEVE_METHOD } from '@/types/app'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   RiAedFill,
   RiArrowRightLine,
@@ -11,8 +10,9 @@ import {
   RiLoader2Fill,
   RiTerminalBoxLine,
 } from '@remixicon/react'
-import { buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

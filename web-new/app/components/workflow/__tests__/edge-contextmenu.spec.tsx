@@ -1,7 +1,7 @@
 import type { Edge, Node } from '../types'
-import { ContextMenu } from '@langgenius/dify-ui/context-menu'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { ContextMenu } from '@xsl/lomva-ui/context-menu'
 import { useEffect } from 'react'
 import { useEdges, useNodes, useStoreApi } from 'reactflow'
 import { createEdge, createNode } from '../__tests__/fixtures'

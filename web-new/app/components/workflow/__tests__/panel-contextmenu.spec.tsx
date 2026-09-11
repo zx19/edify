@@ -1,5 +1,5 @@
-import { ContextMenu } from '@langgenius/dify-ui/context-menu'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { ContextMenu } from '@xsl/lomva-ui/context-menu'
 import { withSelectorKey } from '@/test/i18n-mock'
 import { FlowType } from '@/types/common'
 import { fullWorkflowAccessControl } from '../hooks-store'

@@ -1,16 +1,16 @@
 import type { EnvironmentDeployment } from '@dify/contracts/enterprise-app-deploy/types.gen'
 import type { EnvironmentDeploymentAction } from '../state'
 import type { UndeployHandler } from './types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { Fragment, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getWorkflowVersionName } from '@/app/components/workflow/utils/version'

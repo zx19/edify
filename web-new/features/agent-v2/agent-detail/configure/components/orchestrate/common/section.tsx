@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react'
 import type { AgentBuildDraftChangeSection } from '../build-draft-changes-context'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 import { Infotip } from '@/app/components/base/infotip'
 import { AgentBuildDraftChangeDot } from '../build-draft-change-dot'
 import { useIsAgentBuildDraftSectionChanged } from '../build-draft-changes-context'

@@ -16,7 +16,7 @@ const mockWorkflowState = {
   setListeningTriggerIsAll: vi.fn(),
   setShowVariableInspectPanel: vi.fn(),
 }
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

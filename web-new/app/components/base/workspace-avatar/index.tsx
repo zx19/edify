@@ -1,8 +1,8 @@
 'use client'
 
-import type { AvatarSize } from '@langgenius/dify-ui/avatar'
-import { AvatarFallback, AvatarRoot } from '@langgenius/dify-ui/avatar'
-import { cn } from '@xsl/ui/cn'
+import type { AvatarSize } from '@xsl/lomva-ui/avatar'
+import { AvatarFallback, AvatarRoot } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 
 export type WorkspaceAvatarSize = Extract<AvatarSize, 'xs' | 'sm' | 'lg' | '2xl'>
 

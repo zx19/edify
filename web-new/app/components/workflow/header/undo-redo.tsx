@@ -1,4 +1,4 @@
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ViewWorkflowHistory from '@/app/components/workflow/header/view-workflow-history'

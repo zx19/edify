@@ -9,15 +9,6 @@ import type {
 import type { Tool } from '@/app/components/tools/types'
 import type { TriggerWithProvider } from '@/app/components/workflow/block-selector/types'
 import type { Node, ToolWithProvider, ValueSelector, Var } from '@/app/components/workflow/types'
-import { PopoverTrigger } from '@langgenius/dify-ui/popover'
-import {
-  PreviewCard,
-  PreviewCardPopup,
-  PreviewCardPortal,
-  PreviewCardPositioner,
-  PreviewCardTrigger,
-} from '@langgenius/dify-ui/preview-card'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {
   RiArrowDownSLine,
   RiCloseLine,
@@ -25,7 +16,16 @@ import {
   RiLoader4Line,
   RiMoreLine,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { PopoverTrigger } from '@xsl/lomva-ui/popover'
+import {
+  PreviewCard,
+  PreviewCardPopup,
+  PreviewCardPortal,
+  PreviewCardPositioner,
+  PreviewCardTrigger,
+} from '@xsl/lomva-ui/preview-card'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'
 import { Line3 } from '@/app/components/base/icons/src/public/common'

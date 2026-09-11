@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import type useConfig from '../hooks/use-config'
 import type { HumanInputNodeType } from '../types'
 import type { NodePanelProps } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import { BlockEnum, InputVarType, VarType } from '@/app/components/workflow/types'
 import Panel from '../panel'
@@ -24,7 +24,7 @@ vi.mock('copy-to-clipboard', () => ({
   default: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
   },

@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { InputVar, MoreInfo } from '@/app/components/workflow/types'
 import { RiDeleteBinLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useHover } from 'ahooks'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'

@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { InputVar } from '../../../../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'

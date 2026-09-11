@@ -2,9 +2,9 @@ import type { InstalledAppResponse } from '@dify/contracts/api/console/installed
 import type { ReactNode } from 'react'
 import type { ChatConfig } from '../../types'
 import type { AppConversationData, AppData, AppMeta, ConversationItem } from '@/models/share'
-import { ToastHost } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
+import { ToastHost } from '@xsl/lomva-ui/toast'
 import {
   AppSourceType,
   delConversation,

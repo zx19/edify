@@ -2,8 +2,8 @@
 
 import type { InputVar } from '@/app/components/workflow/types'
 import type { SnippetDetail, SnippetInputField } from '@/models/snippet'
-import { toast } from '@langgenius/dify-ui/toast'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import { isEqual } from 'es-toolkit/predicate'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

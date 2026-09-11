@@ -1,5 +1,6 @@
 'use client'
 
+import { useMutation } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -8,9 +9,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/alert-dialog'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'
 

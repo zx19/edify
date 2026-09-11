@@ -1,6 +1,6 @@
 import type { FileEntity } from '../types'
 import type { ImageInfo } from '@/app/components/datasets/common/image-previewer'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useState } from 'react'
 import ImagePreviewer from '@/app/components/datasets/common/image-previewer'
 import { useUpload } from '../hooks/use-upload'

@@ -1,11 +1,11 @@
+import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
+} from '@xsl/lomva-ui/dropdown-menu'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

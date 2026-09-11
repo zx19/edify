@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, Ref } from 'react'
 import type { SnippetListItem as SnippetListItemData } from '@/types/snippet'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type SnippetListItemProps = {
   ref?: Ref<HTMLButtonElement>

@@ -14,8 +14,8 @@ import type {
   LogicalOperator,
 } from '../types'
 import { RiAddLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectItem,
@@ -25,7 +25,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

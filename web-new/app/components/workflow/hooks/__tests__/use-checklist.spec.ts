@@ -143,7 +143,7 @@ vi.mock('../index', () => ({
   useNodesMetaData: () => ({ nodes: [], nodesMap: mockNodesMap }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

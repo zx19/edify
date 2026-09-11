@@ -3,7 +3,7 @@ import type {
   SegmentStatusFilterOption,
   SegmentStatusFilterValue,
 } from '../hooks/use-search-filter'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'
 import { SearchInput } from '@/app/components/base/search-input'

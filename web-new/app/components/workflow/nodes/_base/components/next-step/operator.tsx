@@ -1,13 +1,13 @@
 import type { CommonNodeType, OnSelectBlock } from '@/app/components/workflow/types'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuPopup,
   DropdownMenuPortal,
   DropdownMenuPositioner,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { intersection } from 'es-toolkit/array'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

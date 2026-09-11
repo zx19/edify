@@ -5,7 +5,7 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { trackEvent } from '@/app/components/base/amplitude'

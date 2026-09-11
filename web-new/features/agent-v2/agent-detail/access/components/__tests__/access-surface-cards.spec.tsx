@@ -4,10 +4,10 @@ import type {
 } from '@dify/contracts/api/console/agent/types.gen'
 import type { AppDetail } from '@dify/contracts/api/console/apps/types.gen'
 import type React from 'react'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { seedAccountProfileQuery } from '@/test/console/account-profile'
 import { seedSystemFeatures } from '@/test/console/query-data'
 import { render } from '@/test/console/render'
@@ -37,7 +37,7 @@ vi.mock('@/context/i18n', () => ({
   useDocLink: () => (path: string) => `https://docs.example.test${path}`,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
     success: vi.fn(),

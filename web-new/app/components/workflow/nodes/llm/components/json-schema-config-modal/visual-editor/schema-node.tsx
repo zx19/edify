@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { Field } from '../../../types'
 import { RiArrowDropDownLine, RiArrowDropRightLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useDebounceFn } from 'ahooks'
 import * as React from 'react'
 import { useMemo, useState } from 'react'

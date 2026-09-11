@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { VersionHistoryContextMenuOptions } from '../../../types'
-import { DropdownMenuItem } from '@langgenius/dify-ui/dropdown-menu'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { DropdownMenuItem } from '@xsl/lomva-ui/dropdown-menu'
 import * as React from 'react'
 import UpgradeBtn from '@/app/components/billing/upgrade-btn'
 

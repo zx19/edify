@@ -5,16 +5,16 @@ import type {
   AgentProviderTool,
   AgentToolAction,
 } from '@/features/agent-v2/agent-composer/form-state'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthCategory, Authorized, usePluginAuth } from '@/app/components/plugins/plugin-auth'

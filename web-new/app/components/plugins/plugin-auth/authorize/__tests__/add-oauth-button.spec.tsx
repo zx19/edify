@@ -92,7 +92,7 @@ vi.mock('@/app/components/base/form/types', () => ({
   FormTypeEnum: { radio: 'radio' },
 }))
 
-vi.mock('@xsl/ui/cn', () => ({
+vi.mock('@xsl/lomva-ui/cn', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }))
 

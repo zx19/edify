@@ -1,7 +1,5 @@
 'use client'
 
-import { Avatar } from '@langgenius/dify-ui/avatar'
-import { toast } from '@langgenius/dify-ui/toast'
 import {
   RiAccountCircleLine,
   RiGlobalLine,
@@ -10,8 +8,10 @@ import {
   RiTranslate2,
 } from '@remixicon/react'
 import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
 import type { Attachment, HitTestingRecord, Query } from '@/models/datasets'
 import { RiApps2Line, RiArrowDownLine, RiFocus2Line } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

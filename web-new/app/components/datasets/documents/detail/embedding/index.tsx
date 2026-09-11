@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { IndexingType } from '../../../create/step-two'
 import type { RETRIEVE_METHOD } from '@/types/app'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

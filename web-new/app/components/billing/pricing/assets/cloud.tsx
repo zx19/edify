@@ -3,7 +3,7 @@ type CloudProps = {
 }
 
 const Cloud = ({ isActive }: CloudProps) => {
-  const color = isActive ? 'var(--color-saas-dify-blue-accessible)' : 'var(--color-text-primary)'
+  const color = isActive ? 'var(--color-saas-blue-accessible)' : 'var(--color-text-primary)'
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">

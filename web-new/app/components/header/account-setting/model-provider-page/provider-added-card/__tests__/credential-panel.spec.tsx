@@ -29,7 +29,7 @@ const {
   mockChangePriorityFn: vi.fn().mockResolvedValue({ result: 'success' }),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: { notify: mockToastNotify },
   toast: {
     success: (message: string) => mockToastNotify({ type: 'success', message }),
@@ -105,7 +105,7 @@ vi.mock('../model-auth-dropdown', () => ({
   ),
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => (
     <div data-testid="indicator" data-status={status} />
   ),

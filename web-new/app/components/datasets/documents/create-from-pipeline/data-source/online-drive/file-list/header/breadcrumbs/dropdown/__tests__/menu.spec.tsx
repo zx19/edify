@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
-import { DropdownMenu, DropdownMenuContent } from '@langgenius/dify-ui/dropdown-menu'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { DropdownMenu, DropdownMenuContent } from '@xsl/lomva-ui/dropdown-menu'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import Menu from '../menu'
 

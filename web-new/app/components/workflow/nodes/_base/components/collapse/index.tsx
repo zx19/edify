@@ -2,10 +2,10 @@ import type {
   CollapsiblePanelProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
-} from '@langgenius/dify-ui/collapsible'
+} from '@xsl/lomva-ui/collapsible'
 import type { ReactNode } from 'react'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 
 type CollapseProps = Omit<CollapsibleProps, 'open' | 'onOpenChange'> & {
   collapsed?: boolean

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { NumberField, NumberFieldGroup, NumberFieldInput } from '@langgenius/dify-ui/number-field'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
+import { NumberField, NumberFieldGroup, NumberFieldInput } from '@xsl/lomva-ui/number-field'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
 import { useTranslation } from 'react-i18next'
 
 const i18nPrefix = 'nodes.humanInput'

@@ -1,4 +1,4 @@
-import { Input } from '@langgenius/dify-ui/input'
+import { Input } from '@xsl/lomva-ui/input'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

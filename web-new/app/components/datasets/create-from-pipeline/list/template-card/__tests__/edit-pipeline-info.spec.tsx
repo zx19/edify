@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react'
 import type { PipelineTemplate } from '@/models/pipeline'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
 import { fireEvent, screen, render as testingLibraryRender, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { ChunkingMode } from '@/models/datasets'
 import EditPipelineInfo from '../edit-pipeline-info'
@@ -28,8 +28,8 @@ const { mockToastError } = vi.hoisted(() => ({
   mockToastError: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@langgenius/dify-ui/toast')>()
+vi.mock('@xsl/lomva-ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@xsl/lomva-ui/toast')>()
   return {
     ...actual,
     toast: {

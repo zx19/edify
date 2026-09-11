@@ -1,11 +1,11 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+} from '@xsl/lomva-ui/dropdown-menu'
 import {
   getStepByStepTourDropdownMenuContentProps,
   useStepByStepTourControlledDropdown,

@@ -56,8 +56,8 @@ let mockCredentialData: CredentialData | undefined = {
   current_credential_name: 'Default',
 }
 
-vi.mock('@langgenius/dify-ui/toast', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@langgenius/dify-ui/toast')>()
+vi.mock('@xsl/lomva-ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@xsl/lomva-ui/toast')>()
   return {
     ...actual,
     default: {

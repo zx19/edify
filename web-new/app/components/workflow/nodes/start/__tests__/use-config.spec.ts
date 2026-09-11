@@ -38,7 +38,7 @@ vi.mock('../../../hooks/use-inspect-vars-crud', () => ({
   default: (...args: unknown[]) => mockUseInspectVarsCrud(...args),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   __esModule: true,
   toast: {
     error: (message: string) => mockNotify({ type: 'error', message }),

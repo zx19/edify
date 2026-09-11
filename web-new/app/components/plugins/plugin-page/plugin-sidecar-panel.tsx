@@ -1,8 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { PopoverClose, PopoverTitle } from '@langgenius/dify-ui/popover'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { PopoverClose, PopoverTitle } from '@xsl/lomva-ui/popover'
 import { useTranslation } from 'react-i18next'
 
 type PluginSidecarPanelProps = {

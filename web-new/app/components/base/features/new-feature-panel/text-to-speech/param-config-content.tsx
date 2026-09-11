@@ -1,7 +1,6 @@
 'use client'
 import type { OnFeaturesChange } from '@/app/components/base/features/types'
 import type { I18nKeysWithPrefix } from '@/types/i18n'
-import { Switch } from '@langgenius/dify-ui/switch'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import {
   Select,
@@ -13,7 +12,8 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { produce } from 'immer'
 import { useTranslation } from 'react-i18next'
 import { replace } from 'string-ts'

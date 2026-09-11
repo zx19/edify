@@ -1,7 +1,10 @@
 import type { AgentInviteOptionResponse } from '@dify/contracts/api/console/agent/types.gen'
-import type { ComboboxChangeEventDetails } from '@langgenius/dify-ui/combobox'
+import type { ComboboxChangeEventDetails } from '@xsl/lomva-ui/combobox'
 import type { NodeDefault } from '../types'
 import type { AgentRosterNodeData } from './types'
+import { useQuery } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxInput,
@@ -10,12 +13,9 @@ import {
   ComboboxItemText,
   ComboboxList,
   ComboboxStatus,
-} from '@langgenius/dify-ui/combobox'
-import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/combobox'
+import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useDebounce } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

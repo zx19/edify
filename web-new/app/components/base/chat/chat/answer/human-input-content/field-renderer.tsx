@@ -1,6 +1,5 @@
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { FormInputItem } from '@/app/components/workflow/nodes/human-input/types'
-import { Textarea } from '@langgenius/dify-ui/textarea'
 import {
   Select,
   SelectItem,
@@ -12,7 +11,8 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { FileUploaderInAttachmentWrapper } from '@/app/components/base/file-uploader'
 import {

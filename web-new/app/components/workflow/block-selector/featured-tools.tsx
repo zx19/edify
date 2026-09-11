@@ -1,18 +1,18 @@
 'use client'
-import type { PreviewCardHandle } from '@langgenius/dify-ui/preview-card'
+import type { PreviewCardHandle } from '@xsl/lomva-ui/preview-card'
 import type { TFunction } from 'i18next'
 import type { ToolWithProvider } from '../types'
 import type { ToolDefaultValue, ToolValue } from './types'
 import type { Plugin } from '@/app/components/plugins/types'
 import type { Locale } from '@/i18n-config'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 import {
   createPreviewCardHandle,
   PreviewCard,
   PreviewCardTrigger,
-} from '@langgenius/dify-ui/preview-card'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/preview-card'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

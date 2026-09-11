@@ -5,7 +5,7 @@ import type {
   MetadataItemWithValueLength,
 } from '@/app/components/datasets/metadata/types'
 import type { SortType } from '@/service/datasets'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Chip from '@/app/components/base/chip'

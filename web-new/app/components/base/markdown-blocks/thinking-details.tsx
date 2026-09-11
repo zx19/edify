@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 
 type ThinkingDetailsProps = ComponentProps<'details'> & {

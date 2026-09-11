@@ -1,10 +1,10 @@
 import type { SkillResponse } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { AgentConfigApiContext } from '../../config-context'
 import type { AgentSoulConfigFormState } from '@/features/agent-v2/agent-composer/form-state'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
@@ -86,7 +86,7 @@ const mocks = vi.hoisted(() => ({
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),

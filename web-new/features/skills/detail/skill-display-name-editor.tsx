@@ -2,8 +2,8 @@
 
 import type { SkillDetailResponse } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { SkillFileMutationCoordinator } from './shared'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { consoleQuery } from '@/service/client'

@@ -25,7 +25,7 @@ const { mockSetShowAnnotationFullModal, mockProviderContext, mockT, mockAddAnnot
 
 vi.mock('copy-to-clipboard', () => ({ default: vi.fn() }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: { success: vi.fn() },
 }))
 

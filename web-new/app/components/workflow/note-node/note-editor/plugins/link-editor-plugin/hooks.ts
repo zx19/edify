@@ -1,7 +1,7 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { TOGGLE_LINK_COMMAND } from '@lexical/link'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { mergeRegister } from '@lexical/utils'
+import { toast } from '@xsl/lomva-ui/toast'
 import { escape } from 'es-toolkit/string'
 import { CLICK_COMMAND, COMMAND_PRIORITY_LOW } from 'lexical'
 import { useCallback, useEffect } from 'react'

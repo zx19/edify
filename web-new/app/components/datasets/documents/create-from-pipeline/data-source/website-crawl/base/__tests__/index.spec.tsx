@@ -1,7 +1,7 @@
 import type { CrawlResultItem as CrawlResultItemType } from '@/models/datasets'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import * as React from 'react'
 import CheckboxWithLabel from '../checkbox-with-label'
 import CrawledResult from '../crawled-result'

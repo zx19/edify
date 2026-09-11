@@ -2,7 +2,7 @@ import type { Credential } from '../../../declarations'
 import { fireEvent, render, screen } from '@testing-library/react'
 import CredentialItem from '../credential-item'
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status?: string }) => (
     <div data-testid="indicator" data-status={status} />
   ),

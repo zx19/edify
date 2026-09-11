@@ -1,8 +1,8 @@
 'use client'
 
-import { DialogTrigger } from '@langgenius/dify-ui/dialog'
-import { Kbd } from '@langgenius/dify-ui/kbd'
 import { detectPlatform, formatForDisplay } from '@tanstack/react-hotkeys'
+import { DialogTrigger } from '@xsl/lomva-ui/dialog'
+import { Kbd } from '@xsl/lomva-ui/kbd'
 import { useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gotoAnythingDialogHandle } from '@/app/components/goto-anything/dialog-handle'

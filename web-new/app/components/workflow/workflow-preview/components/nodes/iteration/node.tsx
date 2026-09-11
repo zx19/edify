@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { IterationNodeType } from '@/app/components/workflow/nodes/iteration/types'
 import type { NodeProps } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
 import { Background, useViewport } from 'reactflow'
 

@@ -1,6 +1,6 @@
 'use client'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import ChangePasswordForm from '@/app/forgot-password/ChangePasswordForm'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'

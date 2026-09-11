@@ -1,5 +1,5 @@
-import { Dialog, DialogPopup, DialogPortal, DialogTitle } from '@langgenius/dify-ui/dialog'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { Dialog, DialogPopup, DialogPortal, DialogTitle } from '@xsl/lomva-ui/dialog'
 import { gotoAnythingDialogHandle } from '@/app/components/goto-anything/dialog-handle'
 import { AppDetailTop } from '../app-detail-top'
 

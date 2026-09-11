@@ -70,7 +70,7 @@ vi.mock('@/service/client', () => ({
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: tagMocks.api,
 }))
 

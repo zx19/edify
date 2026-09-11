@@ -9,7 +9,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { CredentialIcon } from '@/app/components/datasets/common/credential-icon'
 
 export type NotionCredential = {

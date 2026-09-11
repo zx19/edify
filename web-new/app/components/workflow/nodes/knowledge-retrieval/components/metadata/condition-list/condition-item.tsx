@@ -6,7 +6,7 @@ import type {
   MetadataShape,
 } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import { RiDeleteBinLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useMemo, useState } from 'react'
 import { MetadataFilteringVariableType } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import MetadataIcon from '../metadata-icon'

@@ -1,6 +1,6 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { defaultAgentSoulConfigFormState } from '@/features/agent-v2/agent-composer/form-state'
 import { AgentComposerProvider } from '@/features/agent-v2/agent-composer/provider'
@@ -8,7 +8,7 @@ import { AgentOrchestrateReadOnlyContext } from '../../read-only-context'
 import { AgentEnvEditor, EnvVariablesTable } from '../env'
 import { getEnvImportPlatform, parseEnvImport } from '../env-utils'
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

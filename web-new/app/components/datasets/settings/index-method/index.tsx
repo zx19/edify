@@ -1,6 +1,6 @@
 'use client'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useTranslation } from 'react-i18next'
 import { Economic, HighQuality } from '@/app/components/base/icons/src/vender/knowledge'
 import { IndexingType } from '../../create/step-two'

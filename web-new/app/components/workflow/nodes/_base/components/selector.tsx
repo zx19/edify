@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useClickAway } from 'ahooks'
 import * as React from 'react'
 import { useState } from 'react'

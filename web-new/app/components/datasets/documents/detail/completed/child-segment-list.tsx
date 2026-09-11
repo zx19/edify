@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { ChildChunkDetail } from '@/models/datasets'
 import { RiArrowDownSLine, RiArrowRightSLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

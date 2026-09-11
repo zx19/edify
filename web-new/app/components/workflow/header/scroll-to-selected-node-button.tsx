@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { CommonNodeType } from '../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useNodes } from 'reactflow'
 import { scrollToWorkflowNode } from '../utils/node-navigation'

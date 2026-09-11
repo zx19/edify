@@ -1,6 +1,6 @@
-import { PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 
 type ModelSettingsTriggerProps = {

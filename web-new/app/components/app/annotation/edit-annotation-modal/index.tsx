@@ -7,7 +7,7 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import {
   Drawer,
   DrawerBackdrop,
@@ -17,8 +17,8 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { toast } from '@langgenius/dify-ui/toast'
+} from '@xsl/lomva-ui/drawer'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

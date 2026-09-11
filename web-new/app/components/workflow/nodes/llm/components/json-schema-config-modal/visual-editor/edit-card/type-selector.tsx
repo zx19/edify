@@ -12,7 +12,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useState } from 'react'
 
 export type TypeItem = {

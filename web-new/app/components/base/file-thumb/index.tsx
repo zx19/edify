@@ -1,6 +1,6 @@
 import type { VariantProps } from 'class-variance-authority'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { cva } from 'class-variance-authority'
 import * as React from 'react'
 import { useCallback } from 'react'

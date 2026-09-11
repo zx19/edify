@@ -2,10 +2,10 @@
 
 import type { ComponentProps, RefObject } from 'react'
 import type { StepByStepTourTaskId, StepByStepTourTaskView } from './types'
-import { PopoverDescription, PopoverTitle } from '@langgenius/dify-ui/popover'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { PopoverDescription, PopoverTitle } from '@xsl/lomva-ui/popover'
 import { useEffect } from 'react'
 
 export type FloatingChecklistProps = {

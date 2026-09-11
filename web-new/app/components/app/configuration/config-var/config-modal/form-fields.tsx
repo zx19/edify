@@ -4,8 +4,7 @@ import type { Item as SelectOptionItem } from './type-select'
 import type { SelectorTranslate } from '@/app/components/app/configuration/utils'
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { InputVar, UploadFileSetting } from '@/app/components/workflow/types'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import {
   Select,
   SelectItem,
@@ -17,7 +16,8 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import * as React from 'react'
 import { Trans } from 'react-i18next'
 import { getStringSelectorTranslate } from '@/app/components/app/configuration/utils'

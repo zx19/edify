@@ -1,8 +1,8 @@
 'use client'
 
 import type { EnvironmentVariableItemResponse } from '@dify/contracts/api/console/apps/types.gen'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { consoleClient } from '@/service/client'

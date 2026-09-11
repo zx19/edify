@@ -7,7 +7,7 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useTranslation } from 'react-i18next'
 import { getOutputTypeOption, OUTPUT_TYPE_OPTIONS } from './utils'
 

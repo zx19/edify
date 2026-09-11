@@ -7,9 +7,9 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

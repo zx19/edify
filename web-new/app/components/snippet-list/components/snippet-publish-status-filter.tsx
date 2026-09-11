@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,8 +8,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuRadioItemIndicator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

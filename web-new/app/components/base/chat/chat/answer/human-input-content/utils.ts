@@ -1,4 +1,4 @@
-import type { ButtonProps } from '@xsl/ui/button'
+import type { ButtonProps } from '@xsl/lomva-ui/button'
 import type { HumanInputFieldValue } from './field-renderer'
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { FormInputItem } from '@/app/components/workflow/nodes/human-input/types'

@@ -226,7 +226,7 @@ vi.mock('@/app/components/datasets/common/check-rerank-model', () => ({
   isReRankModelSelected: () => true,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: mockToastError,
     success: vi.fn(),
@@ -420,7 +420,7 @@ describe('Form', () => {
     })
 
     it('should show error when trying to save with empty name', async () => {
-      const { toast } = await import('@langgenius/dify-ui/toast')
+      const { toast } = await import('@xsl/lomva-ui/toast')
       render(<Form />)
 
       // Clear the name

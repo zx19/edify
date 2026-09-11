@@ -1,10 +1,10 @@
 'use client'
 
 import type { DeploymentStatus as DeploymentStatusValue } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import type { StatusDotStatus } from '@langgenius/dify-ui/status-dot'
+import type { StatusDotStatus } from '@xsl/lomva-ui/status-dot'
 import { DeploymentStatus as DeploymentStatusEnum } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { useTranslation } from 'react-i18next'
 
 const STATUS_TEXT_CLASS_NAMES: Record<DeploymentStatusValue, string> = {

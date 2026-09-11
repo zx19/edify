@@ -10,7 +10,7 @@ import { useFileUpload } from '../use-file-upload'
 // Mock notify function
 const mockNotify = vi.fn()
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (message: string) => mockNotify({ type: 'error', message }),
   },

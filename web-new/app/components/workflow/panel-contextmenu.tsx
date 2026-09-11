@@ -1,10 +1,10 @@
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ContextMenuContent,
   ContextMenuGroup,
   ContextMenuItem,
   ContextMenuSeparator,
-} from '@langgenius/dify-ui/context-menu'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/context-menu'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlowType } from '@/types/common'

@@ -1,6 +1,6 @@
 import type { FileEntity } from '../types'
 import type { FileUpload } from '@/app/components/base/features/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { SupportUploadFileTypes } from '@/app/components/workflow/types'
 import { useFile } from '../hooks'
 import { useStore } from '../store'

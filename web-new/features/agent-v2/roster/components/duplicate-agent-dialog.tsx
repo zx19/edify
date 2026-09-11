@@ -4,21 +4,21 @@ import type {
   AgentAppPartial,
 } from '@dify/contracts/api/console/agent/types.gen'
 import type { AgentFormValues, AgentIconSelection } from './agent-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Field, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
-import { Form } from '@langgenius/dify-ui/form'
-import { Input } from '@langgenius/dify-ui/input'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { Field, FieldError, FieldLabel } from '@xsl/lomva-ui/field'
+import { Form } from '@xsl/lomva-ui/form'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

@@ -1,7 +1,7 @@
 'use client'
 import type { FC, ReactNode } from 'react'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { VarType } from '@/app/components/workflow/nodes/tool/types'
 

@@ -1,6 +1,8 @@
 'use client'
 import type { Hotkey } from '@tanstack/react-hotkeys'
 import type { SnippetCanvasData, SnippetInputField } from '@/models/snippet'
+import { useHotkey } from '@tanstack/react-hotkeys'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogBackdrop,
@@ -8,12 +10,10 @@ import {
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Input } from '@langgenius/dify-ui/input'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { useHotkey } from '@tanstack/react-hotkeys'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -11,7 +11,7 @@ import type { Event, Tool } from '@/app/components/tools/types'
 import type { TriggerWithProvider } from '@/app/components/workflow/block-selector/types'
 import type { ToolWithProvider, ValueSelector, Var } from '@/app/components/workflow/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectContent,
@@ -19,7 +19,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useEffect, useMemo, useState } from 'react'
 import { CheckboxList } from '@/app/components/base/checkbox-list'
 import Input from '@/app/components/base/input'

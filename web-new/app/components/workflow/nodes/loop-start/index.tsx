@@ -1,6 +1,6 @@
 import type { NodeProps } from 'reactflow'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiHome5Fill } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NodeSourceHandle } from '@/app/components/workflow/nodes/_base/components/node-handle'

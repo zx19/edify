@@ -1,7 +1,7 @@
 'use client'
 
 import type { HeaderProps } from '@/app/components/workflow/header'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Header from '@/app/components/workflow/header'

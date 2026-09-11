@@ -1,7 +1,7 @@
 import type { FormData, InputFieldFormProps } from '../types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { PipelineInputVarType } from '@/models/pipeline'
 import { useConfigurations, useHiddenConfigurations, useHiddenFieldNames } from '../hooks'

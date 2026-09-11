@@ -1,5 +1,5 @@
 import type { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type GroupLabelProps = ComponentProps<'div'>
 

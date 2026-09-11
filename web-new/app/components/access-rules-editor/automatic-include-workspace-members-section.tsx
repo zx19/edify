@@ -1,6 +1,6 @@
 'use client'
 
-import { Switch } from '@langgenius/dify-ui/switch'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { memo, useId } from 'react'
 import { useTranslation } from 'react-i18next'
 

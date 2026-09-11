@@ -1,4 +1,4 @@
-import { DropdownMenuItem } from '@langgenius/dify-ui/dropdown-menu'
+import { DropdownMenuItem } from '@xsl/lomva-ui/dropdown-menu'
 import * as React from 'react'
 
 type ItemProps = {

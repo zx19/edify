@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import s from '../style.module.css'
 import { FolderPlusIcon, NotionIcon, ThreeDotsIcon } from './icons'

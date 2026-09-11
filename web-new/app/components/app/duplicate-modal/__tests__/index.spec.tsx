@@ -17,7 +17,7 @@ vi.mock('@/context/provider-context', () => ({
   useProviderContext: () => mockProviderContext,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (...args: unknown[]) => toastErrorMock(...args),
   },

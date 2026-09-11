@@ -1,8 +1,8 @@
 'use client'
 
 import type { AgentBuildDraftChangeSummary } from './build-draft-changes-context'
-import { Collapsible, CollapsiblePanel } from '@langgenius/dify-ui/collapsible'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Collapsible, CollapsiblePanel } from '@xsl/lomva-ui/collapsible'
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AgentBuildGridTexture } from '../build-grid-texture'

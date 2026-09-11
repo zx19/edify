@@ -8,7 +8,7 @@ import type {
   QAChunks,
 } from './types'
 import type { ParentMode } from '@/models/datasets'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useMemo } from 'react'
 import { ChunkingMode } from '@/models/datasets'
 import ChunkCard from './chunk-card'

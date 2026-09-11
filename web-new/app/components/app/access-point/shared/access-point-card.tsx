@@ -2,9 +2,9 @@
 
 import type { ReactNode } from 'react'
 import type { AccessPointStatus } from './access-point-status'
-import { StatusDot, StatusDotSkeleton } from '@langgenius/dify-ui/status-dot'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot, StatusDotSkeleton } from '@xsl/lomva-ui/status-dot'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 

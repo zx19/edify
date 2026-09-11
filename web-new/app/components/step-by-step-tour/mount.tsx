@@ -7,6 +7,9 @@ import type {
   StepByStepTourTaskId,
   StepByStepTourTaskView,
 } from './types'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Popover,
   PopoverArrow,
@@ -17,10 +20,7 @@ import {
   PopoverPositioner,
   PopoverTitle,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/popover'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQueryState } from 'nuqs'
 import { useEffect, useRef, useState } from 'react'

@@ -1,7 +1,9 @@
 'use client'
 
-import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
+import type { PopoverContentProps } from '@xsl/lomva-ui/popover'
 import type { BuiltInMetadataItem, MetadataItem } from '../types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxEmpty,
@@ -11,11 +13,9 @@ import {
   ComboboxItemText,
   ComboboxList,
   ComboboxSeparator,
-} from '@langgenius/dify-ui/combobox'
-import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/combobox'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDatasetMetaData } from '@/service/knowledge/use-metadata'

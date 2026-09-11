@@ -8,11 +8,11 @@ import type {
   SubjectAccount,
   SubjectGroup,
 } from '@/models/access-control'
-import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Toggle } from '@langgenius/dify-ui/toggle'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Toggle } from '@xsl/lomva-ui/toggle'
 import { useTranslation } from 'react-i18next'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 import { SubjectType } from '@/models/access-control'

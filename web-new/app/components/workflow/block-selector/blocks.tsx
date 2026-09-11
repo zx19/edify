@@ -4,7 +4,7 @@ import {
   createPreviewCardHandle,
   PreviewCard,
   PreviewCardTrigger,
-} from '@langgenius/dify-ui/preview-card'
+} from '@xsl/lomva-ui/preview-card'
 import { groupBy } from 'es-toolkit/compat'
 import { Fragment, memo, useCallback, useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

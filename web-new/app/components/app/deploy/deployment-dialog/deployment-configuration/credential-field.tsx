@@ -1,6 +1,5 @@
 import type { CredentialSlot } from '@dify/contracts/enterprise-app-deploy/types.gen'
 import { PluginCategory } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import {
   Select,
   SelectContent,
@@ -9,7 +8,8 @@ import {
   SelectItem,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { useTranslation } from 'react-i18next'
 import useGetIcon from '@/app/components/plugins/install-plugin/base/use-get-icon'
 import useTheme from '@/hooks/use-theme'

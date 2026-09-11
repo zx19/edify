@@ -78,7 +78,7 @@ vi.mock('../../context', () => ({
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 
@@ -140,7 +140,7 @@ vi.mock('../hooks/use-child-segment-data', () => ({
 }))
 
 vi.mock('../components/menu-bar', async () => {
-  const { Checkbox } = await import('@langgenius/dify-ui/checkbox')
+  const { Checkbox } = await import('@xsl/lomva-ui/checkbox')
 
   return {
     default: ({

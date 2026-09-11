@@ -1,6 +1,6 @@
 import type { FormType } from '../..'
 import { useStore } from '@tanstack/react-form'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from '../..'
 

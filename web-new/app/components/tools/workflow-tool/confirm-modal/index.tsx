@@ -1,8 +1,8 @@
 'use client'
 
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
 import { useTranslation } from 'react-i18next'
 import { AlertTriangle } from '@/app/components/base/icons/src/vender/solid/alertsAndFeedback'
 

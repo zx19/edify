@@ -1,7 +1,7 @@
 import type { WorkspaceCustomConfigPayload } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { ChangeEvent } from 'react'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

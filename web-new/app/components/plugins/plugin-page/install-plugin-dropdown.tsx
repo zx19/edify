@@ -1,17 +1,17 @@
 'use client'
 
-import type { ButtonProps } from '@xsl/ui/button'
+import type { ButtonProps } from '@xsl/lomva-ui/button'
 import type { PluginCategoryEnum } from '@/app/components/plugins/types'
+import { RiAddCircleFill, RiArrowDownSLine } from '@remixicon/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { RiAddCircleFill, RiArrowDownSLine } from '@remixicon/react'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { noop } from 'es-toolkit/function'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

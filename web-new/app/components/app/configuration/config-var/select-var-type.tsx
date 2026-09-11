@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
+} from '@xsl/lomva-ui/dropdown-menu'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { OperationButton } from '@/app/components/app/configuration/base/operation-button'

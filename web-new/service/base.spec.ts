@@ -1,5 +1,5 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { PUBLIC_API_PREFIX } from '@/config'
 // oxlint-disable-next-line no-restricted-imports
@@ -18,7 +18,7 @@ import {
 
 const refreshAccessTokenOrReLoginMock = vi.hoisted(() => vi.fn())
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

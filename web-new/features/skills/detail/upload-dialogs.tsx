@@ -2,16 +2,16 @@
 
 import type { SkillUploadQueueItem } from './shared'
 import type { SkillUploadDecision, SkillUploadReviewItem } from './upload-workflow'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTranslation } from 'react-i18next'
 import { getPathBaseName } from './shared'
 import { isUploadReviewItemSkipped, isUploadReviewResolved } from './upload-workflow'

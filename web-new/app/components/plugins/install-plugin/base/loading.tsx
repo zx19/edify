@@ -1,5 +1,5 @@
 'use client'
-import { CheckboxSkeleton } from '@langgenius/dify-ui/checkbox'
+import { CheckboxSkeleton } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import Placeholder from '../../card/base/placeholder'
 

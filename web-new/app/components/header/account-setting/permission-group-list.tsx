@@ -1,15 +1,15 @@
 'use client'
 
 import type { PermissionGroup } from '@/models/access-control'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

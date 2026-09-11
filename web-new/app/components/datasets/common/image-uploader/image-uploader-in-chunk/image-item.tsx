@@ -1,6 +1,6 @@
 import type { FileEntity } from '../types'
-import { ProgressCircle } from '@langgenius/dify-ui/progress'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { ProgressCircle } from '@xsl/lomva-ui/progress'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import FileImageRender from '@/app/components/base/file-uploader/file-image-render'

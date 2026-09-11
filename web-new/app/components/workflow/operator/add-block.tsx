@@ -1,6 +1,6 @@
 import type { BlockSelectorProps } from '@/app/components/workflow/block-selector'
 import type { Node, OnSelectBlock } from '@/app/components/workflow/types'
-import { IconButton } from '@xsl/ui/icon-button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStoreApi } from 'reactflow'

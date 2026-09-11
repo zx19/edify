@@ -1,10 +1,10 @@
 import type { AnyFieldApi } from '@tanstack/react-form'
 import type { FieldState, FormSchema, TypeWithI18N } from '@/app/components/base/form/types'
-import { Field, FieldItem, FieldLabel } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { Radio, RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { useStore } from '@tanstack/react-form'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Field, FieldItem, FieldLabel } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { Radio, RadioGroup } from '@xsl/lomva-ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -13,7 +13,7 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { isValidElement, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CheckboxList } from '@/app/components/base/checkbox-list'

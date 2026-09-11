@@ -1,6 +1,6 @@
 import type { IterationDurationMap, NodeTracing } from '@/types/workflow'
 import { RiArrowRightSLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import { Iteration } from '@/app/components/base/icons/src/vender/workflow'
 import { NodeRunningStatus } from '@/app/components/workflow/types'

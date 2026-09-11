@@ -2,7 +2,7 @@
 
 import type { DeploymentVersion } from '../version'
 import type { DeploymentDialogRequest } from './types'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import { useState } from 'react'
 import { DeploymentConfiguration } from './deployment-configuration'
 import { VersionSelection } from './version-selection'

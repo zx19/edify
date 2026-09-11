@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import { NumberField, NumberFieldGroup, NumberFieldInput } from '@langgenius/dify-ui/number-field'
+import { NumberField, NumberFieldGroup, NumberFieldInput } from '@xsl/lomva-ui/number-field'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 

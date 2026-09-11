@@ -4,7 +4,7 @@ import type { EducationStatusResponse } from '@dify/contracts/api/console/accoun
 import type { GetFeaturesResponse } from '@dify/contracts/api/console/features/types.gen'
 import type { ReactNode } from 'react'
 import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
 import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

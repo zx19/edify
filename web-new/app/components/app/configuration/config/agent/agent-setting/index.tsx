@@ -1,7 +1,9 @@
 'use client'
 import type { AgentConfig } from '@/models/debug'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   Slider,
   SliderControl,
@@ -9,9 +11,7 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/slider'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CuteRobot } from '@/app/components/base/icons/src/vender/solid/communication'

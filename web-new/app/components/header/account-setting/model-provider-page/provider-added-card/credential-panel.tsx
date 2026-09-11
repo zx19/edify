@@ -2,7 +2,7 @@ import type { ModelProviderSummaryResponse } from '@dify/contracts/api/console/w
 import type { ReactNode } from 'react'
 import type { ModelProvider, PreferredProviderTypeEnum } from '../declarations'
 import type { CardVariant } from './use-credential-panel-state'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Warning from '@/app/components/base/icons/src/vender/line/alertsAndFeedback/Warning'

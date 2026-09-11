@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { RelatedApp } from '@/models/datasets'
 import { RiArrowRightUpLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import AppIcon from '@/app/components/base/app-icon'
 import Link from '@/next/link'

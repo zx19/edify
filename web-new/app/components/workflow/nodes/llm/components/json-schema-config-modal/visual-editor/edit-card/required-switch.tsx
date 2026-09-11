@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Switch } from '@langgenius/dify-ui/switch'
+import { Switch } from '@xsl/lomva-ui/switch'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -1,4 +1,5 @@
 'use client'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -8,8 +9,7 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
 import { useTranslation } from 'react-i18next'
 
 type IFloatRightContainerProps = {

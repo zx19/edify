@@ -7,7 +7,6 @@ import type {
   LoopVariableMap,
   NodeTracing,
 } from '@/types/workflow'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {
   RiAlertFill,
   RiArrowRightSLine,
@@ -16,7 +15,8 @@ import {
   RiLoader2Line,
   RiPauseCircleFill,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'

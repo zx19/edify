@@ -1,6 +1,6 @@
 'use client'
-import { buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

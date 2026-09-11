@@ -1,15 +1,15 @@
 import type { UpdateWorkflowNodesMapPayload } from '../workflow-variable-block'
 import type { WorkflowNodesMap } from '../workflow-variable-block/node'
 import type { ValueSelector, Var } from '@/app/components/workflow/types'
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { mergeRegister } from '@lexical/utils'
 import {
   PreviewCard,
   PreviewCardPopup,
   PreviewCardPortal,
   PreviewCardPositioner,
   PreviewCardTrigger,
-} from '@langgenius/dify-ui/preview-card'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { mergeRegister } from '@lexical/utils'
+} from '@xsl/lomva-ui/preview-card'
 import { COMMAND_PRIORITY_EDITOR } from 'lexical'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

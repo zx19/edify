@@ -3,6 +3,8 @@ import type { TFunction } from 'i18next'
 import type { FC } from 'react'
 import type { TriggerEvent } from '@/app/components/plugins/types'
 import type { TriggerProviderApiEntity } from '@/app/components/workflow/block-selector/types'
+import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -10,10 +12,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/drawer'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'
 import { useLanguage } from '@/app/components/header/account-setting/model-provider-page/hooks'

@@ -1,3 +1,4 @@
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -6,9 +7,8 @@ import {
   DropdownMenuPositioner,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ShortcutKbd } from '@/app/components/workflow/shortcuts/shortcut-kbd'

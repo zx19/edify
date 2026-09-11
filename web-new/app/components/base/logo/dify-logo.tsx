@@ -1,6 +1,6 @@
 import type { VariantProps } from 'class-variance-authority'
 import type { ComponentProps } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { cva } from 'class-variance-authority'
 import { basePath } from '@/utils/var'
 

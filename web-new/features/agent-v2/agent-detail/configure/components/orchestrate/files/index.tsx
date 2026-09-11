@@ -4,15 +4,10 @@ import type { MouseEvent, ReactNode } from 'react'
 import type { AgentOrchestrateAddActionOptions } from '../add-actions-context'
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentFileNode } from '@/features/agent-v2/agent-composer/form-state'
-import { Dialog, DialogTrigger } from '@langgenius/dify-ui/dialog'
-import {
-  FileTreeBadge,
-  FileTreeGuide,
-  FileTreeIcon,
-  FileTreeLabel,
-} from '@langgenius/dify-ui/file-tree'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Dialog, DialogTrigger } from '@xsl/lomva-ui/dialog'
+import { FileTreeBadge, FileTreeGuide, FileTreeIcon, FileTreeLabel } from '@xsl/lomva-ui/file-tree'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'

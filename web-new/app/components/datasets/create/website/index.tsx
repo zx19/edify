@@ -2,7 +2,7 @@
 import type { FC } from 'react'
 import type { DataSourceAuth } from '@/app/components/header/account-setting/data-source-page-new/types'
 import type { CrawlOptions, CrawlResultItem } from '@/models/datasets'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useQueryState } from 'nuqs'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'

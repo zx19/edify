@@ -4,9 +4,9 @@ import type {
   EnvironmentVariable,
   LLMEnvironmentVariableValue,
 } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { RiCloseLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import { cloneDeep } from 'es-toolkit/object'
 import { isEqual } from 'es-toolkit/predicate'
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'

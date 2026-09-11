@@ -1,8 +1,8 @@
 import type { Tag } from '../../../hooks'
-import { PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { memo, useEffect, useRef } from 'react'
 import { useTranslation } from '#i18n'
 

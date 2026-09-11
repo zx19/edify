@@ -1,13 +1,13 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { useQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/scroll-area'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'
 import { consoleQuery } from '@/service/client'

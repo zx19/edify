@@ -3,15 +3,15 @@
 import type { CSSProperties, ReactNode } from 'react'
 import type { IntegrationSection } from './routes'
 import type { DocPathWithoutLang } from '@/types/doc-paths'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import UpdateSettingDialog from '@/app/components/header/account-setting/update-setting-dialog'

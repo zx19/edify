@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { CodeNodeType } from './types'
 import type { NodePanelProps } from '@/app/components/workflow/types'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'

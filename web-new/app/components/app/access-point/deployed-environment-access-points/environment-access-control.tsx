@@ -6,8 +6,8 @@ import type {
   AccessControlSubjectsStatus,
 } from '@/app/components/app/app-access-control/specific-groups-or-members'
 import type { AccessControlAccount, AccessControlGroup } from '@/models/access-control'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccessControlForm } from '@/app/components/app/app-access-control/access-control-form'

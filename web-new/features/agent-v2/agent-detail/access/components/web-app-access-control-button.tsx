@@ -2,7 +2,7 @@
 
 import type { AgentAppDetailWithSite } from '@dify/contracts/api/console/agent/types.gen'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

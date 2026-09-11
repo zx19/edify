@@ -25,7 +25,7 @@ vi.mock('copy-to-clipboard', () => ({
   default: copyMock,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: toastMocks,
 }))
 

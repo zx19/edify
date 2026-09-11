@@ -5,7 +5,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { useTranslation } from 'react-i18next'
 
 type InputModeSelectProps = {

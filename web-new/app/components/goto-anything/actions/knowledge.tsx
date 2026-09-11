@@ -1,6 +1,6 @@
 import type { DatasetListItemResponse } from '@dify/contracts/api/console/datasets/types.gen'
 import type { ActionItem, KnowledgeSearchResult } from './types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { consoleQuery } from '@/service/client'
 import { Folder } from '../../base/icons/src/vender/solid/files'
 

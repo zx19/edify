@@ -143,7 +143,7 @@ vi.mock('jotai', async (importOriginal) => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({ toast: toastMock }))
+vi.mock('@xsl/lomva-ui/toast', () => ({ toast: toastMock }))
 
 const documentsInfiniteOptions = vi.hoisted(() =>
   vi.fn((options: Omit<InfiniteOptions, 'queryKind'>) => ({ ...options, queryKind: 'documents' })),

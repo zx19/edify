@@ -1,5 +1,5 @@
 import type { LabelProps } from '../label'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback } from 'react'
 import FileTypeItem from '@/app/components/workflow/nodes/_base/components/file-type-item'
 import { SupportUploadFileTypes } from '@/app/components/workflow/types'

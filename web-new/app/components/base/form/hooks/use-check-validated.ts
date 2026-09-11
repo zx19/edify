@@ -1,6 +1,6 @@
 import type { AnyFormApi } from '@tanstack/react-form'
 import type { FormSchema } from '@/app/components/base/form/types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 
 export const useCheckValidated = (form: AnyFormApi, FormSchemas: FormSchema[]) => {

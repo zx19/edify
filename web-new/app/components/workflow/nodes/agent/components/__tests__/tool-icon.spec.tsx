@@ -37,7 +37,7 @@ vi.mock('@/app/components/base/icons/src/vender/other', () => ({
   Group: ({ className }: { className?: string }) => <div className={className}>group-icon</div>,
 }))
 
-vi.mock('@langgenius/dify-ui/status-dot', () => ({
+vi.mock('@xsl/lomva-ui/status-dot', () => ({
   StatusDot: ({ status }: { status: string }) => <div>{`indicator:${status}`}</div>,
 }))
 

@@ -21,7 +21,7 @@ vi.mock('../../hooks/use-check-metadata-name', () => ({
 }))
 
 const mockToastNotify = vi.fn()
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: {
     notify: (args: unknown) => mockToastNotify(args),
   },

@@ -6,7 +6,7 @@ import {
   RiErrorWarningFill,
   RiLoader2Line,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useMemo } from 'react'
 import BlockIcon from '@/app/components/workflow/block-icon'
 import NodeControl from '@/app/components/workflow/nodes/_base/components/node-control'

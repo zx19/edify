@@ -2,8 +2,8 @@
 import type { Mock } from 'vite-plus/test'
 import type { AnnotationItem } from '../type'
 import type { App } from '@/types/app'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useProviderContext } from '@/context/provider-context'
 import {

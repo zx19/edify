@@ -5,7 +5,7 @@ import type { MoreLikeThisConfig, PromptConfig, TextToSpeechConfig } from '@/mod
 import type { AppData, CustomConfigValueType, SiteInfo } from '@/models/share'
 import type { VisionFile, VisionSettings } from '@/types/app'
 import { RiArrowDownSLine, RiArrowUpSLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useBoolean } from 'ahooks'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'

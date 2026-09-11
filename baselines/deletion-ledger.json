@@ -1,12 +1,17 @@
 {
   "created": "2026-09-11",
   "rule": "执行计划 v2 §4 步 5：追平即登记入台账，**实际删除统一推迟到第 7 步终验通过后**（§6「统一删旧」行）——dify-ui 旧包与 web/ 旧轨是 :3000 对照物的载体，逐项即删会断旧轨编译",
+  "notes": [
+    "2026-09-11 机制变更（用户拍板）：原语迁移改整包批发——packages/dify-ui 整包复制为 packages/lomva-ui（@xsl/lomva-ui）并随搬迁去 Dify 化；批发验证 = tsc + web-new 全量单测 + 包自身 spec + storybook 护栏",
+    "parity.spec（双轨恒等测试）已于批发机制下定稿删除——逐字副本恒真，无信息价值；单个原语后续独立重写时按需补对照",
+    "批发后下方 cn/button/icon-button/select 四条视为整包搬迁的一部分，旧包 dify-ui 整包第 7 步统一删除"
+  ],
   "pending": [
     {
       "type": "primitive",
       "name": "cn",
       "oldPath": "packages/dify-ui/src/cn.ts",
-      "newPath": "packages/ui/src/cn.ts",
+      "newPath": "packages/lomva-ui/src/cn.ts",
       "closedAt": "2026-09-11",
       "evidence": "① 契约：function cn(...inputs: ClassValue[]) 签名一致；② 实现逐字（clsx+twMerge）；③ web-new 965 文件 import 改写 + tsc 0 错 + 全量单测 23397/23398 与旧轨基线一致"
     },
@@ -14,25 +19,25 @@
       "type": "primitive",
       "name": "button",
       "oldPath": "packages/dify-ui/src/button/",
-      "newPath": "packages/ui/src/button/",
+      "newPath": "packages/lomva-ui/src/button/",
       "closedAt": "2026-09-11",
-      "evidence": "① 契约：props 对齐 baselines/dify-ui-api.json（verbatim 声明 + heritage + cva 键/default 一致）；② @xsl/ui 测试 46/46 绿（复制 browser spec 8 + 双轨 parity 38：DOM outerHTML 全等 / 边界组合 / 行为快照）；③ web-new 499 文件 import 批量改写，tsc 0 错；④ web-new 全量单测 23397/23398（1 skip）与旧轨基线一致；⑤ dev server smoke 200；⑥ 双 stories 就位 web-new/app/components/double-track/button.stories.tsx（像素 diff 随 W3 screenshot:diff harness）"
+      "evidence": "① 契约：props 对齐 baselines/dify-ui-api.json（verbatim 声明 + heritage + cva 键/default 一致）；② @xsl/lomva-ui 测试 46/46 绿（复制 browser spec 8 + 双轨 parity 38：DOM outerHTML 全等 / 边界组合 / 行为快照）；③ web-new 499 文件 import 批量改写，tsc 0 错；④ web-new 全量单测 23397/23398（1 skip）与旧轨基线一致；⑤ dev server smoke 200；⑥ 双 stories 就位 web-new/app/components/double-track/button.stories.tsx（像素 diff 随 W3 screenshot:diff harness）"
     },
     {
       "type": "primitive",
       "name": "icon-button",
       "oldPath": "packages/dify-ui/src/icon-button/",
-      "newPath": "packages/ui/src/icon-button/",
+      "newPath": "packages/lomva-ui/src/icon-button/",
       "closedAt": "2026-09-11",
-      "evidence": "① 契约：props（AccessibleName 联合 + cva 键）一致；② @xsl/ui 测试绿（复制 browser spec + parity 73：7 variant×5 size×2 tone DOM 全等 + disabled/aria-labelledby 边界 + click 行为）；③ web-new 225 文件 import 改写 + tsc 0 错 + 全量单测与基线一致"
+      "evidence": "① 契约：props（AccessibleName 联合 + cva 键）一致；② @xsl/lomva-ui 测试绿（复制 browser spec + parity 73：7 variant×5 size×2 tone DOM 全等 + disabled/aria-labelledby 边界 + click 行为）；③ web-new 225 文件 import 改写 + tsc 0 错 + 全量单测与基线一致"
     },
     {
       "type": "primitive",
       "name": "select",
       "oldPath": "packages/dify-ui/src/select/（含内部共享件 placement/overlay-shared/form-control-shared）",
-      "newPath": "packages/ui/src/select/",
+      "newPath": "packages/lomva-ui/src/select/",
       "closedAt": "2026-09-11",
-      "evidence": "复杂档校准样本。① 契约：16 组件 + 15 props 类型导出一致；② @xsl/ui 测试绿（复制 browser spec + parity：trigger 三尺寸/disabled 收起态、展开 popup portal 内容 normalize 后 DOM 全等、选中回调行为快照全等）；③ web-new 73 文件 import 改写 + 验证见 commit"
+      "evidence": "复杂档校准样本。① 契约：16 组件 + 15 props 类型导出一致；② @xsl/lomva-ui 测试绿（复制 browser spec + parity：trigger 三尺寸/disabled 收起态、展开 popup portal 内容 normalize 后 DOM 全等、选中回调行为快照全等）；③ web-new 73 文件 import 改写 + 验证见 commit"
     }
   ],
   "deleted": []

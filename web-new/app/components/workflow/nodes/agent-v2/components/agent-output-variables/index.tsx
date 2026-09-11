@@ -6,7 +6,7 @@ import type {
   EditableOutputConfig,
   EditingState,
 } from './utils'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

@@ -1,6 +1,6 @@
 import type { VersionHistoryContextMenuOptions } from '../../types'
 import type { VersionHistory } from '@/types/workflow'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import dayjs from 'dayjs'
 import * as React from 'react'
 import { useEffect, useState } from 'react'

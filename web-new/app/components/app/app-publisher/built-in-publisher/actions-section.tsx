@@ -1,6 +1,6 @@
 import type { AppPublisherProps } from '../types'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { AppModeEnum } from '@/types/app'
 import SuggestedAction from '../suggested-action'

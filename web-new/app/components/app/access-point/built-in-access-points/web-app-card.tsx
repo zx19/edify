@@ -12,8 +12,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AccessControl from '@/app/components/app/app-access-control'

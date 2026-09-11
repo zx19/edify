@@ -1,5 +1,5 @@
 import type { useNodesSyncDraft } from './use-nodes-sync-draft'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DSL_EXPORT_CHECK } from '@/app/components/workflow/constants'

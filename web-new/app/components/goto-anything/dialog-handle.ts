@@ -1,5 +1,5 @@
 'use client'
 
-import { createDialogHandle } from '@langgenius/dify-ui/dialog'
+import { createDialogHandle } from '@xsl/lomva-ui/dialog'
 
 export const gotoAnythingDialogHandle = createDialogHandle()

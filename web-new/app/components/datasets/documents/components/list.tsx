@@ -1,10 +1,10 @@
 'use client'
 
 import type { SimpleDocumentDetail } from '@/models/datasets'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
-import { Pagination } from '@langgenius/dify-ui/pagination'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { CheckboxGroup } from '@xsl/lomva-ui/checkbox-group'
+import { Pagination } from '@xsl/lomva-ui/pagination'
 import { useBoolean } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'

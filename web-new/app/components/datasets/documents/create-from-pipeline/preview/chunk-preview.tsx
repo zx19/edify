@@ -7,7 +7,7 @@ import type {
 } from '@/models/datasets'
 import type { OnlineDriveFile } from '@/models/pipeline'
 import { RiSearchEyeLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

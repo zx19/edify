@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
 
 type Option = {
   value: string

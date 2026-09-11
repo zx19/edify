@@ -11,7 +11,8 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Drawer,
   DrawerBackdrop,
@@ -20,8 +21,7 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/drawer'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

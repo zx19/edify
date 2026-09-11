@@ -1,4 +1,4 @@
-import type { PopoverTriggerProps } from '@langgenius/dify-ui/popover'
+import type { PopoverTriggerProps } from '@xsl/lomva-ui/popover'
 import type { Dayjs } from 'dayjs'
 
 export enum ViewType {

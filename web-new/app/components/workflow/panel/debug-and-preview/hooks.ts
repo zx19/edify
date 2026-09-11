@@ -4,7 +4,7 @@ import type { ChatItem, ChatItemInTree, Inputs } from '@/app/components/base/cha
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
 import type { IOtherOptions } from '@/service/base'
 import type { ReasoningChunkResponse } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { uniqBy } from 'es-toolkit/compat'
 import { produce, setAutoFreeze } from 'immer'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'

@@ -1,5 +1,5 @@
 'use client'
-import type { DrawerProps } from '@langgenius/dify-ui/drawer'
+import type { DrawerProps } from '@xsl/lomva-ui/drawer'
 import type {
   Emoji,
   WorkflowToolProviderOutputParameter,
@@ -7,6 +7,8 @@ import type {
   WorkflowToolProviderParameter,
   WorkflowToolProviderRequest,
 } from '../types'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -16,12 +18,10 @@ import {
   DrawerPortal,
   DrawerTitle,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useMemo, useState } from 'react'

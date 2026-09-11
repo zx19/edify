@@ -4,7 +4,7 @@ import type { HumanInputFormSubmitData } from '@/app/components/base/chat/chat/a
 import type { WorkflowProcess } from '@/app/components/base/chat/types'
 import type { SiteInfo } from '@/models/share'
 import { RiPlayList2Line } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import HumanInputFilledFormList from '@/app/components/base/chat/chat/answer/human-input-filled-form-list'
 import HumanInputFormList from '@/app/components/base/chat/chat/answer/human-input-form-list'

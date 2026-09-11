@@ -6,12 +6,12 @@ import type {
   ModelSelectorValue,
 } from './types'
 import type { ModelProviderQuotaGetPaid } from '@/types/model-provider'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import {
   createPreviewCardHandle,
   PreviewCard,
   PreviewCardContent,
-} from '@langgenius/dify-ui/preview-card'
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/preview-card'
 import { useTheme } from 'next-themes'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
 import type { LabelProps } from '../label'
 import type { Options } from '@/app/components/app/configuration/config-var/config-select'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import ConfigSelect from '@/app/components/app/configuration/config-var/config-select'
 import { useFieldContext } from '../..'
 import Label from '../label'

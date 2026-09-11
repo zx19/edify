@@ -1,6 +1,6 @@
 import type { ConversationVariable } from '@/app/components/workflow/types'
 import { RiDeleteBinLine, RiEditLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { capitalize } from 'es-toolkit/string'
 import { memo, useState } from 'react'
 import { BubbleX } from '@/app/components/base/icons/src/vender/line/others'

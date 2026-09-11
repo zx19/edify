@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { CustomRunFormProps } from './types'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

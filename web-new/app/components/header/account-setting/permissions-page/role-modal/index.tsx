@@ -1,16 +1,16 @@
 'use client'
 import type { Role } from '@/models/access-control'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Input } from '@langgenius/dify-ui/input'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Input } from '@xsl/lomva-ui/input'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getEnterpriseDocUrl, useLocale } from '@/context/i18n'

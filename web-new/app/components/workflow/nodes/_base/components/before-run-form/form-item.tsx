@@ -2,9 +2,8 @@
 import type { FC } from 'react'
 import type { InputVar } from '../../../../types'
 import type { FileEntity } from '@/app/components/base/file-uploader/types'
-import { Textarea } from '@langgenius/dify-ui/textarea'
 import { RiDeleteBinLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Select,
   SelectContent,
@@ -13,7 +12,8 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useMemo } from 'react'

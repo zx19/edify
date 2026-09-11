@@ -2,10 +2,10 @@
 
 import type { MouseEventHandler } from 'react'
 import type { DSLImportWarning } from '@/models/app'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
 import { RiAlertFill, RiCloseLine, RiFileDownloadLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
+import { toast } from '@xsl/lomva-ui/toast'
 import { memo, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DSLImportWarningDescription from '@/app/components/app/create-from-dsl-modal/dsl-import-warning-description'

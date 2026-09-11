@@ -1,6 +1,6 @@
 import type { OnResize } from 'reactflow'
 import type { CommonNodeType } from '../../../types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useCallback } from 'react'
 import { NodeResizeControl } from 'reactflow'
 import { useNodesInteractions } from '../../../hooks/use-nodes-interactions'

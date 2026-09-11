@@ -9,7 +9,7 @@ vi.mock('@/context/provider-context', () => ({
 }))
 
 const mockToastNotify = vi.fn()
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   default: {
     notify: vi.fn((args) => mockToastNotify(args)),
   },

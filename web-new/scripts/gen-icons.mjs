@@ -133,7 +133,7 @@ const generateImageComponent = async (entry, relativeSegments) => {
 // DON NOT EDIT IT MANUALLY
 
 import * as React from 'react'
-import { cn } from '@langgenius/dify-ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import s from './<%= fileName %>.module.css'
 
 const Icon = (

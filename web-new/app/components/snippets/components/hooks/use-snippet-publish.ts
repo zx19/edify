@@ -1,6 +1,6 @@
 import type { Snippet as SnippetContract } from '@/types/snippet'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useChecklistBeforePublish } from '@/app/components/workflow/hooks/use-checklist'

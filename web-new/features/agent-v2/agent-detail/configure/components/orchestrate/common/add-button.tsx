@@ -1,8 +1,8 @@
 'use client'
 
-import type { ButtonProps } from '@xsl/ui/button'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import type { ButtonProps } from '@xsl/lomva-ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import { useAgentOrchestrateViewingVersion } from '../read-only-context'
 

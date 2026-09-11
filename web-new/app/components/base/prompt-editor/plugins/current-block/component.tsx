@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect } from 'react'
 import { GeneratorType } from '@/app/components/app/configuration/config/automatic/types'
 import { CurrentBlockNode, DELETE_CURRENT_BLOCK_COMMAND } from '.'

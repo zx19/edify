@@ -1,7 +1,7 @@
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { RiEqualizer2Line } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 

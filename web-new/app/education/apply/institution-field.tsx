@@ -1,4 +1,5 @@
-import type { AutocompleteChangeEventDetails } from '@langgenius/dify-ui/autocomplete'
+import type { AutocompleteChangeEventDetails } from '@xsl/lomva-ui/autocomplete'
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -12,9 +13,8 @@ import {
   AutocompletePortal,
   AutocompletePositioner,
   AutocompleteStatus,
-} from '@langgenius/dify-ui/autocomplete'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/autocomplete'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
 import { useDebouncedValue } from 'foxact/use-debounced-value'
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

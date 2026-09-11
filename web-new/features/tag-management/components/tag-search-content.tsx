@@ -1,5 +1,6 @@
 import type { TagType } from '@dify/contracts/api/console/tags/types.gen'
 import type { TagComboboxItem } from './tag-combobox-item'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   ComboboxEmpty,
   ComboboxInput,
@@ -10,9 +11,8 @@ import {
   ComboboxList,
   ComboboxSeparator,
   useComboboxFilteredItems,
-} from '@langgenius/dify-ui/combobox'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/combobox'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useAtomValue } from 'jotai'
 import { Fragment, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

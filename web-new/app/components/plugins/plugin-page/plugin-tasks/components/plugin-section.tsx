@@ -7,7 +7,7 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
+} from '@xsl/lomva-ui/scroll-area'
 import PluginItem from './plugin-item'
 
 type PluginSectionProps = {

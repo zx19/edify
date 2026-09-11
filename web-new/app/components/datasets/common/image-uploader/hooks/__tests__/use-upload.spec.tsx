@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import type { FileEntity } from '../../types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { FileContextProvider } from '../../store'
@@ -21,7 +21,7 @@ vi.mock('@/service/use-common', () => ({
   })),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: mockToastError,
   },

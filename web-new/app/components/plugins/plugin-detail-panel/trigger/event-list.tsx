@@ -1,6 +1,6 @@
 import type { TriggerEvent } from '@/app/components/plugins/types'
 import type { TriggerProviderApiEntity } from '@/app/components/workflow/block-selector/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '@/app/components/header/account-setting/model-provider-page/hooks'

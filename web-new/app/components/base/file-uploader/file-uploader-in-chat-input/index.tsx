@@ -1,5 +1,5 @@
 import type { FileUpload } from '@/app/components/base/features/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TransferMethod } from '@/types/app'

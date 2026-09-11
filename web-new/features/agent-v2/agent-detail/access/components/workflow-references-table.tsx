@@ -6,7 +6,7 @@ import type {
 } from '@dify/contracts/api/console/agent/types.gen'
 import type { ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'
 import useTimestamp from '@/hooks/use-timestamp'

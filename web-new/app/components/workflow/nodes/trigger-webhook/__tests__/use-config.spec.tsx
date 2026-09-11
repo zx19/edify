@@ -1,6 +1,6 @@
 import type { WebhookTriggerNodeType } from '../types'
-import { toast } from '@langgenius/dify-ui/toast'
 import { renderHook } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import { BlockEnum, VarType } from '@/app/components/workflow/types'
 import { fetchWebhookUrl } from '@/service/apps'
@@ -21,7 +21,7 @@ vi.mock('react-i18next', async () => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   __esModule: true,
   toast: {
     error: vi.fn(),

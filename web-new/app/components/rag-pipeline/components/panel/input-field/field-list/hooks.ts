@@ -1,7 +1,7 @@
 import type { SortableItem } from './types'
 import type { MoreInfo, ValueSelector } from '@/app/components/workflow/types'
 import type { InputVar } from '@/models/pipeline'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
 import { produce } from 'immer'
 import { useCallback, useRef, useState } from 'react'

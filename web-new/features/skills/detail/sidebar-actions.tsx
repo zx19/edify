@@ -1,6 +1,7 @@
 'use client'
 
 import type { SkillDetailResponse } from '@dify/contracts/api/console/workspaces/types.gen'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,18 +10,17 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useRouter } from '@/next/navigation'

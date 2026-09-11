@@ -1,8 +1,10 @@
 'use client'
 
-import type { AutocompleteChangeEventDetails } from '@langgenius/dify-ui/autocomplete'
+import type { AutocompleteChangeEventDetails } from '@xsl/lomva-ui/autocomplete'
 import type { Plugin } from '../plugins/types'
 import type { ActionItem, SearchResult } from './actions/types'
+import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -14,7 +16,7 @@ import {
   AutocompleteList,
   AutocompleteRow,
   AutocompleteStatus,
-} from '@langgenius/dify-ui/autocomplete'
+} from '@xsl/lomva-ui/autocomplete'
 import {
   Dialog,
   DialogBackdrop,
@@ -22,17 +24,15 @@ import {
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
+} from '@xsl/lomva-ui/dialog'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/scroll-area'
 import { useDebouncedValue } from 'foxact/use-debounced-value'
 import { useAtomValue } from 'jotai'
 import { useMemo, useRef, useState } from 'react'

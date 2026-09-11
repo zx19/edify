@@ -5,7 +5,7 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
+} from '@xsl/lomva-ui/slider'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -11,7 +11,7 @@ const permissionState = vi.hoisted(() => ({
   workspacePermissionKeys: ['dataset.acl.edit', 'dataset.external.connect'],
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: { error: toastErrorMock, info: toastInfoMock },
 }))
 

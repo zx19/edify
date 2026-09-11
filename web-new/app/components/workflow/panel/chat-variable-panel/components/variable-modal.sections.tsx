@@ -6,8 +6,8 @@ import type {
   ObjectValueItem,
 } from './variable-modal.helpers'
 import { RiDraftLine, RiInputField } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import Input from '@/app/components/base/input'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'
 import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'

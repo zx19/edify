@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { Plugin, VersionProps } from '../../../types'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import { MARKETPLACE_API_PREFIX } from '@/config'
 import Card from '../../../card'

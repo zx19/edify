@@ -7,22 +7,22 @@ import type {
 import type { DragEvent, MouseEvent, ReactElement } from 'react'
 import type { SkillDropTarget } from './file-tree-dnd'
 import type { FileTreeInlineAction, FileTreeNode } from './shared'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from '@langgenius/dify-ui/context-menu'
+} from '@xsl/lomva-ui/context-menu'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { setSkillFileDragPreview } from './file-tree-drag-preview'

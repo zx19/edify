@@ -1,6 +1,6 @@
 import { RiCloseLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import RetrievalSettings from '../external-knowledge-base/create/RetrievalSettings'

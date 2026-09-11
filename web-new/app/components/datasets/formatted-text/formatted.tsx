@@ -1,5 +1,5 @@
 import type { ComponentProps, FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type FormattedTextProps = ComponentProps<'p'>
 

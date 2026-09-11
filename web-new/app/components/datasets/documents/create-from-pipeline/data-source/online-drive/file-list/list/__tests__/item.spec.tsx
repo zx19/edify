@@ -1,6 +1,6 @@
 import type { OnlineDriveFile } from '@/models/pipeline'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import Item from '../item'
 

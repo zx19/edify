@@ -2,10 +2,10 @@
 
 import type { Hotkey } from '@tanstack/react-hotkeys'
 import type { ReactNode } from 'react'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 import { useTranslation } from 'react-i18next'
 
 const PUBLISH_SKILL_HOTKEY = 'Mod+Shift+P' satisfies Hotkey

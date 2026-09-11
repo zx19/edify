@@ -1,6 +1,6 @@
 'use client'
 
-import { Kbd } from '@langgenius/dify-ui/kbd'
+import { Kbd } from '@xsl/lomva-ui/kbd'
 import { useTranslation } from 'react-i18next'
 
 type FooterProps = {

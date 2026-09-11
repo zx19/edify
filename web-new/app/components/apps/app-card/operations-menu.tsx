@@ -2,9 +2,9 @@
 
 import type { AppPartial } from '@dify/contracts/api/console/apps/types.gen'
 import type { MouseEvent } from 'react'
-import { DropdownMenuItem, DropdownMenuSeparator } from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { DropdownMenuItem, DropdownMenuSeparator } from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useTranslation } from 'react-i18next'
 import { buildInstalledAppPath } from '@/app/components/explore/installed-app/routes'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'

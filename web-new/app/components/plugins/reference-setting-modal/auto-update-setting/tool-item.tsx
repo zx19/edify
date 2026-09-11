@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { PluginDetail } from '@/app/components/plugins/types'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
 import * as React from 'react'
 import Icon from '@/app/components/plugins/card/base/card-icon'
 import { MARKETPLACE_API_PREFIX } from '@/config'

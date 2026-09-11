@@ -45,7 +45,7 @@ vi.mock('react-i18next', async (importOriginal) => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: (...args: unknown[]) => notifyMock(...args),
 }))
 

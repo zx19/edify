@@ -16,8 +16,8 @@ import type {
   ValueSelector,
   Var,
 } from '@/app/components/workflow/types'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { noop } from 'es-toolkit/function'
 import { produce } from 'immer'
 import * as React from 'react'

@@ -7,7 +7,7 @@ import type {
 } from '@/app/components/tools/types'
 import type { InputVar, Variable } from '@/app/components/workflow/types'
 import type { PublishWorkflowParams } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createWorkflowToolProvider, saveWorkflowToolProvider } from '@/service/tools'

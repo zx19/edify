@@ -1,6 +1,6 @@
 'use client'
 
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
 import { useTranslation } from 'react-i18next'
 
 type SearchBoxProps = {

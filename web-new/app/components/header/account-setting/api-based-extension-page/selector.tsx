@@ -1,12 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Popover,
   PopoverPopup,
   PopoverPortal,
   PopoverPositioner,
   PopoverTrigger,
-} from '@langgenius/dify-ui/popover'
-import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/popover'
 import { useQueryState } from 'nuqs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

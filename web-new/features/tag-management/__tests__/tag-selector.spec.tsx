@@ -19,7 +19,7 @@ const { mockToast } = vi.hoisted(() => {
   return { mockToast }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({ toast: mockToast }))
+vi.mock('@xsl/lomva-ui/toast', () => ({ toast: mockToast }))
 
 const { mockUseQueryData, createTag, bindTag, unBindTag } = vi.hoisted(() => {
   const mockUseQueryData: { current: Tag[] } = { current: [] }

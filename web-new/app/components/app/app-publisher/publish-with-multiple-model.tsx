@@ -4,14 +4,14 @@ import type {
   Model,
   ModelItem,
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
+import { RiArrowDownSLine } from '@remixicon/react'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { RiArrowDownSLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '@/app/components/header/account-setting/model-provider-page/hooks'

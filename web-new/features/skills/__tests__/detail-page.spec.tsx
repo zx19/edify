@@ -4,12 +4,12 @@ import type {
   SkillVersionResponse,
 } from '@dify/contracts/api/console/workspaces/types.gen'
 import type { ReactNode } from 'react'
-import { Dialog, DialogPopup, DialogPortal, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
 import { detectPlatform } from '@tanstack/react-hotkeys'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Dialog, DialogPopup, DialogPortal, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import { StrictMode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -70,7 +70,7 @@ const mocks = vi.hoisted(() => ({
   versionPatchMutationFn: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),

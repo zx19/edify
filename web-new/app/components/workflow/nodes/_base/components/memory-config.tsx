@@ -1,7 +1,8 @@
 'use client'
 import type { FC } from 'react'
 import type { Memory } from '../../../types'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   Slider,
   SliderControl,
@@ -9,9 +10,8 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/slider'
+import { Switch } from '@xsl/lomva-ui/switch'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback } from 'react'

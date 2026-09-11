@@ -80,7 +80,7 @@ vi.mock('../../../hooks/use-workflow-history', () => ({
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: (...args: unknown[]) => mockToastError(...args),
   },

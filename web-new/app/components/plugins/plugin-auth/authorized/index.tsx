@@ -1,5 +1,5 @@
 import type { OffsetOptions } from '@floating-ui/react'
-import type { PopoverContentProps } from '@langgenius/dify-ui/popover'
+import type { PopoverContentProps } from '@xsl/lomva-ui/popover'
 import type { Credential, PluginPayload } from '../types'
 import {
   AlertDialog,
@@ -8,12 +8,12 @@ import {
   AlertDialogConfirmButton,
   AlertDialogContent,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { toast } from '@xsl/lomva-ui/toast'
 import { memo, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCredentialPermissions } from '@/hooks/use-credential-permissions'

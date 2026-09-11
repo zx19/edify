@@ -1,4 +1,4 @@
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   NumberField,
   NumberFieldControls,
@@ -6,7 +6,7 @@ import {
   NumberFieldGroup,
   NumberFieldIncrement,
   NumberFieldInput,
-} from '@langgenius/dify-ui/number-field'
+} from '@xsl/lomva-ui/number-field'
 import {
   Slider,
   SliderControl,
@@ -14,7 +14,7 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-} from '@langgenius/dify-ui/slider'
+} from '@xsl/lomva-ui/slider'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

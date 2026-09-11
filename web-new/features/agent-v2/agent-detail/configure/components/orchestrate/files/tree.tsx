@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import type { AgentFileNode } from '@/features/agent-v2/agent-composer/form-state'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   FileTree,
   FileTreeFile,
@@ -11,9 +12,8 @@ import {
   FileTreeIcon,
   FileTreeLabel,
   FileTreeList,
-} from '@langgenius/dify-ui/file-tree'
-import { ScrollArea, ScrollAreaContent, ScrollAreaViewport } from '@langgenius/dify-ui/scroll-area'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/file-tree'
+import { ScrollArea, ScrollAreaContent, ScrollAreaViewport } from '@xsl/lomva-ui/scroll-area'
 import { Fragment } from 'react'
 
 type AgentFileTreeFolderOpenStrategy = (context: { file: AgentFileNode; depth: number }) => boolean

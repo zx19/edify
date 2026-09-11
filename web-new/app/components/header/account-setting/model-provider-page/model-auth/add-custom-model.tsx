@@ -3,10 +3,10 @@ import type {
   CustomConfigurationModelFixedFields,
   ModelProvider,
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModelModalModeEnum } from '@/app/components/header/account-setting/model-provider-page/declarations'

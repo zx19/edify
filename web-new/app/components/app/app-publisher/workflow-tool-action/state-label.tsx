@@ -1,5 +1,5 @@
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
 
 type WorkflowToolStateLabelProps = {
   label: string

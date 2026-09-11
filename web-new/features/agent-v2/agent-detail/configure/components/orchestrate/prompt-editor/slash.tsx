@@ -13,8 +13,8 @@ import type {
   AgentTool,
 } from '@/features/agent-v2/agent-composer/form-state'
 import type { AgentProviderToolDefaultValue } from '@/features/agent-v2/agent-composer/store-modules/tools'
-import { FileTreeIcon } from '@langgenius/dify-ui/file-tree'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { FileTreeIcon } from '@xsl/lomva-ui/file-tree'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getMarketplaceCategoryUrl } from '@/app/components/plugins/marketplace/utils'

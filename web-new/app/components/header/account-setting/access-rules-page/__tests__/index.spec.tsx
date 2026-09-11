@@ -1,7 +1,7 @@
 import type { AccessPolicyWithBindings } from '@/models/access-control'
-import { toast } from '@langgenius/dify-ui/toast'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import {
   useCreateAccessRule,
   useInfiniteWorkspaceAppAccessRules,
@@ -15,7 +15,7 @@ const mocks = vi.hoisted(() => ({
   updateAccessRule: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
   },

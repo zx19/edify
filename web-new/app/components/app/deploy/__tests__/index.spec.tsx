@@ -18,9 +18,9 @@ import {
   OperatorType,
   PluginCategory,
 } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { toast } from '@langgenius/dify-ui/toast'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { consoleQuery } from '@/service/client'
 import {
   appWorkflowQueryOptions,
@@ -735,7 +735,7 @@ vi.mock('@/context/i18n', () => ({
   useDocLink: () => mockDocLink,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

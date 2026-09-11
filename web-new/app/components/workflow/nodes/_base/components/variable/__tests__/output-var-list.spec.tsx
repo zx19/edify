@@ -16,7 +16,7 @@ vi.mock('../var-type-picker', () => ({
   ),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: { error: vi.fn() },
 }))
 

@@ -1,6 +1,6 @@
 import { RiArrowLeftLine } from '@remixicon/react'
-import { buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from '@/next/link'

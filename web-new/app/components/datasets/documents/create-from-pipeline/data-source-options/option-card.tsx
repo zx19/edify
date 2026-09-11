@@ -1,5 +1,5 @@
 import type { DataSourceNodeType } from '@/app/components/workflow/nodes/data-source/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import DatasourceIcon from './datasource-icon'
 import { useDatasourceIcon } from './hooks'

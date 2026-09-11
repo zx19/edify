@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 const gridColumnCount = 384
 const gridRowCount = 32

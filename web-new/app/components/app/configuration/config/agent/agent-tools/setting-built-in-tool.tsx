@@ -2,6 +2,9 @@
 import type { FC } from 'react'
 import type { Collection, Tool } from '@/app/components/tools/types'
 import type { ToolWithProvider } from '@/app/components/workflow/types'
+import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -9,11 +12,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/drawer'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

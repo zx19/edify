@@ -1,6 +1,6 @@
 'use client'
 
-import { createToast, createToastManager } from '@langgenius/dify-ui/toast'
+import { createToast, createToastManager } from '@xsl/lomva-ui/toast'
 
 const appConfigurationToastManager = createToastManager()
 const toast = createToast(appConfigurationToastManager)

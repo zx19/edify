@@ -1,12 +1,7 @@
 import type { Recipient as RecipientItem } from '../../../types'
 import type { Member } from '@/models/common'
-import {
-  Popover,
-  PopoverPopup,
-  PopoverPortal,
-  PopoverPositioner,
-} from '@langgenius/dify-ui/popover'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverPopup, PopoverPortal, PopoverPositioner } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

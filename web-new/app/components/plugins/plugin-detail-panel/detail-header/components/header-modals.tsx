@@ -11,7 +11,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
+} from '@xsl/lomva-ui/alert-dialog'
 import { useTranslation } from 'react-i18next'
 import PluginInfo from '@/app/components/plugins/plugin-page/plugin-info'
 import UpdateFromMarketplace from '@/app/components/plugins/update-plugin/from-market-place'

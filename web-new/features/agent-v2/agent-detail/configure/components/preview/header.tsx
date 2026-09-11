@@ -1,12 +1,12 @@
 import type { MouseEvent, ReactNode } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import {
   SegmentedControl,
   SegmentedControlDivider,
   SegmentedControlItem,
-} from '@langgenius/dify-ui/segmented-control'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/segmented-control'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'
 import { AgentConfigureClearSessionConfirmDialog } from '../confirm-clear-session-dialog'

@@ -2,6 +2,8 @@
 import type { FC } from 'react'
 import type { StrategyDetail as StrategyDetailType } from '@/app/components/plugins/types'
 import type { Locale } from '@/i18n-config'
+import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -9,10 +11,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/drawer'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

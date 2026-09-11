@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import type { FormInputItem, HumanInputNodeType } from './types'
 import type { NodePanelProps, Var } from '@/app/components/workflow/types'
-import { toast } from '@langgenius/dify-ui/toast'
 import {
   RiAddLine,
   RiClipboardLine,
@@ -9,9 +8,10 @@ import {
   RiExpandDiagonalLine,
   RiEyeLine,
 } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

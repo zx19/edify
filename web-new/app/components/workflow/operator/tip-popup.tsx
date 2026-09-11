@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import type { WorkflowCanvasShortcutId } from '../shortcuts/definitions'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { memo } from 'react'
 import { ShortcutKbd } from '../shortcuts/shortcut-kbd'
 

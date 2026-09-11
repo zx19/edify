@@ -1,5 +1,5 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { useAutoDisabledDocuments } from '@/service/knowledge/use-document'
 import AutoDisabledDocument from '../auto-disabled-document'
@@ -30,7 +30,7 @@ vi.mock('@/service/knowledge/use-document', () => ({
   useInvalidDisabledDocument: vi.fn(() => mockInvalidDisabledDocument),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: mockToastSuccess,
   },

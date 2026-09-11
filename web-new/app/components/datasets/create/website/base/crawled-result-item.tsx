@@ -1,9 +1,9 @@
 'use client'
 import type { FC } from 'react'
 import type { CrawlResultItem as CrawlResultItemType } from '@/models/datasets'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

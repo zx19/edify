@@ -17,7 +17,7 @@
 
 /* Design system: palette overrides, semantic tokens, light/dark themes,
  * project utilities and components. */
-@import '@langgenius/dify-ui/styles.css';
+@import '@xsl/lomva-ui/styles.css';
 
 /* Project-only runtime CSS variables (gradients and special masks). */
 @import '../../themes/manual-light.css' layer(base);

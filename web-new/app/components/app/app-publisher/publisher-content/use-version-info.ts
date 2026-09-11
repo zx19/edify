@@ -1,5 +1,5 @@
 import type { WorkflowResponse } from '@dify/contracts/api/console/apps/types.gen'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInvalidateAppWorkflow, useUpdateWorkflow } from '@/service/use-workflow'

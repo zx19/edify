@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { App } from '@/types/app'
-import { Pagination } from '@langgenius/dify-ui/pagination'
+import { Pagination } from '@xsl/lomva-ui/pagination'
 import { useDebounce } from 'ahooks'
 import dayjs from 'dayjs'
 import { omit } from 'es-toolkit/object'

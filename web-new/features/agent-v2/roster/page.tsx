@@ -2,14 +2,14 @@
 
 import type { AgentAppPartial } from '@dify/contracts/api/console/agent/types.gen'
 import type { RosterFilterValue } from './components/roster-filter'
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/scroll-area'
 import { useDebounce } from 'ahooks'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'

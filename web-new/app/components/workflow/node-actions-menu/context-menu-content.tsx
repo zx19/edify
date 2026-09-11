@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuLinkItem,
   ContextMenuSeparator,
-} from '@langgenius/dify-ui/context-menu'
+} from '@xsl/lomva-ui/context-menu'
 import { useTranslation } from 'react-i18next'
 import { ChangeBlockMenuTrigger } from './change-block-menu-trigger'
 import {

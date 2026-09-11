@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { Dataset } from './index'
 import type { EventEmitterValue } from '@/context/event-emitter'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEventEmitterContextContext } from '@/context/event-emitter'

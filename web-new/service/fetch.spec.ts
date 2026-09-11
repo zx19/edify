@@ -8,14 +8,14 @@ import {
 // oxlint-disable-next-line no-restricted-imports
 import { base } from './fetch'
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     add: vi.fn(),
     error: vi.fn(),
   },
 }))
 
-const { toast } = await import('@langgenius/dify-ui/toast')
+const { toast } = await import('@xsl/lomva-ui/toast')
 
 describe('base', () => {
   beforeEach(() => {

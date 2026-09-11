@@ -1,6 +1,6 @@
-import { FileTreeIcon } from '@langgenius/dify-ui/file-tree'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { FileTreeIcon } from '@xsl/lomva-ui/file-tree'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { use } from 'react'
 import { RosterReferenceBlockContext } from './context'
 import {

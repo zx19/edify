@@ -1,9 +1,9 @@
-import type { KbdColor } from '@langgenius/dify-ui/kbd'
 import type { FormatDisplayOptions, Hotkey, IndividualKey } from '@tanstack/react-hotkeys'
+import type { KbdColor } from '@xsl/lomva-ui/kbd'
 import type { WorkflowCanvasShortcutId } from './definitions'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
 import { formatForDisplay } from '@tanstack/react-hotkeys'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
 import { getWorkflowCanvasShortcutDisplayKey } from './definitions'
 
 type ShortcutKbdSource =

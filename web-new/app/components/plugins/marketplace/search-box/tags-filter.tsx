@@ -1,9 +1,9 @@
 'use client'
 
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { CheckboxGroup } from '@langgenius/dify-ui/checkbox-group'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
-import { Popover, PopoverContent } from '@langgenius/dify-ui/popover'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { CheckboxGroup } from '@xsl/lomva-ui/checkbox-group'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@xsl/lomva-ui/input-group'
+import { Popover, PopoverContent } from '@xsl/lomva-ui/popover'
 import { useState } from 'react'
 import { useTranslation } from '#i18n'
 import { useTags } from '@/app/components/plugins/hooks'

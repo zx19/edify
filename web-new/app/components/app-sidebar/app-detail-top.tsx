@@ -1,9 +1,9 @@
 'use client'
 
-import { DialogTrigger } from '@langgenius/dify-ui/dialog'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { formatForDisplay } from '@tanstack/react-hotkeys'
+import { DialogTrigger } from '@xsl/lomva-ui/dialog'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import SidebarLeftArrowIcon from '@/app/components/base/icons/src/vender/SidebarLeftArrowIcon'
 import { DetailSidebarToggleButton } from '@/app/components/detail-sidebar/toggle-button'

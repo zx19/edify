@@ -2,7 +2,7 @@
 
 import type { FC } from 'react'
 import { RiArrowLeftLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import { useTranslation } from 'react-i18next'
 
 type StepTwoFooterProps = {

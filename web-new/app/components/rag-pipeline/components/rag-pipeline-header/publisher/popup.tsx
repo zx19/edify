@@ -1,4 +1,7 @@
 import type { PublishWorkflowParams } from '@/types/workflow'
+import { RiArrowRightUpLine, RiPlayCircleLine, RiTerminalBoxLine } from '@remixicon/react'
+import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -7,14 +10,11 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
-import { toast } from '@langgenius/dify-ui/toast'
-import { RiArrowRightUpLine, RiPlayCircleLine, RiTerminalBoxLine } from '@remixicon/react'
-import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Kbd, KbdGroup } from '@xsl/lomva-ui/kbd'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import { useCallback, useState } from 'react'

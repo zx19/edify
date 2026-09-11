@@ -3,10 +3,10 @@ import type {
   TriggerOAuthConfig,
   TriggerSubscriptionBuilder,
 } from '@/app/components/workflow/block-selector/types'
-import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BaseForm } from '@/app/components/base/form/components/base'

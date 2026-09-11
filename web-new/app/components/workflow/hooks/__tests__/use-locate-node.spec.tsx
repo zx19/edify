@@ -12,7 +12,7 @@ vi.mock('@/next/navigation', () => ({
   useSearchParams: () => mockSearchParams,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: Object.assign(vi.fn(), {
     success: mockToastSuccess,
     error: mockToastError,

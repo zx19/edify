@@ -1,19 +1,19 @@
 import type { OnNodeAdd } from '../../types'
 import type { SnippetListItem as SnippetListItemData } from '@/types/snippet'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   createPreviewCardHandle,
   PreviewCard,
   PreviewCardTrigger,
-} from '@langgenius/dify-ui/preview-card'
+} from '@xsl/lomva-ui/preview-card'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/scroll-area'
 import { useInfiniteScroll } from 'ahooks'
 import { memo, useCallback, useDeferredValue, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

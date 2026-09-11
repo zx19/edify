@@ -1,9 +1,8 @@
 'use client'
 import type { Reducer } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { toast } from '@langgenius/dify-ui/toast'
 import { useQueryClient } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import {
   Select,
   SelectContent,
@@ -11,7 +10,8 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { resolvePostLoginRedirect } from '@/app/signin/utils/post-login-redirect'

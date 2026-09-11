@@ -1,7 +1,7 @@
 import type { VisualEditorProps } from '.'
 import type { Field } from '../../../types'
 import type { EditData } from './edit-card'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { noop } from 'es-toolkit/function'
 import { produce } from 'immer'
 import { useTranslation } from 'react-i18next'

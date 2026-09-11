@@ -1,16 +1,16 @@
 'use client'
 
 import type { Role } from '@/models/access-control'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { RadioControl, RadioGroup, RadioItem } from '@langgenius/dify-ui/radio-group'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { cn } from '@xsl/lomva-ui/cn'
+import { RadioControl, RadioGroup, RadioItem } from '@xsl/lomva-ui/radio-group'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/scroll-area'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/app/components/base/search-input'

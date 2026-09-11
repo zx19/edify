@@ -1,6 +1,6 @@
 'use client'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 
 type StartNodeOptionProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
   icon: ReactNode

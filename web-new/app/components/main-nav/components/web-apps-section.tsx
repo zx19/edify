@@ -5,6 +5,8 @@ import type {
   InstalledAppResponse,
 } from '@dify/contracts/api/console/installed-apps/types.gen'
 import type { InfiniteData } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useMutation } from '@tanstack/react-query'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -13,21 +15,19 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@xsl/lomva-ui/collapsible'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { toast } from '@langgenius/dify-ui/toast'
-import { keepPreviousData, useInfiniteQuery, useMutation } from '@tanstack/react-query'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/scroll-area'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,12 +1,12 @@
-import type { DropdownMenuPositionerProps } from '@langgenius/dify-ui/dropdown-menu'
+import type { DropdownMenuPositionerProps } from '@xsl/lomva-ui/dropdown-menu'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuPopup,
   DropdownMenuPortal,
   DropdownMenuPositioner,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useGetIcon from '@/app/components/plugins/install-plugin/base/use-get-icon'

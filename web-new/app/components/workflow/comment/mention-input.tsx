@@ -2,10 +2,10 @@
 
 import type { ReactNode } from 'react'
 import type { UserProfile } from '@/app/components/workflow/comment/types'
-import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   forwardRef,
   memo,

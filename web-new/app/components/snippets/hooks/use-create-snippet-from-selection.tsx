@@ -6,7 +6,7 @@ import type {
   ValueSelector,
 } from '@/app/components/workflow/types'
 import type { SnippetCanvasData, SnippetInputField } from '@/models/snippet'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getNodesBounds } from 'reactflow'

@@ -1,5 +1,5 @@
 import type { LabelProps } from '../label'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import VarReferencePicker from '@/app/components/workflow/nodes/_base/components/variable/var-reference-picker'
 import Label from '../label'
 

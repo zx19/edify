@@ -15,7 +15,7 @@ import type {
   SummaryIndexSetting as SummaryIndexSettingType,
 } from '@/models/datasets'
 import type { RetrievalConfig, RETRIEVE_METHOD } from '@/types/app'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { trackEvent } from '@/app/components/base/amplitude'

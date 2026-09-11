@@ -6,10 +6,10 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { Input } from '@langgenius/dify-ui/input'
-import { toast } from '@langgenius/dify-ui/toast'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { Input } from '@xsl/lomva-ui/input'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDeleteTriggerSubscription } from '@/service/use-triggers'

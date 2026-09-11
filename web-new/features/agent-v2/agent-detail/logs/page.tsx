@@ -2,6 +2,7 @@
 
 import type { AgentLogConversationItemResponse } from '@dify/contracts/api/console/agent/types.gen'
 import type { SourceFilterValue } from './components/source-picker'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import {
   Drawer,
   DrawerBackdrop,
@@ -9,9 +10,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Pagination } from '@langgenius/dify-ui/pagination'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+} from '@xsl/lomva-ui/drawer'
+import { Pagination } from '@xsl/lomva-ui/pagination'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

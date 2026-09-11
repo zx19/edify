@@ -1,6 +1,6 @@
 import type { ISavedItemsProps } from '../index'
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'

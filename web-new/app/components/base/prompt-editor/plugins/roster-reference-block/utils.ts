@@ -1,4 +1,4 @@
-import type { FileTreeIconType } from '@langgenius/dify-ui/file-tree'
+import type { FileTreeIconType } from '@xsl/lomva-ui/file-tree'
 
 type RosterReferenceKind = 'skill' | 'file' | 'tool-all' | 'tool' | 'cli_tool' | 'knowledge'
 

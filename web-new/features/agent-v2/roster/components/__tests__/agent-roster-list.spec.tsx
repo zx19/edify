@@ -1,9 +1,9 @@
 import type { AgentAppPartial } from '@dify/contracts/api/console/agent/types.gen'
 import type { ComponentProps } from 'react'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { AgentRosterList } from '../agent-roster-list'
 
 const { duplicateAgentMutationFn } = vi.hoisted(() => ({

@@ -1,6 +1,6 @@
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import { useState } from 'react'
 import { AccessMode } from '@/models/access-control'
 import AccessControlItem from '../access-control-item'

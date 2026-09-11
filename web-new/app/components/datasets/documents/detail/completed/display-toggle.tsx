@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiLineHeight } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Collapse } from '@/app/components/base/icons/src/vender/knowledge'

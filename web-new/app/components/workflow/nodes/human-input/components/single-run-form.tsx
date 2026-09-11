@@ -3,7 +3,7 @@ import type { HumanInputFieldValue } from '@/app/components/base/chat/chat/answe
 import type { UserAction } from '@/app/components/workflow/nodes/human-input/types'
 import type { HumanInputFormData } from '@/types/workflow'
 import { RiArrowLeftLine } from '@remixicon/react'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

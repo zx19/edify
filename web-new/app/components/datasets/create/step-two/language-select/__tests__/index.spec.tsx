@@ -120,7 +120,7 @@ describe('LanguageSelect', () => {
         expect(onSelect).not.toHaveBeenCalled()
       })
 
-      vi.doUnmock('@xsl/ui/select')
+      vi.doUnmock('@xsl/lomva-ui/select')
     })
   })
 

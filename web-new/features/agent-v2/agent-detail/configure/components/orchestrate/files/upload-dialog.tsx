@@ -8,19 +8,19 @@ import type { FileResponse } from '@dify/contracts/api/console/files/types.gen'
 import type { ChangeEvent, DragEvent } from 'react'
 import type { AgentConfigApiContext } from '../config-context'
 import type { AgentFileNode } from '@/features/agent-v2/agent-composer/form-state'
+import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { FileTreeIcon } from '@langgenius/dify-ui/file-tree'
-import { toast } from '@langgenius/dify-ui/toast'
-import { useMutation } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { FileTreeIcon } from '@xsl/lomva-ui/file-tree'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFileSizeLimit } from '@/app/components/base/file-uploader/hooks'

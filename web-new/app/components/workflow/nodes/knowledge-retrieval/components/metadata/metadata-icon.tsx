@@ -1,5 +1,5 @@
 import { RiHashtag, RiTextSnippet, RiTimeLine } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
 import { MetadataFilteringVariableType } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 

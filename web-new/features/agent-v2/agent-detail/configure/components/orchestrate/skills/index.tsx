@@ -8,23 +8,23 @@ import type { UIEvent } from 'react'
 import type { AgentOrchestrateAddActionOptions } from '../add-actions-context'
 import type { AgentSkill } from '@/features/agent-v2/agent-composer/form-state'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
-import { toast } from '@langgenius/dify-ui/toast'
-import {
   keepPreviousData,
   useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@xsl/lomva-ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useDebounce } from 'ahooks'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo, useRef, useState } from 'react'

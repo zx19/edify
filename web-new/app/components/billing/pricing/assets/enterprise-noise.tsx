@@ -8,7 +8,7 @@ const EnterpriseNoise = () => {
       fill="none"
     >
       <g opacity="0.05" filter="url(#filter0_g_1_5499)">
-        <rect y="0" width="100%" height="96" fill="var(--color-saas-dify-blue-accessible)" />
+        <rect y="0" width="100%" height="96" fill="var(--color-saas-blue-accessible)" />
       </g>
       <defs>
         <filter

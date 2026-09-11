@@ -2,15 +2,15 @@
 
 import type { AgentLogSourceResponse } from '@dify/contracts/api/console/agent/types.gen'
 import type { ReactNode } from 'react'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Button } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/scroll-area'
 import {
   Select,
   SelectItem,
@@ -21,7 +21,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

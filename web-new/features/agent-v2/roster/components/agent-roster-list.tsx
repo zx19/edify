@@ -1,16 +1,16 @@
 'use client'
 
 import type { AgentAppPartial, AgentIconType } from '@dify/contracts/api/console/agent/types.gen'
+import { Button } from '@xsl/lomva-ui/button'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExportAppDsl } from '@/app/components/app/use-export-app-dsl'

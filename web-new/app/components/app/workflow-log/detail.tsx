@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiCloseLine, RiPlayLargeLine } from '@remixicon/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '@/app/components/app/store'
 import { WorkflowContextProvider } from '@/app/components/workflow/context'

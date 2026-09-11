@@ -10,6 +10,8 @@ import type {
   Query,
 } from '@/models/datasets'
 import type { RetrievalConfig } from '@/types/app'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Drawer,
   DrawerBackdrop,
@@ -17,10 +19,8 @@ import {
   DrawerPopup,
   DrawerPortal,
   DrawerViewport,
-} from '@langgenius/dify-ui/drawer'
-import { Pagination } from '@langgenius/dify-ui/pagination'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/drawer'
+import { Pagination } from '@xsl/lomva-ui/pagination'
 import { useBoolean } from 'ahooks'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'

@@ -1,6 +1,6 @@
 import type { VariantProps } from 'class-variance-authority'
 import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { cva } from 'class-variance-authority'
 import { Highlight } from '@/app/components/base/icons/src/public/common'
 

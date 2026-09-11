@@ -95,7 +95,7 @@ vi.mock('@/utils/download', () => ({
   downloadBlob: mockDownloadBlob,
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: mockToastSuccess,
     error: mockToastError,

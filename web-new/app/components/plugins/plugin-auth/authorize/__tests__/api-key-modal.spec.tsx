@@ -1,9 +1,9 @@
 import type { ApiKeyModalProps } from '../api-key-modal'
 import type { FormSchema } from '@/app/components/base/form/types'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { renderWithAccountProfile as render } from '@/test/console/account-profile'
@@ -28,7 +28,7 @@ const { mockToast } = vi.hoisted(() => {
   }
 })
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: mockToast,
 }))
 

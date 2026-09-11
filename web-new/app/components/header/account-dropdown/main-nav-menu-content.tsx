@@ -2,7 +2,9 @@
 
 import type { ReactNode } from 'react'
 import type { Theme } from '@/app/components/base/theme-selector'
-import { Avatar } from '@langgenius/dify-ui/avatar'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -14,9 +16,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTheme } from 'next-themes'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'

@@ -39,7 +39,7 @@ vi.mock('@/app/components/base/chat/chat', () => ({
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: mocks.toastError,
     success: mocks.toastSuccess,

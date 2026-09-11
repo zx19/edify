@@ -1,6 +1,6 @@
 import type { ChangeEvent, KeyboardEvent } from 'react'
-import { toast } from '@langgenius/dify-ui/toast'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

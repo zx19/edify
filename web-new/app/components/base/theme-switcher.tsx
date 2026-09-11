@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useTheme } from 'next-themes'
 
 type Theme = 'light' | 'dark' | 'system'

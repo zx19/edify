@@ -1,6 +1,6 @@
 import type { LoopVariable } from '@/app/components/workflow/nodes/loop/types'
 import type { Var } from '@/app/components/workflow/types'
-import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Textarea } from '@xsl/lomva-ui/textarea'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Input from '@/app/components/base/input'

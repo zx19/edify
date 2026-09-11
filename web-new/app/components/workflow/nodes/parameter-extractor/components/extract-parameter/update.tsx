@@ -2,12 +2,9 @@
 import type { FC } from 'react'
 import type { Param } from '../../types'
 import type { MoreInfo } from '@/app/components/workflow/types'
-import { Dialog, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Input } from '@langgenius/dify-ui/input'
-import { Switch } from '@langgenius/dify-ui/switch'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { Input } from '@xsl/lomva-ui/input'
 import {
   Select,
   SelectContent,
@@ -16,7 +13,10 @@ import {
   SelectItemText,
   SelectTrigger,
   SelectValue,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import { Switch } from '@xsl/lomva-ui/switch'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

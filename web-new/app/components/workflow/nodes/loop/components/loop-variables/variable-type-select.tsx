@@ -5,7 +5,7 @@ import {
   SelectItemIndicator,
   SelectItemText,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
 import { VarType } from '@/app/components/workflow/types'
 
 type VariableTypeSelectProps = {

@@ -26,7 +26,7 @@ import type {
 import { CodeNode } from '@lexical/code'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { $getRoot, TextNode } from 'lexical'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'

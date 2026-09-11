@@ -10,7 +10,7 @@ import type {
 } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 import type { DataSet } from '@/models/datasets'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { intersectionBy } from 'es-toolkit/compat'
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { RiDatabase2Line, RiFileList3Line, RiRocketLine } from '@remixicon/react'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import { useState } from 'react'
 import RadioCard from '.'
 

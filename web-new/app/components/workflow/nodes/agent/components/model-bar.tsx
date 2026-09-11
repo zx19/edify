@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { StatusDot } from '@langgenius/dify-ui/status-dot'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { StatusDot } from '@xsl/lomva-ui/status-dot'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModelTypeEnum } from '@/app/components/header/account-setting/model-provider-page/declarations'

@@ -1,9 +1,9 @@
 import type { Shape } from '../../store/workflow'
 import type { HumanInputFieldValue } from '@/app/components/base/chat/chat/answer/human-input-content/field-renderer'
 import type { HumanInputFilledFormData, HumanInputFormData } from '@/types/workflow'
-import { toast } from '@langgenius/dify-ui/toast'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import {
   createNodeTracing,
@@ -20,7 +20,7 @@ vi.mock('copy-to-clipboard', () => ({
   default: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     success: vi.fn(),
   },

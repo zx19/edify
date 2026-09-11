@@ -1,8 +1,8 @@
 'use client'
 
 import type { RosterFilterValue } from './roster-filter'
-import { Checkbox } from '@langgenius/dify-ui/checkbox'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
+import { Checkbox } from '@xsl/lomva-ui/checkbox'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/app/components/base/search-input'

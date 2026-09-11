@@ -1,6 +1,5 @@
 import type { currentVarType } from './panel'
 import type { NodeWithVar, VarInInspect } from '@/types/workflow'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {
   RiArrowRightSLine,
   RiDeleteBinLine,
@@ -8,9 +7,10 @@ import {
   RiLoader2Line,
   // RiErrorWarningFill,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
-// import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+import { cn } from '@xsl/lomva-ui/cn'
+// import { Button } from '@xsl/lomva-ui/button'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlockIcon from '@/app/components/workflow/block-icon'

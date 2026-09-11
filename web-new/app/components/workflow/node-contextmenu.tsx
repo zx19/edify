@@ -1,5 +1,5 @@
 import type { Node } from './types'
-import { ContextMenuContent } from '@langgenius/dify-ui/context-menu'
+import { ContextMenuContent } from '@xsl/lomva-ui/context-menu'
 import useNodes from '@/app/components/workflow/store/workflow/use-nodes'
 import { NodeActionsContextMenuContent } from './node-actions-menu/context-menu-content'
 import { NODE_ACTIONS_MENU_WIDTH_CLASS_NAME } from './node-actions-menu/shared'

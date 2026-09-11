@@ -10,6 +10,8 @@ import type {
   WorkflowGenPlan,
 } from '@/service/workflow-generator'
 import type { CompletionParams, ModelModeType } from '@/types/app'
+import { matchesKeyboardEvent } from '@tanstack/react-hotkeys'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -18,14 +20,12 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-} from '@langgenius/dify-ui/alert-dialog'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@langgenius/dify-ui/dialog'
-import { Field, FieldLabel } from '@langgenius/dify-ui/field'
-import { Textarea } from '@langgenius/dify-ui/textarea'
-import { toast } from '@langgenius/dify-ui/toast'
-import { matchesKeyboardEvent } from '@tanstack/react-hotkeys'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Button, buttonVariants } from '@xsl/ui/button'
+} from '@xsl/lomva-ui/alert-dialog'
+import { Button, buttonVariants } from '@xsl/lomva-ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@xsl/lomva-ui/dialog'
+import { Field, FieldLabel } from '@xsl/lomva-ui/field'
+import { Textarea } from '@xsl/lomva-ui/textarea'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

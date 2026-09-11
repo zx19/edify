@@ -1,14 +1,14 @@
 'use client'
 import type { Role } from '@/models/access-control'
+import { Button } from '@xsl/lomva-ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@langgenius/dify-ui/dialog'
-import { Button } from '@xsl/ui/button'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import WorkspaceRoleCheckboxList from '../../workspace-role-checkbox-list'

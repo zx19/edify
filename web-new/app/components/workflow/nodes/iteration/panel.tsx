@@ -1,16 +1,7 @@
 import type { FC } from 'react'
 import type { IterationNodeType } from './types'
 import type { NodePanelProps } from '@/app/components/workflow/types'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import {
-  Slider,
-  SliderControl,
-  SliderIndicator,
-  SliderLabel,
-  SliderThumb,
-  SliderTrack,
-} from '@langgenius/dify-ui/slider'
-import { Switch } from '@langgenius/dify-ui/switch'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
 import {
   Select,
   SelectContent,
@@ -19,7 +10,16 @@ import {
   SelectItemText,
   SelectLabel,
   SelectTrigger,
-} from '@xsl/ui/select'
+} from '@xsl/lomva-ui/select'
+import {
+  Slider,
+  SliderControl,
+  SliderIndicator,
+  SliderLabel,
+  SliderThumb,
+  SliderTrack,
+} from '@xsl/lomva-ui/slider'
+import { Switch } from '@xsl/lomva-ui/switch'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Input from '@/app/components/base/input'

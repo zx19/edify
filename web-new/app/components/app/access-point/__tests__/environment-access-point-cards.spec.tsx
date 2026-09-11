@@ -159,7 +159,7 @@ vi.mock('@/app/components/app/access-point/shared/api-secret-key-button', () => 
   },
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
     success: vi.fn(),

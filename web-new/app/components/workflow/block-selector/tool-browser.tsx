@@ -8,7 +8,7 @@ import type {
 } from '@/app/components/workflow/block-selector/marketplace-plugin/list'
 import type { OnSelectBlock } from '@/app/components/workflow/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useDebounce } from 'ahooks'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

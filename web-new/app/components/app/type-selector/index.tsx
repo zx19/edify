@@ -1,11 +1,11 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   RiArrowDownSLine,
   RiCloseCircleFill,
   RiExchange2Fill,
   RiFilter3Line,
 } from '@remixicon/react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

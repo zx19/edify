@@ -1,6 +1,6 @@
 'use client'
 import type { Props as CreateContentProps } from './create-content'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { CreateContent } from './create-content'
 

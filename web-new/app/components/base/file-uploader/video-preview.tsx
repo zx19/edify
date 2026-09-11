@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogContent } from '@xsl/lomva-ui/dialog'
 import { useTranslation } from 'react-i18next'
 
 type VideoPreviewProps = {

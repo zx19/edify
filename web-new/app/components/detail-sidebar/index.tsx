@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import { useHotkey } from '@tanstack/react-hotkeys'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useRef, useState } from 'react'
 import EnvNav from '@/app/components/header/env-nav'
 import AccountSection from '@/app/components/main-nav/components/account-section'

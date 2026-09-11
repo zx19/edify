@@ -1,5 +1,5 @@
 'use client'
-import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
+import { SegmentedControl, SegmentedControlItem } from '@xsl/lomva-ui/segmented-control'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewType } from './types'

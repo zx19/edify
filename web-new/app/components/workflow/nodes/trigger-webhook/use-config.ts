@@ -1,6 +1,6 @@
 import type { SelectorParam } from 'i18next'
 import type { HttpMethod, WebhookHeader, WebhookParameter, WebhookTriggerNodeType } from './types'
-import { toast } from '@langgenius/dify-ui/toast'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore as useAppStore } from '@/app/components/app/store'

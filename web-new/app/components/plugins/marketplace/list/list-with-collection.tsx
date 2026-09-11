@@ -2,7 +2,7 @@
 
 import type { MarketplaceCollection, SearchParamsFromCollection } from '@dify/contracts/marketplace'
 import type { Plugin } from '@/app/components/plugins/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslation } from '#i18n'
 import { getLanguage } from '@/i18n-config/language'

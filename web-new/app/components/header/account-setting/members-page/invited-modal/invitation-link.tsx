@@ -1,6 +1,6 @@
 'use client'
 import type { MemberInviteSuccessResponse } from '@dify/contracts/api/console/workspaces/types.gen'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'

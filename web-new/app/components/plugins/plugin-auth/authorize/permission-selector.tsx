@@ -1,5 +1,7 @@
 import type { CredentialPermission } from '@/models/permission'
-import { Avatar } from '@langgenius/dify-ui/avatar'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +9,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuRadioItemIndicator,
   DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+} from '@xsl/lomva-ui/dropdown-menu'
 import { useTranslation } from 'react-i18next'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 import { PermissionLevel } from '@/models/permission'

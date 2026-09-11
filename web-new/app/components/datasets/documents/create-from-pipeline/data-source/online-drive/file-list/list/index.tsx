@@ -1,6 +1,6 @@
 import type { OnlineDriveFile } from '@/models/pipeline'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { RiLoader2Line } from '@remixicon/react'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

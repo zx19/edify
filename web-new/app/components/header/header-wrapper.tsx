@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { usePathname } from '@/next/navigation'
 import s from './index.module.css'

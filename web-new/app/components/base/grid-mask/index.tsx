@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import Style from './style.module.css'
 
 type GridMaskProps = {

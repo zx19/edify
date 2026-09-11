@@ -1,8 +1,8 @@
 import type { ComponentType, SVGProps } from 'react'
-import { Field } from '@langgenius/dify-ui/field'
-import { Fieldset, FieldsetLegend } from '@langgenius/dify-ui/fieldset'
-import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { fireEvent, render, screen } from '@testing-library/react'
+import { Field } from '@xsl/lomva-ui/field'
+import { Fieldset, FieldsetLegend } from '@xsl/lomva-ui/fieldset'
+import { RadioGroup } from '@xsl/lomva-ui/radio-group'
 import { HybridSearchModeEnum, RetrievalSearchMethodEnum, WeightedScoreEnum } from '../../../types'
 import { SearchMethodOption } from '../search-method-option'
 

@@ -5,13 +5,6 @@ import type {
   WorkflowCommentDetail,
   WorkflowCommentDetailReply,
 } from '@/app/components/workflow/comment/types'
-import { Avatar, AvatarFallback, AvatarImage, AvatarRoot } from '@langgenius/dify-ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@langgenius/dify-ui/dropdown-menu'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {
   RiArrowDownSLine,
   RiArrowUpSLine,
@@ -22,7 +15,10 @@ import {
   RiMoreFill,
 } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
+import { Avatar, AvatarFallback, AvatarImage, AvatarRoot } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@xsl/lomva-ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReactFlow, useViewport } from 'reactflow'

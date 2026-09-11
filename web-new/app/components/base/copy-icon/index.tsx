@@ -1,5 +1,5 @@
 'use client'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useClipboard } from 'foxact/use-clipboard'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

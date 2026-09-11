@@ -7,10 +7,10 @@ import type {
 } from '../../../types'
 import type { CodeNodeType } from '@/app/components/workflow/nodes/code/types'
 import type { App, AppSSO } from '@/types/app'
-import { toast } from '@langgenius/dify-ui/toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from '@xsl/lomva-ui/toast'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import { HooksStoreContext } from '@/app/components/workflow/hooks-store/provider'
 import { createHooksStore } from '@/app/components/workflow/hooks-store/store'
@@ -20,7 +20,7 @@ import { seedAccountProfileQuery } from '@/test/console/account-profile'
 import { render } from '@/test/console/render'
 import EmailSenderModal from '../test-email-sender'
 
-vi.mock('@langgenius/dify-ui/toast', async (importOriginal) => ({
+vi.mock('@xsl/lomva-ui/toast', async (importOriginal) => ({
   ...(await importOriginal()),
   toast: {
     error: vi.fn(),

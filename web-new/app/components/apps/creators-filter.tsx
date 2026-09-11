@@ -1,6 +1,8 @@
 'use client'
 
-import { Avatar } from '@langgenius/dify-ui/avatar'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar } from '@xsl/lomva-ui/avatar'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   Combobox,
   ComboboxInput,
@@ -14,10 +16,8 @@ import {
   ComboboxPositioner,
   ComboboxTrigger,
   ComboboxValue,
-} from '@langgenius/dify-ui/combobox'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/ui/cn'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/combobox'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { userProfileQueryOptions } from '@/features/account-profile/client'

@@ -1,8 +1,8 @@
 import type { LangGeniusVersionInfo } from '@/context/app-context-types'
 // Import mocks for assertions
 import type { ConsoleStateFixture as BaseConsoleStateFixture } from '@/test/console/state-fixture'
-import { toast } from '@langgenius/dify-ui/toast'
 import { waitFor } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import {
   useInvalidateReferenceSettings,

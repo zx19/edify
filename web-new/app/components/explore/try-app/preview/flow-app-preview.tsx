@@ -2,7 +2,7 @@
 import type { JsonObject } from '@dify/contracts/api/console/trial-apps/types.gen'
 import type { FC } from 'react'
 import type { Edge, Node } from '@/app/components/workflow/types'
-import { cn } from '@xsl/ui/cn'
+import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import Loading from '@/app/components/base/loading'
 import { BlockEnum } from '@/app/components/workflow/types'

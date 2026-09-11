@@ -1,5 +1,5 @@
-import { toast } from '@langgenius/dify-ui/toast'
 import { renderHook } from '@testing-library/react'
+import { toast } from '@xsl/lomva-ui/toast'
 import { act } from 'react'
 import { useExportSnippetMutation } from '@/service/use-snippets'
 import { downloadBlob } from '@/utils/download'
@@ -17,7 +17,7 @@ vi.mock('@/utils/download', () => ({
   downloadBlob: vi.fn(),
 }))
 
-vi.mock('@langgenius/dify-ui/toast', () => ({
+vi.mock('@xsl/lomva-ui/toast', () => ({
   toast: {
     error: vi.fn(),
   },

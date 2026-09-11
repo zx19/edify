@@ -1,5 +1,6 @@
 'use client'
-import { Dialog, DialogClose, DialogContent } from '@langgenius/dify-ui/dialog'
+import { Dialog, DialogClose, DialogContent } from '@xsl/lomva-ui/dialog'
+import { IconButton } from '@xsl/lomva-ui/icon-button'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -7,8 +8,7 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-} from '@langgenius/dify-ui/scroll-area'
-import { IconButton } from '@xsl/ui/icon-button'
+} from '@xsl/lomva-ui/scroll-area'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetPricingPageLanguage } from '@/context/i18n'

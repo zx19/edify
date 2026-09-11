@@ -2,7 +2,7 @@
 import type { HumanInputFieldValue } from './field-renderer'
 import type { HumanInputFormProps } from './type'
 import type { UserAction } from '@/app/components/workflow/nodes/human-input/types'
-import { Button } from '@xsl/ui/button'
+import { Button } from '@xsl/lomva-ui/button'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import ContentItem from './content-item'

@@ -1,6 +1,6 @@
 import type { RelatedAppResponse } from '@/models/datasets'
-import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiInformation2Line } from '@remixicon/react'
+import { Popover, PopoverContent, PopoverTrigger } from '@xsl/lomva-ui/popover'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import LinkedAppsPanel from '@/app/components/base/linked-apps-panel'
