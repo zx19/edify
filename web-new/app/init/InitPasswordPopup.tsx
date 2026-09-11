@@ -1,7 +1,7 @@
 'use client'
 import type { InitValidateStatusResponse } from '@/models/common'
-import { Button } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useDocumentTitle from '@/hooks/use-document-title'

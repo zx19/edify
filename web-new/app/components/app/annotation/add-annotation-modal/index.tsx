@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { AnnotationItemBasic } from '../type'
-import { Button } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import {
   Drawer,
@@ -14,6 +13,7 @@ import {
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

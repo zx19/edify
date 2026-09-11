@@ -12,7 +12,6 @@ import type {
   HandleUpdateCondition,
   HandleUpdateSubVariableCondition,
 } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Select,
@@ -25,6 +24,7 @@ import {
   SelectTrigger,
 } from '@langgenius/dify-ui/select'
 import { RiAddLine, RiDeleteBinLine, RiDraggable } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

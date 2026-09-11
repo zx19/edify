@@ -1,12 +1,12 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { Switch } from '@langgenius/dify-ui/switch'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Button } from '@xsl/ui/button'
 import { useClipboard } from 'foxact/use-clipboard'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { SchemaRoot } from '../../../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiArrowLeftLine, RiCloseLine, RiSparklingLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

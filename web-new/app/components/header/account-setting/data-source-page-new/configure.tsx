@@ -5,8 +5,8 @@ import type {
   AddOAuthButtonProps,
   PluginPayload,
 } from '@/app/components/plugins/plugin-auth/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Button } from '@xsl/ui/button'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AddApiKeyButton, AddOAuthButton } from '@/app/components/plugins/plugin-auth'

@@ -1,9 +1,9 @@
 'use client'
 
 import type { AccessPoint } from '@/app/components/app/deploy/access-point'
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

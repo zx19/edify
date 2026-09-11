@@ -1,5 +1,4 @@
 import type { TriggerSubscriptionBuilder } from '@/app/components/workflow/block-selector/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import {
@@ -11,6 +10,7 @@ import {
 } from '@langgenius/dify-ui/select'
 import { toast } from '@langgenius/dify-ui/toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Button } from '@xsl/ui/button'
 import { useBoolean } from 'ahooks'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

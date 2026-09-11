@@ -1,7 +1,7 @@
 'use client'
 
 import type { Plugin, PluginDeclaration, UpdateFromGitHubPayload } from '../../../types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

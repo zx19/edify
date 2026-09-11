@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'
 import BasicInfoSection from './components/basic-info-section'

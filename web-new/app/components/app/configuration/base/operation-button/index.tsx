@@ -1,7 +1,7 @@
 'use client'
-import type { ButtonProps } from '@langgenius/dify-ui/button'
-import { Button } from '@langgenius/dify-ui/button'
+import type { ButtonProps } from '@xsl/ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 
 type OperationButtonProps = Omit<ButtonProps, 'children' | 'size' | 'variant'> & {

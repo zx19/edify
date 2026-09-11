@@ -1,6 +1,5 @@
 import type { CloudPlan } from '@dify/contracts/api/console/features/types.gen'
 import type { ReactNode } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -11,6 +10,7 @@ import {
 import { toast } from '@langgenius/dify-ui/toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useQueryState } from 'nuqs'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

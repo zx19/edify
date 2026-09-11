@@ -1,7 +1,7 @@
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { RiEqualizer2Line, RiScales3Line } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -4,7 +4,6 @@ import type {
   AgentAppPartial,
 } from '@dify/contracts/api/console/agent/types.gen'
 import type { AgentFormValues, AgentIconSelection } from './agent-form'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -19,6 +18,7 @@ import { Input } from '@langgenius/dify-ui/input'
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

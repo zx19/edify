@@ -11,10 +11,10 @@ import type {
   FormValue,
   Model,
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Markdown } from '@/app/components/base/markdown'

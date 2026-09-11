@@ -1,8 +1,8 @@
 'use client'
 import type { FC } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { RiAddLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 
 type Props = Readonly<{

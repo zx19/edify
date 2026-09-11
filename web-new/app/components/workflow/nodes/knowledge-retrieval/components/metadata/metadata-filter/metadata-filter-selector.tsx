@@ -1,4 +1,3 @@
-import { Button } from '@langgenius/dify-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { RiArrowDownSLine, RiCheckLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { MetadataFilteringModeEnum } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
 

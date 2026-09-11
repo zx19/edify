@@ -2,7 +2,6 @@
 
 import type { AgentLogSourceResponse } from '@dify/contracts/api/console/agent/types.gen'
 import type { ReactNode } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -22,6 +21,7 @@ import {
   SelectTrigger,
 } from '@langgenius/dify-ui/select'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

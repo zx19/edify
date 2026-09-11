@@ -9,7 +9,6 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -19,6 +18,7 @@ import {
 } from '@langgenius/dify-ui/dialog'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

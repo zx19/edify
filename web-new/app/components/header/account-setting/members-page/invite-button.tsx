@@ -1,6 +1,6 @@
-import type { ButtonProps } from '@langgenius/dify-ui/button'
-import { Button } from '@langgenius/dify-ui/button'
+import type { ButtonProps } from '@xsl/ui/button'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

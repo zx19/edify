@@ -4,7 +4,6 @@ import type {
   EnvScope,
   EnvVariable,
 } from '@/features/agent-v2/agent-composer/form-state'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -17,6 +16,7 @@ import { Form } from '@langgenius/dify-ui/form'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'

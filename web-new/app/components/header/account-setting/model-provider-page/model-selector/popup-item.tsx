@@ -6,13 +6,13 @@ import type {
   ModelSelectorProvider,
   ModelSelectorValue,
 } from './types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { PreviewCardTrigger } from '@langgenius/dify-ui/preview-card'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useModalContext } from '@/context/modal-context'

@@ -1,7 +1,7 @@
 import type { MetadataShape } from '@/app/components/workflow/nodes/knowledge-retrieval/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiFilter3Line } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MetadataPanel from './metadata-panel'

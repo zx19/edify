@@ -1,8 +1,8 @@
 'use client'
 
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

@@ -1,6 +1,6 @@
 import type { OnFeaturesChange } from '@/app/components/base/features/types'
 import type { UploadFileSetting } from '@/app/components/workflow/types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'

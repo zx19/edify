@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { Credential, CustomCollectionBackend, CustomParamSchema, Emoji } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
@@ -16,6 +15,7 @@ import {
 import { Input } from '@langgenius/dify-ui/input'
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useDebounce, useGetState } from 'ahooks'
 import { produce } from 'immer'
 import * as React from 'react'

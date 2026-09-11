@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,6 +8,7 @@ import {
 } from '@langgenius/dify-ui/dialog'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { CopyFeedback } from '@/app/components/base/copy-feedback'
 

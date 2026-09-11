@@ -1,6 +1,6 @@
-import { Button } from '@langgenius/dify-ui/button'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import ToolSelector from '../index'
 

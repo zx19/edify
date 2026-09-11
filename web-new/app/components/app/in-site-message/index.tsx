@@ -1,7 +1,7 @@
 'use client'
 
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import { useEffect, useMemo, useState } from 'react'
 import { trackEvent } from '@/app/components/base/amplitude'
 import { MarkdownWithDirective } from '@/app/components/base/markdown-with-directive'

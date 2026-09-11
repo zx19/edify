@@ -6,8 +6,8 @@ import type {
   NewKnowledgeSourceDraft,
   NewKnowledgeWebsiteProvider,
 } from './routes'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

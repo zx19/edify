@@ -1,4 +1,3 @@
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Popover,
   PopoverContent,
@@ -7,6 +6,7 @@ import {
   PopoverTrigger,
 } from '@langgenius/dify-ui/popover'
 import { SegmentedControl, SegmentedControlItem } from '@langgenius/dify-ui/segmented-control'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'

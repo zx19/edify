@@ -1,7 +1,7 @@
 'use client'
 import type { AppDetailWithSite } from '@dify/contracts/api/console/apps/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

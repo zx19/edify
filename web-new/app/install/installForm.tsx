@@ -1,7 +1,6 @@
 'use client'
 import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
 import { zPostSetupBody } from '@dify/contracts/api/console/setup/zod.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Field,
   FieldDescription,
@@ -14,6 +13,7 @@ import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@langgenius/dify-ui/input-group'
 import { useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

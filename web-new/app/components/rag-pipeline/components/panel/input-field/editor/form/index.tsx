@@ -1,7 +1,7 @@
 import type { FormData, InputFieldFormProps } from './types'
 import type { MoreInfo } from '@/app/components/workflow/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

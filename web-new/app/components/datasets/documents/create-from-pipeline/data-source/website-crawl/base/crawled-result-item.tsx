@@ -1,9 +1,9 @@
 'use client'
 import type { CrawlResultItem as CrawlResultItemType } from '@/models/datasets'
-import { Button } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Radio } from '@langgenius/dify-ui/radio-group'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

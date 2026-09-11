@@ -1,5 +1,5 @@
-import { Button } from '@langgenius/dify-ui/button'
 import { RiAddCircleFill } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

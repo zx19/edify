@@ -1,8 +1,7 @@
 'use client'
 
-import type { ButtonProps } from '@langgenius/dify-ui/button'
+import type { ButtonProps } from '@xsl/ui/button'
 import type { PluginCategoryEnum } from '@/app/components/plugins/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
 } from '@langgenius/dify-ui/dropdown-menu'
 import { RiAddCircleFill, RiArrowDownSLine } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { noop } from 'es-toolkit/function'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

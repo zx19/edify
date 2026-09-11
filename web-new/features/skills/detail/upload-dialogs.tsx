@@ -2,7 +2,6 @@
 
 import type { SkillUploadQueueItem } from './shared'
 import type { SkillUploadDecision, SkillUploadReviewItem } from './upload-workflow'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Dialog,
@@ -12,6 +11,7 @@ import {
   DialogTitle,
 } from '@langgenius/dify-ui/dialog'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { getPathBaseName } from './shared'
 import { isUploadReviewItemSkipped, isUploadReviewResolved } from './upload-workflow'

@@ -1,7 +1,6 @@
 'use client'
 import type { GetBillingSubscriptionData } from '@dify/contracts/api/console/billing/types.gen'
 import type { CloudPlan } from '@dify/contracts/api/console/features/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -11,6 +10,7 @@ import {
 } from '@langgenius/dify-ui/dialog'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,7 @@
 'use client'
 import type { SchemaRoot, StructuredOutput } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ShowPanel from '@/app/components/workflow/nodes/_base/components/variable/object-child-tree-panel/show'

@@ -3,7 +3,6 @@
 import type { LogicalDocument } from '@dify/contracts/knowledge-fs/types.gen'
 import type { FocusEventHandler } from 'react'
 import type { DocumentDisplayStatus } from './document-model'
-import { Button } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
@@ -14,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

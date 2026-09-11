@@ -1,8 +1,8 @@
 import type { Tag } from '../../../hooks'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Button } from '@xsl/ui/button'
 import { memo, useEffect, useRef } from 'react'
 import { useTranslation } from '#i18n'
 

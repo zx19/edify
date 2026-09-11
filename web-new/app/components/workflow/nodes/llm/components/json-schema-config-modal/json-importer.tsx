@@ -1,7 +1,7 @@
 import type { FC } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import { RiCloseLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

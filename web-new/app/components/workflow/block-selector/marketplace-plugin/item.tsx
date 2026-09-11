@@ -1,7 +1,7 @@
 'use client'
 import type { Plugin } from '@/app/components/plugins/types.ts'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useBoolean } from 'ahooks'
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

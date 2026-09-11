@@ -5,8 +5,8 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiLoader2Line } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useCountDown } from 'ahooks'
 import * as React from 'react'
 import { useRef, useState } from 'react'

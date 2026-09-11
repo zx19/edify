@@ -2,8 +2,8 @@
 
 import type { RoleModalMode, submitRoleData } from './role-modal'
 import type { Role } from '@/models/access-control'
-import { Button } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

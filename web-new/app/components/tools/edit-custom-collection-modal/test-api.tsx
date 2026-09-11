@@ -5,7 +5,6 @@ import type {
   CustomCollectionBackend,
   CustomParamSchema,
 } from '@/app/components/tools/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Drawer,
@@ -18,6 +17,7 @@ import {
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
 import { RiSettings2Line } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,6 @@
 'use client'
 
 import type { AppEnvironment } from '@dify/contracts/enterprise-app-deploy/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { undeployedAppEnvironmentsAtom } from '../../state'

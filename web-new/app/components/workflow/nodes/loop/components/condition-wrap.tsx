@@ -13,7 +13,6 @@ import type {
   HandleUpdateSubVariableCondition,
   LogicalOperator,
 } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Select,
@@ -26,6 +25,7 @@ import {
   SelectTrigger,
 } from '@langgenius/dify-ui/select'
 import { RiAddLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiHistoryLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

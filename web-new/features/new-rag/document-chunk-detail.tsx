@@ -3,8 +3,8 @@ import type {
   LogicalDocument,
   LogicalDocumentRevision,
 } from '@dify/contracts/knowledge-fs/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
+import { Button } from '@xsl/ui/button'
 import copy from 'copy-to-clipboard'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,9 +1,9 @@
 'use client'
 
 import type { AgentAppDetailWithSite } from '@dify/contracts/api/console/agent/types.gen'
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'

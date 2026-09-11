@@ -1,7 +1,6 @@
 'use client'
 
 import type { PluginDeclaration, UpdateFromGitHubPayload } from '../../../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Field } from '@langgenius/dify-ui/field'
 import {
   Select,
@@ -12,6 +11,7 @@ import {
   SelectLabel,
   SelectTrigger,
 } from '@langgenius/dify-ui/select'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

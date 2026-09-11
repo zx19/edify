@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { ImageFile } from '@/types/app'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TransferMethod } from '@/types/app'

@@ -10,9 +10,9 @@ import type {
   Query,
 } from '@/models/datasets'
 import type { RetrievalConfig } from '@/types/app'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { RiEqualizer2Line, RiPlayCircleLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

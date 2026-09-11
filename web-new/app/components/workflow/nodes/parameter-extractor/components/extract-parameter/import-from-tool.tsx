@@ -7,7 +7,7 @@ import type {
   ToolDefaultValue,
 } from '@/app/components/workflow/block-selector/types'
 import type { BlockEnum } from '@/app/components/workflow/types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '@/app/components/header/account-setting/model-provider-page/hooks'

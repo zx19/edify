@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from '@langgenius/dify-ui/button'
 import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
 import { RiAlertFill, RiCloseLine, RiFileDownloadLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Uploader } from '@/app/components/app/create-from-dsl-modal/uploader'

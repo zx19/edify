@@ -1,6 +1,6 @@
-import { buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowLeftLine } from '@remixicon/react'
+import { buttonVariants } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from '@/next/link'

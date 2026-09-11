@@ -1,6 +1,6 @@
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@langgenius/dify-ui/button'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 import { useRouter } from '@/next/navigation'

@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from '@langgenius/dify-ui/button'
 import { RiAddLine } from '@remixicon/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

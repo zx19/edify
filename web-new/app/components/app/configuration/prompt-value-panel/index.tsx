@@ -2,7 +2,6 @@
 import type { FC } from 'react'
 import type { Inputs } from '@/models/debug'
 import type { VisionFile, VisionSettings } from '@/types/app'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Select,
@@ -16,6 +15,7 @@ import {
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import { RiArrowDownSLine, RiArrowRightSLine, RiPlayLargeFill } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,5 @@
 import type { ChunkStructureEnum } from '../../types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field } from '@/app/components/workflow/nodes/_base/components/layout'

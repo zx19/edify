@@ -1,5 +1,5 @@
 import type { StartNodeType } from '../nodes/start/types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNodes } from 'reactflow'

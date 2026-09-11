@@ -7,7 +7,6 @@ import type {
   SubjectAccount,
   SubjectGroup,
 } from '@/models/access-control'
-import { Button } from '@langgenius/dify-ui/button'
 import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from '@langgenius/dify-ui/popover'
 import {
   ScrollArea,
@@ -16,6 +15,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { Button } from '@xsl/ui/button'
 import { useDebounce } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

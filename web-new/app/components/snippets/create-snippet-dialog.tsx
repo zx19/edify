@@ -1,7 +1,6 @@
 'use client'
 import type { Hotkey } from '@tanstack/react-hotkeys'
 import type { SnippetCanvasData, SnippetInputField } from '@/models/snippet'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogBackdrop,
@@ -14,6 +13,7 @@ import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { useHotkey } from '@tanstack/react-hotkeys'
+import { Button } from '@xsl/ui/button'
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -6,8 +6,8 @@ import type {
   FileIndexingEstimateResponse,
 } from '@/models/datasets'
 import type { OnlineDriveFile } from '@/models/pipeline'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiSearchEyeLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,6 @@
 'use client'
 import type { FC } from 'react'
 import type { AnnotationItemBasic } from '../type'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +10,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

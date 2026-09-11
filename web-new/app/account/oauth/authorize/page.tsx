@@ -1,7 +1,6 @@
 'use client'
 
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { toast } from '@langgenius/dify-ui/toast'
 import {
@@ -12,6 +11,7 @@ import {
   RiTranslate2,
 } from '@remixicon/react'
 import { skipToken, useMutation, useQuery } from '@tanstack/react-query'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

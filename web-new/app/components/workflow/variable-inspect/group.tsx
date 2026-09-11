@@ -1,7 +1,7 @@
 import type { currentVarType } from './panel'
 import type { NodeWithVar, VarInInspect } from '@/types/workflow'
 import { cn } from '@langgenius/dify-ui/cn'
-// import { Button } from '@langgenius/dify-ui/button'
+// import { Button } from '@xsl/ui/button'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
 import {

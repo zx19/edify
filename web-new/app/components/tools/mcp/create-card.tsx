@@ -1,6 +1,6 @@
 'use client'
 import type { ToolWithProvider } from '@/app/components/workflow/types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { STEP_BY_STEP_TOUR_TARGETS } from '@/app/components/step-by-step-tour/target-registry'

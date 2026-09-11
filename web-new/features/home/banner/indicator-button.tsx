@@ -1,4 +1,4 @@
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import styles from './indicator-button.module.css'
 
 type IndicatorButtonProps = {

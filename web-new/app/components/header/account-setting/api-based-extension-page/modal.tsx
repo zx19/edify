@@ -2,7 +2,6 @@ import type {
   ApiBasedExtensionPayload,
   ApiBasedExtensionResponse,
 } from '@dify/contracts/api/console/api-based-extension/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@langgenius/dify-ui/dialog'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@langgenius/dify-ui/field'
 import { Form } from '@langgenius/dify-ui/form'
@@ -10,6 +9,7 @@ import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { useDocLink } from '@/context/i18n'
 import { consoleQuery } from '@/service/client'

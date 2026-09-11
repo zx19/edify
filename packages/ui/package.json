@@ -1,0 +1,48 @@
+{
+  "name": "@xsl/ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "杏树林新原语包（前端重写 2a/2b 产出）——视觉默认值对齐 Dify 现行值，主题新值经 @xsl/tokens 作用域类覆盖",
+  "type": "module",
+  "exports": {
+    "./cn": "./src/cn.ts",
+    "./button": "./src/button/index.tsx"
+  },
+  "scripts": {
+    "test": "vp test --project unit",
+    "test:watch": "vp test --project unit --watch",
+    "type-check": "tsc"
+  },
+  "dependencies": {
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:"
+  },
+  "devDependencies": {
+    "@base-ui/react": "catalog:",
+    "@dify/tsconfig": "workspace:*",
+    "@egoist/tailwindcss-icons": "catalog:",
+    "@iconify-json/ri": "catalog:",
+    "@langgenius/dify-ui": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "class-variance-authority": "catalog:",
+    "playwright": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
+    "vitest-browser-react": "catalog:"
+  },
+  "peerDependencies": {
+    "@base-ui/react": "catalog:",
+    "class-variance-authority": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:"
+  }
+}

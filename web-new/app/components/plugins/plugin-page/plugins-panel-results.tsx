@@ -3,7 +3,6 @@ import type { PluginDetail } from '../types'
 import type { EmbeddedMarketplaceCategory } from './category-marketplace'
 import type { PluginPageContentInset } from './content-inset'
 import type { Collection } from '@/app/components/tools/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   ScrollArea,
@@ -12,6 +11,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

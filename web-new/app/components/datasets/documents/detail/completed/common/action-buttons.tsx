@@ -1,7 +1,7 @@
 import type { Hotkey } from '@tanstack/react-hotkeys'
-import { Button } from '@langgenius/dify-ui/button'
 import { Kbd, KbdGroup } from '@langgenius/dify-ui/kbd'
 import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { ChunkingMode } from '@/models/datasets'
 import { useDocumentContext } from '../../context'

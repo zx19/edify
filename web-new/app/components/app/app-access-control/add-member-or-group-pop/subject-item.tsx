@@ -9,10 +9,10 @@ import type {
   SubjectGroup,
 } from '@/models/access-control'
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Toggle } from '@langgenius/dify-ui/toggle'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { userProfileQueryOptions } from '@/features/account-profile/client'
 import { SubjectType } from '@/models/access-control'

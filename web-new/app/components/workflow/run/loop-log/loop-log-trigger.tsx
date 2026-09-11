@@ -1,6 +1,6 @@
 import type { LoopDurationMap, LoopVariableMap, NodeTracing } from '@/types/workflow'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiArrowRightSLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { Loop } from '@/app/components/base/icons/src/vender/workflow'
 

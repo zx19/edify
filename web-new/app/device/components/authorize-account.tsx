@@ -2,7 +2,7 @@
 
 import type { FC } from 'react'
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { deviceApproveAccount, deviceDenyAccount } from '@/service/device-flow'

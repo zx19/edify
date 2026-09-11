@@ -3,9 +3,9 @@
 import type { ReactNode } from 'react'
 import type { UserProfile } from '@/app/components/workflow/comment/types'
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { Button } from '@xsl/ui/button'
 import {
   forwardRef,
   memo,

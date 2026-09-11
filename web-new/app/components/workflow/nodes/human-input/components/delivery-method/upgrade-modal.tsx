@@ -1,6 +1,6 @@
-import { Button } from '@langgenius/dify-ui/button'
 import { RiMailSendFill } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { SparklesSoft } from '@/app/components/base/icons/src/public/common'
 import { PremiumBadgeButton } from '@/app/components/base/premium-badge'

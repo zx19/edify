@@ -1,4 +1,4 @@
-import type { ButtonProps } from '@langgenius/dify-ui/button'
+import type { ButtonProps } from '@xsl/ui/button'
 
 type MarkdownButtonAppearance = Pick<ButtonProps, 'size' | 'tone' | 'variant'>
 

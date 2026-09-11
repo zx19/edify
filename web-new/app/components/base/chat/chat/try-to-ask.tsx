@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { OnSend } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

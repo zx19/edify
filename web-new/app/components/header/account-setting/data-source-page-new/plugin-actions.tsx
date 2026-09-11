@@ -1,8 +1,8 @@
 'use client'
 
 import type { PluginDetail } from '@/app/components/plugins/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@langgenius/dify-ui/tooltip'
+import { Button } from '@xsl/ui/button'
 import { memo, useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge from '@/app/components/base/badge'

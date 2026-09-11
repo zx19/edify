@@ -5,7 +5,6 @@ import type {
   AgentProviderTool,
   AgentToolAction,
 } from '@/features/agent-v2/agent-composer/form-state'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
 import {
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@langgenius/dify-ui/dropdown-menu'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { Button } from '@xsl/ui/button'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthCategory, Authorized, usePluginAuth } from '@/app/components/plugins/plugin-auth'

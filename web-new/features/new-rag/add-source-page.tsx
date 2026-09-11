@@ -9,9 +9,9 @@ import type {
   NewKnowledgeSourceType,
   NewKnowledgeWebsiteProvider,
 } from './routes'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

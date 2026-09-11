@@ -7,11 +7,11 @@ import type {
   PreProcessingRule,
   SummaryIndexSetting as SummaryIndexSettingType,
 } from '@/models/datasets'
-import { Button } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { RadioGroup } from '@langgenius/dify-ui/radio-group'
 import { RiSearchEyeLine } from '@remixicon/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'
 import { ParentChildChunk } from '@/app/components/base/icons/src/vender/knowledge'

@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 import type { AppPublisherProps } from '../../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@langgenius/dify-ui/popover'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { WorkflowLaunchDialog } from '@/app/components/app/overview/workflow-launch-dialog'
 import { BuiltInPublisher } from '../../built-in-publisher'

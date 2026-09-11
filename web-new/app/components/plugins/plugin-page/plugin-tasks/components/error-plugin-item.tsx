@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { Plugin, PluginStatus } from '@/app/components/plugins/types'
 import type { Locale } from '@/i18n-config'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PluginInstallPermissionProvider } from '@/app/components/plugins/install-plugin/components/plugin-install-permission-provider'

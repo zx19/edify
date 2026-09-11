@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@langgenius/dify-ui/button'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'

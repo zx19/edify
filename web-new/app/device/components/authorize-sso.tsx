@@ -3,7 +3,7 @@
 import type { FC } from 'react'
 import type { ApprovalContext } from '@/service/device-flow'
 import { Avatar } from '@langgenius/dify-ui/avatar'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { approveExternal, fetchApprovalContext } from '@/service/device-flow'

@@ -5,7 +5,6 @@ import type { CreateKnowledgeExitReason } from './components/create-knowledge-ex
 import type { KnowledgeVisibility } from './create-knowledge-workflow'
 import type { QueuedUpload } from './create-upload-queue'
 import type { NewKnowledgeSourceDraft, NewKnowledgeStartMode } from './routes'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogBackdrop,
@@ -29,6 +28,7 @@ import {
 import { Textarea } from '@langgenius/dify-ui/textarea'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,9 +1,9 @@
 /* eslint-disable style/multiline-ternary */
 'use client'
 import type { RecommendedAppResponse } from '@dify/contracts/api/console/explore/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { Dialog, DialogContent } from '@langgenius/dify-ui/dialog'
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@langgenius/dify-ui/tabs'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,7 +1,7 @@
 import type { DataSourceCredential } from './types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Input } from '@langgenius/dify-ui/input'
 import { StatusDot } from '@langgenius/dify-ui/status-dot'
+import { Button } from '@xsl/ui/button'
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Operator from './operator'

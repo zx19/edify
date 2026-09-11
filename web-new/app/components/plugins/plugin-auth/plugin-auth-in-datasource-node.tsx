@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiAddLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 

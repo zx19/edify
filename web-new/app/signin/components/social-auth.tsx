@@ -1,5 +1,5 @@
-import { buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { buttonVariants } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { API_PREFIX } from '@/config'
 import { useLocale } from '@/context/i18n'

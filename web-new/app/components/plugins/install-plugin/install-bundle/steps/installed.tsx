@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
 import type { InstallStatus, Plugin, VersionProps } from '../../../types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import Badge, { BadgeState } from '@/app/components/base/badge/index'

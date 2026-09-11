@@ -1,8 +1,8 @@
 'use client'
 
 import type { FC } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiArrowLeftLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 
 type StepTwoFooterProps = {

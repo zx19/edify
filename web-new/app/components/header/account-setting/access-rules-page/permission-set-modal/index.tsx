@@ -1,6 +1,5 @@
 'use client'
 import type { AccessPolicyResourceType } from '@/models/access-control'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -11,6 +10,7 @@ import {
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { Input } from '@langgenius/dify-ui/input'
 import { Textarea } from '@langgenius/dify-ui/textarea'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getEnterpriseDocUrl, useLocale } from '@/context/i18n'

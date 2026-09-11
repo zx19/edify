@@ -1,6 +1,6 @@
 import type { Hotkey } from '@tanstack/react-hotkeys'
-import { Button } from '@langgenius/dify-ui/button'
 import { useHotkey } from '@tanstack/react-hotkeys'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { ShortcutKbd } from '@/app/components/workflow/shortcuts/shortcut-kbd'
 

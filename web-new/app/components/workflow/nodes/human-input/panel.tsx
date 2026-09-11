@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import type { FormInputItem, HumanInputNodeType } from './types'
 import type { NodePanelProps, Var } from '@/app/components/workflow/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
 import { toast } from '@langgenius/dify-ui/toast'
@@ -12,6 +11,7 @@ import {
   RiExpandDiagonalLine,
   RiEyeLine,
 } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

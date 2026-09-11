@@ -1,5 +1,5 @@
 import type { CustomActionsProps } from '@/app/components/base/form/components/form/actions'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '@/app/components/workflow/store'

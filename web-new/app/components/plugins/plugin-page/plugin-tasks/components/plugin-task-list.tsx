@@ -1,5 +1,4 @@
 import type { PluginStatus } from '@/app/components/plugins/types'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -7,6 +6,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { useGetLanguage } from '@/context/i18n'
 import ErrorPluginItem from './error-plugin-item'

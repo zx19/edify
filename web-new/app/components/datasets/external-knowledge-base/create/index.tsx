@@ -1,8 +1,8 @@
 'use client'
 
 import type { CreateKnowledgeBaseReq } from './declarations'
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'

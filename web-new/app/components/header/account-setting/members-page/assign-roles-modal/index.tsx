@@ -1,6 +1,5 @@
 'use client'
 import type { Role } from '@/models/access-control'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,6 +8,7 @@ import {
   DialogTitle,
 } from '@langgenius/dify-ui/dialog'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { Button } from '@xsl/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import WorkspaceRoleCheckboxList from '../../workspace-role-checkbox-list'

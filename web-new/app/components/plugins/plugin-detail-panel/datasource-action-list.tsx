@@ -1,4 +1,4 @@
-// import { Button } from '@langgenius/dify-ui/button'
+// import { Button } from '@xsl/ui/button'
 // import { StatusDot } from '@langgenius/dify-ui/status-dot'
 // import ToolItem from '@/app/components/tools/provider/tool-item'
 // import ConfigCredential from '@/app/components/tools/setting/build-in/config-credentials'

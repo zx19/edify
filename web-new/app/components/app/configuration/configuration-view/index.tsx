@@ -12,7 +12,6 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Drawer,
   DrawerBackdrop,
@@ -22,6 +21,7 @@ import {
   DrawerPortal,
   DrawerViewport,
 } from '@langgenius/dify-ui/drawer'
+import { Button } from '@xsl/ui/button'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'

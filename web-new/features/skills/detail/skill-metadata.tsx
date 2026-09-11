@@ -7,7 +7,6 @@ import type {
 import type { SkillFileMutationCoordinator } from './shared'
 import type { TagComboboxItem } from '@/features/tag-management/components/tag-combobox-item'
 import type { AppIconType } from '@/types/app'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Combobox,
@@ -18,6 +17,7 @@ import {
 } from '@langgenius/dify-ui/combobox'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

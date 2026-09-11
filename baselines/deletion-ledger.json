@@ -1,0 +1,23 @@
+{
+  "created": "2026-09-11",
+  "rule": "执行计划 v2 §4 步 5：追平即登记入台账，**实际删除统一推迟到第 7 步终验通过后**（§6「统一删旧」行）——dify-ui 旧包与 web/ 旧轨是 :3000 对照物的载体，逐项即删会断旧轨编译",
+  "pending": [
+    {
+      "type": "primitive",
+      "name": "cn",
+      "oldPath": "packages/dify-ui/src/cn.ts",
+      "newPath": "packages/ui/src/cn.ts",
+      "closedAt": "2026-09-11",
+      "evidence": "随 button 闭环（叶子依赖）；web-new 侧 965 处 @langgenius/dify-ui/cn import 的改写归 cn 自身闭环（后续批次）"
+    },
+    {
+      "type": "primitive",
+      "name": "button",
+      "oldPath": "packages/dify-ui/src/button/",
+      "newPath": "packages/ui/src/button/",
+      "closedAt": "2026-09-11",
+      "evidence": "① 契约：props 对齐 baselines/dify-ui-api.json（verbatim 声明 + heritage + cva 键/default 一致）；② @xsl/ui 测试 46/46 绿（复制 browser spec 8 + 双轨 parity 38：DOM outerHTML 全等 / 边界组合 / 行为快照）；③ web-new 499 文件 import 批量改写，tsc 0 错；④ web-new 全量单测 23397/23398（1 skip）与旧轨基线一致；⑤ dev server smoke 200；⑥ 双 stories 就位 web-new/app/components/double-track/button.stories.tsx（像素 diff 随 W3 screenshot:diff harness）"
+    }
+  ],
+  "deleted": []
+}

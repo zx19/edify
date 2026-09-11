@@ -6,8 +6,8 @@ import type {
   StepByStepTourCoachmarkPlacement,
   StepByStepTourCoachmarkSize,
 } from './use-coachmark-position'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { getStepByStepTourGuideKind, getStepByStepTourTargetSelector } from './target-registry'

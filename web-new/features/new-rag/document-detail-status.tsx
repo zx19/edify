@@ -1,6 +1,6 @@
 import type { DocumentProcessingTask } from '@dify/contracts/knowledge-fs/types.gen'
 import type { RefObject } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 

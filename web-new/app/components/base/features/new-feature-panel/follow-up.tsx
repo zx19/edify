@@ -2,8 +2,8 @@ import type {
   OnFeaturesChange,
   SuggestedQuestionsAfterAnswer,
 } from '@/app/components/base/features/types'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiEqualizer2Line } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback, useState } from 'react'

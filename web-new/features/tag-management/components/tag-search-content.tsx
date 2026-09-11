@@ -1,6 +1,5 @@
 import type { TagType } from '@dify/contracts/api/console/tags/types.gen'
 import type { TagComboboxItem } from './tag-combobox-item'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   ComboboxEmpty,
   ComboboxInput,
@@ -13,6 +12,7 @@ import {
   useComboboxFilteredItems,
 } from '@langgenius/dify-ui/combobox'
 import { IconButton } from '@langgenius/dify-ui/icon-button'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { Fragment, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

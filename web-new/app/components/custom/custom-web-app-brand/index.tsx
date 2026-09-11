@@ -1,6 +1,6 @@
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Switch } from '@langgenius/dify-ui/switch'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import Divider from '@/app/components/base/divider'
 import ChatPreviewCard from './components/chat-preview-card'

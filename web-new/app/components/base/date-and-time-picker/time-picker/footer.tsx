@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { TimePickerFooterProps } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 

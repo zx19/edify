@@ -1,7 +1,7 @@
 'use client'
 import type { SelfHostedPlan } from '../../../config'
-import { buttonVariants } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { buttonVariants } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import AwsMarketplaceDark from '@/app/components/base/icons/src/public/billing/AwsMarketplaceDark'
 import AwsMarketplaceLight from '@/app/components/base/icons/src/public/billing/AwsMarketplaceLight'

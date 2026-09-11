@@ -1,7 +1,7 @@
 'use client'
 import type { BuiltInMetadataItem } from '../types'
-import { Button } from '@langgenius/dify-ui/button'
 import { Input } from '@langgenius/dify-ui/input'
+import { Button } from '@xsl/ui/button'
 import { noop } from 'es-toolkit/function'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'

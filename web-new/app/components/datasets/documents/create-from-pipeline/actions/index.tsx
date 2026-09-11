@@ -1,7 +1,7 @@
-import { Button, buttonVariants } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { cn } from '@langgenius/dify-ui/cn'
 import { RiArrowRightLine } from '@remixicon/react'
+import { Button, buttonVariants } from '@xsl/ui/button'
 import * as React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

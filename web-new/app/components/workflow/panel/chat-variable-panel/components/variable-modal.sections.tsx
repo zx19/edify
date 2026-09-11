@@ -5,9 +5,9 @@ import type {
   EditorToggleLabelKey,
   ObjectValueItem,
 } from './variable-modal.helpers'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { RiDraftLine, RiInputField } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import Input from '@/app/components/base/input'
 import CodeEditor from '@/app/components/workflow/nodes/_base/components/editor/code-editor'
 import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'

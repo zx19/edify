@@ -4,7 +4,6 @@ import type { AppPartial } from '@dify/contracts/api/console/apps/types.gen'
 import type { ComboboxPositionerProps } from '@langgenius/dify-ui/combobox'
 import type { ReactNode } from 'react'
 import { zIconType } from '@dify/contracts/api/console/apps/zod.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Combobox,
   ComboboxEmpty,
@@ -27,6 +26,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from '@langgenius/dify-ui/scroll-area'
+import { Button } from '@xsl/ui/button'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'

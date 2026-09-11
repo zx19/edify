@@ -12,7 +12,6 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   DropdownMenu,
@@ -32,6 +31,7 @@ import {
 } from '@langgenius/dify-ui/scroll-area'
 import { toast } from '@langgenius/dify-ui/toast'
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useDebounce } from 'ahooks'
 import { useQueryState } from 'nuqs'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'

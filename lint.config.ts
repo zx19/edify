@@ -11,6 +11,7 @@ const tailwindCanonicalClassesOverride = {
     'web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
     'web-new/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
     'packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+    'packages/ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
   ],
   rules: {
     'better-tailwindcss/enforce-canonical-classes': [
@@ -1090,6 +1091,7 @@ export const lintConfig = {
         'web/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'web-new/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'packages/ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
       ],
       rules: {
         'eslint-react/no-children-count': 'warn',
@@ -1171,7 +1173,10 @@ export const lintConfig = {
       },
     },
     {
-      files: ['packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'],
+      files: [
+        'packages/dify-ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'packages/ui/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+      ],
       rules: {
         'react/exhaustive-deps': [
           'error',
@@ -1190,7 +1195,7 @@ export const lintConfig = {
       },
     },
     {
-      files: ['packages/dify-ui/**/*.tsx'],
+      files: ['packages/dify-ui/**/*.tsx', 'packages/ui/**/*.tsx'],
       rules: {
         'jsx-a11y/alt-text': 'error',
         'jsx-a11y/anchor-ambiguous-text': 'off',
@@ -1299,7 +1304,9 @@ export const lintConfig = {
     {
       files: [
         'packages/dify-ui/**/*.stories.{js,cjs,mjs,jsx,ts,tsx}',
+        'packages/ui/**/*.stories.{js,cjs,mjs,jsx,ts,tsx}',
         'packages/dify-ui/**/*.story.{js,cjs,mjs,jsx,ts,tsx}',
+        'packages/ui/**/*.story.{js,cjs,mjs,jsx,ts,tsx}',
       ],
       rules: {
         'storybook/await-interactions': 'error',
@@ -1317,7 +1324,10 @@ export const lintConfig = {
       },
     },
     {
-      files: ['packages/dify-ui/**/.storybook/main.{js,cjs,mjs,ts}'],
+      files: [
+        'packages/dify-ui/**/.storybook/main.{js,cjs,mjs,ts}',
+        'packages/ui/**/.storybook/main.{js,cjs,mjs,ts}',
+      ],
       rules: {
         'storybook/no-uninstalled-addons': [
           'error',
@@ -1330,7 +1340,9 @@ export const lintConfig = {
     {
       files: [
         'packages/dify-ui/**/__tests__/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'packages/ui/**/__tests__/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
         'packages/dify-ui/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
+        'packages/ui/**/*.spec.{js,cjs,mjs,jsx,ts,cts,mts,tsx}',
       ],
       rules: {
         'eslint-react/purity': 'off',

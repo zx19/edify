@@ -1,10 +1,10 @@
 'use client'
 
 import type { AccessPolicyWithBindings, ResourceUserAccessSetting } from '@/models/access-control'
-import { Button } from '@langgenius/dify-ui/button'
 import { Checkbox } from '@langgenius/dify-ui/checkbox'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Pagination } from '@langgenius/dify-ui/pagination'
+import { Button } from '@xsl/ui/button'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

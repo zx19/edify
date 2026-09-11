@@ -1,7 +1,7 @@
 'use client'
 import type { FC } from 'react'
-import { Button } from '@langgenius/dify-ui/button'
 import { RiAddLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useCallback } from 'react'

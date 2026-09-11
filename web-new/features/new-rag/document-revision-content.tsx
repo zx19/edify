@@ -4,8 +4,8 @@ import type {
   LogicalDocument,
   LogicalDocumentRevision,
 } from '@dify/contracts/knowledge-fs/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

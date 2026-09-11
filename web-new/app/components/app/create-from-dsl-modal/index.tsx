@@ -3,7 +3,6 @@
 import type { AppImportPayload, Import } from '@dify/contracts/api/console/apps/types.gen'
 import type { Hotkey } from '@tanstack/react-hotkeys'
 import type { AppModeEnum } from '@/types/app'
-import { Button } from '@langgenius/dify-ui/button'
 import {
   Dialog,
   DialogBackdrop,
@@ -20,6 +19,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from '@langgenius/dify-ui/tabs'
 import { toast } from '@langgenius/dify-ui/toast'
 import { formatForDisplay, useHotkey } from '@tanstack/react-hotkeys'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue } from 'jotai'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

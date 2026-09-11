@@ -1,7 +1,7 @@
 'use client'
-import { Button } from '@langgenius/dify-ui/button'
 import { toast } from '@langgenius/dify-ui/toast'
 import { RiArrowLeftLine, RiLockPasswordLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { noop } from 'es-toolkit/function'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

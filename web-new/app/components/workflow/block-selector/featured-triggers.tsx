@@ -5,7 +5,6 @@ import type { TriggerPluginActionPreviewPayload } from './trigger-plugin/action-
 import type { TriggerDefaultValue, TriggerWithProvider } from './types'
 import type { Plugin } from '@/app/components/plugins/types'
 import type { Locale } from '@/i18n-config'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@langgenius/dify-ui/collapsible'
 import {
@@ -13,6 +12,7 @@ import {
   PreviewCard,
   PreviewCardTrigger,
 } from '@langgenius/dify-ui/preview-card'
+import { Button } from '@xsl/ui/button'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'

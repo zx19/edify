@@ -1,8 +1,8 @@
 'use client'
 
 import type { AgentSoulMemoryConfig } from '@dify/contracts/api/console/agent/types.gen'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { SkeletonRectangle } from '@/app/components/base/skeleton'
 

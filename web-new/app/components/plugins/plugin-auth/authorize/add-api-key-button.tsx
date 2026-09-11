@@ -1,7 +1,7 @@
-import type { ButtonProps } from '@langgenius/dify-ui/button'
+import type { ButtonProps } from '@xsl/ui/button'
 import type { PluginPayload } from '../types'
 import type { FormSchema } from '@/app/components/base/form/types'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { memo, useState } from 'react'
 import ApiKeyModal from './api-key-modal'
 

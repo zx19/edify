@@ -8,7 +8,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@langgenius/dify-ui/alert-dialog'
-import { Button } from '@langgenius/dify-ui/button'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 import { useGetMembersOfRole } from '@/service/access-control/use-workspace-roles'
 

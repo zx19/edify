@@ -7,7 +7,6 @@ import type {
   StepByStepTourTaskId,
   StepByStepTourTaskView,
 } from './types'
-import { Button } from '@langgenius/dify-ui/button'
 import { cn } from '@langgenius/dify-ui/cn'
 import {
   Popover,
@@ -21,6 +20,7 @@ import {
   PopoverTrigger,
 } from '@langgenius/dify-ui/popover'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Button } from '@xsl/ui/button'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQueryState } from 'nuqs'
 import { useEffect, useRef, useState } from 'react'

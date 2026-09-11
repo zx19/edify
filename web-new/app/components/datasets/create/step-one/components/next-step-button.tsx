@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@langgenius/dify-ui/button'
 import { RiArrowRightLine } from '@remixicon/react'
+import { Button } from '@xsl/ui/button'
 import { useTranslation } from 'react-i18next'
 
 type NextStepButtonProps = {
