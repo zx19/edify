@@ -103,7 +103,7 @@ const PluginTypeSwitch = ({ className, variant = 'default' }: PluginTypeSwitchPr
                     : 'hover:bg-state-base-hover hover:text-text-secondary'),
                 isActive &&
                   (isHero
-                    ? 'border-white/95 bg-components-main-nav-nav-button-bg-active text-saas-dify-blue-inverted shadow-md backdrop-blur-[5px]'
+                    ? 'text-saas-blue-inverted border-white/95 bg-components-main-nav-nav-button-bg-active shadow-md backdrop-blur-[5px]'
                     : 'border-components-main-nav-nav-button-border bg-components-main-nav-nav-button-bg-active! text-components-main-nav-nav-button-text-active! shadow-xs'),
               )}
               onClick={() => {

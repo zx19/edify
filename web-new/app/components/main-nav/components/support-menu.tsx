@@ -56,7 +56,7 @@ export default function SupportMenu() {
             trailing={
               <span
                 aria-hidden
-                className="max-w-30 shrink-0 truncate px-1 system-xs-semibold-uppercase text-saas-dify-blue-accessible"
+                className="text-saas-blue-accessible max-w-30 shrink-0 truncate px-1 system-xs-semibold-uppercase"
               >
                 {t(($) => $['upgradeBtn.encourageShort'], { ns: 'billing' })}
               </span>

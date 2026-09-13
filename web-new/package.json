@@ -177,6 +177,7 @@
     "@vitejs/plugin-rsc": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
+    "@xsl/lomva-tokens": "workspace:*",
     "@xsl/lomva-ui": "workspace:*",
     "agentation": "catalog:",
     "code-inspector-plugin": "catalog:",

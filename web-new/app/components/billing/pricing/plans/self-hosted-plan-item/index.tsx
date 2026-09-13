@@ -81,7 +81,7 @@ export function SelfHostedPlanItem({ plan }: { plan: SelfHostedPlan }) {
           data-plan={plan}
           className={cn(
             buttonVariants({ variant: 'tertiary', size: null }),
-            'h-12 w-full justify-start gap-x-2 rounded-none bg-components-button-tertiary-bg py-3 pr-4 pl-5 system-xl-semibold text-text-primary hover:bg-components-button-tertiary-bg-hover data-[plan=enterprise]:bg-saas-dify-blue-static data-[plan=enterprise]:text-text-primary-on-surface data-[plan=enterprise]:hover:bg-saas-dify-blue-static-hover data-[plan=premium]:bg-saas-background-inverted data-[plan=premium]:py-2 data-[plan=premium]:text-background-default data-[plan=premium]:hover:bg-saas-background-inverted-hover',
+            'data-[plan=enterprise]:bg-saas-blue-static data-[plan=enterprise]:hover:bg-saas-blue-static-hover h-12 w-full justify-start gap-x-2 rounded-none bg-components-button-tertiary-bg py-3 pr-4 pl-5 system-xl-semibold text-text-primary hover:bg-components-button-tertiary-bg-hover data-[plan=enterprise]:text-text-primary-on-surface data-[plan=premium]:bg-saas-background-inverted data-[plan=premium]:py-2 data-[plan=premium]:text-background-default data-[plan=premium]:hover:bg-saas-background-inverted-hover',
           )}
         >
           <span className="flex grow items-center gap-x-2">

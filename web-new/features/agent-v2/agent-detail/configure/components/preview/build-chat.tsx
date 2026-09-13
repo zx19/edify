@@ -48,10 +48,7 @@ function AgentBuildChatEmptyState({
             />
           ))}
         </div>
-        <span
-          aria-hidden
-          className="absolute i-ri-hammer-line size-5 text-saas-dify-blue-inverted"
-        />
+        <span aria-hidden className="text-saas-blue-inverted absolute i-ri-hammer-line size-5" />
       </div>
       <div className="mt-3 flex max-w-full items-center gap-1.5">
         <div className="min-w-0 truncate system-md-medium text-text-secondary">

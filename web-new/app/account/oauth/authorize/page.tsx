@@ -168,7 +168,7 @@ export default function OAuthAuthorize() {
           {isLoggedIn && (
             <div className="text-text-primary">{t(($) => $.connect, { ns: 'oauth' })}</div>
           )}
-          <div className="text-saas-dify-blue-inverted">{appLabel}</div>
+          <div className="text-saas-blue-inverted">{appLabel}</div>
           {!isLoggedIn && (
             <div className="text-text-primary">
               {t(($) => $['tips.notLoggedIn'], { ns: 'oauth' })}

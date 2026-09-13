@@ -15,7 +15,7 @@ export function PlanFeatureInfotip({ label, content }: { label: string; content:
             aria-label={content}
             variant="default"
             size="xs"
-            className="group relative z-10 size-4.5 rounded-sm border-0 bg-state-base-hover p-0 transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-none hover:bg-saas-dify-blue-static data-popup-open:rounded-none data-popup-open:bg-saas-dify-blue-static motion-reduce:transition-none"
+            className="group hover:bg-saas-blue-static data-popup-open:bg-saas-blue-static relative z-10 size-4.5 rounded-sm border-0 bg-state-base-hover p-0 transition-[border-radius,background-color] duration-500 ease-in-out hover:rounded-none data-popup-open:rounded-none motion-reduce:transition-none"
           >
             <span
               aria-hidden
@@ -26,7 +26,7 @@ export function PlanFeatureInfotip({ label, content }: { label: string; content:
       />
       <PopoverContent
         placement="top-end"
-        className="w-[260px] rounded-none border-0 bg-saas-dify-blue-static px-5 py-[18px] system-xs-regular text-text-primary-on-surface shadow-none"
+        className="bg-saas-blue-static w-[260px] rounded-none border-0 px-5 py-[18px] system-xs-regular text-text-primary-on-surface shadow-none"
       >
         <PopoverTitle className="sr-only">{label}</PopoverTitle>
         {content}

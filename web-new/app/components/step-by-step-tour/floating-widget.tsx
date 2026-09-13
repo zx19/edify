@@ -140,7 +140,7 @@ function TourCompletionPrompt({
     >
       <span
         aria-hidden
-        className="mb-3 flex size-5 items-center justify-center rounded-full border-2 border-saas-dify-blue-inverted text-saas-dify-blue-inverted"
+        className="border-saas-blue-inverted text-saas-blue-inverted mb-3 flex size-5 items-center justify-center rounded-full border-2"
       >
         <span className="i-ri-check-line size-3.5" />
       </span>
@@ -173,7 +173,7 @@ export function MinimizedTourPill({
       {...props}
       type="button"
       className={cn(
-        'inline-flex h-8 w-45.75 max-w-[calc(100vw-16px)] items-center gap-2 overflow-hidden rounded-full border-[0.5px] border-components-panel-border bg-background-section px-3 py-2 text-saas-dify-blue-inverted outline-hidden transition-colors hover:bg-state-base-hover focus-visible:ring-2 focus-visible:ring-state-accent-solid',
+        'text-saas-blue-inverted inline-flex h-8 w-45.75 max-w-[calc(100vw-16px)] items-center gap-2 overflow-hidden rounded-full border-[0.5px] border-components-panel-border bg-background-section px-3 py-2 outline-hidden transition-colors hover:bg-state-base-hover focus-visible:ring-2 focus-visible:ring-state-accent-solid',
         className,
       )}
     >
@@ -214,7 +214,7 @@ function TourProgress({
               key={index}
               className={cn(
                 'h-1 min-w-0 flex-1 rounded-full',
-                active ? 'bg-saas-dify-blue-inverted' : 'bg-components-slider-track',
+                active ? 'bg-saas-blue-inverted' : 'bg-components-slider-track',
               )}
             />
           )
@@ -333,7 +333,7 @@ function TaskStatusIndicator({
         type="button"
         aria-label={incompleteLabel}
         disabled={disabled}
-        className="flex size-4.5 shrink-0 items-center justify-center rounded-full bg-saas-dify-blue-accessible text-text-primary-on-surface outline-hidden hover:bg-saas-dify-blue-inverted focus-visible:ring-2 focus-visible:ring-state-accent-solid disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-saas-dify-blue-accessible"
+        className="bg-saas-blue-accessible hover:bg-saas-blue-inverted disabled:hover:bg-saas-blue-accessible flex size-4.5 shrink-0 items-center justify-center rounded-full text-text-primary-on-surface outline-hidden focus-visible:ring-2 focus-visible:ring-state-accent-solid disabled:cursor-not-allowed disabled:opacity-50"
         onClick={onUncomplete}
       >
         <span aria-hidden className="i-ri-check-line size-3" />

@@ -162,9 +162,9 @@ const HelpMenu = ({ triggerIcon, triggerClassName, triggerRef, triggerSize }: He
               className={cn(
                 'focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-state-accent-solid focus-visible:outline-solid',
                 usesDefaultTrigger && [
-                  'rounded-full border border-components-card-border bg-components-card-bg text-text-tertiary shadow-xs transition-colors hover:bg-components-card-bg-alt hover:text-saas-dify-blue-inverted',
+                  'hover:text-saas-blue-inverted rounded-full border border-components-card-border bg-components-card-bg text-text-tertiary shadow-xs transition-colors hover:bg-components-card-bg-alt',
                   !triggerSize && 'size-7 p-0',
-                  'data-popup-open:bg-components-card-bg-alt data-popup-open:text-saas-dify-blue-inverted',
+                  'data-popup-open:text-saas-blue-inverted data-popup-open:bg-components-card-bg-alt',
                 ],
                 !usesDefaultTrigger &&
                   'data-popup-open:bg-state-base-hover data-popup-open:text-text-secondary',

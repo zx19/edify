@@ -159,7 +159,7 @@ function WorkspaceCardTrigger({
             <button
               type="button"
               title={planActionLabel}
-              className="max-w-30 shrink-0 truncate px-1 system-xs-semibold-uppercase text-saas-dify-blue-accessible transition-colors hover:text-saas-dify-blue-static-hover focus-visible:inset-ring-2 focus-visible:inset-ring-state-accent-solid focus-visible:outline-hidden"
+              className="text-saas-blue-accessible hover:text-saas-blue-static-hover max-w-30 shrink-0 truncate px-1 system-xs-semibold-uppercase transition-colors focus-visible:inset-ring-2 focus-visible:inset-ring-state-accent-solid focus-visible:outline-hidden"
               onClick={onPlanClick}
             >
               {planActionLabel}

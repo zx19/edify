@@ -155,7 +155,7 @@ export function CloudPlanItem({
                 {t(($) => $[`${i18nPrefix}.name`], { ns: 'billing' })}
               </h3>
               {isMostPopularPlan && (
-                <div className="flex items-center justify-center bg-saas-dify-blue-static px-1.5 py-1">
+                <div className="bg-saas-blue-static flex items-center justify-center px-1.5 py-1">
                   <span className="system-2xs-semibold-uppercase text-text-primary-on-surface">
                     {t(($) => $['plansCommon.mostPopular'], { ns: 'billing' })}
                   </span>
@@ -197,7 +197,7 @@ export function CloudPlanItem({
             variant="tertiary"
             size={null}
             disabled={isPlanDisabled}
-            className="h-auto w-full justify-start gap-x-2 rounded-none bg-components-button-tertiary-bg py-3 pr-4 pl-5 system-xl-semibold text-text-primary hover:bg-components-button-tertiary-bg-hover data-disabled:bg-components-button-tertiary-bg-disabled data-disabled:text-text-disabled data-disabled:hover:bg-components-button-tertiary-bg-disabled data-[plan=professional]:bg-saas-dify-blue-static data-[plan=professional]:text-text-primary-on-surface data-[plan=professional]:hover:bg-saas-dify-blue-static-hover data-[plan=team]:bg-saas-background-inverted data-[plan=team]:text-background-default data-[plan=team]:hover:bg-saas-background-inverted-hover"
+            className="data-[plan=professional]:bg-saas-blue-static data-[plan=professional]:hover:bg-saas-blue-static-hover h-auto w-full justify-start gap-x-2 rounded-none bg-components-button-tertiary-bg py-3 pr-4 pl-5 system-xl-semibold text-text-primary hover:bg-components-button-tertiary-bg-hover data-disabled:bg-components-button-tertiary-bg-disabled data-disabled:text-text-disabled data-disabled:hover:bg-components-button-tertiary-bg-disabled data-[plan=professional]:text-text-primary-on-surface data-[plan=team]:bg-saas-background-inverted data-[plan=team]:text-background-default data-[plan=team]:hover:bg-saas-background-inverted-hover"
             onClick={handlePlanButtonClick}
           >
             <span className="grow text-start">{buttonLabel}</span>

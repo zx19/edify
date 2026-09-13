@@ -2151,6 +2151,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
+      '@xsl/lomva-tokens':
+        specifier: workspace:*
+        version: link:../packages/lomva-tokens
       '@xsl/lomva-ui':
         specifier: workspace:*
         version: link:../packages/lomva-ui

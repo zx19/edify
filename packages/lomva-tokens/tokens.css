@@ -6,7 +6,9 @@
  * dark 按 design §3.2「底色/灰阶反转/橙亮档」原则本次定稿，须过三线目视评审（M1 人信号）。
  *
  * 机制约定：
- * - dark：作用域元素上加 .dark（如 <body class="webapp-theme dark">）
+ * - dark 双通道：同元素 .dark（约定保留，如 <body class="webapp-theme dark">）；
+ *   或 html 级 [data-theme='dark'] 后代命中（web-new 现状：next-themes `attribute: 'data-theme'`，
+ *   实证见 web-new/app/layout.tsx themeProviderProps）
  * - accent 运行期覆盖（chat_color_theme）：在作用域根元素 inline style 设 --accent/--accent-deep/--accent-soft，
  *   层叠天然覆盖本文件的类级定义；WebApp 渲染时按 sites.ui_config 注入（3a/第 4 步落地）
  * - 无作用域类 = 不出现任何新视觉值：新原语包默认值对齐 Dify 现行视觉（§4 token 注记），
@@ -64,9 +66,13 @@
 }
 
 /* dark 变体：底色/灰阶反转、accent 橙亮档 */
+/* 双通道：同元素 .dark + html 级 [data-theme='dark'] 后代（web-new next-themes 现状） */
 .admin-theme.dark,
 .webapp-theme.dark,
-.console-theme.dark {
+.console-theme.dark,
+[data-theme='dark'] .admin-theme,
+[data-theme='dark'] .webapp-theme,
+[data-theme='dark'] .console-theme {
   --bg: #0a0a0b;
   --bg-soft: #17171a;
   --card: #1c1c20;

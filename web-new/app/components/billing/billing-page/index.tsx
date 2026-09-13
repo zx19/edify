@@ -42,7 +42,7 @@ const Billing: FC = () => {
               {t(($) => $.viewBillingDescription, { ns: 'billing' })}
             </div>
           </div>
-          <span className="inline-flex h-8 w-24 items-center justify-center gap-0.5 rounded-lg bg-components-button-secondary-bg px-3 py-2 text-saas-dify-blue-accessible shadow-[0_1px_2px_rgba(9,9,11,0.05)] inset-ring-[0.5px] inset-ring-components-button-secondary-border backdrop-blur-[5px]">
+          <span className="text-saas-blue-accessible inline-flex h-8 w-24 items-center justify-center gap-0.5 rounded-lg bg-components-button-secondary-bg px-3 py-2 shadow-[0_1px_2px_rgba(9,9,11,0.05)] inset-ring-[0.5px] inset-ring-components-button-secondary-border backdrop-blur-[5px]">
             <span className="system-sm-medium leading-none">
               {t(($) => $.viewBillingAction, { ns: 'billing' })}
             </span>

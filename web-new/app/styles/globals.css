@@ -1,4 +1,5 @@
 @import './tailwind-core.css';
+@import '@xsl/lomva-tokens/tokens.css';
 
 @source '../../app';
 @source '../../context';

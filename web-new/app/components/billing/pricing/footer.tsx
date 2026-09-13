@@ -23,7 +23,7 @@ export function PricingFooter({
             </span>
           </div>
         )}
-        <span className="flex h-fit items-center gap-x-1 text-saas-dify-blue-accessible">
+        <span className="text-saas-blue-accessible flex h-fit items-center gap-x-1">
           <Link
             href={pricingPageURL}
             className="system-md-regular hover:underline focus-visible:underline focus-visible:outline-hidden"

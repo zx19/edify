@@ -30,12 +30,12 @@ export function BannerItem({ banner, sort, language, accountId, titleId }: Banne
       <div className="pointer-events-none relative z-20 min-w-px flex-1 self-stretch rounded-2xl py-6 pl-8">
         <div className="flex min-h-24 w-full flex-col gap-1 py-1 @min-[996px]/banner:flex-row @min-[996px]/banner:flex-wrap @min-[996px]/banner:items-end">
           <div className="flex min-w-0 flex-col pr-4 @min-[996px]/banner:max-w-170 @min-[996px]/banner:min-w-120 @min-[996px]/banner:flex-[1_0_0]">
-            <p className="line-clamp-1 h-[1.8rem] w-full title-4xl-semi-bold wrap-break-word text-dify-logo-blue">
+            <p className="text-logo-blue line-clamp-1 h-[1.8rem] w-full title-4xl-semi-bold wrap-break-word">
               {category}
             </p>
             <p
               id={titleId}
-              className="line-clamp-2 min-h-[3.6rem] w-full title-4xl-semi-bold wrap-break-word text-dify-logo-black"
+              className="text-logo-black line-clamp-2 min-h-[3.6rem] w-full title-4xl-semi-bold wrap-break-word"
             >
               {title}
             </p>

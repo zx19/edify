@@ -123,7 +123,7 @@ describe('SupportMenu', () => {
     expect(screen.getByText('common.userProfile.contactUs')).toHaveClass('text-text-disabled')
     expect(screen.getByText('billing.upgradeBtn.encourageShort')).toHaveClass(
       'system-xs-semibold-uppercase',
-      'text-saas-dify-blue-accessible',
+      'text-saas-blue-accessible',
     )
     expect(screen.queryByText('common.userProfile.emailSupport')).not.toBeInTheDocument()
     expect(

@@ -68,7 +68,7 @@ export function PricingContent({ pricingPageURL }: { pricingPageURL: string }) {
                   <span
                     className={cn(
                       'system-xl-semibold text-text-secondary',
-                      active && 'text-saas-dify-blue-accessible',
+                      active && 'text-saas-blue-accessible',
                     )}
                   >
                     {t(($) => $['plansCommon.cloud'], { ns: 'billing' })}
@@ -86,7 +86,7 @@ export function PricingContent({ pricingPageURL }: { pricingPageURL: string }) {
                   <span
                     className={cn(
                       'system-xl-semibold text-text-secondary',
-                      active && 'text-saas-dify-blue-accessible',
+                      active && 'text-saas-blue-accessible',
                     )}
                   >
                     {t(($) => $['plansCommon.self'], { ns: 'billing' })}
