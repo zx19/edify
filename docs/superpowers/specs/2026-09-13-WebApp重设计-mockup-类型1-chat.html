@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebApp 重设计 Mockup · 类型 1 /chat（chat-with-history）</title>
+<style>
+  /* ===== 视觉语言定稿：白+黑+橙（token 值与 packages/lomva-tokens/tokens.css 一致） ===== */
+  :root {
+    --bg: #ffffff; --bg-soft: #f7f7f8; --card: #ffffff;
+    --border: #e8e8ea; --border-strong: #d9d9dc;
+    --text-1: #0a0a0b; --text-2: #3d3d42; --text-3: #8a8a93;
+    --accent: #ff8c00; --accent-soft: #fff3e0; --accent-deep: #e67a00;
+    --danger: #e5484d; --danger-soft: #fef3f2;
+    --success: #12a150; --success-soft: #e9f9ef;
+    --gray-pill-bg: #f2f2f4; --gray-pill-fg: #3d3d42;
+    --accent-pill-bg: #fff3e0; --accent-pill-fg: #e67a00;
+    --violet-pill-bg: #f4f3ff; --violet-pill-fg: #6938ef;
+    --radius: 12px; --radius-btn: 9px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-sm: 0 1px 3px rgb(10 10 11 / .06);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .1);
+    --font: 'Inter', 'SF Pro Text', -apple-system, 'PingFang SC', 'system-ui', sans-serif;
+    --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+    /* mockup 工具条自身配色（不入产品 token） */
+    --tool-bg: #1c1c20; --tool-fg: #c9c9d1;
+  }
+  .stage[data-theme='dark'] {
+    --bg: #0a0a0b; --bg-soft: #17171a; --card: #1c1c20;
+    --border: #2a2a2f; --border-strong: #3a3a41;
+    --text-1: #f7f7f8; --text-2: #c9c9d1; --text-3: #7c7c87;
+    --accent: #ffa940; --accent-soft: #3a2a14; --accent-deep: #ff8c00;
+    --danger: #f2555a; --danger-soft: #3b1618;
+    --success: #3ecf8e; --success-soft: #0f2e21;
+    --gray-pill-bg: #26262b; --gray-pill-fg: #c9c9d1;
+    --accent-pill-bg: #3a2a14; --accent-pill-fg: #ffa940;
+    --violet-pill-bg: #241f3d; --violet-pill-fg: #a89cff;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .3);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / .4);
+    --shadow-md: 0 10px 34px rgb(0 0 0 / .5);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body { font-family:var(--font); background:#e9e9ec; color:#0a0a0b; font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; border:0; background:none; color:inherit; }
+  input,textarea,select { font-family:inherit; }
+  svg { display:block; }
+
+  /* ===== mockup 评审工具条（非产品 UI） ===== */
+  .toolbar { position:sticky; top:0; z-index:100; background:var(--tool-bg); color:var(--tool-fg); padding:10px 16px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; font-size:12px; }
+  .toolbar .t-title { font-weight:700; color:#fff; letter-spacing:.02em; }
+  .toolbar .t-group { display:flex; align-items:center; gap:6px; }
+  .toolbar .t-label { color:#7c7c87; }
+  .toolbar .t-btn { padding:4px 10px; border-radius:7px; color:var(--tool-fg); font-size:12px; transition:background .12s; }
+  .toolbar .t-btn:hover { background:#2a2a2f; }
+  .toolbar .t-btn.on { background:#ff8c00; color:#fff; font-weight:600; }
+  .toolbar .t-check { display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none; }
+  .toolbar input[type=checkbox] { accent-color:#ff8c00; }
+  .toolbar .t-note { color:#7c7c87; margin-left:auto; }
+
+  /* ===== 舞台（产品区） ===== */
+  .stage { background:var(--bg); color:var(--text-1); min-height:calc(100vh - 44px); }
+  .shell { display:flex; height:calc(100vh - 44px); overflow:hidden; }
+
+  /* ===== 侧栏 ===== */
+  .side { width:248px; flex:none; background:var(--bg); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .side-app { display:flex; align-items:center; gap:10px; padding:14px 14px 12px; }
+  .app-icon { width:32px; height:32px; border-radius:9px; background:var(--accent-soft); display:grid; place-items:center; font-size:17px; flex:none; }
+  .side-app-name { font-weight:600; font-size:14px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .icon-btn { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; color:var(--text-3); transition:background .12s,color .12s; flex:none; }
+  .icon-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .side-new { margin:2px 12px 10px; }
+  .btn-primary { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; height:36px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; font-weight:600; font-size:13.5px; transition:background .12s, box-shadow .12s; box-shadow:var(--shadow-xs); }
+  .btn-primary:hover { background:var(--accent-deep); }
+  .side-scroll { flex:1; overflow-y:auto; padding:0 8px; }
+  .conv-label { display:flex; align-items:center; gap:5px; padding:10px 10px 5px; font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--text-3); }
+  .conv-item { position:relative; display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; color:var(--text-2); font-size:13.5px; cursor:pointer; transition:background .12s; }
+  .conv-item:hover { background:var(--bg-soft); }
+  .conv-item.active { background:var(--accent-soft); color:var(--accent-deep); font-weight:600; }
+  .conv-item .t { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .conv-item .ops { display:none; width:22px; height:22px; border-radius:6px; place-items:center; color:var(--text-3); flex:none; }
+  .conv-item:hover .ops { display:grid; }
+  .conv-item .ops:hover { background:var(--border); color:var(--text-1); }
+  .conv-item.active .ops { color:var(--accent-deep); }
+  .pin-ico { width:12px; height:12px; color:var(--accent-deep); flex:none; }
+  .side-foot { border-top:1px solid var(--border); padding:8px 12px 10px; display:flex; align-items:center; gap:8px; }
+  .brand-foot { flex:1; font-size:11.5px; color:var(--text-3); display:flex; align-items:center; gap:4px; min-width:0; white-space:nowrap; }
+  .brand-foot b { color:var(--text-2); font-weight:600; }
+
+  /* ===== 主区 ===== */
+  .main { flex:1; min-width:0; display:flex; flex-direction:column; background:var(--bg-soft); }
+  .hd { height:52px; flex:none; display:flex; align-items:center; gap:8px; padding:0 16px; background:var(--bg); border-bottom:1px solid var(--border); }
+  .hd-app { display:flex; align-items:center; gap:9px; min-width:0; }
+  .hd-app .app-icon { width:26px; height:26px; font-size:14px; border-radius:7px; }
+  .hd-app-name { font-weight:600; font-size:13.5px; }
+  .hd-sep { width:1px; height:18px; background:var(--border); margin:0 4px; }
+  .hd-conv { display:flex; align-items:center; gap:4px; min-width:0; color:var(--text-2); font-size:13px; padding:5px 8px; border-radius:8px; cursor:pointer; }
+  .hd-conv:hover { background:var(--bg-soft); }
+  .hd-conv .t { max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hd-right { margin-left:auto; display:flex; align-items:center; gap:6px; }
+  .hd-btn { display:flex; align-items:center; gap:6px; height:32px; padding:0 10px; border-radius:8px; color:var(--text-2); font-size:12.5px; font-weight:500; transition:background .12s; }
+  .hd-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+
+  /* ===== 消息流 ===== */
+  .chat-scroll { flex:1; overflow-y:auto; }
+  .chat-col { max-width:760px; margin:0 auto; padding:24px 24px 12px; display:flex; flex-direction:column; gap:22px; }
+  .msg-row { display:flex; gap:10px; }
+  .avatar { width:30px; height:30px; border-radius:8px; flex:none; display:grid; place-items:center; font-size:15px; }
+  .avatar.user { background:var(--gray-pill-bg); color:var(--text-2); }
+  .avatar.bot { background:var(--accent-soft); }
+  .msg-main { flex:1; min-width:0; }
+  .bubble-user { margin-left:auto; max-width:70%; background:var(--text-1); color:var(--bg); border-radius:14px 14px 4px 14px; padding:10px 14px; font-size:14px; line-height:1.65; width:fit-content; }
+  .msg-row.user { justify-content:flex-end; }
+  .msg-row.user .msg-main { flex:none; display:flex; flex-direction:column; align-items:flex-end; }
+  .msg-ops { display:flex; align-items:center; gap:2px; margin-top:6px; opacity:0; transition:opacity .12s; }
+  .msg-row:hover .msg-ops, .msg-ops.always { opacity:1; }
+  .op-btn { width:26px; height:26px; border-radius:7px; display:grid; place-items:center; color:var(--text-3); transition:background .12s,color .12s; }
+  .op-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .op-btn.on { color:var(--accent-deep); background:var(--accent-soft); }
+  .answer-body { font-size:14px; line-height:1.75; color:var(--text-1); }
+  .answer-body p { margin:0 0 10px; }
+  .answer-body p:last-child { margin-bottom:0; }
+  .answer-body h4 { font-size:14.5px; margin:14px 0 8px; }
+  .answer-body ul { margin:0 0 10px 18px; }
+  .answer-body li { margin:4px 0; }
+  .answer-body code { font-family:var(--mono); font-size:12.5px; background:var(--bg-soft); border:1px solid var(--border); border-radius:6px; padding:1px 5px; }
+  .answer-body pre { background:#141416; color:#f7f7f8; border-radius:10px; padding:12px 14px; overflow-x:auto; margin:10px 0; }
+  .answer-body pre code { background:none; border:0; padding:0; color:inherit; }
+
+  /* 推理面板（已深度思考） */
+  .think { margin-bottom:10px; }
+  .think-bar { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-radius:8px; background:var(--bg-soft); color:var(--text-3); font-size:12.5px; cursor:pointer; transition:background .12s; }
+  .think-bar:hover { color:var(--text-2); }
+  .think-bar .chev { transition:transform .15s; }
+  .think.open .think-bar .chev { transform:rotate(90deg); }
+  .think-body { display:none; margin-top:8px; padding:10px 12px; border-left:2px solid var(--border); color:var(--text-3); font-size:12.5px; line-height:1.7; }
+  .think.open .think-body { display:block; }
+
+  /* Agent 思考链 / workflow 过程 */
+  .agent-step { border:1px solid var(--border); border-radius:10px; margin:8px 0; overflow:hidden; }
+  .agent-step-hd { display:flex; align-items:center; gap:8px; padding:8px 12px; font-size:12.5px; color:var(--text-2); cursor:pointer; background:var(--card); }
+  .agent-step-hd:hover { background:var(--bg-soft); }
+  .step-badge { font-size:10.5px; font-weight:700; padding:1.5px 7px; border-radius:99px; background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .step-badge.ok { background:var(--success-soft); color:var(--success); }
+  .agent-step-bd { display:none; padding:10px 12px; border-top:1px solid var(--border); font-size:12.5px; color:var(--text-3); line-height:1.7; }
+  .agent-step.open .agent-step-bd { display:block; }
+
+  /* 引用来源 */
+  .cite { margin-top:12px; }
+  .cite-bar { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--text-3); cursor:pointer; padding:4px 8px; border-radius:7px; }
+  .cite-bar:hover { background:var(--bg-soft); color:var(--text-2); }
+  .cite-list { display:none; margin-top:8px; flex-direction:column; gap:6px; }
+  .cite.open .cite-list { display:flex; }
+  .cite-card { display:flex; gap:10px; align-items:flex-start; border:1px solid var(--border); border-radius:10px; padding:10px 12px; background:var(--card); cursor:pointer; transition:border-color .12s; }
+  .cite-card:hover { border-color:var(--border-strong); }
+  .cite-no { width:18px; height:18px; border-radius:6px; background:var(--gray-pill-bg); color:var(--gray-pill-fg); font-size:11px; font-weight:700; display:grid; place-items:center; flex:none; margin-top:1px; }
+  .cite-title { font-size:12.5px; font-weight:600; color:var(--text-1); }
+  .cite-desc { font-size:12px; color:var(--text-3); margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cite-score { margin-left:auto; font-size:11px; font-weight:700; padding:2px 7px; border-radius:99px; background:var(--accent-pill-bg); color:var(--accent-pill-fg); flex:none; }
+
+  /* 附件卡片 */
+  .file-card { display:inline-flex; align-items:center; gap:9px; border:1px solid var(--border); border-radius:10px; padding:8px 12px; background:var(--card); margin-top:8px; cursor:pointer; }
+  .file-card:hover { border-color:var(--border-strong); }
+  .file-ico { width:30px; height:30px; border-radius:8px; background:var(--accent-soft); color:var(--accent-deep); display:grid; place-items:center; }
+  .file-name { font-size:12.5px; font-weight:600; }
+  .file-meta { font-size:11px; color:var(--text-3); }
+
+  /* 人工介入表单（内嵌聊天区） */
+  .human-form { border:1px solid var(--border); border-radius:12px; background:var(--card); padding:14px; margin-top:6px; max-width:480px; }
+  .human-form .hf-title { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .human-form .hf-desc { font-size:12px; color:var(--text-3); margin-bottom:10px; }
+  .hf-actions { display:flex; gap:8px; margin-top:12px; }
+
+  /* 性能行 + 操作栏组合行 */
+  .msg-foot { display:flex; align-items:center; gap:10px; margin-top:6px; }
+  .metrics { font-size:11.5px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+  .multi-ans { display:inline-flex; align-items:center; gap:2px; font-size:11.5px; color:var(--text-3); }
+  .multi-ans button { width:20px; height:20px; border-radius:6px; display:grid; place-items:center; color:var(--text-3); }
+  .multi-ans button:hover { background:var(--bg-soft); color:var(--text-1); }
+
+  /* 建议问题 */
+  .suggest { display:flex; flex-direction:column; gap:6px; margin-top:10px; align-items:flex-start; }
+  .suggest-item { border:1px solid var(--border); background:var(--card); border-radius:99px; padding:7px 14px; font-size:12.5px; color:var(--text-2); transition:all .12s; text-align:left; }
+  .suggest-item:hover { background:var(--accent-soft); border-color:transparent; color:var(--accent-deep); }
+
+  /* 流式响应态 */
+  .streaming-dot { display:inline-block; width:7px; height:7px; border-radius:99px; background:var(--accent); animation:pulse 1s infinite ease-in-out; }
+  @keyframes pulse { 50% { opacity:.25; } }
+  .btn-stop { display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border); background:var(--card); font-size:12.5px; color:var(--text-2); box-shadow:var(--shadow-xs); }
+  .btn-stop:hover { background:var(--bg-soft); }
+
+  /* ===== 输入区 ===== */
+  .composer-zone { flex:none; padding:10px 24px 16px; background:linear-gradient(to top, var(--bg-soft) 70%, transparent); }
+  .composer { max-width:760px; margin:0 auto; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:12px 12px 8px; transition:border-color .15s, box-shadow .15s; }
+  .composer:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .composer textarea { width:100%; border:0; outline:0; resize:none; background:transparent; color:var(--text-1); font-size:14px; line-height:1.6; max-height:160px; }
+  .composer textarea::placeholder { color:var(--text-3); }
+  .composer-ft { display:flex; align-items:center; gap:4px; margin-top:6px; }
+  .composer-ft .spacer { flex:1; }
+  .send-btn { width:32px; height:32px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; display:grid; place-items:center; transition:background .12s; box-shadow:var(--shadow-xs); }
+  .send-btn:hover { background:var(--accent-deep); }
+  .send-btn:disabled { background:var(--gray-pill-bg); color:var(--text-3); box-shadow:none; cursor:not-allowed; }
+
+  /* ===== 欢迎屏 ===== */
+  .welcome { display:none; flex:1; overflow-y:auto; }
+  .welcome.on { display:block; }
+  .welcome-col { max-width:760px; margin:0 auto; padding:56px 24px 24px; }
+  .w-head { text-align:center; margin-bottom:28px; }
+  .w-icon { width:64px; height:64px; border-radius:16px; background:var(--accent-soft); display:grid; place-items:center; font-size:34px; margin:0 auto 14px; box-shadow:var(--shadow-sm); }
+  .w-title { font-size:24px; font-weight:700; letter-spacing:-.3px; }
+  .w-sub { font-size:13.5px; color:var(--text-3); margin-top:6px; }
+  .w-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:22px 0 26px; }
+  .w-sug { border:1px solid var(--border); background:var(--card); border-radius:12px; padding:12px 14px; font-size:13px; color:var(--text-2); text-align:left; transition:all .12s; }
+  .w-sug:hover { border-color:var(--accent); background:var(--accent-soft); color:var(--accent-deep); }
+  .w-form { border:1px solid var(--border); border-radius:14px; background:var(--card); box-shadow:var(--shadow-sm); overflow:hidden; }
+  .w-form-hd { display:flex; align-items:center; gap-8px; padding:12px 16px; font-size:13px; font-weight:600; cursor:pointer; }
+  .w-form-hd .chev { margin-left:auto; transition:transform .15s; color:var(--text-3); }
+  .w-form.collapsed .w-form-hd .chev { transform:rotate(-90deg); }
+  .w-form-bd { padding:4px 16px 16px; display:flex; flex-direction:column; gap:12px; }
+  .w-form.collapsed .w-form-bd { display:none; }
+  .fld label { display:block; font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:5px; }
+  .fld label .req { color:var(--danger); margin-left:2px; }
+  .fld input[type=text], .fld input[type=number], .fld select, .fld textarea { width:100%; border:1px solid var(--border); border-radius:var(--radius-btn); background:var(--bg); color:var(--text-1); font-size:13px; padding:8px 10px; outline:0; transition:border-color .12s, box-shadow .12s; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .fld .hint { font-size:11px; color:var(--text-3); margin-top:4px; }
+  .w-start { display:flex; justify-content:flex-end; padding:0 0 2px; }
+  .btn-accent { display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 16px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; font-weight:600; font-size:13px; box-shadow:var(--shadow-xs); }
+  .btn-accent:hover { background:var(--accent-deep); }
+  .w-desc-card { margin:0 0 22px; border:1px solid var(--border); border-radius:12px; background:var(--card); padding:12px 16px; font-size:12.5px; color:var(--text-2); line-height:1.7; }
+  .w-desc-card .more { color:var(--accent-deep); font-weight:600; cursor:pointer; }
+
+  /* ===== 弹窗（重命名/删除/关于/点踩反馈） ===== */
+  .mask { position:fixed; inset:0; background:rgb(10 10 11 / .4); display:none; place-items:center; z-index:200; }
+  .mask.on { display:grid; }
+  .modal { width:400px; background:var(--card); color:var(--text-1); border-radius:14px; box-shadow:var(--shadow-md); padding:18px; }
+  .modal h3 { font-size:15px; margin-bottom:10px; }
+  .modal p { font-size:13px; color:var(--text-2); line-height:1.7; }
+  .modal input { width:100%; border:1px solid var(--border); border-radius:var(--radius-btn); background:var(--bg); color:var(--text-1); padding:8px 10px; font-size:13px; outline:0; margin:4px 0 14px; }
+  .modal input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .modal .m-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
+  .btn-ghost { height:32px; padding:0 14px; border-radius:var(--radius-btn); border:1px solid var(--border); background:var(--card); font-size:12.5px; font-weight:500; color:var(--text-2); }
+  .btn-ghost:hover { background:var(--bg-soft); }
+  .btn-danger { height:32px; padding:0 14px; border-radius:var(--radius-btn); background:var(--danger); color:#fff; font-size:12.5px; font-weight:600; }
+  .modal .about-row { display:flex; gap:10px; align-items:center; margin:10px 0; }
+  .modal textarea { width:100%; border:1px solid var(--border); border-radius:var(--radius-btn); background:var(--bg); color:var(--text-1); padding:8px 10px; font-size:13px; outline:0; resize:vertical; min-height:84px; }
+
+  /* dropdown 菜单（会话操作 / 更多） */
+  .menu { position:absolute; min-width:168px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); padding:5px; display:none; z-index:50; }
+  .menu.on { display:block; }
+  .menu-item { display:flex; align-items:center; gap:8px; width:100%; padding:7px 10px; border-radius:8px; font-size:12.5px; color:var(--text-2); text-align:left; }
+  .menu-item:hover { background:var(--bg-soft); color:var(--text-1); }
+  .menu-item.danger { color:var(--danger); }
+  .menu-item.danger:hover { background:var(--danger-soft); }
+  .menu-sep { height:1px; background:var(--border); margin:5px 4px; }
+  .menu-label { padding:6px 10px 3px; font-size:10.5px; font-weight:700; letter-spacing:.06em; color:var(--text-3); }
+  .menu-item .check { margin-left:auto; color:var(--accent-deep); }
+
+  /* 移动端 frame */
+  .m-section { padding:28px 0 40px; }
+  .m-title { text-align:center; font-size:12px; color:#8a8a93; margin-bottom:14px; letter-spacing:.04em; }
+  .m-frame { width:390px; height:720px; margin:0 auto; border-radius:28px; border:1px solid var(--border-strong); overflow:hidden; background:var(--bg); color:var(--text-1); box-shadow:var(--shadow-md); position:relative; display:flex; flex-direction:column; }
+  .m-hd { height:50px; flex:none; display:flex; align-items:center; gap:8px; padding:0 12px; border-bottom:1px solid var(--border); background:var(--bg); }
+  .m-body { flex:1; padding:16px 14px; background:var(--bg-soft); overflow:hidden; display:flex; flex-direction:column; gap:14px; }
+  .m-drawer { position:absolute; inset:0; z-index:10; display:flex; }
+  .m-drawer .d-mask { position:absolute; inset:0; background:rgb(10 10 11 / .35); }
+  .m-drawer .d-panel { position:relative; width:78%; background:var(--bg); height:100%; border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .m-note { text-align:center; font-size:11.5px; color:#8a8a93; margin-top:12px; }
+
+  /* 标注 chip（mockup 内说明不可见交互） */
+  .anno { display:inline-block; font-size:10.5px; color:var(--accent-pill-fg); background:var(--accent-pill-bg); border-radius:5px; padding:1px 6px; font-weight:600; vertical-align:2px; margin-left:6px; }
+
+  /* 侧栏隐藏降级（ui_config show_conversation_sidebar=false） */
+  .shell.no-side .side { display:none; }
+  .shell.no-side .only-noside { display:grid !important; }
+  .shell.no-side .hd-btn.only-noside { display:flex !important; }
+  .only-noside { display:none !important; }
+  /* ui_config 开关系 */
+  .stage.hide-actions .msg-ops, .stage.hide-actions .demo-actions-note { display:none; }
+  .stage.hide-cite .cite { display:none; }
+  .stage.hide-suggest .suggest, .stage.hide-suggest .w-grid { display:none; }
+  .stage.hide-metrics .metrics { display:none; }
+</style>
+</head>
+<body>
+
+<!-- ================= mockup 评审工具条（非产品 UI） ================= -->
+<div class="toolbar">
+  <span class="t-title">类型1 /chat mockup</span>
+  <div class="t-group"><span class="t-label">状态</span>
+    <button class="t-btn on" data-state="chat">对话中</button>
+    <button class="t-btn" data-state="welcome">欢迎屏+变量表单</button>
+  </div>
+  <div class="t-group"><span class="t-label">主题</span>
+    <button class="t-btn on" data-theme-btn="light">浅色</button>
+    <button class="t-btn" data-theme-btn="dark">深色</button>
+  </div>
+  <div class="t-group"><span class="t-label">ui_config 演示</span>
+    <label class="t-check"><input type="checkbox" id="ckSide" checked>侧栏</label>
+    <label class="t-check"><input type="checkbox" id="ckOps" checked>消息操作</label>
+    <label class="t-check"><input type="checkbox" id="ckCite" checked>引用</label>
+    <label class="t-check"><input type="checkbox" id="ckSug" checked>建议问题</label>
+    <label class="t-check"><input type="checkbox" id="ckMetrics" checked>性能行</label>
+  </div>
+  <span class="t-note">橙标 = 设计待定点 · 悬停交互均可实操</span>
+</div>
+
+<div class="stage" id="stage" data-theme="light">
+<div class="shell" id="shell">
+
+  <!-- ================= 侧栏 ================= -->
+  <aside class="side">
+    <div class="side-app">
+      <div class="app-icon">🤖</div>
+      <div class="side-app-name">杏树林智能助手</div>
+      <button class="icon-btn" title="收起侧栏" onclick="setSide(false)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
+    </div>
+    <div class="side-new">
+      <button class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+        开启新对话
+      </button>
+    </div>
+    <div class="side-scroll">
+      <div class="conv-label">
+        <svg class="pin-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3v5l3 3v2h-6v7l-1 1-1-1v-7H5v-2l3-3V3h8z"/></svg>
+        置顶
+      </div>
+      <div class="conv-item"><span class="t">周报生成模板讨论</span>
+        <button class="ops" title="操作" onclick="openMenu(event,'menuConv')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      </div>
+      <div class="conv-label" style="margin-top:6px">对话列表</div>
+      <div class="conv-item active"><span class="t">介绍你自己 🙂<span class="anno">自动命名实证</span></span>
+        <button class="ops" onclick="openMenu(event,'menuConv')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      </div>
+      <div class="conv-item"><span class="t">理赔材料清单咨询</span>
+        <button class="ops" onclick="openMenu(event,'menuConv')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      </div>
+      <div class="conv-item"><span class="t">退保流程需要几天</span>
+        <button class="ops" onclick="openMenu(event,'menuConv')"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      </div>
+    </div>
+    <div class="side-foot">
+      <div class="brand-foot" title="品牌链：应用级 ui_config → 工作区级 → 默认">Powered by <b>杏树林</b></div>
+      <button class="icon-btn" title="更多" onclick="openMenu(event,'menuMore')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 主区 ================= -->
+  <div class="main">
+    <header class="hd">
+      <button class="icon-btn only-noside" title="展开侧栏" onclick="setSide(true)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
+      <div class="hd-app">
+        <div class="app-icon">🤖</div>
+        <span class="hd-app-name">杏树林智能助手</span>
+      </div>
+      <div class="hd-sep"></div>
+      <button class="hd-conv" onclick="openMenu(event,'menuConvHd')">
+        <span class="t">介绍你自己 🙂</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="hd-right">
+        <button class="hd-btn" id="hdVars">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+          查看变量<span class="anno">有表单时</span>
+        </button>
+        <button class="hd-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          重置对话
+        </button>
+        <button class="hd-btn only-noside">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+          新对话
+        </button>
+      </div>
+    </header>
+
+    <!-- ========= 对话中 ========= -->
+    <div class="chat-scroll" id="viewChat">
+      <div class="chat-col">
+
+        <!-- 用户消息（hover 出操作：复制/编辑后重发） -->
+        <div class="msg-row user">
+          <div class="msg-main">
+            <div class="bubble-user">你好，请用一句话介绍你自己</div>
+            <div class="msg-ops">
+              <button class="op-btn" title="复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <button class="op-btn" title="编辑后重发" onclick="editUserMsg(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+            </div>
+          </div>
+          <div class="avatar user"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div>
+        </div>
+
+        <!-- AI 回答：推理面板 + markdown + 性能行 + 操作栏 + 引用 + 建议问题 -->
+        <div class="msg-row">
+          <div class="avatar bot">🤖</div>
+          <div class="msg-main">
+            <div class="think" onclick="this.classList.toggle('open')">
+              <span class="think-bar">
+                <svg class="chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+                已深度思考（0.8s）
+              </span>
+              <div class="think-body">用户在问我是谁。需要简洁自我介绍，说明我是杏树林部署的 AI 助手，语气友好……</div>
+            </div>
+            <div class="answer-body">
+              <p>你好！我是<strong>杏树林智能助手</strong>，基于大模型为你提供产品咨询、理赔指引和材料预审服务。</p>
+              <h4>我能帮你做什么</h4>
+              <ul>
+                <li>解答保险产品条款与保障范围问题</li>
+                <li>指引理赔流程，预审材料完整性，例如 <code>住院发票原件</code></li>
+                <li>生成周报、纪要等常用文档</li>
+              </ul>
+              <pre><code>GET /lomva/api/site
+{ "title": "杏树林智能助手", "default_language": "zh-Hans" }</code></pre>
+            </div>
+
+            <!-- 引用来源（ui_config.show_citation） -->
+            <div class="cite" >
+              <span class="cite-bar" onclick="this.parentElement.classList.toggle('open')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+                引用了 2 个来源
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+              <div class="cite-list">
+                <div class="cite-card">
+                  <div class="cite-no">1</div>
+                  <div style="flex:1;min-width:0">
+                    <div class="cite-title">理赔服务手册 v3.2 · 住院医疗章节</div>
+                    <div class="cite-desc">住院医疗费用报销需准备：出院小结、费用清单、发票原件、医保结算单……</div>
+                  </div>
+                  <span class="cite-score">0.92</span>
+                </div>
+                <div class="cite-card">
+                  <div class="cite-no">2</div>
+                  <div style="flex:1;min-width:0">
+                    <div class="cite-title">常见问题 FAQ · 退保与理赔时效</div>
+                    <div class="cite-desc">标准理赔审核时效为材料齐全后 3-5 个工作日……</div>
+                  </div>
+                  <span class="cite-score">0.87</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 附件列表示例 -->
+            <div>
+              <div class="file-card">
+                <div class="file-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+                <div><div class="file-name">理赔材料清单.pdf</div><div class="file-meta">PDF · 182 KB · 可下载/预览</div></div>
+              </div>
+            </div>
+
+            <!-- 操作栏 + 性能行（同一行：左操作右指标） -->
+            <div class="msg-foot">
+              <div class="msg-ops always" style="margin-top:0">
+                <button class="op-btn" title="赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+                <button class="op-btn" title="反对（开反馈弹窗）" onclick="openMask('maskDislike')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:scaleY(-1)"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+                <button class="op-btn" title="复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                <button class="op-btn" title="重新生成"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+                <button class="op-btn" title="朗读（TTS 开启时）"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button>
+              </div>
+              <span class="multi-ans" title="同问题多答案切换">
+                <button>‹</button>1/2<button>›</button>
+              </span>
+              <span class="metrics" style="margin-left:auto">耗时 1.29s · 139 tokens · 38.0 tokens/s<span class="anno">常显弱化，非纯 hover（清单出入 #2 决策）</span></span>
+            </div>
+
+            <!-- 答案后建议问题（ui_config.show_suggested_questions） -->
+            <div class="suggest">
+              <button class="suggest-item">理赔需要准备哪些材料？</button>
+              <button class="suggest-item">退保会影响续保吗？</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- chatflow 工作流过程面板（折叠） -->
+        <div class="msg-row">
+          <div class="avatar bot">🤖</div>
+          <div class="msg-main">
+            <div class="agent-step open">
+              <div class="agent-step-hd" onclick="this.parentElement.classList.toggle('open')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="transition:transform .15s"><path d="m6 9 6 6 6-6"/></svg>
+                <span class="step-badge ok">已完成</span> 工作流过程 · 3 节点 · 2.1s
+              </div>
+              <div class="agent-step-bd">
+                ① 开始 → ② 知识检索（命中 2 段）→ ③ LLM 生成 ✓<br>
+                <span style="color:var(--text-3)">chatflow 类应用展示；节点可逐个展开看输入/输出（保留现状交互）</span>
+              </div>
+            </div>
+            <div class="agent-step">
+              <div class="agent-step-hd" onclick="this.parentElement.classList.toggle('open')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+                <span class="step-badge">Agent</span> 调用工具：知识库检索 → 读取文档
+              </div>
+              <div class="agent-step-bd">Agent App 消息变体：思考链 + 工具调用明细（入参/出参折叠展示）。</div>
+            </div>
+            <div class="answer-body" style="margin-top:8px"><p>已完成材料预审：发票信息完整，缺少<strong>出院小结</strong>照片，请补充后重新提交。</p></div>
+          </div>
+        </div>
+
+        <!-- 人工介入表单内嵌（human input） -->
+        <div class="msg-row">
+          <div class="avatar bot">🤖</div>
+          <div class="msg-main">
+            <div class="human-form">
+              <div class="hf-title">请确认提交信息</div>
+              <div class="hf-desc">人工介入节点（workflow human-input）：内嵌表单 / 已提交态两种形态保留</div>
+              <div class="fld"><label>收件邮箱<span class="req">*</span></label><input type="text" value="zhangxi@xingshulin.com"></div>
+              <div class="hf-actions">
+                <button class="btn-accent" style="height:30px">确认提交</button>
+                <button class="btn-ghost">取消</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 流式响应中 + 停止按钮 -->
+        <div class="msg-row">
+          <div class="avatar bot">🤖</div>
+          <div class="msg-main">
+            <div class="answer-body"><p>正在为你整理退保流程的详细步骤 <span class="streaming-dot"></span></p></div>
+            <div class="msg-foot"><button class="btn-stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>停止生成</button></div>
+          </div>
+        </div>
+
+        <div style="height:8px"></div>
+      </div>
+    </div>
+
+    <!-- ========= 欢迎屏 + 变量表单 ========= -->
+    <div class="welcome" id="viewWelcome">
+      <div class="welcome-col">
+        <div class="w-head">
+          <div class="w-icon">🤖</div>
+          <div class="w-title">你好，我是杏树林智能助手</div>
+          <div class="w-sub">保险咨询 · 理赔指引 · 材料预审（副标题来自 ui_config.brand.welcome_subtitle，空 = 不渲染）</div>
+        </div>
+        <div class="w-desc-card">
+          应用描述卡片（新会话首屏，可展开/折叠）——这里是应用编排者写的应用说明，支持 Markdown。
+          <span class="more">收起</span>
+        </div>
+        <div class="w-grid">
+          <button class="w-sug">理赔需要准备哪些材料？</button>
+          <button class="w-sug">退保流程怎么走？</button>
+          <button class="w-sug">帮我写一份周报模板</button>
+          <button class="w-sug">住院津贴怎么计算？</button>
+        </div>
+        <div class="w-form" id="wForm">
+          <div class="w-form-hd" onclick="document.getElementById('wForm').classList.toggle('collapsed')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+            对话前请完善信息（变量表单）
+            <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="w-form-bd">
+            <div class="fld"><label>姓名（文本）<span class="req">*</span></label><input type="text" placeholder="请输入姓名"></div>
+            <div class="fld"><label>年龄（数字）</label><input type="number" placeholder="选填"></div>
+            <div class="fld"><label>保障类型（下拉）<span class="req">*</span></label>
+              <select><option>住院医疗</option><option>重大疾病</option><option>意外保障</option></select>
+            </div>
+            <div class="fld"><label>情况说明（段落）</label><textarea rows="3" placeholder="简单描述你的情况…"></textarea></div>
+            <div class="fld"><label>既有保单（单文件）</label>
+              <input type="text" value="📎 拖拽或点击上传 PDF/图片" readonly style="color:var(--text-3)">
+              <div class="hint">变量 8 型同构：文本/数字/段落/复选/下拉/单文件/多文件/JSON —— 其余 3 型同套样式，不一一摆出</div>
+            </div>
+            <div class="w-start"><button class="btn-accent">开始聊天</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========= 输入区 ========= -->
+    <div class="composer-zone">
+      <div class="composer">
+        <textarea rows="2" placeholder="和 杏树林智能助手 聊天（占位符取 site.input_placeholder）"></textarea>
+        <div class="composer-ft">
+          <button class="icon-btn" title="附件（file_upload.enabled 时显示；支持拖拽/剪贴板/URL）">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <button class="icon-btn" title="语音输入（speech_to_text.enabled 时显示）">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <span style="font-size:11px;color:var(--text-3);margin-right:8px">Enter 发送 · Shift+Enter 换行 · ⌘↑↓ 历史</span>
+          <button class="send-btn" disabled title="空内容禁用态">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 移动端形态 ================= -->
+<div class="m-section">
+  <div class="m-title">移动端形态（&lt;768px 断点切换为上下结构）——静态展示：独立 header + 全屏侧栏浮层</div>
+  <div class="m-frame">
+    <div class="m-hd">
+      <button class="icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="app-icon" style="width:24px;height:24px;font-size:13px;border-radius:6px">🤖</div>
+      <span style="font-weight:600;font-size:13.5px;flex:1">杏树林智能助手</span>
+      <button class="icon-btn" title="会话操作"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
+    </div>
+    <div class="m-body">
+      <div class="msg-row user"><div class="msg-main"><div class="bubble-user">你好，请用一句话介绍你自己</div></div></div>
+      <div class="msg-row"><div class="avatar bot" style="width:26px;height:26px;font-size:13px">🤖</div>
+        <div class="msg-main"><div class="answer-body" style="font-size:13.5px"><p>你好！我是<strong>杏树林智能助手</strong>……</p></div></div>
+      </div>
+    </div>
+    <div style="padding:10px 12px 14px;background:var(--bg-soft)">
+      <div class="composer" style="padding:9px 10px 6px">
+        <div style="font-size:13px;color:var(--text-3);padding:2px 2px 8px">和 杏树林智能助手 聊天</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span></span>
+          <button class="send-btn" style="width:28px;height:28px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <!-- 侧栏全屏浮层（展示态） -->
+    <div class="m-drawer">
+      <div class="d-mask"></div>
+      <div class="d-panel">
+        <div class="side-app"><div class="app-icon">🤖</div><div class="side-app-name">杏树林智能助手</div></div>
+        <div class="side-new"><button class="btn-primary">开启新对话</button></div>
+        <div class="side-scroll">
+          <div class="conv-label">对话列表</div>
+          <div class="conv-item active"><span class="t">介绍你自己 🙂</span></div>
+          <div class="conv-item"><span class="t">理赔材料清单咨询</span></div>
+        </div>
+        <div class="side-foot"><div class="brand-foot">Powered by <b>杏树林</b></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="m-note">变量设置浮层同为全屏形态；删除/重命名弹窗居中自适应宽度</div>
+</div>
+</div><!-- /stage -->
+
+<!-- ================= 浮层（菜单 & 弹窗） ================= -->
+<div class="menu" id="menuConv">
+  <button class="menu-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3v5l3 3v2h-6v7l-1 1-1-1v-7H5v-2l3-3V3h8z"/></svg>置顶</button>
+  <button class="menu-item" onclick="openMask('maskRename')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>重命名</button>
+  <div class="menu-sep"></div>
+  <button class="menu-item danger" onclick="openMask('maskDelete')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>删除</button>
+</div>
+<div class="menu" id="menuConvHd">
+  <button class="menu-item">置顶当前会话</button>
+  <button class="menu-item" onclick="openMask('maskRename')">重命名</button>
+  <div class="menu-sep"></div>
+  <button class="menu-item danger" onclick="openMask('maskDelete')">删除</button>
+</div>
+<div class="menu" id="menuMore" style="min-width:200px">
+  <div class="menu-label">主题</div>
+  <button class="menu-item" onclick="setTheme('light')">浅色<span class="check" data-check="light">✓</span></button>
+  <button class="menu-item" onclick="setTheme('dark')">深色<span class="check" data-check="dark" style="display:none">✓</span></button>
+  <button class="menu-item">跟随系统<span class="anno">默认</span></button>
+  <div class="menu-sep"></div>
+  <button class="menu-item">隐私政策<span class="anno">site 配置才显示</span></button>
+  <button class="menu-item" onclick="openMask('maskAbout')">关于</button>
+  <button class="menu-item">退出登录<span class="anno">非 public 模式</span></button>
+</div>
+
+<div class="mask" id="maskRename">
+  <div class="modal">
+    <h3>重命名对话</h3>
+    <input value="介绍你自己 🙂">
+    <div class="m-actions"><button class="btn-ghost" onclick="closeMasks()">取消</button><button class="btn-accent" onclick="closeMasks()">保存</button></div>
+  </div>
+</div>
+<div class="mask" id="maskDelete">
+  <div class="modal">
+    <h3>删除对话</h3>
+    <p>删除后不可恢复，确认删除「介绍你自己 🙂」？</p>
+    <div class="m-actions"><button class="btn-ghost" onclick="closeMasks()">取消</button><button class="btn-danger" onclick="closeMasks()">删除</button></div>
+  </div>
+</div>
+<div class="mask" id="maskAbout">
+  <div class="modal">
+    <h3>关于</h3>
+    <div class="about-row"><div class="app-icon" style="width:36px;height:36px;font-size:19px">🤖</div><div><b>杏树林智能助手</b><div style="font-size:12px;color:var(--text-3)">v1.0 · © 2026 杏树林</div></div></div>
+    <p>应用描述全文 + 版权信息 + 免责声明（site.copyright / disclaimer 配置驱动）。</p>
+    <div class="m-actions"><button class="btn-ghost" onclick="closeMasks()">关闭</button></div>
+  </div>
+</div>
+<div class="mask" id="maskDislike">
+  <div class="modal">
+    <h3>反馈问题（点踩）</h3>
+    <textarea placeholder="告诉我们哪里不对：内容错误 / 没有帮助 / 其他…"></textarea>
+    <div class="m-actions"><button class="btn-ghost" onclick="closeMasks()">取消</button><button class="btn-accent" onclick="closeMasks()">提交反馈</button></div>
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage')
+  const shell = document.getElementById('shell')
+
+  // 状态切换：对话中 / 欢迎屏
+  document.querySelectorAll('[data-state]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-state]').forEach(x => x.classList.toggle('on', x === b))
+    const welcome = b.dataset.state === 'welcome'
+    document.getElementById('viewChat').style.display = welcome ? 'none' : ''
+    document.getElementById('viewWelcome').classList.toggle('on', welcome)
+  })
+
+  // 主题切换（工具条 + 更多菜单同源）
+  function setTheme(t) {
+    stage.dataset.theme = t
+    document.querySelectorAll('[data-theme-btn]').forEach(x => x.classList.toggle('on', x.dataset.themeBtn === t))
+    document.querySelectorAll('[data-check]').forEach(x => x.style.display = x.dataset.check === t ? '' : 'none')
+  }
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.onclick = () => setTheme(b.dataset.themeBtn))
+
+  // ui_config 演示开关
+  ckSide.onchange = () => shell.classList.toggle('no-side', !ckSide.checked)
+  ckOps.onchange = () => stage.classList.toggle('hide-actions', !ckOps.checked)
+  ckCite.onchange = () => stage.classList.toggle('hide-cite', !ckCite.checked)
+  ckSug.onchange = () => stage.classList.toggle('hide-suggest', !ckSug.checked)
+  ckMetrics.onchange = () => stage.classList.toggle('hide-metrics', !ckMetrics.checked)
+  function setSide(v) { ckSide.checked = v; shell.classList.toggle('no-side', !v) }
+
+  // 菜单 / 弹窗
+  function openMenu(e, id) {
+    e.stopPropagation(); closeMasks()
+    const m = document.getElementById(id)
+    const r = e.currentTarget.getBoundingClientRect()
+    m.classList.add('on')
+    const mw = m.offsetWidth, mh = m.offsetHeight
+    let x = Math.min(r.left, innerWidth - mw - 12), y = r.bottom + 6
+    if (y + mh > innerHeight - 12) y = r.top - mh - 6
+    m.style.left = x + 'px'; m.style.top = y + 'px'
+  }
+  function openMask(id) { closeMasks(); document.getElementById(id).classList.add('on') }
+  function closeMasks() {
+    document.querySelectorAll('.mask').forEach(x => x.classList.remove('on'))
+    document.querySelectorAll('.menu').forEach(x => x.classList.remove('on'))
+  }
+  document.addEventListener('click', closeMasks)
+  document.querySelectorAll('.mask').forEach(m => m.onclick = e => { if (e.target === m) closeMasks() })
+
+  // 用户消息编辑后重发（演示态）
+  function editUserMsg(btn) {
+    const main = btn.closest('.msg-main')
+    const bubble = main.querySelector('.bubble-user')
+    const old = bubble.textContent
+    const ta = document.createElement('textarea')
+    ta.value = old
+    ta.style.cssText = 'width:420px;max-width:70vw;border:1px solid var(--accent);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.6;outline:0;background:var(--card);color:var(--text-1);resize:vertical'
+    const bar = document.createElement('div')
+    bar.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;margin-top:8px'
+    bar.innerHTML = '<button class="btn-ghost" data-a="cancel">取消</button><button class="btn-accent" data-a="save" style="height:30px">保存并重发</button>'
+    bubble.replaceWith(ta); main.querySelector('.msg-ops').style.display = 'none'; main.appendChild(bar)
+    bar.onclick = e => {
+      const a = e.target.dataset.a; if (!a) return
+      if (a === 'save') bubble.textContent = ta.value
+      ta.replaceWith(bubble); bar.remove()
+      main.querySelector('.msg-ops').style.display = ''
+    }
+    ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length)
+  }
+</script>
+</body>
+</html>
