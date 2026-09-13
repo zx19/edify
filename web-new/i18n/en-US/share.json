@@ -54,5 +54,6 @@
   "humanInput.sorry": "Sorry!",
   "humanInput.submissionID": "submission_id: {{id}}",
   "humanInput.thanks": "Thanks!",
-  "login.backToHome": "Back to Home"
+  "login.backToHome": "Back to Home",
+  "splash.loading": "Loading"
 }

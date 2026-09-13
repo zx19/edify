@@ -7,7 +7,6 @@ import {
   resolveWebAppLoginRedirect,
 } from '@/app/(shareLayout)/webapp-signin/login-redirect'
 import AppUnavailable from '@/app/components/base/app-unavailable'
-import Loading from '@/app/components/base/loading'
 import { useWebAppStore } from '@/context/web-app-context'
 import { usePathname, useRouter, useSearchParams } from '@/next/navigation'
 import { fetchAccessToken } from '@/service/share'
@@ -160,8 +159,15 @@ function Splash({ children }: PropsWithChildren) {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Loading />
+      <div className="flex h-full flex-col items-center justify-center gap-y-3">
+        <div
+          className="size-8 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--accent)]"
+          role="status"
+          aria-label={t(($) => $['splash.loading'], { ns: 'share' })}
+        />
+        <span className="text-[13px] text-[var(--text-3)]">
+          {t(($) => $['splash.loading'], { ns: 'share' })}
+        </span>
       </div>
     )
   }

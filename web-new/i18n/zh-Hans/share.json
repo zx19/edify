@@ -54,5 +54,6 @@
   "humanInput.sorry": "抱歉!",
   "humanInput.submissionID": "提交 ID: {{id}}",
   "humanInput.thanks": "谢谢!",
-  "login.backToHome": "返回首页"
+  "login.backToHome": "返回首页",
+  "splash.loading": "加载中"
 }
