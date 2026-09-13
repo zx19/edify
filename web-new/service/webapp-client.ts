@@ -36,9 +36,10 @@ function createWebAppOpenAPILink(): WebAppClientLink {
     },
     fetch: (input, _init, options) => {
       // 剥回契约相对路径交还 request：formatURL(isPublicAPI) 内部重做
-      // PUBLIC_API_PREFIX 前缀 + getWebAppPublicApiPath 地址解析
+      // PUBLIC_API_PREFIX 前缀 + getWebAppPublicApiPath 地址解析；query 串随路径透传
       const linkPathname = new URL(getBaseURL(PUBLIC_API_PREFIX)).pathname.replace(/\/$/, '')
-      const path = new URL(input.url).pathname.replace(linkPathname, '')
+      const inputURL = new URL(input.url)
+      const path = inputURL.pathname.replace(linkPathname, '') + inputURL.search
       return request(
         path,
         { headers: input.headers, method: input.method },

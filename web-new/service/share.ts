@@ -18,6 +18,7 @@ import {
   upload,
 } from './base'
 import { getWebAppAccessToken } from './webapp-auth'
+import { webappClient } from './webapp-client'
 
 export enum AppSourceType {
   webApp = 'webApp',
@@ -139,8 +140,12 @@ export const stopWorkflowMessage = async (
   )(getUrl(`workflows/tasks/${taskId}/stop`, appSourceType, installedAppId))
 }
 
-export const fetchAppInfo = async () => {
-  return get('/site') as Promise<AppData>
+// 3a：webApp 公开链路 4 函数走 oRPC 契约 client（transport 见 webapp-client.ts）；
+// installedApp/tryApp console 链路原样保留
+export const fetchAppInfo = async (): Promise<AppData> => {
+  // 契约 custom_config 为窄对象类型，本地 AppData 为宽 Record（try-app 等构造方依赖宽型）；
+  // runtime 同一 JSON，类型派生对齐留第 4 步单元重写
+  return webappClient.site.get({}) as unknown as Promise<AppData>
 }
 
 export const fetchConversations = async (
@@ -231,7 +236,13 @@ export const fetchChatList = async (
 // }
 
 // init value. wait for server update
-export const fetchAppParams = async (appSourceType: AppSourceType, appId = '') => {
+export const fetchAppParams = async (
+  appSourceType: AppSourceType,
+  appId = '',
+): Promise<ChatConfig> => {
+  if (appSourceType === AppSourceType.webApp)
+    // 契约 Parameters 与本地 ChatConfig 结构摩擦（可选性差异），runtime 同 JSON；消费方第 4 步重写时对齐
+    return webappClient.parameters.get({}) as unknown as Promise<ChatConfig>
   return getAction(
     'get',
     appSourceType,
@@ -310,7 +321,13 @@ export const fetchMembersOAuth2SSOUrl = async (appCode: string, redirectUrl: str
   ) as Promise<{ url: string }>
 }
 
-export const fetchAppMeta = async (appSourceType: AppSourceType, installedAppId = '') => {
+export const fetchAppMeta = async (
+  appSourceType: AppSourceType,
+  installedAppId = '',
+): Promise<AppMeta> => {
+  if (appSourceType === AppSourceType.webApp)
+    // 契约 tool_icons 值为 unknown（openapi schema 粗），本地 AppMeta 保留 ToolIcon 精度，第 4 步统一收口
+    return webappClient.meta.get({}) as Promise<AppMeta>
   return getAction(
     'get',
     appSourceType,
@@ -435,8 +452,11 @@ export const getUserCanAccess = (appId: string, isInstalledApp: boolean) => {
   return get<{ result: boolean }>(`/webapp/permission?appId=${appId}`)
 }
 
-export const getAppAccessModeByAppCode = (appCode: string) => {
-  return get<{ accessMode: AccessMode }>(`/webapp/access-mode?appCode=${appCode}`)
+export const getAppAccessModeByAppCode = async (
+  appCode: string,
+): Promise<{ accessMode: AccessMode }> => {
+  const res = await webappClient.webapp.accessMode.get({ query: { appCode } })
+  return { accessMode: res.accessMode as AccessMode }
 }
 
 export const getHumanInputForm = (token: string) => {

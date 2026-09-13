@@ -40,4 +40,14 @@ describe('webappClient', () => {
     const headers = new Headers((options as RequestInit)?.headers)
     expect(headers.get('X-App-Passport')).toBe('test-passport')
   })
+
+  it('query 参数经 URL 透传不丢失（access-mode?appCode=）', async () => {
+    const { webappClient } = await import('./webapp-client')
+    await expect(
+      webappClient.webapp.accessMode.get({ query: { appCode: 'abc123' } }),
+    ).rejects.toThrow('stop-at-transport')
+    const [url] = mockRequest.mock.calls[0]!
+    expect(url).toMatch(/\/webapp\/access-mode\?/)
+    expect(url).toContain('appCode=abc123')
+  })
 })
