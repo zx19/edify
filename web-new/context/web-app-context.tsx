@@ -6,12 +6,12 @@ import type { AppData, AppMeta } from '@/models/share'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { create } from 'zustand'
+import SplashSpinner from '@/app/(shareLayout)/components/splash-spinner'
 import {
   isWebAppSigninPath,
   resolveWebAppLoginRedirect,
 } from '@/app/(shareLayout)/webapp-signin/login-redirect'
 import { getProcessedSystemVariablesFromUrlParams } from '@/app/components/base/chat/utils'
-import Loading from '@/app/components/base/loading'
 import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 import { AccessMode } from '@/models/access-control'
 import { usePathname, useSearchParams } from '@/next/navigation'
@@ -113,11 +113,8 @@ const WebAppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [accessModeResult, updateWebAppAccessMode, shareCode])
 
   if (isLoading) {
-    return (
-      <div className="flex size-full items-center justify-center">
-        <Loading />
-      </div>
-    )
+    // 3a：access-mode 门与 Splash 共用同一加载视觉（此 provider 仅 (shareLayout) 渲染，console 零影响）
+    return <SplashSpinner />
   }
   return <>{children}</>
 }

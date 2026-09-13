@@ -20,6 +20,7 @@ import {
 import { getClientLoginFallback } from '@/utils/login-redirect'
 import { replaceLoginRedirect } from '@/utils/login-redirect.client'
 import { basePath } from '@/utils/var'
+import SplashSpinner from './splash-spinner'
 
 function Splash({ children }: PropsWithChildren) {
   const { t } = useTranslation()
@@ -158,18 +159,7 @@ function Splash({ children }: PropsWithChildren) {
   if (!shareCode && redirectUrl === null && !isWebAppSigninPath(pathname)) return <>{children}</>
 
   if (isLoading) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-y-3">
-        <div
-          className="size-8 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--accent)]"
-          role="status"
-          aria-label={t(($) => $['splash.loading'], { ns: 'share' })}
-        />
-        <span className="text-[13px] text-[var(--text-3)]">
-          {t(($) => $['splash.loading'], { ns: 'share' })}
-        </span>
-      </div>
-    )
+    return <SplashSpinner />
   }
   return <>{children}</>
 }
