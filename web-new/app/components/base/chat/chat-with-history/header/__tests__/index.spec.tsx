@@ -294,7 +294,7 @@ describe('Header Component', () => {
     it('should render system title if conversation id is missing', () => {
       setup({ currentConversationId: '', sidebarCollapseState: true })
       const titleEl = screen.getByText('Test App')
-      expect(titleEl)!.toHaveClass('system-md-semibold')
+      expect(titleEl)!.toHaveClass('font-semibold')
     })
 
     it('should render app icon from URL when icon_url is provided', () => {
@@ -320,14 +320,13 @@ describe('Header Component', () => {
 
     it('should handle missing name in conversation item', () => {
       const mockConv = { id: 'conv-1', name: '' } as ConversationItem
-      setup({
+      const { container } = setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         sidebarCollapseState: true,
       })
-      // The separator is just a div with text content '/'
-      // The separator is just a div with text content '/'
-      expect(screen.getByText('/'))!.toBeInTheDocument()
+      // 分隔符已改为无文本竖线（mockup）；断言会话名下拉 trigger 存在即可
+      expect(container.querySelector('.i-ri-arrow-down-s-line'))!.toBeInTheDocument()
     })
 
     it('should handle New Chat button state when currentConversationId is present but isResponding is true', () => {
@@ -357,14 +356,14 @@ describe('Header Component', () => {
       expect(screen.queryByText('My Chat')).not.toBeInTheDocument()
     })
 
-    it('should not render operation menu if sidebar is NOT collapsed', () => {
+    it('should render operation menu whenever conversation exists（mockup：会话名下拉恒显，不再限收起态）', () => {
       const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
       setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         sidebarCollapseState: false,
       })
-      expect(screen.queryByText('My Chat')).not.toBeInTheDocument()
+      expect(screen.queryByText('My Chat')).toBeInTheDocument()
     })
 
     it('should pass empty rename value when conversation name is undefined', async () => {
@@ -375,9 +374,9 @@ describe('Header Component', () => {
         sidebarCollapseState: true,
       })
 
-      const operationTrigger = container.querySelector(
-        '.flex.cursor-pointer.items-center.rounded-lg.p-1\\.5.pl-2.text-text-secondary.hover\\:bg-state-base-hover',
-      ) as HTMLElement
+      const operationTrigger = container
+        .querySelector('.i-ri-arrow-down-s-line')!
+        .closest('button') as HTMLElement
       await userEvent.click(operationTrigger)
       await userEvent.click(await screen.findByText('explore.sidebar.action.rename'))
 

@@ -1,10 +1,7 @@
-import { Button } from '@xsl/lomva-ui/button'
 import { cn } from '@xsl/lomva-ui/cn'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import InputsFormContent from '@/app/components/base/chat/chat-with-history/inputs-form/content'
-import Divider from '@/app/components/base/divider'
-import { Message3Fill } from '@/app/components/base/icons/src/public/other'
 import { useChatWithHistoryContext } from '../context'
 
 type Props = Readonly<{
@@ -12,83 +9,58 @@ type Props = Readonly<{
   setCollapsed: (collapsed: boolean) => void
 }>
 
+/**
+ * 变量表单卡（chat 单元重写，mockup 类型1 欢迎屏）：
+ * - 卡片：token 边框/底色/radius 14；标题行可折叠
+ * - 「开始聊天」accent 实心钮（吃壳层注入的 --accent；createTheme 直改色机制退役）
+ */
 const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
   const { t } = useTranslation()
-  const { isMobile, currentConversationId, handleStartChat, allInputsHidden, theme, inputsForms } =
+  const { isMobile, currentConversationId, handleStartChat, allInputsHidden, inputsForms } =
     useChatWithHistoryContext()
 
   if (allInputsHidden || inputsForms.length === 0) return null
 
   return (
     <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
-      <div
-        className={cn(
-          'w-full max-w-2xl rounded-2xl border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-md',
-          collapsed && 'border border-components-card-border bg-components-card-bg shadow-none',
-        )}
-      >
-        <div
-          className={cn(
-            'flex items-center gap-3 rounded-t-2xl px-6 py-4',
-            !collapsed && 'border-b border-divider-subtle',
-            isMobile && 'px-4 py-3',
-          )}
-        >
-          <Message3Fill className="size-6 shrink-0" />
-          <div className="grow system-xl-semibold text-text-secondary">
+      <div className="w-full max-w-2xl rounded-[14px] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+        <div className="flex items-center gap-2.5 px-4 py-3">
+          <span aria-hidden className="i-ri-list-check size-4 text-[var(--text-3)]" />
+          <div className="grow text-[13px] font-semibold text-[var(--text-1)]">
             {t(($) => $['chat.chatSettingsTitle'], { ns: 'share' })}
           </div>
-          {collapsed && (
-            <Button
-              className="text-text-tertiary uppercase"
-              size="small"
-              variant="ghost"
-              onClick={() => setCollapsed(false)}
-            >
-              {t(($) => $['operation.edit'], { ns: 'common' })}
-            </Button>
-          )}
-          {!collapsed && currentConversationId && (
-            <Button
-              className="text-text-tertiary uppercase"
-              size="small"
-              variant="ghost"
-              onClick={() => setCollapsed(true)}
-            >
-              {t(($) => $['operation.close'], { ns: 'common' })}
-            </Button>
-          )}
+          <button
+            type="button"
+            aria-expanded={!collapsed}
+            className="grid size-6 place-items-center rounded-md text-[var(--text-3)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <span
+              aria-hidden
+              className={cn(
+                'i-ri-arrow-down-s-line size-4 transition-transform',
+                collapsed && '-rotate-90',
+              )}
+            />
+          </button>
         </div>
         {!collapsed && (
-          <div className={cn('p-6', isMobile && 'p-4')}>
+          <div className={cn('border-t border-[var(--border)] px-4 pt-1 pb-4', isMobile && 'px-3')}>
             <InputsFormContent />
-          </div>
-        )}
-        {!collapsed && !currentConversationId && (
-          <div className={cn('p-6', isMobile && 'p-4')}>
-            <Button
-              variant="primary"
-              className="w-full"
-              onClick={() => handleStartChat(() => setCollapsed(true))}
-              style={
-                theme
-                  ? {
-                      backgroundColor: theme.primaryColor,
-                    }
-                  : {}
-              }
-            >
-              {t(($) => $['chat.startChat'], { ns: 'share' })}
-            </Button>
+            {!currentConversationId && (
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  className="inline-flex h-[34px] items-center gap-1.5 rounded-[9px] bg-[var(--accent)] px-4 text-[13px] font-semibold text-white shadow-[var(--shadow-xs)] transition-colors hover:bg-[var(--accent-deep)]"
+                  onClick={() => handleStartChat(() => setCollapsed(true))}
+                >
+                  {t(($) => $['chat.startChat'], { ns: 'share' })}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
-      {collapsed && (
-        <div className="flex w-full max-w-180 items-center py-4">
-          <Divider bgStyle="gradient" className="h-px basis-1/2 rotate-180" />
-          <Divider bgStyle="gradient" className="h-px basis-1/2" />
-        </div>
-      )}
     </div>
   )
 }

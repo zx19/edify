@@ -77,7 +77,7 @@ const HeaderInMobile = () => {
 
   return (
     <>
-      <div className="flex shrink-0 items-center gap-1 bg-mask-top2bottom-gray-50-to-transparent px-2 py-3">
+      <div className="flex shrink-0 items-center gap-1 border-b border-[var(--border)] bg-[var(--bg)] px-3 py-2.5">
         <IconButton
           aria-label={t(($) => $['sidebar.expandSidebar'], { ns: 'layout' })}
           size="lg"
@@ -127,7 +127,7 @@ const HeaderInMobile = () => {
           data-testid="mobile-sidebar-overlay"
         >
           <div
-            className="flex h-full w-[calc(100vw-40px)] rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-xs"
+            className="flex h-full w-[calc(100vw-40px)] rounded-xl border border-[var(--border)] bg-[var(--bg)] shadow-[var(--shadow-md)]"
             onClick={(e) => e.stopPropagation()}
             data-testid="sidebar-content"
           >
@@ -142,10 +142,10 @@ const HeaderInMobile = () => {
           data-testid="mobile-chat-settings-overlay"
         >
           <div
-            className="flex h-full w-[calc(100vw-40px)] flex-col rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-xs"
+            className="flex h-full w-[calc(100vw-40px)] flex-col rounded-xl border border-[var(--border)] bg-[var(--bg)] shadow-[var(--shadow-md)]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-3 rounded-t-2xl border-b border-divider-subtle px-4 py-3">
+            <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3">
               <div className="i-custom-public-other-message-3-fill size-6 shrink-0" />
               <div className="grow system-xl-semibold text-text-secondary">
                 {t(($) => $['chat.chatSettingsTitle'], { ns: 'share' })}

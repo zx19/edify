@@ -91,7 +91,7 @@ describe('Operation Component', () => {
     const trigger = screen.getByText('Chat Title').closest('.cursor-pointer')
 
     // closed state
-    expect(trigger).toHaveClass('data-popup-open:bg-state-base-hover')
+    expect(trigger).toHaveClass('data-popup-open:bg-[var(--bg-soft)]')
     expect(trigger).not.toHaveAttribute('data-popup-open')
 
     // open state

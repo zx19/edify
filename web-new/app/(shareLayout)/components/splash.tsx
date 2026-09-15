@@ -20,9 +20,11 @@ import {
 import { getClientLoginFallback } from '@/utils/login-redirect'
 import { replaceLoginRedirect } from '@/utils/login-redirect.client'
 import { basePath } from '@/utils/var'
+import { useBodyWebappTheme } from '../use-body-webapp-theme'
 import SplashSpinner from './splash-spinner'
 
 function Splash({ children }: PropsWithChildren) {
+  useBodyWebappTheme()
   const { t } = useTranslation()
   const shareCode = useWebAppStore((s) => s.shareCode)
   const webAppAccessMode = useWebAppStore((s) => s.webAppAccessMode)

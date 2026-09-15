@@ -1,5 +1,4 @@
 import type { ConversationItem } from '@/models/share'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,7 +8,6 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@xsl/lomva-ui/alert-dialog'
-import { Button } from '@xsl/lomva-ui/button'
 import { cn } from '@xsl/lomva-ui/cn'
 import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { useCallback, useState } from 'react'
@@ -17,16 +15,22 @@ import { useTranslation } from 'react-i18next'
 import AppIcon from '@/app/components/base/app-icon'
 import List from '@/app/components/base/chat/chat-with-history/sidebar/list'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
-import { DifyLogo } from '@/app/components/base/logo/dify-logo'
-import MenuDropdown from '@/app/components/share/text-generation/menu-dropdown'
-import { systemFeaturesQueryOptions } from '@/features/system-features/client'
+import { resolveUiConfig } from '@/models/ui-config'
 import { useChatWithHistoryContext } from '../context'
+import MoreMenu from './more-menu'
 
 type Props = Readonly<{
   isPanel?: boolean
   panelVisible?: boolean
 }>
 
+/**
+ * 侧栏（chat 单元重写，mockup 类型1）：
+ * - 直接消费作用域 token（壳层根恒挂 .webapp-theme）
+ * - 品牌页脚链（design §2.4/附录D）：remove_webapp_brand 隐藏 → 应用级 ui_config.brand.footer_text
+ *   → 工作区级 custom_config.replace_webapp_logo → 默认「杏树林」；DifyLogo/systemFeatures.branding
+ *   （社区版恒 false 分支）移除
+ */
 const Sidebar = ({ isPanel }: Props) => {
   const { t } = useTranslation()
   const {
@@ -48,7 +52,6 @@ const Sidebar = ({ isPanel }: Props) => {
     isResponding,
   } = useChatWithHistoryContext()
   const isSidebarCollapsed = sidebarCollapseState
-  const { data: systemFeatures } = useSuspenseQuery(systemFeaturesQueryOptions())
   const [showConfirm, setShowConfirm] = useState<ConversationItem | null>(null)
   const [showRename, setShowRename] = useState<ConversationItem | null>(null)
 
@@ -84,15 +87,19 @@ const Sidebar = ({ isPanel }: Props) => {
   const deleteConversationContent =
     t(($) => $['chat.deleteConversation.content'], { ns: 'share' }) || ''
 
+  const uiConfig = resolveUiConfig(appData?.site)
+  const customConfig = appData?.custom_config
+  const showBrand = !customConfig?.remove_webapp_brand
+
   return (
     <div
       className={cn(
-        'flex w-full grow flex-col',
+        'flex w-full grow flex-col bg-[var(--bg)]',
         isPanel &&
-          'rounded-xl border-[0.5px] border-components-panel-border-subtle bg-components-panel-bg shadow-lg',
+          'rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-md)]',
       )}
     >
-      <div className={cn('flex shrink-0 items-center gap-3 p-3 pr-2')}>
+      <div className="flex shrink-0 items-center gap-2.5 px-3.5 pt-3.5 pb-2">
         <div className="shrink-0">
           <AppIcon
             size="large"
@@ -102,43 +109,40 @@ const Sidebar = ({ isPanel }: Props) => {
             imageUrl={appData?.site.icon_url}
           />
         </div>
-        <div className={cn('grow truncate system-md-semibold text-text-secondary')}>
+        <div className="grow truncate text-sm font-semibold text-[var(--text-1)]">
           {appData?.site.title}
         </div>
         {!isMobile && isSidebarCollapsed && (
           <IconButton
             aria-label={t(($) => $['sidebar.expandSidebar'], { ns: 'layout' })}
-            size="lg"
             onClick={() => handleSidebarCollapse(false)}
           >
-            <span aria-hidden className="i-ri-expand-right-line h-4.5 w-4.5" />
+            <span aria-hidden className="i-ri-expand-right-line size-4" />
           </IconButton>
         )}
         {!isMobile && !isSidebarCollapsed && (
           <IconButton
             aria-label={t(($) => $['sidebar.collapseSidebar'], { ns: 'layout' })}
-            size="lg"
             onClick={() => handleSidebarCollapse(true)}
           >
-            <span aria-hidden className="i-ri-layout-left-2-line h-4.5 w-4.5" />
+            <span aria-hidden className="i-ri-layout-left-2-line size-4" />
           </IconButton>
         )}
       </div>
-      <div className="shrink-0 px-3 py-4">
-        <Button
-          variant="secondary-accent"
+      <div className="shrink-0 px-3 pb-2.5">
+        <button
+          type="button"
           disabled={isResponding}
-          className="w-full justify-center"
+          className="flex h-9 w-full items-center justify-center gap-1.5 rounded-[9px] bg-[var(--accent)] text-[13.5px] font-semibold text-white shadow-[var(--shadow-xs)] transition-colors hover:bg-[var(--accent-deep)] disabled:cursor-not-allowed disabled:opacity-50"
           onClick={handleNewConversation}
         >
-          <span aria-hidden className="i-ri-edit-box-line size-4" />
+          <span aria-hidden className="i-ri-add-line size-4" />
           {t(($) => $['chat.newChat'], { ns: 'share' })}
-        </Button>
+        </button>
       </div>
-      <div className="h-0 grow space-y-2 overflow-y-auto px-3 pt-4">
-        {/* pinned list */}
+      <div className="h-0 grow space-y-2 overflow-y-auto px-2 pt-2">
         {!!pinnedConversationList.length && (
-          <div className="mb-4">
+          <div className="mb-3">
             <List
               isPin
               title={pinnedTitle}
@@ -163,33 +167,26 @@ const Sidebar = ({ isPanel }: Props) => {
           />
         )}
       </div>
-      <div className="flex shrink-0 items-center justify-between p-3">
-        <MenuDropdown hideLogout={isInstalledApp} placement="top-start" data={appData?.site} />
-        {/* powered by */}
-        <div className="shrink-0">
-          {!appData?.custom_config?.remove_webapp_brand && (
-            <div className={cn('flex shrink-0 items-center gap-1.5 px-1')}>
-              <div className="system-2xs-medium-uppercase text-text-tertiary">
-                {t(($) => $['chat.poweredBy'], { ns: 'share' })}
-              </div>
-              {systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo ? (
+      <div className="flex shrink-0 items-center gap-2 border-t border-[var(--border)] px-3 py-2">
+        <div className="flex min-w-0 grow items-center gap-1 text-[11.5px] whitespace-nowrap text-[var(--text-3)]">
+          {showBrand && (
+            <>
+              <span>{t(($) => $['chat.poweredBy'], { ns: 'share' })}</span>
+              {uiConfig.brand.footer_text ? (
+                <span className="truncate">{uiConfig.brand.footer_text}</span>
+              ) : customConfig?.replace_webapp_logo ? (
                 <img
-                  src={systemFeatures.branding.workspace_logo}
-                  alt="logo"
-                  className="block h-5 w-auto"
-                />
-              ) : appData?.custom_config?.replace_webapp_logo ? (
-                <img
-                  src={`${appData?.custom_config?.replace_webapp_logo}`}
+                  src={String(customConfig.replace_webapp_logo)}
                   alt="logo"
                   className="block h-5 w-auto"
                 />
               ) : (
-                <DifyLogo alt="Dify" size="small" />
+                <b className="font-semibold text-[var(--text-2)]">杏树林</b>
               )}
-            </div>
+            </>
           )}
         </div>
+        <MoreMenu hideLogout={isInstalledApp} data={appData?.site} />
         <AlertDialog open={!!showConfirm} onOpenChange={(open) => !open && handleCancelConfirm()}>
           <AlertDialogContent>
             <div className="flex flex-col gap-2 px-6 pt-6 pb-4">

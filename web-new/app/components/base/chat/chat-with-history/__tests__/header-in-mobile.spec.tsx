@@ -557,8 +557,9 @@ describe('HeaderInMobile', () => {
     })
 
     const { container } = render(<HeaderInMobile />)
-    const operationTrigger = container.querySelector('.system-md-semibold')
-      ?.parentElement as HTMLElement
+    const operationTrigger = container
+      .querySelector('.i-ri-arrow-down-s-line')
+      ?.closest('button') as HTMLElement
     fireEvent.click(operationTrigger)
     fireEvent.click(
       await screen.findByText(/explore\.sidebar\.action\.rename|sidebar\.action\.rename/i),

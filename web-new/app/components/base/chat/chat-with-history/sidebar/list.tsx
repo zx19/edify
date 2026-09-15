@@ -21,7 +21,12 @@ const List: FC<ListProps> = ({
   return (
     <div className="space-y-0.5">
       {title && (
-        <div className="px-3 pt-2 pb-1 system-xs-medium-uppercase text-text-tertiary">{title}</div>
+        <div className="flex items-center gap-1 px-2.5 pt-2 pb-1 text-[11px] font-bold tracking-[0.06em] text-[var(--text-3)]">
+          {isPin && (
+            <span aria-hidden className="i-ri-pushpin-fill size-3 text-[var(--accent-deep)]" />
+          )}
+          {title}
+        </div>
       )}
       {list.map((item) => (
         <Item

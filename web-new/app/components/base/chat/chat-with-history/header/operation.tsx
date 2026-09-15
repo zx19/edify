@@ -36,8 +36,8 @@ const Operation: FC<Props> = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex cursor-pointer items-center rounded-lg border-none bg-transparent p-1.5 pl-2 text-text-secondary outline-hidden hover:bg-state-base-hover focus-visible:ring-2 focus-visible:ring-state-accent-solid data-popup-open:bg-state-base-hover">
-        <span className="system-md-semibold">{title}</span>
+      <DropdownMenuTrigger className="flex cursor-pointer items-center rounded-lg border-none bg-transparent p-1.5 pl-2 text-[13px] text-[var(--text-2)] outline-hidden hover:bg-[var(--bg-soft)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] data-popup-open:bg-[var(--bg-soft)]">
+        <span className="font-semibold">{title}</span>
         <span aria-hidden className="i-ri-arrow-down-s-line size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent placement="bottom-start" sideOffset={4} className="min-w-[120px]">

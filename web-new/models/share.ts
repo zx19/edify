@@ -1,4 +1,5 @@
 import type { AppMode } from '@dify/contracts/api/web/types.gen'
+import type { WebAppUiConfig } from './ui-config'
 import type { Locale } from '@/i18n-config'
 import type { AppIconType } from '@/types/app'
 
@@ -26,6 +27,8 @@ export type SiteInfo = {
   input_placeholder?: string
   show_workflow_steps?: boolean
   use_icon_as_answer_icon?: boolean
+  /** 应用级界面配置（design §2.1 sites.ui_config）；后端下发未就位时 undefined → resolveUiConfig 全默认 */
+  ui_config?: WebAppUiConfig | null
 }
 
 export type ToolIcon = string | Record<string, unknown>

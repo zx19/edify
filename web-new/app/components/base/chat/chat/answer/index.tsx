@@ -10,6 +10,7 @@ import AnswerIcon from '@/app/components/base/answer-icon'
 import Citation from '@/app/components/base/chat/chat/citation'
 import LoadingAnim from '@/app/components/base/chat/chat/loading-anim'
 import { FileList } from '@/app/components/base/file-uploader'
+import { resolveUiConfig } from '@/models/ui-config'
 import ContentSwitch from '../content-switch'
 import { useChatContext } from '../context'
 import AgentContent from './agent-content'
@@ -92,6 +93,9 @@ const Answer: FC<AnswerProps> = ({
   const hasReasoning = !!item.reasoningContent && Object.values(item.reasoningContent).some(Boolean)
 
   const { getHumanInputNodeData } = useChatContext()
+
+  // ui_config 组件显隐门（降级规则见功能对照表）：后端未下发时全默认显示
+  const uiConfig = resolveUiConfig(appData?.site)
 
   const handleSwitchSibling = useCallback(
     (direction: 'prev' | 'next') => {
@@ -214,8 +218,8 @@ const Answer: FC<AnswerProps> = ({
                   title={t(($) => $.editBy, { ns: 'appAnnotation', author: annotation.authorName })}
                 />
               )}
-              <SuggestedQuestions item={item} />
-              {!!citation?.length && !responding && (
+              {uiConfig.components.show_suggested_questions && <SuggestedQuestions item={item} />}
+              {!!citation?.length && !responding && uiConfig.components.show_citation && (
                 <Citation data={citation} showHitInfo={config?.supportCitationHitInfo} />
               )}
             </div>
@@ -276,8 +280,8 @@ const Answer: FC<AnswerProps> = ({
                   title={t(($) => $.editBy, { ns: 'appAnnotation', author: annotation.authorName })}
                 />
               )}
-              <SuggestedQuestions item={item} />
-              {!!citation?.length && !responding && (
+              {uiConfig.components.show_suggested_questions && <SuggestedQuestions item={item} />}
+              {!!citation?.length && !responding && uiConfig.components.show_citation && (
                 <Citation data={citation} showHitInfo={config?.supportCitationHitInfo} />
               )}
             </div>
@@ -285,24 +289,29 @@ const Answer: FC<AnswerProps> = ({
         )}
 
         {/* msg-foot 组合行（mockup 类型1）：操作条 + 多答案切换 + 性能行（右侧） */}
-        {!responding && (
+        {/* ui_config：show_message_actions=false 时操作条+多答案切换整组不渲染（对照表降级规则） */}
+        {!responding && (uiConfig.components.show_message_actions || more) && (
           <div className="mt-1.5 flex items-center gap-2">
-            <Operation
-              item={item}
-              question={question}
-              index={index}
-              showPromptLog={showPromptLog}
-              noChatInput={noChatInput}
-            />
-            {typeof item.siblingCount === 'number' && item.siblingCount > 1 && (
-              <ContentSwitch
-                count={item.siblingCount}
-                currentIndex={item.siblingIndex}
-                prevDisabled={!item.prevSibling}
-                nextDisabled={!item.nextSibling}
-                switchSibling={handleSwitchSibling}
+            {uiConfig.components.show_message_actions && (
+              <Operation
+                item={item}
+                question={question}
+                index={index}
+                showPromptLog={showPromptLog}
+                noChatInput={noChatInput}
               />
             )}
+            {uiConfig.components.show_message_actions &&
+              typeof item.siblingCount === 'number' &&
+              item.siblingCount > 1 && (
+                <ContentSwitch
+                  count={item.siblingCount}
+                  currentIndex={item.siblingIndex}
+                  prevDisabled={!item.prevSibling}
+                  nextDisabled={!item.nextSibling}
+                  switchSibling={handleSwitchSibling}
+                />
+              )}
             <More more={more} />
           </div>
         )}

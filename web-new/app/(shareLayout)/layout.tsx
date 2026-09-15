@@ -8,6 +8,7 @@ import Splash from './components/splash'
  * - dark 经根布局 next-themes 的 [data-theme='dark'] 属性通道命中（见 tokens.css 选择器组）
  * - 视觉壳层（chat-with-history / text-generation）不在此：按 v2 E.6 混合模式随 chat 单元 mockup 范本落地
  * - 认证页（webapp-signin/reset-password）不重写（3a 边界「不含认证」），挂类对其零视觉影响（不消费 token）
+ * - body 同步挂类在 Splash（client 组件，portal 弹层继承作用域；离开 share 路由即摘除）
  */
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (

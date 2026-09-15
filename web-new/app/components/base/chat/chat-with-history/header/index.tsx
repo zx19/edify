@@ -1,5 +1,4 @@
 import type { ConversationItem } from '@/models/share'
-import { RiEditBoxLine, RiLayoutRight2Line, RiResetLeftLine } from '@remixicon/react'
 import {
   AlertDialog,
   AlertDialogActions,
@@ -9,7 +8,6 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@xsl/lomva-ui/alert-dialog'
-import { cn } from '@xsl/lomva-ui/cn'
 import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import { useCallback, useState } from 'react'
@@ -20,6 +18,11 @@ import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/re
 import { useChatWithHistoryContext } from '../context'
 import Operation from './operation'
 
+/**
+ * 桌面顶栏（chat 单元重写，mockup 类型1）：
+ * 左 = 应用图标+名称（恒显）+ 当前会话名下拉（恒显，原仅侧栏收起时）；
+ * 右 = 查看变量（有表单时）+ 重置对话（icon+文字）+ 降级组（侧栏隐藏/收起时：展开钮 + 新对话）。
+ */
 const Header = () => {
   const {
     appData,
@@ -82,91 +85,82 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex h-14 shrink-0 items-center justify-between p-3">
-        <div
-          className={cn(
-            'flex items-center gap-1 transition-all duration-200 ease-in-out',
-            !isSidebarCollapsed && 'user-select-none opacity-0',
-          )}
-        >
+      <div className="flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--border)] bg-[var(--bg)] px-4">
+        {isSidebarCollapsed && (
           <IconButton
             aria-label={t(($) => $['sidebar.expandSidebar'], { ns: 'layout' })}
-            className={cn(!isSidebarCollapsed && 'cursor-default')}
-            size="lg"
             onClick={() => handleSidebarCollapse(false)}
           >
-            <RiLayoutRight2Line aria-hidden="true" className="h-4.5 w-4.5" />
+            <span aria-hidden className="i-ri-layout-left-2-line size-4" />
           </IconButton>
-          <div className="mr-1 shrink-0">
+        )}
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="shrink-0">
             <AppIcon
-              size="large"
+              size="small"
               iconType={appData?.site.icon_type}
               icon={appData?.site.icon}
               background={appData?.site.icon_background}
               imageUrl={appData?.site.icon_url}
             />
           </div>
-          {!currentConversationId && (
-            <div className={cn('grow truncate system-md-semibold text-text-secondary')}>
-              {appData?.site.title}
-            </div>
-          )}
-          {currentConversationId && currentConversationItem && isSidebarCollapsed && (
-            <>
-              <div className="p-1 text-divider-deep">/</div>
-              <Operation
-                title={currentConversationItem?.name || ''}
-                isPinned={!!isPin}
-                togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
-                isShowDelete
-                isShowRenameConversation
-                onRenameConversation={() => handleOperate('rename')}
-                onDelete={() => handleOperate('delete')}
-              />
-            </>
-          )}
-          <div className="flex items-center px-1">
-            <div className="h-3.5 w-px bg-divider-regular"></div>
+          <div className="truncate text-[13.5px] font-semibold text-[var(--text-1)]">
+            {appData?.site.title}
           </div>
-          {isSidebarCollapsed && (
-            <Tooltip>
-              <TooltipTrigger
-                disabled={!!currentConversationId}
-                render={
-                  <div>
-                    <IconButton
-                      aria-label={t(($) => $['chat.newChatTip'], { ns: 'share' })}
-                      size="lg"
-                      disabled={!currentConversationId || isResponding}
-                      onClick={handleNewConversation}
-                    >
-                      <RiEditBoxLine aria-hidden="true" className="h-4.5 w-4.5" />
-                    </IconButton>
-                  </div>
-                }
-              />
-              <TooltipContent>{t(($) => $['chat.newChatTip'], { ns: 'share' })}</TooltipContent>
-            </Tooltip>
-          )}
         </div>
-        <div className="flex items-center gap-1">
+        {currentConversationId && currentConversationItem && (
+          <>
+            <div className="mx-1 h-[18px] w-px shrink-0 bg-[var(--border)]" />
+            <Operation
+              title={currentConversationItem?.name || ''}
+              isPinned={!!isPin}
+              togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
+              isShowDelete
+              isShowRenameConversation
+              onRenameConversation={() => handleOperate('rename')}
+              onDelete={() => handleOperate('delete')}
+            />
+          </>
+        )}
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          {currentConversationId && inputsForms.length > 0 && <ViewFormDropdown />}
           {currentConversationId && (
             <Tooltip>
               <TooltipTrigger
                 render={
-                  <IconButton
-                    aria-label={t(($) => $['chat.resetChat'], { ns: 'share' })}
-                    size="lg"
+                  <button
+                    type="button"
+                    className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
                     onClick={handleNewConversation}
                   >
-                    <RiResetLeftLine aria-hidden="true" className="h-4.5 w-4.5" />
-                  </IconButton>
+                    <span aria-hidden className="i-ri-reset-left-line size-3.5" />
+                    {t(($) => $['chat.resetChat'], { ns: 'share' })}
+                  </button>
                 }
               />
               <TooltipContent>{t(($) => $['chat.resetChat'], { ns: 'share' })}</TooltipContent>
             </Tooltip>
           )}
-          {currentConversationId && inputsForms.length > 0 && <ViewFormDropdown />}
+          {isSidebarCollapsed && (
+            <Tooltip>
+              <TooltipTrigger
+                disabled={!currentConversationId}
+                render={
+                  <button
+                    type="button"
+                    aria-label={t(($) => $['chat.newChatTip'], { ns: 'share' })}
+                    className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)] disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={!currentConversationId || isResponding}
+                    onClick={handleNewConversation}
+                  >
+                    <span aria-hidden className="i-ri-add-line size-3.5" />
+                    {t(($) => $['chat.newChat'], { ns: 'share' })}
+                  </button>
+                }
+              />
+              <TooltipContent>{t(($) => $['chat.newChatTip'], { ns: 'share' })}</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </div>
       <AlertDialog open={!!showConfirm} onOpenChange={(open) => !open && handleCancelConfirm()}>

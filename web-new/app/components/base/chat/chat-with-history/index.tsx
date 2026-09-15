@@ -1,13 +1,13 @@
 'use client'
 import type { InstalledAppResponse } from '@dify/contracts/api/console/installed-apps/types.gen'
-import type { FC } from 'react'
+import type { CSSProperties, FC } from 'react'
 import type { ChatProps } from '../chat'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useState } from 'react'
 import Loading from '@/app/components/base/loading'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import useDocumentTitle from '@/hooks/use-document-title'
-import { createTheme } from '../embedded-chatbot/theme/theme'
+import { resolveUiConfig } from '@/models/ui-config'
 import ChatWrapper from './chat-wrapper'
 import { ChatWithHistoryContext, useChatWithHistoryContext } from './context'
 import Header from './header'
@@ -18,11 +18,33 @@ import Sidebar from './sidebar'
 type ChatWithHistoryProps = {
   className?: string
 }
+
+/**
+ * chat_color_theme → 作用域 accent 三档注入（替代 createTheme 内联样式机制，design §3.2）：
+ * - 未配置 = 不注入，继承 tokens.css 作用域默认橙
+ * - 配置后 = 壳层根 inline 覆盖 --accent/--accent-deep/--accent-soft，发送钮/CTA/选中态随之换色
+ * - chat_color_theme_inverted：旧语义=定制色 header 白底反色；新 header 恒中性（mockup 扁平化），
+ *   无视觉落点（功能对照表核销注记）
+ */
+function buildAccentStyle(chatColorTheme: string | null | undefined): CSSProperties | undefined {
+  if (!chatColorTheme) return undefined
+  return {
+    '--accent': chatColorTheme,
+    '--accent-deep': `color-mix(in srgb, ${chatColorTheme}, black 12%)`,
+    '--accent-soft': `color-mix(in srgb, ${chatColorTheme} 10%, transparent)`,
+    '--accent-pill-bg': `color-mix(in srgb, ${chatColorTheme} 12%, transparent)`,
+    '--accent-pill-fg': `color-mix(in srgb, ${chatColorTheme}, black 12%)`,
+  } as CSSProperties
+}
+
 const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
   const { appData, appChatListDataLoading, chatShouldReloadKey, isMobile, sidebarCollapseState } =
     useChatWithHistoryContext()
   const isSidebarCollapsed = sidebarCollapseState
   const site = appData?.site
+  // ui_config：show_conversation_sidebar=false → 侧栏整隐，hover 浮出面板也关闭（降级走 header 操作组）
+  const uiConfig = resolveUiConfig(site)
+  const sidebarEnabled = uiConfig.layout.show_conversation_sidebar
 
   const [showSidePanel, setShowSidePanel] = useState(false)
 
@@ -32,26 +54,29 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
 
   useDocumentTitle(site?.title || 'Chat')
 
+  const accentStyle = buildAccentStyle(site?.chat_color_theme)
+
   return (
     <div
-      className={cn('flex h-full bg-background-default-burn', isMobile && 'flex-col', className)}
+      className={cn('webapp-theme flex h-full bg-[var(--bg)]', isMobile && 'flex-col', className)}
+      style={accentStyle}
     >
-      {!isMobile && (
+      {!isMobile && sidebarEnabled && (
         <div
           className={cn(
-            'flex w-59 flex-col p-1 pr-0 transition-all duration-200 ease-in-out',
-            isSidebarCollapsed && 'w-0 overflow-hidden p-0!',
+            'flex w-62 flex-col border-r border-[var(--border)] transition-all duration-200 ease-in-out',
+            isSidebarCollapsed && 'w-0 overflow-hidden border-0 p-0!',
           )}
         >
           <Sidebar />
         </div>
       )}
       {isMobile && <HeaderInMobile />}
-      <div className={cn('relative grow p-2', isMobile && 'h-[calc(100%-56px)] p-0')}>
-        {isSidebarCollapsed && (
+      <div className={cn('relative grow', isMobile && 'h-[calc(100%-56px)]')}>
+        {isSidebarCollapsed && sidebarEnabled && (
           <div
             className={cn(
-              'absolute top-0 z-20 flex h-full w-[256px] flex-col p-2 transition-all duration-500 ease-in-out',
+              'absolute top-0 z-20 flex h-full w-[256px] flex-col transition-all duration-500 ease-in-out',
               showSidePanel ? 'left-0' : '-left-62',
             )}
             onMouseEnter={() => setShowSidePanel(true)}
@@ -60,12 +85,7 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
             <Sidebar isPanel panelVisible={showSidePanel} />
           </div>
         )}
-        <div
-          className={cn(
-            'flex h-full flex-col overflow-hidden border-[0,5px] border-components-panel-border-subtle bg-chatbot-bg',
-            isMobile ? 'rounded-t-2xl' : 'rounded-2xl',
-          )}
-        >
+        <div className="flex h-full flex-col bg-[var(--bg-soft)]">
           {!isMobile && <Header />}
           {appChatListDataLoading && <Loading type="app" />}
           {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
@@ -129,10 +149,6 @@ const ChatWithHistoryWrap: FC<ChatWithHistoryWrapProps> = ({
     allInputsHidden,
     initUserVariables,
   } = useChatWithHistory(installedAppInfo)
-  const theme = createTheme(
-    appData?.site?.chat_color_theme ?? null,
-    appData?.site?.chat_color_theme_inverted ?? false,
-  )
 
   return (
     <ChatWithHistoryContext.Provider
@@ -165,7 +181,6 @@ const ChatWithHistoryWrap: FC<ChatWithHistoryWrapProps> = ({
         appId,
         handleFeedback,
         currentChatInstanceRef,
-        theme,
         sidebarCollapseState,
         handleSidebarCollapse,
         clearChatList,

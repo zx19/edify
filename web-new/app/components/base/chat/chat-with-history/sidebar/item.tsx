@@ -28,8 +28,9 @@ const Item: FC<ItemProps> = ({
       ref={ref}
       key={item.id}
       className={cn(
-        'group flex cursor-pointer rounded-lg p-1 pl-3 system-sm-medium text-components-menu-item-text hover:bg-state-base-hover',
-        isSelected && 'bg-state-accent-active text-text-accent hover:bg-state-accent-active',
+        'group flex cursor-pointer items-center gap-2 rounded-[9px] px-2.5 py-2 text-[13.5px] text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]',
+        isSelected &&
+          'bg-[var(--accent-soft)] font-semibold text-[var(--accent-deep)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)]',
       )}
       onClick={() => onChangeConversation(item.id)}
     >

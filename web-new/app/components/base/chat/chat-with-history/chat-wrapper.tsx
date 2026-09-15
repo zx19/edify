@@ -1,7 +1,6 @@
 import type { FileEntity } from '../../file-uploader/types'
 import type { SpeechToTextTarget } from '../../voice-input/types'
 import type { ChatConfig, ChatItem, ChatItemInTree, OnSend } from '../types'
-import { RiArrowDownSLine, RiArrowUpSLine } from '@remixicon/react'
 import { Avatar } from '@xsl/lomva-ui/avatar'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -10,9 +9,9 @@ import { trackWebAppEvent } from '@/app/components/base/amplitude/web-app-event'
 import AnswerIcon from '@/app/components/base/answer-icon'
 import AppIcon from '@/app/components/base/app-icon'
 import InputsForm from '@/app/components/base/chat/chat-with-history/inputs-form'
-import SuggestedQuestions from '@/app/components/base/chat/chat/answer/suggested-questions'
 import { Markdown } from '@/app/components/base/markdown'
 import { InputVarType } from '@/app/components/workflow/types'
+import { resolveUiConfig } from '@/models/ui-config'
 import {
   AppSourceType,
   fetchChatList,
@@ -48,7 +47,6 @@ const ChatWrapper = () => {
     handleFeedback,
     currentChatInstanceRef,
     appData,
-    theme,
     sidebarCollapseState,
     clearChatList,
     setClearChatList,
@@ -306,7 +304,7 @@ const ChatWrapper = () => {
     if (!description || currentConversationId || hasSent) return null
     return (
       <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
-        <div className="w-full max-w-2xl rounded-2xl border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-md">
+        <div className="w-full max-w-2xl rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
           <div className={cn('p-6', isMobile && 'p-4')}>
             <div
               ref={handleDescRef}
@@ -318,23 +316,23 @@ const ChatWrapper = () => {
             >
               {description}
               {!descExpanded && showDescToggle && (
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-components-panel-bg-transparent to-components-panel-bg" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-transparent to-[var(--card)]" />
               )}
             </div>
             {showDescToggle && (
               <button
                 type="button"
-                className="mt-0.5 flex items-center gap-0.5 system-xs-regular text-text-accent hover:opacity-80"
+                className="mt-0.5 flex items-center gap-0.5 text-xs text-[var(--accent-deep)] hover:opacity-80"
                 onClick={() => setDescExpanded((v) => !v)}
               >
                 {descExpanded ? (
                   <>
-                    <RiArrowUpSLine className="size-3" />
+                    <span aria-hidden className="i-ri-arrow-up-s-line size-3" />
                     {t(($) => $['chat.collapse'], { ns: 'share' })}
                   </>
                 ) : (
                   <>
-                    <RiArrowDownSLine className="size-3" />
+                    <span aria-hidden className="i-ri-arrow-down-s-line size-3" />
                     {t(($) => $['chat.expand'], { ns: 'share' })}
                   </>
                 )}
@@ -363,55 +361,55 @@ const ChatWrapper = () => {
     if (currentConversationId) return null
     if (!welcomeMessage) return null
     if (!collapsed && inputsForms.length > 0 && !allInputsHidden) return null
-    if (welcomeMessage.suggestedQuestions && welcomeMessage.suggestedQuestions?.length > 0) {
-      return (
-        <div className="flex min-h-[50vh] items-center justify-center px-4 py-12">
-          <div className="flex max-w-180 grow gap-4">
-            <AppIcon
-              size="xl"
-              iconType={appData?.site.icon_type}
-              icon={appData?.site.icon}
-              background={appData?.site.icon_background}
-              imageUrl={appData?.site.icon_url}
-            />
-            <div className="w-0 grow">
-              <div className="grow rounded-2xl bg-chat-bubble-bg px-4 py-3 body-lg-regular text-text-primary">
-                <Markdown content={welcomeMessage.content} />
-                <SuggestedQuestions item={welcomeMessage} />
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    }
+    // mockup 类型1 欢迎屏：居中 64px 图标 + 标题（开场白 markdown）+ ui_config 副标题（空不渲染）
+    // + 建议问题 2×2 卡片格
+    const welcomeSubtitle = resolveUiConfig(appData?.site).brand.welcome_subtitle
+    const questions = (welcomeMessage.suggestedQuestions ?? []).filter((q) => !!q && q.trim())
     return (
-      <div className={cn('flex min-h-[50vh] flex-col items-center justify-center gap-3 py-12')}>
-        <AppIcon
-          size="xl"
-          iconType={appData?.site.icon_type}
-          icon={appData?.site.icon}
-          background={appData?.site.icon_background}
-          imageUrl={appData?.site.icon_url}
-        />
-        <div className="max-w-3xl px-4">
-          <Markdown
-            className="body-2xl-regular! text-text-tertiary!"
-            content={welcomeMessage.content}
+      <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-12">
+        <div className="grid size-16 place-items-center rounded-2xl bg-[var(--accent-soft)] shadow-[var(--shadow-sm)]">
+          <AppIcon
+            size="large"
+            iconType={appData?.site.icon_type}
+            icon={appData?.site.icon}
+            background={appData?.site.icon_background}
+            imageUrl={appData?.site.icon_url}
           />
         </div>
+        <div className="mt-4 max-w-3xl text-center text-2xl font-bold tracking-tight text-[var(--text-1)]">
+          <Markdown content={welcomeMessage.content} />
+        </div>
+        {welcomeSubtitle && (
+          <div className="mt-1.5 text-center text-[13.5px] text-[var(--text-3)]">
+            {welcomeSubtitle}
+          </div>
+        )}
+        {questions.length > 0 &&
+          resolveUiConfig(appData?.site).components.show_suggested_questions && (
+            <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-2 max-sm:grid-cols-1">
+              {questions.map((question) => (
+                <button
+                  type="button"
+                  key={question}
+                  className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 py-3 text-left text-[13px] text-[var(--text-2)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)] disabled:pointer-events-none disabled:opacity-50"
+                  onClick={() => doSend(question)}
+                >
+                  {question}
+                </button>
+              ))}
+            </div>
+          )}
       </div>
     )
   }, [
-    appData?.site.icon,
-    appData?.site.icon_background,
-    appData?.site.icon_type,
-    appData?.site.icon_url,
+    appData?.site,
     chatList,
     collapsed,
     currentConversationId,
     inputsForms.length,
     respondingState,
     allInputsHidden,
+    doSend,
   ])
 
   const answerIcon =
@@ -431,7 +429,7 @@ const ChatWrapper = () => {
         : undefined
 
   return (
-    <div className="h-full overflow-hidden bg-chatbot-bg">
+    <div className="h-full overflow-hidden bg-[var(--bg-soft)]">
       <Chat
         appData={appData ?? undefined}
         config={appConfig}
@@ -459,7 +457,6 @@ const ChatWrapper = () => {
         suggestedQuestions={suggestedQuestions}
         answerIcon={answerIcon}
         hideProcessDetail
-        theme={theme}
         switchSibling={doSwitchSibling}
         inputDisabled={inputDisabled}
         sidebarCollapseState={sidebarCollapseState}

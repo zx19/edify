@@ -86,8 +86,10 @@ describe('InputsFormNode', () => {
 
     expect(screen.getByText('share.chat.chatSettingsTitle')).toBeInTheDocument()
 
-    const editBtn = screen.getByRole('button', { name: /common.operation.edit/i })
-    await user.click(editBtn)
+    // 重写后折叠钮为 chevron（aria-expanded=false 表示收起态）
+    const toggleBtn = screen.getByRole('button', { name: '' }) // 无文案图标钮
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
+    await user.click(toggleBtn)
     expect(setCollapsed).toHaveBeenCalledWith(false)
   })
 
@@ -100,26 +102,23 @@ describe('InputsFormNode', () => {
     // Real InputsFormContent should render the label
     expect(screen.getByText('Test Label')).toBeInTheDocument()
 
-    const closeBtn = screen.getByRole('button', { name: /common.operation.close/i })
-    await user.click(closeBtn)
+    const toggleBtn = screen.getByRole('button', { name: '' })
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'true')
+    await user.click(toggleBtn)
     expect(setCollapsed).toHaveBeenCalledWith(true)
   })
 
   it('should render start chat button with theme styling when no conversation exists', async () => {
     const user = userEvent.setup()
     const setCollapsed = vi.fn()
-    const themeColor = 'rgb(18, 52, 86)' // #123456
-
-    setMockContext({
-      currentConversationId: '',
-      theme: { primaryColor: themeColor } as unknown as ChatWithHistoryContextValue['theme'],
-    })
+    // theme.primaryColor 内联机制已退役：开始钮吃作用域 accent 类（chat_color_theme 由壳层注入 --accent 覆盖）
+    setMockContext({ currentConversationId: '' })
 
     render(<InputsFormNode collapsed={false} setCollapsed={setCollapsed} />)
     const startBtn = screen.getByRole('button', { name: /share.chat.startChat/i })
 
     expect(startBtn).toBeInTheDocument()
-    expect(startBtn).toHaveStyle({ backgroundColor: themeColor })
+    expect(startBtn.className).toContain('bg-[var(--accent)]')
 
     await user.click(startBtn)
     expect(mockHandleStartChat).toHaveBeenCalled()
@@ -137,11 +136,9 @@ describe('InputsFormNode', () => {
     expect(outerDiv).toBeTruthy()
     // Check for mobile-specific layout classes (pt-4)
 
-    // Check padding in expanded content (p-4 for mobile)
-    // Prefer a test id for the content wrapper; fallback to finding the label's closest ancestor
-    const contentWrapper =
-      screen.queryByTestId('inputs-form-content-wrapper') ??
-      screen.getByText('Test Label').closest('.p-4')
+    // 重写后移动端差异：外层 pt-4 + 内容区 px-3
+    expect(outerDiv.className).toContain('pt-4')
+    const contentWrapper = screen.getByText('Test Label').closest('[class*="px-3"]')
     expect(contentWrapper).toBeInTheDocument()
   })
 })

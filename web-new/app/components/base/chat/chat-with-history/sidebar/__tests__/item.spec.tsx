@@ -105,8 +105,8 @@ describe('Item', () => {
     it('should show active state when selected', () => {
       const { container } = render(<Item {...defaultProps} currentConversationId="1" />)
       const itemDiv = container.firstChild as HTMLElement
-      expect(itemDiv).toHaveClass('bg-state-accent-active')
-      expect(itemDiv).toHaveClass('text-text-accent')
+      expect(itemDiv).toHaveClass('bg-[var(--accent-soft)]')
+      expect(itemDiv).toHaveClass('text-[var(--accent-deep)]')
 
       const activeIndicator = screen.getByTestId('active-indicator')
       expect(activeIndicator).toHaveAttribute('data-active', 'true')
@@ -115,7 +115,7 @@ describe('Item', () => {
     it('should not show active state when not selected', () => {
       const { container } = render(<Item {...defaultProps} currentConversationId="0" />)
       const itemDiv = container.firstChild as HTMLElement
-      expect(itemDiv).not.toHaveClass('bg-state-accent-active')
+      expect(itemDiv).not.toHaveClass('bg-[var(--accent-soft)]')
 
       const activeIndicator = screen.getByTestId('active-indicator')
       expect(activeIndicator).toHaveAttribute('data-active', 'false')
@@ -123,13 +123,13 @@ describe('Item', () => {
 
     it('should toggle active state when currentConversationId changes', () => {
       const { rerender, container } = render(<Item {...defaultProps} currentConversationId="0" />)
-      expect(container.firstChild).not.toHaveClass('bg-state-accent-active')
+      expect(container.firstChild).not.toHaveClass('bg-[var(--accent-soft)]')
 
       rerender(<Item {...defaultProps} currentConversationId="1" />)
-      expect(container.firstChild).toHaveClass('bg-state-accent-active')
+      expect(container.firstChild).toHaveClass('bg-[var(--accent-soft)]')
 
       rerender(<Item {...defaultProps} currentConversationId="0" />)
-      expect(container.firstChild).not.toHaveClass('bg-state-accent-active')
+      expect(container.firstChild).not.toHaveClass('bg-[var(--accent-soft)]')
     })
   })
 
@@ -358,11 +358,11 @@ describe('Item', () => {
     it('should update when currentConversationId changes', () => {
       const { container, rerender } = render(<Item {...defaultProps} currentConversationId="0" />)
 
-      expect(container.firstChild).not.toHaveClass('bg-state-accent-active')
+      expect(container.firstChild).not.toHaveClass('bg-[var(--accent-soft)]')
 
       rerender(<Item {...defaultProps} currentConversationId="1" />)
 
-      expect(container.firstChild).toHaveClass('bg-state-accent-active')
+      expect(container.firstChild).toHaveClass('bg-[var(--accent-soft)]')
     })
 
     it('should update when isPin changes', () => {
