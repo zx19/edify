@@ -121,3 +121,24 @@
 - [x] 交互序列不变或对应 e2e step 可分叉（会话 CRUD/发送/反馈等交互序列同现状；视觉形态变化不改步骤）
 - [x] dark 变体（工具条可切，token 值 = tokens.css 定稿）
 - [x] ui_config 各开关态（工具条五开关实证降级形态）
+
+---
+
+## 实现核销（2026-09-15，chat 单元落地）
+
+**核销口径**：行为层 = 既有 spec 保持绿（chat 全族 1304 + 壳层 348 + 受影响面 1779 全绿，tsc 0）；呈现层 = 本表落点逐项实现。e2e 旅程缺口登记 `reports/test-gaps.md`（M2 阻塞于后端 T3，不豁免）。
+
+**§1 侧栏**：全部实现。新建会话 = accent 实心橙钮；置顶分组带 pin 图标；品牌页脚 = Powered by +（ui_config.footer_text / 工作区 logo / 杏树林默认）——**「Powered by」前缀恒显**（spec 实证现状如此，mockup 图中省略为简笔）；DifyLogo 默认级移除（去 Dify 化）。
+**§2 Header**：全部实现。会话名下拉恒显（mockup 换位置落点）；查看变量/重置对话/降级组（展开+新对话）齐。
+**§3 移动端**：抽屉/设置浮层 token 化；断点机制不动。
+**§4 消息区**：全部实现（气泡反色 token 双层 / 操作条流内行 / 性能行常显同行右侧 / 引用折叠条+卡片 / 建议 pill / 流式停止 / 编辑后重发）。**出入注记**：回答头像沿用 size-10（console 零影响优先于 mockup 30px 细差）。
+**§5 输入区**：accent 发送钮 + focus 晕环（`[.webapp-theme_&]` 变体）；IME/历史/拖拽/语音逻辑零改动。
+**§6 开场白与变量表单**：欢迎屏（图标/标题/副标题/建议格）+ 表单卡 chevron 折叠 + accent 开始钮。
+**§7 全局**：自动命名/passport/i18n 机制不动；自动命名实证保留。
+
+**实现期拍板/注记**（超出原表的新信息）：
+1. **portal 弹层作用域**：base-ui Portal 挂 body 逃出布局 div → share 路由经 `useBodyWebappTheme`（Splash 内 effect）在 body 挂 .webapp-theme，弹层继承新视觉；离开路由摘除，console 零影响。
+2. **chat_color_theme_inverted 退役**：新 header 恒中性（扁平化），inverted 旧语义（定制色 header 反色）无视觉落点；字段继续接收不报错，无渲染。
+3. **未动件（台账）**：reasoning-panel（ThinkingDetails 属 markdown 管线台账）/workflow-process（tracing-panel console 共享）/agent-roster-response-content（/agent 死路由决策不动）/menu-dropdown（text-generation 单元资产）。
+4. **共享件 console 零影响机制**：`[.webapp-theme_&]` tailwind 任意变体（编译实证祖先选择器正确生成）+ token 双层 var（:root Dify 等效默认）。
+5. **e2e 缺口**：本单元验收不含 e2e 双轨（M2 阻塞）；Q&A 走查补位。
