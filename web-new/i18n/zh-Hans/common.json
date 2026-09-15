@@ -108,6 +108,7 @@
   "avatar.deleteTitle": "删除头像",
   "avatar.editAction": "编辑头像",
   "chat.citation.characters": "字符：",
+  "chat.citation.count": "引用了 {{count}} 个来源",
   "chat.citation.hitCount": "召回次数：",
   "chat.citation.hitScore": "召回得分：",
   "chat.citation.linkToDataset": "跳转至知识库",

@@ -13,9 +13,15 @@ import Tooltip from './tooltip'
 type PopupProps = {
   data: Resources
   showHitInfo?: boolean
+  index?: number
 }
 
-const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
+/**
+ * 引用卡片 + 命中详情浮层（chat 单元重写，mockup 类型1）：
+ * - trigger = 卡片（序号方块 + 文件名 + 首段摘要两行截断 + score pill 取该文档最高分）
+ * - 浮层保留原行为：下载（upload_file/file + dataset_id）、分段列表、命中信息、知识库跳转
+ */
+const Popup: FC<PopupProps> = ({ data, showHitInfo = false, index = 0 }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const fileType =
@@ -36,6 +42,11 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
     if (res?.url) downloadUrl({ url: res.url, fileName: data.documentName })
   }
 
+  const summary = data.sources[0]?.content ?? ''
+  const topScore = showHitInfo
+    ? Math.max(0, ...data.sources.map((s) => s.score ?? 0)) || undefined
+    : undefined
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
@@ -43,10 +54,25 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
         render={
           <div
             data-testid="popup-trigger"
-            className="flex h-7 max-w-60 items-center rounded-lg bg-components-button-secondary-bg px-2"
+            className="flex cursor-pointer items-start gap-2.5 rounded-[10px] border border-[var(--border)] bg-[var(--card)] px-3 py-2.5 transition-colors hover:border-[var(--border-strong)]"
           >
-            <FileIcon type={fileType} className="mr-1 size-4 shrink-0" />
-            <div className="truncate text-xs text-text-tertiary">{data.documentName}</div>
+            <div className="grid size-[18px] flex-none place-items-center rounded-md bg-[var(--gray-pill-bg)] text-[11px] font-bold text-[var(--gray-pill-fg)]">
+              {index + 1}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1 text-[12.5px] font-semibold text-[var(--text-1)]">
+                <FileIcon type={fileType} className="size-3.5 shrink-0" />
+                <span className="truncate">{data.documentName}</span>
+              </div>
+              {summary && (
+                <div className="mt-0.5 line-clamp-2 text-xs text-[var(--text-3)]">{summary}</div>
+              )}
+            </div>
+            {topScore !== undefined && (
+              <span className="ml-auto flex-none rounded-full bg-[var(--accent-pill-bg)] px-[7px] py-[2px] text-[11px] font-bold text-[var(--accent-pill-fg)]">
+                {topScore.toFixed(2)}
+              </span>
+            )}
           </div>
         }
       />
@@ -58,17 +84,17 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
       >
         <div
           data-testid="popup-content"
-          className="max-w-90 rounded-xl bg-background-section-burn shadow-lg backdrop-blur-[5px]"
+          className="max-w-90 rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-md)]"
         >
           <div className="px-4 pt-3 pb-2">
             <div className="flex h-4.5 items-center">
               <FileIcon type={fileType} className="mr-1 size-4 shrink-0" />
-              <div className="truncate system-xs-medium text-text-tertiary">
+              <div className="truncate text-xs font-medium text-[var(--text-3)]">
                 {(data.dataSourceType === 'upload_file' || data.dataSourceType === 'file') &&
                 !!data.sources?.[0]?.dataset_id ? (
                   <button
                     type="button"
-                    className="cursor-pointer truncate border-none bg-transparent p-0 text-left text-text-tertiary hover:underline"
+                    className="cursor-pointer truncate border-none bg-transparent p-0 text-left text-[var(--text-3)] hover:underline"
                     onClick={handleDownloadUploadFile}
                     disabled={isDownloading}
                   >
@@ -80,7 +106,7 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
               </div>
             </div>
           </div>
-          <div className="max-h-112.5 overflow-y-auto rounded-lg bg-components-panel-bg px-4 py-0.5">
+          <div className="max-h-112.5 overflow-y-auto border-t border-[var(--border)] px-4 py-0.5">
             <div className="w-full">
               {data.sources.map((source, index) => {
                 const itemKey = source.document_id
@@ -91,15 +117,14 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
                   <Fragment key={itemKey}>
                     <div data-testid="popup-source-item" className="group py-3">
                       <div className="mb-2 flex items-center justify-between">
-                        <div className="flex h-5 items-center rounded-md border border-divider-subtle px-1.5">
-                          {/* replaced svg component with tailwind icon class per lint rule */}
+                        <div className="flex h-5 items-center rounded-md border border-[var(--border)] px-1.5">
                           <i
-                            className="mr-0.5 i-custom-vender-line-general-hash-02 size-3 text-text-quaternary"
+                            className="mr-0.5 i-custom-vender-line-general-hash-02 size-3 text-[var(--text-3)]"
                             aria-hidden
                           />
                           <div
                             data-testid="popup-segment-position"
-                            className="text-[11px] font-medium text-text-tertiary"
+                            className="text-[11px] font-medium text-[var(--text-3)]"
                           >
                             {source.segment_position || index + 1}
                           </div>
@@ -107,7 +132,7 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
                         {showHitInfo && (
                           <Link
                             href={`/datasets/${source.dataset_id}/documents/${source.document_id}`}
-                            className="hidden h-4.5 items-center text-xs text-text-accent group-hover:flex"
+                            className="hidden h-4.5 items-center text-xs text-[var(--accent-deep)] group-hover:flex"
                           >
                             {t(($) => $['chat.citation.linkToDataset'], { ns: 'common' })}
                             <i
@@ -119,14 +144,14 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
                       </div>
                       <div
                         data-testid="popup-source-content"
-                        className="text-[13px] wrap-break-word text-text-secondary"
+                        className="text-[13px] wrap-break-word text-[var(--text-2)]"
                       >
                         {source.content}
                       </div>
                       {showHitInfo && (
                         <div
                           data-testid="popup-hit-info"
-                          className="mt-2 flex flex-wrap items-center system-xs-medium text-text-quaternary"
+                          className="mt-2 flex flex-wrap items-center text-xs font-medium text-[var(--text-3)]"
                         >
                           <Tooltip
                             text={t(($) => $['chat.citation.characters'], { ns: 'common' })}
@@ -167,7 +192,7 @@ const Popup: FC<PopupProps> = ({ data, showHitInfo = false }) => {
                     {index !== data.sources.length - 1 && (
                       <div
                         data-testid="popup-source-divider"
-                        className="my-1 h-px bg-divider-regular"
+                        className="my-1 h-px bg-[var(--border)]"
                       />
                     )}
                   </Fragment>

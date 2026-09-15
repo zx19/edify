@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import type { CitationItem } from '../type'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Popup from './popup'
 
@@ -14,17 +14,18 @@ export type Resources = {
 type CitationProps = {
   data: CitationItem[]
   showHitInfo?: boolean
-  containerClassName?: string
 }
-const Citation: FC<CitationProps> = ({
-  data,
-  showHitInfo,
-  containerClassName = 'chat-answer-container',
-}) => {
+
+/**
+ * 引用来源（chat 单元重写，mockup 类型1 消息区）：折叠条 + 卡片列表。
+ * - 折叠条：「引用了 N 个来源」+ chevron，点击展开/收起
+ * - 卡片列表：每文档一卡（序号/文件名/摘要/score pill），点击卡片开 Popup 命中详情
+ * 交互变化经功能对照表批准（原单行 pill + 宽度测量机制废弃，citation-measurement-item 退役）。
+ */
+const Citation: FC<CitationProps> = ({ data, showHitInfo }) => {
   const { t } = useTranslation()
-  const elesRef = useRef<HTMLDivElement[]>([])
-  const [limitNumberInOneLine, setLimitNumberInOneLine] = useState(0)
-  const [showMore, setShowMore] = useState(false)
+  const [open, setOpen] = useState(false)
+
   const resources = useMemo(
     () =>
       data.reduce((prev: Resources[], next) => {
@@ -49,83 +50,50 @@ const Citation: FC<CitationProps> = ({
     [data],
   )
 
-  useEffect(() => {
-    const containerWidth = document.querySelector(`.${containerClassName}`)!.clientWidth - 40
-    let totalWidth = 0
-    let limit = 0
-    for (let i = 0; i < resources.length; i++) {
-      totalWidth += elesRef.current[i]!.clientWidth
-
-      if (totalWidth + i * 4 > containerWidth) {
-        totalWidth -= elesRef.current[i]!.clientWidth
-
-        if (totalWidth + 34 > containerWidth) limit = i - 1
-        else limit = i
-
-        break
-      } else {
-        limit = i + 1
-      }
-    }
-    setLimitNumberInOneLine(limit)
-    // oxlint-disable-next-line react/exhaustive-deps
-  }, [])
-
-  const resourcesLength = resources.length
-  const citationTitle = t(($) => $['chat.citation.title'], { ns: 'common' })
-  const citationToggleLabel = `${
-    showMore
-      ? t(($) => $['chat.collapse'], { ns: 'share' })
-      : t(($) => $['chat.expand'], { ns: 'share' })
-  } ${citationTitle}`
+  if (resources.length === 0) return null
 
   return (
-    <div className="mt-3 -mb-1">
-      <div
+    <div className="mt-3">
+      <button
+        type="button"
         data-testid="citation-title"
-        className="mb-2 flex items-center system-xs-medium text-text-tertiary"
+        aria-expanded={open}
+        className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-xs text-[var(--text-3)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-2)]"
+        onClick={() => setOpen((v) => !v)}
       >
-        {citationTitle}
-        <div className="ml-2 h-px grow bg-divider-regular" />
-      </div>
-      <div className="relative flex flex-wrap">
-        {resources.map((res, index) => (
-          <div
-            key={res.documentId}
-            aria-hidden
-            data-testid="citation-measurement-item"
-            className="absolute top-0 left-0 -z-10 mr-1 mb-1 h-7 w-auto max-w-60 pr-2 pl-7 text-xs whitespace-nowrap opacity-0"
-            ref={(ele: HTMLDivElement | null) => {
-              elesRef.current[index] = ele!
-            }}
-          >
-            {res.documentName}
-          </div>
-        ))}
-        {resources.slice(0, showMore ? resourcesLength : limitNumberInOneLine).map((res) => (
-          <div key={res.documentId} className="mr-1 mb-1 cursor-pointer">
-            <Popup data={res} showHitInfo={showHitInfo} />
-          </div>
-        ))}
-        {limitNumberInOneLine < resourcesLength && (
-          <button
-            type="button"
-            aria-expanded={showMore}
-            aria-label={citationToggleLabel}
-            className="flex h-7 cursor-pointer appearance-none items-center rounded-lg bg-components-panel-bg px-2 system-xs-medium text-text-tertiary focus-visible:ring-2 focus-visible:ring-state-accent-solid focus-visible:outline-hidden"
-            onClick={() => setShowMore((v) => !v)}
-          >
-            {!showMore ? (
-              `+ ${resourcesLength - limitNumberInOneLine}`
-            ) : (
-              <span
-                aria-hidden
-                className="i-ri-arrow-down-s-line size-4 rotate-180 text-text-tertiary"
-              />
-            )}
-          </button>
-        )}
-      </div>
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden
+        >
+          <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5" />
+          <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5" />
+        </svg>
+        {t(($) => $['chat.citation.count'], { ns: 'common', count: resources.length })}
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          aria-hidden
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <div className="mt-2 flex flex-col gap-1.5" data-testid="citation-list">
+          {resources.map((res, index) => (
+            <Popup key={res.documentId} data={res} showHitInfo={showHitInfo} index={index} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

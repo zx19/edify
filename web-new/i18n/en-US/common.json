@@ -108,6 +108,7 @@
   "avatar.deleteTitle": "Remove Avatar",
   "avatar.editAction": "Edit Avatar",
   "chat.citation.characters": "Characters:",
+  "chat.citation.count": "Cited {{count}} sources",
   "chat.citation.hitCount": "Retrieval count:",
   "chat.citation.hitScore": "Retrieval Score:",
   "chat.citation.linkToDataset": "Link to Knowledge",
