@@ -18,6 +18,7 @@ type OperationProps = {
   sendButtonLabel?: string
   sendButtonLoading?: boolean
   disabled?: boolean
+  /** @deprecated 发送钮配色改由作用域 accent 机制（.webapp-theme 下 var(--accent)），prop 仅保留签名兼容 */
   theme?: Theme | null
   ref?: Ref<HTMLDivElement>
 }
@@ -31,7 +32,6 @@ const Operation: FC<OperationProps> = ({
   sendButtonLabel,
   sendButtonLoading,
   disabled,
-  theme,
 }) => {
   const { t } = useTranslation()
 
@@ -56,18 +56,17 @@ const Operation: FC<OperationProps> = ({
         </div>
         <Button
           aria-label={sendButtonLabel ? undefined : t(($) => $['operation.send'], { ns: 'common' })}
-          className={cn('ml-3 focus-visible:ring-inset', sendButtonLabel ? 'px-3' : 'w-8 px-0')}
+          className={cn(
+            'ml-3 focus-visible:ring-inset',
+            sendButtonLabel ? 'px-3' : 'w-8 px-0',
+            // chat 单元重写：作用域内发送钮吃 accent（含 chat_color_theme 注入的覆盖值）；
+            // 无作用域保持 variant primary 原样（console debug 面板零影响），createTheme 直改色值机制废弃
+            '[.webapp-theme_&]:not-disabled:bg-[var(--accent)] [.webapp-theme_&]:not-disabled:hover:bg-[var(--accent-deep)]',
+          )}
           variant="primary"
           disabled={readonly || disabled}
           loading={sendButtonLoading}
           onClick={onSend}
-          style={
-            theme
-              ? {
-                  backgroundColor: theme.primaryColor,
-                }
-              : {}
-          }
         >
           {sendButtonLabel || <span className="i-ri-send-plane-2-fill size-4" aria-hidden="true" />}
         </Button>

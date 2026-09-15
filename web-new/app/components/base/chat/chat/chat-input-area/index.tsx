@@ -304,6 +304,8 @@ const ChatInputArea = ({
       <div
         className={cn(
           'pointer-events-auto relative z-10 overflow-hidden rounded-xl border border-components-chat-input-border bg-components-panel-bg-blur pb-2.25 shadow-md',
+          // chat 单元重写：作用域内 focus 出 accent 描边+晕环（mockup 输入区）；无作用域视觉不变
+          '[.webapp-theme_&]:focus-within:border-[var(--accent)] [.webapp-theme_&]:focus-within:shadow-[0_0_0_3px_var(--accent-soft)]',
           isDragActive &&
             'border border-dashed border-components-option-card-option-selected-border',
           disabled && 'pointer-events-none border-components-panel-border opacity-50 shadow-none',
