@@ -691,11 +691,6 @@
       "count": 1
     }
   },
-  "web-new/app/components/base/chat/chat/citation/index.tsx": {
-    "eslint-react/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "web-new/app/components/base/chat/chat/hooks.ts": {
     "eslint-react/set-state-in-effect": {
       "count": 2

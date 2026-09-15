@@ -10,25 +10,29 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Textarea from 'react-textarea-autosize'
 import { FileList } from '@/app/components/base/file-uploader'
-import { User } from '@/app/components/base/icons/src/public/avatar'
 import { Markdown } from '@/app/components/base/markdown'
-import { CssTransform } from '../embedded-chatbot/theme/utils'
 import ContentSwitch from './content-switch'
 import { useChatContext } from './context'
 
 type QuestionProps = {
   item: ChatItem
   questionIcon?: ReactNode
-  theme: Theme | null | undefined
+  /** @deprecated createTheme 气泡着色已由 token 双层（--chat-bubble-user-bg/fg）替代，prop 仅保留签名兼容 */
+  theme?: Theme | null | undefined
   enableEdit?: boolean
   switchSibling?: (siblingMessageId: string) => void
   hideAvatar?: boolean
 }
 
+/**
+ * 用户消息气泡（chat 单元重写，mockup 类型1）：
+ * - 气泡色走 token 双层：:root = Dify 蓝（#e1effe，console 不变）；.webapp-theme 作用域 = 黑底白字（dark 反色）
+ * - hover 气泡下方出操作行（复制/编辑后重发），原绝对定位 + contentWidth 测量机废弃
+ * - 编辑态内联 textarea + 保存重发/取消（IME 组合输入处理保留）
+ */
 const Question: FC<QuestionProps> = ({
   item,
   questionIcon,
-  theme,
   enableEdit = true,
   switchSibling,
   hideAvatar,
@@ -43,8 +47,6 @@ const Question: FC<QuestionProps> = ({
 
   const [isEditing, setIsEditing] = useState(false)
   const [editedContent, setEditedContent] = useState(content)
-  const [contentWidth, setContentWidth] = useState(0)
-  const contentRef = useRef<HTMLDivElement>(null)
   const isComposingRef = useRef(false)
   const compositionEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -121,23 +123,6 @@ const Question: FC<QuestionProps> = ({
     [switchSibling, item.prevSibling, item.nextSibling],
   )
 
-  const getContentWidth = () => {
-    /* v8 ignore next 2 -- @preserve */
-    if (contentRef.current) setContentWidth(contentRef.current?.clientWidth)
-  }
-
-  useEffect(() => {
-    /* v8 ignore next 2 -- @preserve */
-    if (!contentRef.current) return
-    const resizeObserver = new ResizeObserver(() => {
-      getContentWidth()
-    })
-    resizeObserver.observe(contentRef.current)
-    return () => {
-      resizeObserver.disconnect()
-    }
-  }, [])
-
   useEffect(() => {
     return () => {
       clearCompositionEndTimer()
@@ -148,45 +133,21 @@ const Question: FC<QuestionProps> = ({
     <div className="mb-2 flex justify-end last:mb-0">
       <div
         className={cn(
-          'group relative mr-4 flex max-w-full items-start overflow-x-hidden pl-14',
+          'group mr-4 flex max-w-full flex-col items-end overflow-x-hidden pl-14',
           isEditing && 'flex-1',
         )}
       >
-        <div className={cn('mr-2 gap-1', isEditing ? 'hidden' : 'flex')}>
-          <div
-            data-testid="action-container"
-            className="absolute hidden gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-xs group-hover:flex"
-            style={{ right: contentWidth + 8 }}
-          >
-            <IconButton
-              aria-label={copyLabel}
-              onClick={() => {
-                copy(content)
-                toast.success(t(($) => $['actionMsg.copySuccessfully'], { ns: 'common' }))
-              }}
-            >
-              <div className="i-ri-clipboard-line size-4" aria-hidden="true" />
-            </IconButton>
-            {enableEdit && (
-              <IconButton aria-label={editLabel} onClick={handleEdit}>
-                <div className="i-ri-edit-line size-4" aria-hidden="true" />
-              </IconButton>
-            )}
-          </div>
-        </div>
         <div
-          ref={contentRef}
           data-testid="question-content"
           className={cn(
             'w-full px-4 py-3 text-sm',
-            !isEditing &&
-              'rounded-2xl bg-background-gradient-bg-fill-chat-bubble-bg-3 text-text-primary',
+            !isEditing && 'rounded-[14px_14px_4px_14px]',
             isEditing &&
-              'rounded-3xl border-[3px] border-components-option-card-option-selected-border bg-components-panel-bg-blur shadow-lg',
+              'rounded-2xl border-2 border-[color:var(--accent,var(--color-components-option-card-option-selected-border))] bg-components-panel-bg-blur shadow-lg',
           )}
           style={
-            !isEditing && theme?.chatBubbleColorStyle
-              ? CssTransform(theme.chatBubbleColorStyle)
+            !isEditing
+              ? { background: 'var(--chat-bubble-user-bg)', color: 'var(--chat-bubble-user-fg)' }
               : {}
           }
         >
@@ -226,23 +187,46 @@ const Question: FC<QuestionProps> = ({
               </div>
             </div>
           )}
-          {!isEditing && (
-            <ContentSwitch
-              count={item.siblingCount}
-              currentIndex={item.siblingIndex}
-              prevDisabled={!item.prevSibling}
-              nextDisabled={!item.nextSibling}
-              switchSibling={handleSwitchSibling}
-            />
-          )}
         </div>
-        <div className="mt-1 h-4.5" />
+        {!isEditing && (
+          <div
+            data-testid="action-container"
+            className="mt-1 flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100"
+          >
+            <IconButton
+              aria-label={copyLabel}
+              onClick={() => {
+                copy(content)
+                toast.success(t(($) => $['actionMsg.copySuccessfully'], { ns: 'common' }))
+              }}
+            >
+              <div className="i-ri-clipboard-line size-4" aria-hidden="true" />
+            </IconButton>
+            {enableEdit && (
+              <IconButton aria-label={editLabel} onClick={handleEdit}>
+                <div className="i-ri-edit-line size-4" aria-hidden="true" />
+              </IconButton>
+            )}
+          </div>
+        )}
+        {!isEditing && (
+          <ContentSwitch
+            count={item.siblingCount}
+            currentIndex={item.siblingIndex}
+            prevDisabled={!item.prevSibling}
+            nextDisabled={!item.nextSibling}
+            switchSibling={handleSwitchSibling}
+          />
+        )}
       </div>
       {!hideAvatar && (
         <div className="size-10 shrink-0">
           {questionIcon || (
             <div className="h-full w-full rounded-full border-[0.5px] border-black/5">
-              <User className="question-default-user-icon size-full" />
+              <span
+                aria-hidden
+                className="question-default-user-icon i-custom-public-avatar-user size-full"
+              />
             </div>
           )}
         </div>

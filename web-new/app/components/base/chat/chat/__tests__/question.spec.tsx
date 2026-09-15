@@ -57,23 +57,6 @@ vi.mock('@/app/components/base/markdown', () => ({
   Markdown: ({ content }: { content: string }) => <div className="markdown-body">{content}</div>,
 }))
 
-// Mock ResizeObserver and capture lifecycle for targeted coverage
-const observeMock = vi.fn()
-const unobserveMock = vi.fn()
-const disconnectMock = vi.fn()
-let resizeCallback: ResizeObserverCallback | null = null
-
-class MockResizeObserver {
-  constructor(callback: ResizeObserverCallback) {
-    resizeCallback = callback
-  }
-
-  observe = observeMock
-  unobserve = unobserveMock
-  disconnect = disconnectMock
-}
-vi.stubGlobal('ResizeObserver', MockResizeObserver)
-
 type RenderProps = {
   theme?: Theme | null
   questionIcon?: React.ReactNode
@@ -132,7 +115,6 @@ const renderWithProvider = (
 describe('Question component', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    resizeCallback = null
   })
 
   it('should render the question content container and default avatar when hideAvatar is false', () => {
@@ -152,41 +134,6 @@ describe('Question component', () => {
     })
     const avatar = container.querySelector('.size-10')
     expect(avatar).toBeNull()
-  })
-
-  it('should observe content width resize and update layout accurately', () => {
-    renderWithProvider(makeItem())
-
-    expect(observeMock).toHaveBeenCalled()
-    expect(resizeCallback).not.toBeNull()
-
-    // Mock HTML element clientWidth to trigger logic mapping line coverage
-    const originalClientWidth = Object.getOwnPropertyDescriptor(
-      HTMLElement.prototype,
-      'clientWidth',
-    )
-    Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, value: 500 })
-
-    act(() => {
-      if (resizeCallback) {
-        resizeCallback([], {} as ResizeObserver)
-      }
-    })
-
-    const actionContainer = screen.getByTestId('action-container')
-    // 500 width + 8 offset defined in styles
-    expect(actionContainer).toHaveStyle({ right: '508px' })
-
-    // Restore original
-    if (originalClientWidth) {
-      Object.defineProperty(HTMLElement.prototype, 'clientWidth', originalClientWidth)
-    }
-  })
-
-  it('should disconnect ResizeObserver on component unmount', () => {
-    const { unmount } = renderWithProvider(makeItem())
-    unmount()
-    expect(disconnectMock).toHaveBeenCalled()
   })
 
   it('should call copy-to-clipboard and show a toast when copy action is clicked', async () => {
@@ -661,56 +608,6 @@ describe('Question component', () => {
     expect(screen.getByText(/image.png/i)).toBeInTheDocument()
   })
 
-  it('should apply correct contentWidth positioning to action container', () => {
-    vi.useFakeTimers()
-
-    try {
-      renderWithProvider(makeItem())
-
-      // Mock clientWidth at different values
-      const originalClientWidth = Object.getOwnPropertyDescriptor(
-        HTMLElement.prototype,
-        'clientWidth',
-      )
-      Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
-        configurable: true,
-        value: 300,
-      })
-
-      act(() => {
-        if (resizeCallback) {
-          resizeCallback([], {} as ResizeObserver)
-        }
-      })
-
-      const actionContainer = screen.getByTestId('action-container')
-      // 300 width + 8 offset = 308px
-      expect(actionContainer).toHaveStyle({ right: '308px' })
-
-      // Change width and trigger resize again
-      Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
-        configurable: true,
-        value: 250,
-      })
-
-      act(() => {
-        if (resizeCallback) {
-          resizeCallback([], {} as ResizeObserver)
-        }
-      })
-
-      // 250 width + 8 offset = 258px
-      expect(actionContainer).toHaveStyle({ right: '258px' })
-
-      // Restore original
-      if (originalClientWidth) {
-        Object.defineProperty(HTMLElement.prototype, 'clientWidth', originalClientWidth)
-      }
-    } finally {
-      vi.useRealTimers()
-    }
-  })
-
   it('should hide edit button when enableEdit is explicitly true', () => {
     renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, { enableEdit: true })
 
@@ -999,11 +896,14 @@ describe('Question component', () => {
     // Should not throw
   })
 
-  it('should handle theme without chatBubbleColorStyle', () => {
-    const theme = { chatBubbleColorStyle: undefined } as unknown as Theme
+  it('should render bubble via token 双层 var 样式（theme prop 已废弃不消费）', () => {
+    const theme = { chatBubbleColorStyle: 'backgroundColor: red' } as unknown as Theme
     renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, { theme })
     const content = screen.getByTestId('question-content')
-    expect(content.getAttribute('style')).toBeNull()
+    const styleAttr = content.getAttribute('style')
+    expect(styleAttr).toContain('--chat-bubble-user-bg')
+    expect(styleAttr).toContain('--chat-bubble-user-fg')
+    expect(styleAttr).not.toContain('red')
   })
 
   it('should handle undefined message_files', () => {

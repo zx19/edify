@@ -15,7 +15,7 @@ import { toast } from '@xsl/lomva-ui/toast'
 import { Toggle } from '@xsl/lomva-ui/toggle'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import copy from 'copy-to-clipboard'
-import { memo, useId, useMemo, useState } from 'react'
+import { memo, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import EditReplyModal from '@/app/components/app/annotation/edit-annotation-modal'
 import Log from '@/app/components/base/chat/chat/log'
@@ -24,17 +24,14 @@ import NewAudioButton from '@/app/components/base/new-audio-button'
 import { useChatContext } from '../context'
 
 type OperationProps = {
-  answerActionPosition?: AnswerActionPosition
   item: ChatItem
   question: string
   index: number
   showPromptLog?: boolean
-  maxSize: number
-  contentWidth: number
-  hasWorkflowProcess: boolean
   noChatInput?: boolean
 }
 
+/** @deprecated chat 单元重写后操作条固定为回答左下流内行，不再支持定位（保留导出兼容 ChatProps 签名） */
 export type AnswerActionPosition = 'auto' | 'below'
 
 type FeedbackTooltipProps = {
@@ -43,8 +40,6 @@ type FeedbackTooltipProps = {
 }
 
 const feedbackTooltipClassName = 'max-w-[260px]'
-const answerActiveFlexClassName = 'group-hover:flex group-has-[[data-popup-open]]:flex'
-const answerActiveBlockClassName = 'group-hover:block group-has-[[data-popup-open]]:block'
 const accentPressedClassName =
   'data-pressed:bg-state-accent-active data-pressed:text-text-accent data-pressed:hover:bg-state-accent-active-alt'
 const destructivePressedClassName =
@@ -76,17 +71,13 @@ const FeedbackTooltip = ({ content, children }: FeedbackTooltipProps) => {
   )
 }
 
-function Operation({
-  answerActionPosition = 'auto',
-  item,
-  question,
-  index,
-  showPromptLog,
-  maxSize,
-  contentWidth,
-  hasWorkflowProcess,
-  noChatInput,
-}: OperationProps) {
+/**
+ * 消息操作条（chat 单元重写，mockup 类型1 消息区）：
+ * 回答左下流内行——赞同/反对（反馈弹窗）、复制、重新生成、朗读（TTS 开启时）、标注、日志；
+ * 原绝对定位 + 宽度计算机（operationWidth/positionRight）随 mockup 行式布局废弃。
+ * 交互行为全保留（反馈覆盖态/tooltip/弹窗/复制 toast/标注流）。
+ */
+function Operation({ item, question, index, showPromptLog, noChatInput }: OperationProps) {
   const { t } = useTranslation()
   const {
     config,
@@ -195,53 +186,20 @@ function Operation({
     setIsShowFeedbackModal(false)
   }
 
-  const operationWidth = useMemo(() => {
-    let width = 0
-    if (!isOpeningStatement) width += 26
-    if (!isOpeningStatement && showPromptLog) width += 28 + 8
-    if (!isOpeningStatement && config?.text_to_speech?.enabled && hasPublicContent) width += 26
-    if (!isOpeningStatement && shouldShowAnnotationAction) width += 26
-    if (shouldShowUserFeedbackBar) width += hasUserFeedback ? 28 + 8 : 60 + 8
-    if (shouldShowAdminFeedbackBar)
-      width += (hasAdminFeedback ? 28 : 60) + 8 + (hasUserFeedback ? 28 : 0)
-
-    return width
-  }, [
-    config?.text_to_speech?.enabled,
-    hasAdminFeedback,
-    hasPublicContent,
-    hasUserFeedback,
-    isOpeningStatement,
-    shouldShowAdminFeedbackBar,
-    shouldShowAnnotationAction,
-    shouldShowUserFeedbackBar,
-    showPromptLog,
-  ])
-
-  const positionRight = useMemo(
-    () => answerActionPosition === 'auto' && operationWidth < maxSize,
-    [answerActionPosition, operationWidth, maxSize],
-  )
+  // mockup：常态下 hover 显现；已有反馈（赞/踩）时常显
+  const hoverRevealClassName =
+    hasUserFeedback || hasAdminFeedback
+      ? ''
+      : 'opacity-0 transition-opacity group-hover:opacity-100 group-has-[[data-popup-open]]:opacity-100'
 
   return (
     <>
       <div
-        className={cn(
-          'absolute flex justify-end gap-1',
-          hasWorkflowProcess && 'right-2 -bottom-4',
-          !positionRight && 'right-2 -bottom-4',
-          !hasWorkflowProcess && positionRight && 'top-2.25!',
-        )}
-        style={!hasWorkflowProcess && positionRight ? { left: contentWidth + 8 } : {}}
+        className={cn('flex items-center gap-0.5', hoverRevealClassName)}
         data-testid="operation-bar"
       >
         {shouldShowUserFeedbackBar && !humanInputFormDataList?.length && (
-          <div
-            className={cn(
-              'ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-xs',
-              hasUserFeedback ? 'flex' : `hidden ${answerActiveFlexClassName}`,
-            )}
-          >
+          <div className="flex items-center gap-0.5">
             {hasUserFeedback ? (
               <FeedbackTooltip
                 content={buildFeedbackTooltip(displayUserFeedback, userFeedbackLabel)}
@@ -296,12 +254,7 @@ function Operation({
           </div>
         )}
         {shouldShowAdminFeedbackBar && !humanInputFormDataList?.length && (
-          <div
-            className={cn(
-              'ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-xs',
-              hasAdminFeedback || hasUserFeedback ? 'flex' : `hidden ${answerActiveFlexClassName}`,
-            )}
-          >
+          <div className="flex items-center gap-0.5">
             {displayUserFeedback?.rating && (
               <FeedbackTooltip
                 content={buildFeedbackTooltip(displayUserFeedback, userFeedbackLabel)}
@@ -330,7 +283,10 @@ function Operation({
             )}
 
             {displayUserFeedback?.rating && (
-              <div className="mx-1 h-3 w-[0.5px] bg-components-actionbar-border" />
+              <div
+                data-testid="feedback-separator"
+                className="mx-1 h-3 w-[0.5px] bg-[var(--border)]"
+              />
             )}
             {hasAdminFeedback ? (
               <FeedbackTooltip
@@ -393,19 +349,9 @@ function Operation({
             )}
           </div>
         )}
-        {showPromptLog && !isOpeningStatement && (
-          <div className={cn('hidden', answerActiveBlockClassName)}>
-            <Log logItem={item} />
-          </div>
-        )}
+        {showPromptLog && !isOpeningStatement && <Log logItem={item} />}
         {!isOpeningStatement && (
-          <div
-            className={cn(
-              'ml-1 hidden items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-xs',
-              answerActiveFlexClassName,
-            )}
-            data-testid="operation-actions"
-          >
+          <div className="flex items-center gap-0.5" data-testid="operation-actions">
             {config?.text_to_speech?.enabled &&
               hasPublicContent &&
               !humanInputFormDataList?.length && (

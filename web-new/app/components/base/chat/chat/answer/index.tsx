@@ -1,10 +1,9 @@
 import type { FC, ReactNode } from 'react'
 import type { ChatConfig, ChatItem } from '../../types'
 import type { HumanInputFormSubmitData } from './human-input-content/type'
-import type { AnswerActionPosition } from './operation'
 import type { AppData } from '@/models/share'
 import { cn } from '@xsl/lomva-ui/cn'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { EditTitle } from '@/app/components/app/annotation/edit-annotation-modal/edit-item'
 import AnswerIcon from '@/app/components/base/answer-icon'
@@ -24,7 +23,8 @@ import SuggestedQuestions from './suggested-questions'
 import WorkflowProcessItem from './workflow-process'
 
 type AnswerProps = {
-  answerActionPosition?: AnswerActionPosition
+  /** @deprecated 操作条固定为流内行（见 operation.tsx），此 prop 仅保留签名兼容 */
+  answerActionPosition?: 'auto' | 'below'
   item: ChatItem
   question: string
   index: number
@@ -45,8 +45,15 @@ type AnswerProps = {
   }) => ReactNode
   onHumanInputFormSubmit?: (formToken: string, formData: HumanInputFormSubmitData) => Promise<void>
 }
+
+/** 回答区容器样式：token 双层（:root = Dify 白渐变气泡；.webapp-theme 作用域 = 去气泡直接排版） */
+const answerContainerStyle = {
+  background: 'var(--chat-answer-bg)',
+  borderRadius: 'var(--chat-answer-radius)',
+  padding: 'var(--chat-answer-py) var(--chat-answer-px)',
+} as const
+
 const Answer: FC<AnswerProps> = ({
-  answerActionPosition,
   item,
   question,
   index,
@@ -84,51 +91,7 @@ const Answer: FC<AnswerProps> = ({
   // `{}` (the field is always persisted), and `!!{}` would otherwise be truthy.
   const hasReasoning = !!item.reasoningContent && Object.values(item.reasoningContent).some(Boolean)
 
-  const [containerWidth, setContainerWidth] = useState(0)
-  const [contentWidth, setContentWidth] = useState(0)
-  const [humanInputFormContainerWidth, setHumanInputFormContainerWidth] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const humanInputFormContainerRef = useRef<HTMLDivElement>(null)
-
   const { getHumanInputNodeData } = useChatContext()
-
-  const getContainerWidth = () => {
-    if (containerRef.current) setContainerWidth(containerRef.current?.clientWidth + 16)
-  }
-  useEffect(() => {
-    getContainerWidth()
-  }, [])
-
-  const getContentWidth = () => {
-    if (contentRef.current) setContentWidth(contentRef.current?.clientWidth)
-  }
-
-  useEffect(() => {
-    if (!responding) getContentWidth()
-  }, [responding])
-
-  const getHumanInputFormContainerWidth = () => {
-    if (humanInputFormContainerRef.current)
-      setHumanInputFormContainerWidth(humanInputFormContainerRef.current?.clientWidth)
-  }
-
-  useEffect(() => {
-    if (hasHumanInputs) getHumanInputFormContainerWidth()
-  }, [hasHumanInputs])
-
-  // Recalculate contentWidth when content changes (e.g., SVG preview/source toggle)
-  useEffect(() => {
-    if (!containerRef.current) return
-    const resizeObserver = new ResizeObserver(() => {
-      getContentWidth()
-      getHumanInputFormContainerWidth()
-    })
-    resizeObserver.observe(containerRef.current)
-    return () => {
-      resizeObserver.disconnect()
-    }
-  }, [])
 
   const handleSwitchSibling = useCallback(
     (direction: 'prev' | 'next') => {
@@ -171,35 +134,18 @@ const Answer: FC<AnswerProps> = ({
       )}
       <div
         className="chat-answer-container group ml-4 w-0 grow pb-4"
-        ref={containerRef}
         data-testid="chat-answer-container"
       >
         {/* Block 1: Workflow Process + Human Input Forms */}
         {hasHumanInputs && (
           <div
-            className={cn('group relative pr-10', chatAnswerContainerInner)}
+            className={cn(chatAnswerContainerInner)}
             data-testid="chat-answer-container-humaninput"
           >
             <div
-              ref={humanInputFormContainerRef}
-              className={cn(
-                'relative inline-block w-full max-w-full rounded-2xl bg-chat-bubble-bg px-4 py-3 body-lg-regular text-text-primary',
-              )}
+              className="relative inline-block w-full max-w-full body-lg-regular text-text-primary"
+              style={answerContainerStyle}
             >
-              {!responding && contentIsEmpty && !hasAgentContent && (
-                <Operation
-                  answerActionPosition={answerActionPosition}
-                  hasWorkflowProcess={!!workflowProcess}
-                  maxSize={containerWidth - humanInputFormContainerWidth - 4}
-                  contentWidth={humanInputFormContainerWidth}
-                  item={item}
-                  question={question}
-                  index={index}
-                  showPromptLog={showPromptLog}
-                  noChatInput={noChatInput}
-                />
-              )}
-              {/** Render workflow process */}
               {workflowProcess && (
                 <WorkflowProcessItem
                   data={workflowProcess}
@@ -222,44 +168,18 @@ const Answer: FC<AnswerProps> = ({
                   humanInputFilledFormDataList={humanInputFilledFormDataList}
                 />
               )}
-              {typeof item.siblingCount === 'number' &&
-                item.siblingCount > 1 &&
-                !responding &&
-                contentIsEmpty &&
-                !hasAgentContent && (
-                  <ContentSwitch
-                    count={item.siblingCount}
-                    currentIndex={item.siblingIndex}
-                    prevDisabled={!item.prevSibling}
-                    nextDisabled={!item.nextSibling}
-                    switchSibling={handleSwitchSibling}
-                  />
-                )}
             </div>
           </div>
         )}
 
         {/* Block 2: Response Content (when human inputs exist) */}
         {hasHumanInputs && (responding || !contentIsEmpty || hasAgentContent || hasReasoning) && (
-          <div className={cn('group relative mt-2 pr-10', chatAnswerContainerInner)}>
+          <div className={cn('group relative mt-2', chatAnswerContainerInner)}>
             <div className="absolute -top-2 left-6 h-3 w-0.5 bg-chat-answer-human-input-form-divider-bg" />
             <div
-              ref={contentRef}
-              className="relative inline-block w-full max-w-full rounded-2xl bg-chat-bubble-bg px-4 py-3 body-lg-regular text-text-primary"
+              className="relative inline-block w-full max-w-full body-lg-regular text-text-primary"
+              style={answerContainerStyle}
             >
-              {!responding && (
-                <Operation
-                  answerActionPosition={answerActionPosition}
-                  hasWorkflowProcess={!!workflowProcess}
-                  maxSize={containerWidth - contentWidth - 4}
-                  contentWidth={contentWidth}
-                  item={item}
-                  question={question}
-                  index={index}
-                  showPromptLog={showPromptLog}
-                  noChatInput={noChatInput}
-                />
-              )}
               {hasReasoning && (
                 <ReasoningPanel content={item.reasoningContent ?? {}} done={reasoningDone} />
               )}
@@ -298,46 +218,20 @@ const Answer: FC<AnswerProps> = ({
               {!!citation?.length && !responding && (
                 <Citation data={citation} showHitInfo={config?.supportCitationHitInfo} />
               )}
-              {typeof item.siblingCount === 'number' && item.siblingCount > 1 && (
-                <ContentSwitch
-                  count={item.siblingCount}
-                  currentIndex={item.siblingIndex}
-                  prevDisabled={!item.prevSibling}
-                  nextDisabled={!item.nextSibling}
-                  switchSibling={handleSwitchSibling}
-                />
-              )}
             </div>
           </div>
         )}
 
         {/* Original single block layout (when no human inputs) */}
         {!hasHumanInputs && (
-          <div
-            className={cn('group relative pr-10', chatAnswerContainerInner)}
-            data-testid="chat-answer-container-inner"
-          >
+          <div className={cn(chatAnswerContainerInner)} data-testid="chat-answer-container-inner">
             <div
-              ref={contentRef}
               className={cn(
-                'relative inline-block max-w-full rounded-2xl bg-chat-bubble-bg px-4 py-3 body-lg-regular text-text-primary',
+                'relative inline-block max-w-full body-lg-regular text-text-primary',
                 workflowProcess && 'w-full',
               )}
+              style={answerContainerStyle}
             >
-              {!responding && (
-                <Operation
-                  answerActionPosition={answerActionPosition}
-                  hasWorkflowProcess={!!workflowProcess}
-                  maxSize={containerWidth - contentWidth - 4}
-                  contentWidth={contentWidth}
-                  item={item}
-                  question={question}
-                  index={index}
-                  showPromptLog={showPromptLog}
-                  noChatInput={noChatInput}
-                />
-              )}
-              {/** Render workflow process */}
               {workflowProcess && (
                 <WorkflowProcessItem
                   data={workflowProcess}
@@ -386,19 +280,32 @@ const Answer: FC<AnswerProps> = ({
               {!!citation?.length && !responding && (
                 <Citation data={citation} showHitInfo={config?.supportCitationHitInfo} />
               )}
-              {typeof item.siblingCount === 'number' && item.siblingCount > 1 && (
-                <ContentSwitch
-                  count={item.siblingCount}
-                  currentIndex={item.siblingIndex}
-                  prevDisabled={!item.prevSibling}
-                  nextDisabled={!item.nextSibling}
-                  switchSibling={handleSwitchSibling}
-                />
-              )}
             </div>
           </div>
         )}
-        <More more={more} />
+
+        {/* msg-foot 组合行（mockup 类型1）：操作条 + 多答案切换 + 性能行（右侧） */}
+        {!responding && (
+          <div className="mt-1.5 flex items-center gap-2">
+            <Operation
+              item={item}
+              question={question}
+              index={index}
+              showPromptLog={showPromptLog}
+              noChatInput={noChatInput}
+            />
+            {typeof item.siblingCount === 'number' && item.siblingCount > 1 && (
+              <ContentSwitch
+                count={item.siblingCount}
+                currentIndex={item.siblingIndex}
+                prevDisabled={!item.prevSibling}
+                nextDisabled={!item.nextSibling}
+                switchSibling={handleSwitchSibling}
+              />
+            )}
+            <More more={more} />
+          </div>
+        )}
       </div>
     </div>
   )

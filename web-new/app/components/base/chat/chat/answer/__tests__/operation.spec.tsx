@@ -203,9 +203,6 @@ type OperationProps = {
   question: string
   index: number
   showPromptLog?: boolean
-  maxSize: number
-  contentWidth: number
-  hasWorkflowProcess: boolean
   noChatInput?: boolean
 }
 
@@ -242,9 +239,6 @@ const baseProps: OperationProps = {
   item: baseItem,
   question: 'What is this?',
   index: 0,
-  maxSize: 500,
-  contentWidth: 300,
-  hasWorkflowProcess: false,
 }
 
 describe('Operation', () => {
@@ -377,11 +371,8 @@ describe('Operation', () => {
     it('should keep hover-only controls visible when a descendant popup is open', () => {
       renderOperation({ ...baseProps, showPromptLog: true })
 
-      expect(screen.getByTestId('operation-actions')).toHaveClass(
-        'group-has-[[data-popup-open]]:flex',
-      )
-      expect(screen.getByTestId('log-btn').parentElement).toHaveClass(
-        'group-has-[[data-popup-open]]:block',
+      expect(screen.getByTestId('operation-bar')).toHaveClass(
+        'group-has-[[data-popup-open]]:opacity-100',
       )
     })
 
@@ -805,7 +796,7 @@ describe('Operation', () => {
       const item = { ...baseItem, feedback: { rating: 'dislike' as const } }
       renderOperation({ ...baseProps, item })
       const bar = screen.getByTestId('operation-bar')
-      expect(bar.querySelector('.bg-components-actionbar-border'))!.toBeInTheDocument()
+      expect(bar.querySelector('[data-testid="feedback-separator"]'))!.toBeInTheDocument()
     })
 
     it('should show existing admin like feedback and allow undo', async () => {
@@ -888,24 +879,6 @@ describe('Operation', () => {
   })
 
   describe('Positioning and layout', () => {
-    it('should position right when operationWidth < maxSize', () => {
-      renderOperation({ ...baseProps, maxSize: 500 })
-      const bar = screen.getByTestId('operation-bar')
-      expect(bar.style.left).toBeTruthy()
-    })
-
-    it('should position bottom when operationWidth >= maxSize', () => {
-      renderOperation({ ...baseProps, maxSize: 1 })
-      const bar = screen.getByTestId('operation-bar')
-      expect(bar.style.left).toBeFalsy()
-    })
-
-    it('should position below when requested even if there is room on the right', () => {
-      renderOperation({ ...baseProps, answerActionPosition: 'below', maxSize: 500 })
-      const bar = screen.getByTestId('operation-bar')
-      expect(bar.style.left).toBeFalsy()
-    })
-
     it('should calculate width correctly for all features combined', () => {
       mockContextValue.config = makeChatConfig({
         text_to_speech: { enabled: true },
@@ -933,7 +906,7 @@ describe('Operation', () => {
       const item = { ...baseItem, feedback: { rating: 'like' as const } }
       renderOperation({ ...baseProps, item })
       const bar = screen.getByTestId('operation-bar')
-      expect(bar.querySelector('.bg-components-actionbar-border'))!.toBeInTheDocument()
+      expect(bar.querySelector('[data-testid="feedback-separator"]'))!.toBeInTheDocument()
     })
 
     it('should handle missing translation fallbacks in buildFeedbackTooltip', () => {

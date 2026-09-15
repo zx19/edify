@@ -48,11 +48,9 @@ describe('More', () => {
     expect(screen.queryByText('·')).not.toBeInTheDocument()
   })
 
-  it('should render nothing inside container if more prop is missing', () => {
+  it('should render nothing when more prop is missing', () => {
     render(<More more={undefined} />)
-    const containerDiv = screen.getByTestId('more-container')
-    expect(containerDiv).toBeInTheDocument()
-    expect(containerDiv.children.length).toBe(0)
+    expect(screen.queryByTestId('more-container')).not.toBeInTheDocument()
   })
 
   it('should correctly format large token counts', () => {

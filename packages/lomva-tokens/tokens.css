@@ -115,10 +115,16 @@
 :root {
   --chat-bubble-user-bg: #e1effe;
   --chat-bubble-user-fg: #101828;
+  /* 回答区容器（manual-light.css 实证值）：Dify 现行 = 白渐变卡片 16px 圆角 16/12 内边距 */
+  --chat-answer-bg: linear-gradient(180deg, #fff 0%, rgb(255 255 255 / 0.6) 100%);
+  --chat-answer-radius: 16px;
+  --chat-answer-px: 16px;
+  --chat-answer-py: 12px;
 }
 [data-theme='dark'] {
   --chat-bubble-user-bg: #27314d;
   --chat-bubble-user-fg: #fbfbfc;
+  --chat-answer-bg: linear-gradient(180deg, rgb(42 43 48) 0%, rgb(37 38 42) 100%);
 }
 .admin-theme,
 .webapp-theme,
@@ -126,4 +132,9 @@
   /* mockup：light = 黑底白字；dark 经下方 dark 段随 --text-1/--bg 互换自动反色 */
   --chat-bubble-user-bg: var(--text-1);
   --chat-bubble-user-fg: var(--bg);
+  /* mockup：回答去气泡框直接排版 */
+  --chat-answer-bg: transparent;
+  --chat-answer-radius: 0;
+  --chat-answer-px: 0;
+  --chat-answer-py: 0;
 }
