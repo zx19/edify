@@ -17,7 +17,7 @@ export default function ContentSwitch({
     count &&
     count > 1 &&
     currentIndex !== undefined && (
-      <div className="flex items-center justify-center pt-3.5 text-sm">
+      <div className="flex items-center justify-center pt-3.5 text-sm [.webapp-theme_&]:pt-0">
         <button
           type="button"
           aria-label="Previous" // Added for accessibility and testing
@@ -25,9 +25,9 @@ export default function ContentSwitch({
           disabled={prevDisabled}
           onClick={() => !prevDisabled && switchSibling('prev')}
         >
-          <ChevronRight className="h-3.5 w-3.5 rotate-180 text-text-primary" />
+          <ChevronRight className="h-3.5 w-3.5 rotate-180 text-text-primary [.webapp-theme_&]:text-[var(--text-3)]" />
         </button>
-        <span className="px-2 text-xs text-text-primary">
+        <span className="px-2 text-xs text-text-primary [.webapp-theme_&]:text-[var(--text-3)]">
           {currentIndex + 1} /{count}
         </span>
         <button

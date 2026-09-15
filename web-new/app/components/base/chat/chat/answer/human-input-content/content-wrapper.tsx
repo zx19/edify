@@ -30,6 +30,8 @@ const ContentWrapper = ({
     <div
       className={cn(
         'rounded-2xl border-[0.5px] border-components-panel-border bg-background-section p-2 shadow-md',
+        // chat 单元重写：作用域内对齐 mockup human-form 卡片（radius 12 / token 边框底色/轻阴影）
+        '[.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:shadow-[var(--shadow-sm)]',
         className,
       )}
       data-testid="content-wrapper"
