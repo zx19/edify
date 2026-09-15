@@ -105,3 +105,25 @@
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.4);
   --shadow-md: 0 10px 34px rgb(0 0 0 / 0.5);
 }
+
+/* ===== chat 专用变量（双层机制，chat 单元 4-chat-2）=====
+ * 族外共享件（Chat/Question/Answer/ChatInputArea/Markdown 被 console debug 面板等消费）重写后
+ * 消费这些变量：无作用域渲染 = :root Dify 等效默认（视觉不变）；作用域内 = 新视觉覆盖。
+ * :root 默认值 = 现行视觉实证值（manual-light.css/manual-dark.css），非新设计语言。
+ * 规则：基础 token（--accent/--bg 等）只在作用域类下有值，共享件消费时带 Dify 等效 fallback，
+ *       如 var(--accent, #1c64f2)；专用变量才进本双层段。 */
+:root {
+  --chat-bubble-user-bg: #e1effe;
+  --chat-bubble-user-fg: #101828;
+}
+[data-theme='dark'] {
+  --chat-bubble-user-bg: #27314d;
+  --chat-bubble-user-fg: #fbfbfc;
+}
+.admin-theme,
+.webapp-theme,
+.console-theme {
+  /* mockup：light = 黑底白字；dark 经下方 dark 段随 --text-1/--bg 互换自动反色 */
+  --chat-bubble-user-bg: var(--text-1);
+  --chat-bubble-user-fg: var(--bg);
+}
