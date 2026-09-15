@@ -155,6 +155,15 @@ export const fetchConversations = async (
   pinned?: boolean,
   limit?: number,
 ) => {
+  if (appSourceType === AppSourceType.webApp) {
+    return webappClient.conversations.get({
+      query: {
+        limit: limit || 20,
+        ...(last_id ? { last_id } : {}),
+        ...(pinned !== undefined ? { pinned } : {}),
+      },
+    }) as unknown as Promise<AppConversationData>
+  }
   return getAction('get', appSourceType)(getUrl('conversations', appSourceType, installedAppId), {
     params: {
       limit: limit || 20,
@@ -169,6 +178,8 @@ export const pinConversation = async (
   installedAppId = '',
   id: string,
 ) => {
+  if (appSourceType === AppSourceType.webApp)
+    return webappClient.conversations.byCId.pin.patch({ params: { c_id: id } })
   return getAction(
     'patch',
     appSourceType,
@@ -180,6 +191,8 @@ export const unpinConversation = async (
   installedAppId = '',
   id: string,
 ) => {
+  if (appSourceType === AppSourceType.webApp)
+    return webappClient.conversations.byCId.unpin.patch({ params: { c_id: id } })
   return getAction(
     'patch',
     appSourceType,
@@ -191,6 +204,8 @@ export const delConversation = async (
   installedAppId = '',
   id: string,
 ) => {
+  if (appSourceType === AppSourceType.webApp)
+    return webappClient.conversations.byCId.delete({ params: { c_id: id } })
   return getAction(
     'del',
     appSourceType,
@@ -203,6 +218,8 @@ export const renameConversation = async (
   id: string,
   name: string,
 ) => {
+  if (appSourceType === AppSourceType.webApp)
+    return webappClient.conversations.byCId.name.post({ params: { c_id: id }, body: { name } })
   return getAction('post', appSourceType)(
     getUrl(`conversations/${id}/name`, appSourceType, installedAppId),
     { body: { name } },
@@ -214,6 +231,12 @@ export const generationConversationName = async (
   installedAppId = '',
   id: string,
 ) => {
+  if (appSourceType === AppSourceType.webApp) {
+    return webappClient.conversations.byCId.name.post({
+      params: { c_id: id },
+      body: { auto_generate: true },
+    }) as unknown as Promise<ConversationItem>
+  }
   return getAction('post', appSourceType)(
     getUrl(`conversations/${id}/name`, appSourceType, installedAppId),
     { body: { auto_generate: true } },
@@ -225,6 +248,13 @@ export const fetchChatList = async (
   appSourceType: AppSourceType,
   installedAppId = '',
 ) => {
+  if (appSourceType === AppSourceType.webApp) {
+    // 契约 messages query 为 first_id 游标；初始加载不传等价于旧 last_id:'' 语义
+    // 不加 as any（豁免额度按计数）：另一分支返回 any，函数整体类型不变
+    return webappClient.messages.get({
+      query: { conversation_id: conversationId, limit: 20 },
+    })
+  }
   return getAction('get', appSourceType)(getUrl('messages', appSourceType, installedAppId), {
     params: { conversation_id: conversationId, limit: 20, last_id: '' },
   }) as any

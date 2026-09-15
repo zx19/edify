@@ -34,15 +34,20 @@ function createWebAppOpenAPILink(): WebAppClientLink {
       const passport = getWebAppPassport(resolveWebAppAddress())
       return passport ? { [PASSPORT_HEADER_NAME]: passport } : {}
     },
-    fetch: (input, _init, options) => {
+    fetch: async (input, _init, options) => {
       // 剥回契约相对路径交还 request：formatURL(isPublicAPI) 内部重做
       // PUBLIC_API_PREFIX 前缀 + getWebAppPublicApiPath 地址解析；query 串随路径透传
       const linkPathname = new URL(getBaseURL(PUBLIC_API_PREFIX)).pathname.replace(/\/$/, '')
       const inputURL = new URL(input.url)
       const path = inputURL.pathname.replace(linkPathname, '') + inputURL.search
+      const hasBody = input.method !== 'GET' && input.method !== 'HEAD'
       return request(
         path,
-        { headers: input.headers, method: input.method },
+        {
+          headers: input.headers,
+          method: input.method,
+          body: hasBody ? await input.text() : undefined,
+        },
         {
           isPublicAPI: true,
           fetchCompat: true,

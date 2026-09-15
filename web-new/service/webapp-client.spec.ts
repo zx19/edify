@@ -50,4 +50,18 @@ describe('webappClient', () => {
     expect(url).toMatch(/\/webapp\/access-mode\?/)
     expect(url).toContain('appCode=abc123')
   })
+
+  it('POST body 透传（path 参数展开 + JSON body）', async () => {
+    const { webappClient } = await import('./webapp-client')
+    await expect(
+      webappClient.conversations.byCId.name.post({
+        params: { c_id: 'c1' },
+        body: { name: '新名' },
+      }),
+    ).rejects.toThrow('stop-at-transport')
+    const [url, options] = mockRequest.mock.calls[0]!
+    expect(url).toBe('/conversations/c1/name')
+    expect((options as RequestInit)?.method).toBe('POST')
+    expect((options as RequestInit)?.body).toBe(JSON.stringify({ name: '新名' }))
+  })
 })
