@@ -893,12 +893,25 @@
       "id": "/chat/[token]",
       "route": "/chat/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/chat/[token]/page.tsx",
-      "contracts": [],
-      "i18nKeys": [],
-      "tests": [],
+      "file": "web-new/app/(shareLayout)/chat/[token]/page.tsx",
+      "contracts": [
+        "ChatProps (app/components/base/chat/chat/index.tsx:25-91)",
+        "ChatWithHistoryWrapProps (chat-with-history/index.tsx:78-83，含 isNewAgent/renderAgentContent)",
+        "oRPC @dify/contracts/api/web（site/parameters/meta/conversations/messages/chat-messages）",
+        "baselines/chat-unit-testids.json（119 testids，e2e 引用 chat-answer-container）"
+      ],
+      "i18nKeys": [
+        "share.json: chat.*/common.appUnavailable/splash.loading",
+        "common.json: userProfile.logout"
+      ],
+      "tests": [
+        "chat-with-history 族 12 spec（hooks 2329 行 / chat-wrapper 2146 行 / sidebar 4 / header 3 / inputs-form 3 / header-in-mobile）",
+        "chat 族 ~48 spec（hooks 3803 行 / index 1209 行 / question 1061 行 / answer 族 11 / human-input 族 11 / citation 4 / chat-input-area 3 等）",
+        "base/chat 根 utils.spec + fixtures 7"
+      ],
       "e2e": [],
-      "status": "pending"
+      "status": "in-progress",
+      "notes": "chat 单元重写中（docs/superpowers/plans/2026-09-13-chat单元重写.md）；e2e 缺口登记 reports/test-gaps.md（M2 阻塞于后端 T3）"
     },
     {
       "id": "/chatbot/[token]",
