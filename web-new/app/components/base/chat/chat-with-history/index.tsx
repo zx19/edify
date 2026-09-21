@@ -1,6 +1,6 @@
 'use client'
 import type { InstalledAppResponse } from '@dify/contracts/api/console/installed-apps/types.gen'
-import type { CSSProperties, FC } from 'react'
+import type { FC } from 'react'
 import type { ChatProps } from '../chat'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect, useState } from 'react'
@@ -8,6 +8,7 @@ import Loading from '@/app/components/base/loading'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import useDocumentTitle from '@/hooks/use-document-title'
 import { resolveUiConfig } from '@/models/ui-config'
+import { buildAccentStyle } from '../accent-style'
 import ChatWrapper from './chat-wrapper'
 import { ChatWithHistoryContext, useChatWithHistoryContext } from './context'
 import Header from './header'
@@ -17,24 +18,6 @@ import Sidebar from './sidebar'
 
 type ChatWithHistoryProps = {
   className?: string
-}
-
-/**
- * chat_color_theme → 作用域 accent 三档注入（替代 createTheme 内联样式机制，design §3.2）：
- * - 未配置 = 不注入，继承 tokens.css 作用域默认橙
- * - 配置后 = 壳层根 inline 覆盖 --accent/--accent-deep/--accent-soft，发送钮/CTA/选中态随之换色
- * - chat_color_theme_inverted：旧语义=定制色 header 白底反色；新 header 恒中性（mockup 扁平化），
- *   无视觉落点（功能对照表核销注记）
- */
-function buildAccentStyle(chatColorTheme: string | null | undefined): CSSProperties | undefined {
-  if (!chatColorTheme) return undefined
-  return {
-    '--accent': chatColorTheme,
-    '--accent-deep': `color-mix(in srgb, ${chatColorTheme}, black 12%)`,
-    '--accent-soft': `color-mix(in srgb, ${chatColorTheme} 10%, transparent)`,
-    '--accent-pill-bg': `color-mix(in srgb, ${chatColorTheme} 12%, transparent)`,
-    '--accent-pill-fg': `color-mix(in srgb, ${chatColorTheme}, black 12%)`,
-  } as CSSProperties
 }
 
 const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {

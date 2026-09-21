@@ -1,95 +1,70 @@
 'use client'
 import type { AppData } from '@/models/share'
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useTranslation } from 'react-i18next'
 import ChatWrapper from '@/app/components/base/chat/embedded-chatbot/chat-wrapper'
 import Header from '@/app/components/base/chat/embedded-chatbot/header'
 import Loading from '@/app/components/base/loading'
-import { DifyLogo } from '@/app/components/base/logo/dify-logo'
-import LogoHeader from '@/app/components/base/logo/logo-embedded-chat-header'
-import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import useDocumentTitle from '@/hooks/use-document-title'
+import { resolveUiConfig } from '@/models/ui-config'
 import { AppSourceType } from '@/service/share'
+import { buildAccentStyle } from '../accent-style'
 import { EmbeddedChatbotContext, useEmbeddedChatbotContext } from './context'
 import { useEmbeddedChatbot } from './hooks'
-import { createTheme } from './theme/theme'
-import { CssTransform } from './theme/utils'
-import { isDify } from './utils'
 
+/**
+ * chatbot 单元重写（mockup 类型2，对照表 §1/§2/§5）：
+ * - 外壳双端同构：白底中性 header + bg-soft 消息区；移动蓝渐变浮卡整体退役
+ * - createTheme/CssTransform/isDify/DifyLogo 退役；chat_color_theme → accent 注入（chat 单元同机制）
+ * - powered by 底部一行常显，品牌链 = remove_webapp_brand 隐藏 → ui_config.brand.footer_text
+ *   → custom_config.replace_webapp_logo → 默认「杏树林」（与 chat 单元口径一致，去 Dify 化）
+ */
 const Chatbot = () => {
   const {
-    isMobile,
     allowResetChat,
     appData,
     appChatListDataLoading,
     chatShouldReloadKey,
     handleNewConversation,
-    theme,
   } = useEmbeddedChatbotContext()
   const { t } = useTranslation()
-  const { data: systemFeatures } = useSuspenseQuery(systemFeaturesQueryOptions())
 
   const site = appData?.site
-
-  const difyIcon = <LogoHeader />
+  const uiConfig = resolveUiConfig(site)
+  const customConfig = appData?.custom_config
+  const showBrand = !customConfig?.remove_webapp_brand
 
   useDocumentTitle(site?.title || 'Chat')
 
   return (
-    <div className="relative">
-      <div
-        className={cn(
-          'flex flex-col rounded-2xl',
-          isMobile ? 'h-[calc(100vh-60px)] shadow-xs' : 'h-screen bg-chatbot-bg',
-        )}
-        style={
-          isMobile ? Object.assign({}, CssTransform(theme?.backgroundHeaderColorStyle ?? '')) : {}
-        }
-      >
-        <Header
-          isMobile={isMobile}
-          allowResetChat={allowResetChat}
-          title={site?.title || ''}
-          customerIcon={isDify() ? difyIcon : ''}
-          theme={theme}
-          onCreateNewChat={handleNewConversation}
-        />
+    <div
+      className="flex h-full flex-col bg-[var(--bg-soft)]"
+      style={buildAccentStyle(site?.chat_color_theme)}
+    >
+      <Header allowResetChat={allowResetChat} onCreateNewChat={handleNewConversation} />
+      <div className="flex grow flex-col overflow-y-auto">
+        {appChatListDataLoading && <Loading type="app" />}
+        {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
+      </div>
+      {showBrand && (
         <div
           className={cn(
-            'flex grow flex-col overflow-y-auto',
-            isMobile && 'm-[0.5px] h-[calc(100vh-3rem)]! rounded-2xl bg-chatbot-bg',
+            'flex shrink-0 items-center justify-center gap-1 bg-[var(--bg-soft)] px-2 pt-1 pb-2',
+            'text-[11px] tracking-wide text-[var(--text-3)]',
           )}
         >
-          {appChatListDataLoading && <Loading type="app" />}
-          {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
-        </div>
-      </div>
-      {/* powered by */}
-      {isMobile && (
-        <div className="flex h-15 shrink-0 items-center pl-2">
-          {!appData?.custom_config?.remove_webapp_brand && (
-            <div className={cn('flex shrink-0 items-center gap-1.5 px-2')}>
-              <div className="system-2xs-medium-uppercase text-text-tertiary">
-                {t(($) => $['chat.poweredBy'], { ns: 'share' })}
-              </div>
-              {systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo ? (
-                <img
-                  src={systemFeatures.branding.workspace_logo}
-                  alt="logo"
-                  className="block h-5 w-auto"
-                />
-              ) : appData?.custom_config?.replace_webapp_logo ? (
-                <img
-                  src={`${appData?.custom_config?.replace_webapp_logo}`}
-                  alt="logo"
-                  className="block h-5 w-auto"
-                />
-              ) : (
-                <DifyLogo alt="Dify" size="small" />
-              )}
-            </div>
+          <span>{t(($) => $['chat.poweredBy'], { ns: 'share' })}</span>
+          {uiConfig.brand.footer_text ? (
+            <span className="truncate">{uiConfig.brand.footer_text}</span>
+          ) : customConfig?.replace_webapp_logo ? (
+            <img
+              src={`${customConfig.replace_webapp_logo}`}
+              alt="logo"
+              className="block h-4 w-auto"
+            />
+          ) : (
+            <b className="font-semibold text-[var(--text-2)]">杏树林</b>
           )}
         </div>
       )}
@@ -134,10 +109,6 @@ const EmbeddedChatbotWrapper = () => {
     allInputsHidden,
     initUserVariables,
   } = useEmbeddedChatbot(AppSourceType.webApp)
-  const theme = createTheme(
-    appData?.site?.chat_color_theme ?? null,
-    appData?.site?.chat_color_theme_inverted ?? false,
-  )
 
   return (
     <EmbeddedChatbotContext.Provider
@@ -167,7 +138,6 @@ const EmbeddedChatbotWrapper = () => {
         appId,
         handleFeedback,
         currentChatInstanceRef,
-        theme,
         clearChatList,
         setClearChatList,
         isResponding,

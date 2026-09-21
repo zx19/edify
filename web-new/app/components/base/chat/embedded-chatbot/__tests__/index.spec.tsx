@@ -1,6 +1,5 @@
 import type { ReactElement, RefObject } from 'react'
 import type { ChatConfig } from '../../types'
-import type { Theme } from '../theme/theme'
 import type { AppData, AppMeta, ConversationItem } from '@/models/share'
 import { screen } from '@testing-library/react'
 import { vi } from 'vite-plus/test'
@@ -9,13 +8,7 @@ import { renderWithConsoleQuery } from '@/test/console/query-data'
 import { useEmbeddedChatbot } from '../hooks'
 import EmbeddedChatbot from '../index'
 
-let mockBrandingWorkspaceLogo = ''
-const render = (ui: ReactElement) =>
-  renderWithConsoleQuery(ui, {
-    systemFeatures: {
-      branding: { enabled: true, workspace_logo: mockBrandingWorkspaceLogo },
-    },
-  })
+const render = (ui: ReactElement) => renderWithConsoleQuery(ui)
 
 vi.mock('../hooks', () => ({
   useEmbeddedChatbot: vi.fn(),
@@ -41,19 +34,7 @@ vi.mock('../chat-wrapper', () => ({
 
 vi.mock('../header', () => ({
   __esModule: true,
-  default: ({ theme }: { theme?: Theme }) => (
-    <div role="banner">
-      <span>chat header</span>
-      <span aria-label="chat theme">
-        {theme?.primaryColor}:{String(theme?.chatColorThemeInverted)}
-      </span>
-    </div>
-  ),
-}))
-
-const mockIsDify = vi.fn(() => false)
-vi.mock('../utils', () => ({
-  isDify: () => mockIsDify(),
+  default: () => <div role="banner">chat header</div>,
 }))
 
 type EmbeddedChatbotHookReturn = ReturnType<typeof useEmbeddedChatbot>
@@ -126,10 +107,13 @@ const createHookReturn = (
   }
 }
 
+/** 外壳根 = header 的父容器（accent 注入点） */
+const getShellRoot = (container: HTMLElement) =>
+  container.querySelector('div.flex.h-full.flex-col') as HTMLElement
+
 describe('EmbeddedChatbot index', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockBrandingWorkspaceLogo = ''
     vi.mocked(useBreakpoints).mockReturnValue(MediaType.mobile)
     vi.mocked(useEmbeddedChatbot).mockReturnValue(createHookReturn())
   })
@@ -153,82 +137,95 @@ describe('EmbeddedChatbot index', () => {
     })
   })
 
-  describe('Theme ownership', () => {
-    it('keeps themes isolated between chat roots', () => {
-      vi.mocked(useEmbeddedChatbot)
-        .mockReturnValueOnce(
-          createHookReturn({
-            appData: createAppData('#FF0000'),
-          }),
-        )
-        .mockReturnValueOnce(
-          createHookReturn({
-            appData: createAppData('#00FF00', true),
-          }),
-        )
+  describe('Accent injection（chat_color_theme → --accent 族，替代 createTheme）', () => {
+    it('injects accent tokens on shell root when chat_color_theme set', () => {
+      const { container } = render(<EmbeddedChatbot />)
 
-      render(
+      const style = getShellRoot(container).getAttribute('style') || ''
+      expect(style).toContain('--accent: blue')
+      expect(style).toContain('--accent-deep')
+      expect(style).toContain('--accent-soft')
+    })
+
+    it('keeps accent isolated between chat roots', () => {
+      vi.mocked(useEmbeddedChatbot)
+        .mockReturnValueOnce(createHookReturn({ appData: createAppData('#FF0000') }))
+        .mockReturnValueOnce(createHookReturn({ appData: createAppData('#00FF00') }))
+
+      const { container } = render(
         <>
           <EmbeddedChatbot />
           <EmbeddedChatbot />
         </>,
       )
 
-      expect(screen.getAllByLabelText('chat theme')).toHaveLength(2)
-      expect(screen.getAllByLabelText('chat theme')[0]).toHaveTextContent('#FF0000:false')
-      expect(screen.getAllByLabelText('chat theme')[1]).toHaveTextContent('#00FF00:true')
+      const styles = [...container.querySelectorAll('div.flex.h-full.flex-col')].map(
+        (el) => el.getAttribute('style') || '',
+      )
+      expect(styles).toHaveLength(2)
+      expect(styles[0]).toContain('--accent: #FF0000')
+      expect(styles[1]).toContain('--accent: #00FF00')
     })
 
-    it('renders a new theme when site configuration changes', () => {
+    it('updates accent when site configuration changes', () => {
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
-        createHookReturn({
-          appData: createAppData('#123456'),
-        }),
+        createHookReturn({ appData: createAppData('#123456') }),
       )
-      const { rerender } = render(<EmbeddedChatbot />)
+      const { container, rerender } = render(<EmbeddedChatbot />)
 
-      expect(screen.getByLabelText('chat theme')).toHaveTextContent('#123456:false')
+      expect(getShellRoot(container).getAttribute('style')).toContain('--accent: #123456')
 
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
-        createHookReturn({
-          appData: createAppData('#654321', true),
-        }),
+        createHookReturn({ appData: createAppData('#654321') }),
       )
       rerender(<EmbeddedChatbot />)
 
-      expect(screen.getByLabelText('chat theme')).toHaveTextContent('#654321:true')
+      expect(getShellRoot(container).getAttribute('style')).toContain('--accent: #654321')
+    })
+
+    it('injects nothing when chat_color_theme absent', () => {
+      vi.mocked(useEmbeddedChatbot).mockReturnValue(
+        createHookReturn({
+          appData: {
+            ...createAppData(),
+            site: { title: 'Embedded App' },
+          } as AppData,
+        }),
+      )
+      const { container } = render(<EmbeddedChatbot />)
+
+      expect(getShellRoot(container).getAttribute('style')).toBeNull()
     })
   })
 
-  describe('Powered by branding', () => {
-    it('should show workspace logo on mobile when branding is enabled', () => {
-      mockBrandingWorkspaceLogo = 'https://example.com/workspace-logo.png'
+  describe('Powered by branding（底部一行，双端统一）', () => {
+    it('shows ui_config.brand.footer_text when configured', () => {
+      vi.mocked(useEmbeddedChatbot).mockReturnValue(
+        createHookReturn({
+          appData: {
+            ...createAppData(),
+            site: {
+              title: 'Embedded App',
+              ui_config: { brand: { footer_text: 'Powered by 自定义品牌' } },
+            },
+          } as AppData,
+        }),
+      )
 
       render(<EmbeddedChatbot />)
 
       expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
-      expect(screen.getByAltText('logo')).toHaveAttribute(
-        'src',
-        'https://example.com/workspace-logo.png',
-      )
+      expect(screen.getByText('Powered by 自定义品牌')).toBeInTheDocument()
     })
 
-    it('should show custom logo when workspace branding logo is unavailable', () => {
+    it('should show custom logo when replace_webapp_logo set and no footer_text', () => {
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
         createHookReturn({
           appData: {
-            app_id: 'app-1',
-            can_replace_logo: true,
+            ...createAppData(),
             custom_config: {
               remove_webapp_brand: false,
               replace_webapp_logo: 'https://example.com/custom-logo.png',
-            },
-            enable_site: true,
-            end_user_id: 'user-1',
-            site: {
-              title: 'Embedded App',
-              chat_color_theme: 'blue',
-              chat_color_theme_inverted: false,
             },
           },
         }),
@@ -243,22 +240,21 @@ describe('EmbeddedChatbot index', () => {
       )
     })
 
+    it('should show default 杏树林 when nothing configured', () => {
+      render(<EmbeddedChatbot />)
+
+      expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
+      expect(screen.getByText('杏树林')).toBeInTheDocument()
+    })
+
     it('should hide powered by section when branding is removed', () => {
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
         createHookReturn({
           appData: {
-            app_id: 'app-1',
-            can_replace_logo: true,
+            ...createAppData(),
             custom_config: {
               remove_webapp_brand: true,
               replace_webapp_logo: '',
-            },
-            enable_site: true,
-            end_user_id: 'user-1',
-            site: {
-              title: 'Embedded App',
-              chat_color_theme: 'blue',
-              chat_color_theme_inverted: false,
             },
           },
         }),
@@ -269,14 +265,13 @@ describe('EmbeddedChatbot index', () => {
       expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
     })
 
-    it('should not show powered by section on desktop', () => {
+    it('should ALSO show powered by on desktop（双端统一拍板，不再是移动端专属）', () => {
       vi.mocked(useBreakpoints).mockReturnValue(MediaType.pc)
-      vi.mocked(useEmbeddedChatbot).mockReturnValue(createHookReturn({ appData: null }))
-      mockIsDify.mockReturnValue(true)
+      vi.mocked(useEmbeddedChatbot).mockReturnValue(createHookReturn())
 
       render(<EmbeddedChatbot />)
 
-      expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
+      expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
       expect(screen.getByText('chat header')).toBeInTheDocument()
     })
   })

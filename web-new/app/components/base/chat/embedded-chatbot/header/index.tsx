@@ -1,45 +1,37 @@
 import type { FC } from 'react'
-import type { Theme } from '../theme/theme'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/lomva-ui/cn'
 import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@xsl/lomva-ui/tooltip'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import AppIcon from '@/app/components/base/app-icon'
 import ViewFormDropdown from '@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown'
-import Divider from '@/app/components/base/divider'
-import { DifyLogo } from '@/app/components/base/logo/dify-logo'
-import { systemFeaturesQueryOptions } from '@/features/system-features/client'
 import { isClient } from '@/utils/client'
 import { useEmbeddedChatbotContext } from '../context'
-import { CssTransform } from '../theme/utils'
 
 type IHeaderProps = {
-  isMobile?: boolean
   allowResetChat?: boolean
-  customerIcon?: React.ReactNode
-  title: string
-  theme?: Theme
   onCreateNewChat?: () => void
 }
-const Header: FC<IHeaderProps> = ({
-  isMobile,
-  allowResetChat,
-  customerIcon,
-  title,
-  theme,
-  onCreateNewChat,
-}) => {
+
+/**
+ * chatbot 单元重写（mockup 类型2，对照表 §2）：
+ * - 白底中性 header 双端同构：左 AppIcon+标题（桌面补回），右功能钮组
+ * - createTheme 着色 / customerIcon（isDify 恒假分支）/ 桌面 powered by 退役
+ *   （powered by 移至外壳底部一行，见 ../index.tsx）
+ * - iframe 通信协议【保留红线】逐字不动：
+ *   上行 dify-chatbot-iframe-ready / dify-chatbot-expand-change；下行 dify-chatbot-config 钉 parentOrigin
+ */
+const Header: FC<IHeaderProps> = ({ allowResetChat, onCreateNewChat }) => {
   const { t } = useTranslation()
   const { appData, currentConversationId, inputsForms, allInputsHidden } =
     useEmbeddedChatbotContext()
 
+  // ===== iframe 通信（保留红线，逻辑逐字保全） =====
   const isIframe = isClient ? window.self !== window.top : false
   const [parentOrigin, setParentOrigin] = useState('')
   const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
   const [expanded, setExpanded] = useState(false)
-  const { data: systemFeatures } = useSuspenseQuery(systemFeaturesQueryOptions())
 
   const handleMessageReceived = useCallback(
     (event: MessageEvent) => {
@@ -80,107 +72,23 @@ const Header: FC<IHeaderProps> = ({
       parentOrigin,
     )
   }, [isIframe, parentOrigin, showToggleExpandButton, expanded])
-
-  if (!isMobile) {
-    return (
-      <div className="flex h-14 shrink-0 items-center justify-end p-3">
-        <div className="flex items-center gap-1">
-          {/* powered by */}
-          <div className="shrink-0">
-            {!appData?.custom_config?.remove_webapp_brand && (
-              <div className={cn('flex shrink-0 items-center gap-1.5 px-2')}>
-                <div className="system-2xs-medium-uppercase text-text-tertiary">
-                  {t(($) => $['chat.poweredBy'], { ns: 'share' })}
-                </div>
-                {systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo ? (
-                  <img
-                    src={systemFeatures.branding.workspace_logo}
-                    alt="logo"
-                    className="block h-5 w-auto"
-                  />
-                ) : appData?.custom_config?.replace_webapp_logo ? (
-                  <img
-                    src={`${appData?.custom_config?.replace_webapp_logo}`}
-                    alt="logo"
-                    className="block h-5 w-auto"
-                  />
-                ) : (
-                  <DifyLogo alt="Dify" size="small" />
-                )}
-              </div>
-            )}
-          </div>
-          {currentConversationId && <Divider type="vertical" className="h-3.5" />}
-          {showToggleExpandButton && (
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <IconButton
-                    size="lg"
-                    aria-label={
-                      expanded
-                        ? t(($) => $['chat.collapse'], { ns: 'share' })
-                        : t(($) => $['chat.expand'], { ns: 'share' })
-                    }
-                    onClick={handleToggleExpand}
-                  >
-                    {expanded ? (
-                      <div
-                        className="i-ri-collapse-diagonal-2-line h-4.5 w-4.5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <div className="i-ri-expand-diagonal-2-line h-4.5 w-4.5" aria-hidden="true" />
-                    )}
-                  </IconButton>
-                }
-              />
-              <TooltipContent>
-                {expanded
-                  ? t(($) => $['chat.collapse'], { ns: 'share' })
-                  : t(($) => $['chat.expand'], { ns: 'share' })}
-              </TooltipContent>
-            </Tooltip>
-          )}
-          {currentConversationId && allowResetChat && (
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <IconButton
-                    size="lg"
-                    aria-label={t(($) => $['chat.resetChat'], { ns: 'share' })}
-                    onClick={onCreateNewChat}
-                  >
-                    <div className="i-ri-reset-left-line h-4.5 w-4.5" aria-hidden="true" />
-                  </IconButton>
-                }
-              />
-              <TooltipContent>{t(($) => $['chat.resetChat'], { ns: 'share' })}</TooltipContent>
-            </Tooltip>
-          )}
-          {currentConversationId && inputsForms.length > 0 && !allInputsHidden && (
-            <ViewFormDropdown />
-          )}
-        </div>
-      </div>
-    )
-  }
+  // ===== iframe 通信结束 =====
 
   return (
-    <div
-      className={cn('flex h-14 shrink-0 items-center justify-between rounded-t-2xl px-3')}
-      style={CssTransform(theme?.headerBorderBottomStyle ?? '')}
-    >
-      <div className="flex grow items-center space-x-3">
-        {customerIcon}
-        <div
-          className="truncate system-md-semibold"
-          style={CssTransform(theme?.colorFontOnHeaderStyle ?? '')}
-        >
-          {title}
+    <div className="flex h-13 shrink-0 items-center gap-2.5 border-b border-[var(--border)] bg-[var(--bg)] px-3.5">
+      <div className="flex min-w-0 grow items-center gap-2.5">
+        <AppIcon
+          size="small"
+          iconType={appData?.site.icon_type}
+          icon={appData?.site.icon}
+          background={appData?.site.icon_background}
+          imageUrl={appData?.site.icon_url}
+        />
+        <div className="truncate text-[13.5px] font-semibold text-[var(--text-1)]">
+          {appData?.site.title || ''}
         </div>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex shrink-0 items-center gap-1">
         {showToggleExpandButton && (
           <Tooltip>
             <TooltipTrigger
@@ -195,21 +103,9 @@ const Header: FC<IHeaderProps> = ({
                   onClick={handleToggleExpand}
                 >
                   {expanded ? (
-                    <div
-                      className={cn(
-                        'i-ri-collapse-diagonal-2-line h-4.5 w-4.5',
-                        theme?.colorPathOnHeader,
-                      )}
-                      aria-hidden="true"
-                    />
+                    <div className="i-ri-collapse-diagonal-2-line size-4" aria-hidden="true" />
                   ) : (
-                    <div
-                      className={cn(
-                        'i-ri-expand-diagonal-2-line h-4.5 w-4.5',
-                        theme?.colorPathOnHeader,
-                      )}
-                      aria-hidden="true"
-                    />
+                    <div className="i-ri-expand-diagonal-2-line size-4" aria-hidden="true" />
                   )}
                 </IconButton>
               }
@@ -221,6 +117,9 @@ const Header: FC<IHeaderProps> = ({
             </TooltipContent>
           </Tooltip>
         )}
+        {currentConversationId && inputsForms.length > 0 && !allInputsHidden && (
+          <ViewFormDropdown />
+        )}
         {currentConversationId && allowResetChat && (
           <Tooltip>
             <TooltipTrigger
@@ -230,18 +129,12 @@ const Header: FC<IHeaderProps> = ({
                   aria-label={t(($) => $['chat.resetChat'], { ns: 'share' })}
                   onClick={onCreateNewChat}
                 >
-                  <div
-                    className={cn('i-ri-reset-left-line h-4.5 w-4.5', theme?.colorPathOnHeader)}
-                    aria-hidden="true"
-                  />
+                  <div className="i-ri-reset-left-line size-4" aria-hidden="true" />
                 </IconButton>
               }
             />
             <TooltipContent>{t(($) => $['chat.resetChat'], { ns: 'share' })}</TooltipContent>
           </Tooltip>
-        )}
-        {currentConversationId && inputsForms.length > 0 && !allInputsHidden && (
-          <ViewFormDropdown iconColor={theme?.colorPathOnHeader} />
         )}
       </div>
     </div>

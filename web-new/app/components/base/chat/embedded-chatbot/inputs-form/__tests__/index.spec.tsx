@@ -95,7 +95,7 @@ describe('InputsFormNode', () => {
     expect(setCollapsed).toHaveBeenCalledWith(true)
   })
 
-  it('should apply theme primary color to start chat button', () => {
+  it('should NOT apply inline theme color to start chat button（createTheme 退役，accent 走 token 注入）', () => {
     vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
       ...mockContextValue,
       theme: {
@@ -104,6 +104,6 @@ describe('InputsFormNode', () => {
     } as unknown as any)
     render(<InputsFormNode collapsed={false} setCollapsed={setCollapsed} />)
     const button = screen.getByRole('button', { name: 'share.chat.startChat' })
-    expect(button).toHaveStyle({ backgroundColor: '#ff0000' })
+    expect(button.getAttribute('style') || '').not.toContain('background-color')
   })
 })

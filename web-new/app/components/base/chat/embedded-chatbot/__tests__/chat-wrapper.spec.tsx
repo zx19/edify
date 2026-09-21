@@ -125,11 +125,6 @@ vi.mock('@/service/workflow', () => ({
   submitHumanInputForm: vi.fn(),
 }))
 
-const mockIsDify = vi.fn(() => false)
-vi.mock('../utils', () => ({
-  isDify: () => mockIsDify(),
-}))
-
 type UseChatReturn = ReturnType<typeof useChat>
 
 const createContextValue = (
@@ -521,7 +516,6 @@ describe('EmbeddedChatbot chat-wrapper', () => {
           currentConversationId: 'conversation-1',
         }),
       )
-      mockIsDify.mockReturnValue(true)
 
       render(<ChatWrapper />)
 
