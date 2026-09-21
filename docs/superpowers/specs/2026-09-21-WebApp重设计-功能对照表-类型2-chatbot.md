@@ -90,3 +90,24 @@
 - **协议验收**：跨源宿主页 harness 重跑（ready→config→展开钮→expand-change 全链），方法见功能清单 §9。
 - **console 零影响**：embedded-chatbot 族外消费方（console `app/overview/embedded`、`explore/try-app`）渲染不变——族内改动不走 `.webapp-theme` 之外的通道，无作用域态靠 token 双层兜底。
 - **蓝色族**：createTheme 默认蓝渐变/`#1C64F2` 全退役；任何残留蓝色走 tokens.css 蓝色族重映射段复核（chat 单元 b4ff5fa3b0 机制）。
+
+## 10. 实现核销（2026-09-21，commit e8c4d3535a）
+
+| 表行 | 实现 | 验证 |
+|---|---|---|
+| §1 外壳双端同构（移动浮卡退役） | index.tsx 重写为白底头+bg-soft 单列 | ✅ QA 移动视口：无蓝渐变（inline style 无 gradient）、白底头实测 |
+| §2 header 白底中性（桌面补回图标+标题） | header/index.tsx 重写 | ✅ QA 桌面截图（图标+标题+右钮组）；spec 9 用例绿 |
+| §2 isDify/customerIcon 退役 | 分支删除，utils.ts+utils.spec 连删 | ✅ tsc 0；无残留引用 |
+| §2 展开/重置/变量钮显隐条件 | 逐字保留 | ✅ 协议 spec 7 用例绿 |
+| §3 iframe 协议三消息 | 逐字保留（仅视觉类名随 header 换新） | ✅ 跨源 harness 回归：ready→config→展开钮（aria=展开）→点击→expand-change 全链 |
+| §4 URL 参数契约 | hooks.tsx 零改动 | ✅ 族 spec 全绿 |
+| §5 powered by 底部一行 + 杏树林链 | index.tsx 底部行；品牌链 footer_text→replace_webapp_logo→杏树林 | ✅ QA 双视口截图（居中一行「Powered by 杏树林」）；index.spec 5 用例覆盖新链 |
+| §6 欢迎屏统一 hero | chat-wrapper.tsx welcome 重写（图标+标题+开场白副标题+建议问题列） | ✅ spec 绿；⚪ 实机未触发（走查应用无 opening_statement——建议问题列表形态待有配置应用走查） |
+| §6 描述卡/表单卡 token 化 | chat-wrapper descriptionNode + inputs-form 双层类 | ✅ spec 绿；⚪ 实机未触发（应用无描述/表单字段） |
+| §7 聊天核心已携带 | 零改动 | ✅ QA 实测气泡黑底白字（rgb(10,10,11)/白）回归 |
+| §7 answerIcon isDify 分支删 | chat-wrapper 改单链 use_icon_as_answer_icon | ✅ spec 绿 |
+| §7 theme prop 停传 | Chat 不再收 theme（签名保留兼容） | ✅ tsc 0 |
+| accent 注入共享化 | chat/accent-style.ts 提取，chat-with-history + chatbot 双消费 | ✅ index.spec accent 4 用例（含多实例隔离/无配置不注入） |
+| console 零影响 | chat-with-history 族 348 用例全绿；双层类保 try-app | ✅ |
+
+**遗留走查项（实机）**：①欢迎屏 hero + 建议问题列（需有 opening_statement 的应用）；②表单卡新视觉（需有变量表单的应用）；③accent 换色实机（需配 chat_color_theme 的应用）。三项 spec 已覆盖逻辑，视觉待人信号。

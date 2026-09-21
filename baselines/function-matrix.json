@@ -931,8 +931,8 @@
         "embedded-chatbot 族 10 spec（3378 行：index/chat-wrapper/hooks/utils/inputs-form 族）"
       ],
       "e2e": [],
-      "status": "重写中",
-      "notes": "三件套 09-21 齐（清单/mockup 用户评审通过/对照表）；iframe 协议+URL 契约=保留红线；createTheme 退役、DifyLogo→杏树林链"
+      "status": "追平",
+      "notes": "chatbot 单元重写完成 09-21（对照表核销见 specs/2026-09-21 功能对照表「实现核销」节）；e2e 缺口同 chat（M2 阻塞链）；遗留实机走查 3 项（欢迎屏/表单卡/accent 换色）"
     },
     {
       "id": "/completion/[token]",
