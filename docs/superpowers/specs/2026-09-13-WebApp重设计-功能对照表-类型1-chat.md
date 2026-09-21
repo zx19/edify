@@ -140,5 +140,5 @@
 1. **portal 弹层作用域**：base-ui Portal 挂 body 逃出布局 div → share 路由经 `useBodyWebappTheme`（Splash 内 effect）在 body 挂 .webapp-theme，弹层继承新视觉；离开路由摘除，console 零影响。
 2. **chat_color_theme_inverted 退役**：新 header 恒中性（扁平化），inverted 旧语义（定制色 header 反色）无视觉落点；字段继续接收不报错，无渲染。
 3. **未动件（台账）**：reasoning-panel（ThinkingDetails 属 markdown 管线台账）/workflow-process（tracing-panel console 共享）/agent-roster-response-content（/agent 死路由决策不动）/menu-dropdown（text-generation 单元资产）。
-4. **共享件 console 零影响机制**：`[.webapp-theme_&]` tailwind 任意变体（编译实证祖先选择器正确生成）+ token 双层 var（:root Dify 等效默认）。
+4. **共享件 console 零影响机制**：`[.webapp-theme_&]` tailwind 任意变体（编译实证祖先选择器正确生成）+ token 双层 var（:root Dify 等效默认）+ **Dify 蓝色族 token 作用域重映射**（tokens.css：text-accent/state-accent-*/button-primary/secondary-accent/option-card-selected-border → --accent 阶梯；走查发现逐文件打补丁漏网太多，改一处映射吃掉整族，chat_color_theme 注入时全族跟随）。
 5. **e2e 缺口**：本单元验收不含 e2e 双轨（M2 阻塞）；Q&A 走查补位。
