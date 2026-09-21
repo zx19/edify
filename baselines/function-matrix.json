@@ -917,12 +917,22 @@
       "id": "/chatbot/[token]",
       "route": "/chatbot/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/chatbot/[token]/page.tsx",
-      "contracts": [],
-      "i18nKeys": [],
-      "tests": [],
+      "file": "web-new/app/(shareLayout)/chatbot/[token]/page.tsx",
+      "contracts": [
+        "iframe postMessage 协议三消息（dify-chatbot-iframe-ready/config/expand-change，header/index.tsx:38-82 + public/embed.js）",
+        "URL 参数契约（sys.*/user.*/inputs deflate64/locale/sendOnEnter/conversation_id，embedded-chatbot/hooks.tsx）",
+        "EmbeddedChatbotContextValue（embedded-chatbot/context.ts，tryApp 变体消费）",
+        "baselines/chatbot-unit-testids.json（族内 2 + 动态模板 1；聊天核心区 testid 见 chat-unit-testids.json）"
+      ],
+      "i18nKeys": [
+        "share.json: chat.*（poweredBy/resetChat/expand/collapse/chatSettingsTitle/startChat/chatFormTip 等）"
+      ],
+      "tests": [
+        "embedded-chatbot 族 10 spec（3378 行：index/chat-wrapper/hooks/utils/inputs-form 族）"
+      ],
       "e2e": [],
-      "status": "pending"
+      "status": "重写中",
+      "notes": "三件套 09-21 齐（清单/mockup 用户评审通过/对照表）；iframe 协议+URL 契约=保留红线；createTheme 退役、DifyLogo→杏树林链"
     },
     {
       "id": "/completion/[token]",

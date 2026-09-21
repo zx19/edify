@@ -1,0 +1,8 @@
+{
+  "$comment": "chatbot 单元（类型2 /chatbot/[token]，embedded-chatbot 族）data-testid 冻结清单——选择器契约（v2 §5.2）。重写时不可删改；新增允许。族内专属件仅 3 枚；聊天核心区 testid 已由 chat-unit-testids.json 冻结（chat-root/chat-container/chat-footer 等，chatbot 页整树复用）。e2e 无直接引用（grep e2e/ 实证 2026-09-21）。",
+  "generatedAt": "2026-09-21",
+  "source": "web-new/app/components/base/chat/embedded-chatbot/** + web-new/app/(shareLayout)/chatbot/** 的 data-testid 全量（--exclude-dir=__tests__）",
+  "e2eReferenced": [],
+  "testids": ["inputs-form-node", "view-form-dropdown-content"],
+  "dynamicTestidPatterns": ["inputs-form-item-${variable}"]
+}
