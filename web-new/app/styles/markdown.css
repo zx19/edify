@@ -1133,3 +1133,10 @@
 .webapp-theme .markdown-body a {
   color: var(--accent-deep);
 }
+
+/* 用户气泡内 markdown 跟随气泡前景色（黑底白字反色；覆盖 .markdown-body 自带 text-primary 深蓝黑） */
+.webapp-theme [data-testid='question-content'] .markdown-body,
+.webapp-theme [data-testid='question-content'] .markdown-body p,
+.webapp-theme [data-testid='question-content'] .markdown-body li {
+  color: inherit;
+}

@@ -137,4 +137,26 @@
   --chat-answer-radius: 0;
   --chat-answer-px: 0;
   --chat-answer-py: 0;
+
+  /* ===== Dify 蓝色系 → 新视觉橙（走查修正：一处映射吃掉整族蓝色残留，含 lomva-ui 原语内部消费） =====
+   * 引用本文件 token 阶梯 → dark 通道自动复用 dark 值；chat_color_theme 注入 --accent 时全族跟随。
+   * 只改强调语义族；中性色（text/border/panel）不动。 */
+  --color-text-accent: var(--accent-deep);
+  --color-text-accent-secondary: var(--accent);
+  --color-text-accent-light-mode-only: var(--accent-deep);
+  --color-state-accent-hover: var(--accent-soft);
+  --color-state-accent-hover-alt: color-mix(in srgb, var(--accent) 18%, transparent);
+  --color-state-accent-active: var(--accent-soft);
+  --color-state-accent-active-alt: color-mix(in srgb, var(--accent) 18%, transparent);
+  --color-state-accent-solid: var(--accent);
+  --color-components-option-card-option-selected-border: var(--accent);
+  --color-components-button-primary-bg: var(--accent);
+  --color-components-button-primary-bg-hover: var(--accent-deep);
+  --color-components-button-primary-bg-disabled: color-mix(in srgb, var(--accent) 14%, transparent);
+  --color-components-button-secondary-accent-text: var(--accent-deep);
+  --color-components-button-secondary-accent-text-disabled: color-mix(
+    in srgb,
+    var(--accent) 40%,
+    transparent
+  );
 }
