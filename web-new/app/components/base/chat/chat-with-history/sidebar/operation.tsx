@@ -46,7 +46,7 @@ const Operation: FC<Props> = ({
             aria-label={t(($) => $['operation.more'], { ns: 'common' })}
             data-active={isActive ? '' : undefined}
             className={cn(
-              'pointer-events-none opacity-0 data-active:bg-state-accent-active data-active:text-text-accent data-active:hover:bg-state-accent-active-alt data-popup-open:pointer-events-auto data-popup-open:bg-state-base-hover data-popup-open:opacity-100 data-active:data-popup-open:bg-state-accent-active data-active:data-popup-open:text-text-accent',
+              'pointer-events-none opacity-0 data-active:bg-[var(--accent-soft)] data-active:text-[var(--accent-deep)] data-active:hover:bg-[var(--accent-soft)] data-popup-open:pointer-events-auto data-popup-open:bg-[var(--bg-soft)] data-popup-open:opacity-100 data-active:data-popup-open:bg-[var(--accent-soft)] data-active:data-popup-open:text-[var(--accent-deep)]',
               isItemHovering && 'pointer-events-auto opacity-100',
             )}
           >

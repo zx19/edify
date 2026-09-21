@@ -62,6 +62,8 @@ const Operation: FC<OperationProps> = ({
             // chat 单元重写：作用域内发送钮吃 accent（含 chat_color_theme 注入的覆盖值）；
             // 无作用域保持 variant primary 原样（console debug 面板零影响），createTheme 直改色值机制废弃
             '[.webapp-theme_&]:not-disabled:bg-[var(--accent)] [.webapp-theme_&]:not-disabled:hover:bg-[var(--accent-deep)]',
+            // 禁用态（mockup）：灰底三级灰图标（variant primary 的蓝色调禁用态在作用域内覆盖）
+            '[.webapp-theme_&]:disabled:bg-[var(--gray-pill-bg)] [.webapp-theme_&]:disabled:text-[var(--text-3)]',
           )}
           variant="primary"
           disabled={readonly || disabled}
