@@ -1134,9 +1134,16 @@
   color: var(--accent-deep);
 }
 
-/* 用户气泡内 markdown 跟随气泡前景色（黑底白字反色；覆盖 .markdown-body 自带 text-primary 深蓝黑） */
-.webapp-theme [data-testid='question-content'] .markdown-body,
-.webapp-theme [data-testid='question-content'] .markdown-body p,
-.webapp-theme [data-testid='question-content'] .markdown-body li {
-  color: inherit;
+/* 用户气泡内 markdown 跟随气泡前景色（黑底白字反色）
+ * 双重门槛：① .markdown-body 元素自带 text-text-primary! 工具类（important，markdown/index.tsx 写死）；
+ * ② 该工具类在 @layer utilities 内——important 声明层序反转，非分层 important 必输分层 important。
+ * 故本规则须进同一 utilities 层 + !important + 更高优先级 (0,3,0)>(0,1,0) 才稳赢。
+ * 仅覆盖文本容器；自带颜色的元素（h1-h6=var(--text-1)、a=var(--accent-deep)、code 浅底芯片）保持原样，
+ * 黑气泡内为已知残留，用户消息极少含这些元素，需要时另开修正。 */
+@layer utilities {
+  .webapp-theme [data-testid='question-content'] .markdown-body,
+  .webapp-theme [data-testid='question-content'] .markdown-body p,
+  .webapp-theme [data-testid='question-content'] .markdown-body li {
+    color: inherit !important;
+  }
 }
