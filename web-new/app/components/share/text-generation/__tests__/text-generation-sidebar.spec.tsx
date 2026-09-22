@@ -4,7 +4,6 @@ import type { SiteInfo } from '@/models/share'
 import type { VisionSettings } from '@/types/app'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { AccessMode } from '@/models/access-control'
-import { createSystemFeaturesFixture } from '@/test/console/system-features'
 import { Resolution, TransferMethod } from '@/types/app'
 import TextGenerationSidebar from '../text-generation-sidebar'
 
@@ -91,8 +90,8 @@ const baseProps: ComponentProps<typeof TextGenerationSidebar> = {
   resultExisted: false,
   runControl: null,
   savedMessages,
+  showBatchTab: true,
   siteInfo,
-  systemFeatures: createSystemFeaturesFixture(),
   textToSpeechConfig: { enabled: true },
   visionConfig,
 }
@@ -162,18 +161,16 @@ describe('TextGenerationSidebar', () => {
     expect(onTabChange).toHaveBeenCalledWith('create')
   })
 
-  it('should prefer workspace branding and hide powered-by block when branding is removed', () => {
+  it('should prefer ui_config footer_text and hide powered-by block when branding is removed', () => {
     const { rerender } = renderSidebar({
-      systemFeatures: createSystemFeaturesFixture({
-        branding: {
-          enabled: true,
-          workspace_logo: 'https://example.com/workspace-logo.png',
-        },
-      }),
+      siteInfo: {
+        ...siteInfo,
+        ui_config: { brand: { footer_text: '杏树林定制页脚' } },
+      } as typeof siteInfo,
     })
 
-    const brandingLogo = screen.getByRole('img', { name: 'logo' })
-    expect(brandingLogo).toHaveAttribute('src', 'https://example.com/workspace-logo.png')
+    expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
+    expect(screen.getByText('杏树林定制页脚')).toBeInTheDocument()
 
     rerender(
       <TextGenerationSidebar
@@ -186,6 +183,20 @@ describe('TextGenerationSidebar', () => {
     )
 
     expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
+  })
+
+  it('should render default 杏树林 when nothing configured', () => {
+    renderSidebar()
+    expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
+    expect(screen.getByText('杏树林')).toBeInTheDocument()
+  })
+
+  it('should hide batch tab by default（ui_config.components.show_batch_tab 拍板）', () => {
+    renderSidebar({ showBatchTab: false })
+    expect(
+      screen.queryByRole('tab', { name: /share\.generation\.tabs\.batch/ }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('run-batch-mock')).not.toBeInTheDocument()
   })
 
   it('should render mobile installed-app layout without saved badge when no saved messages exist', () => {
@@ -254,7 +265,7 @@ describe('TextGenerationSidebar', () => {
     expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
   })
 
-  it('should render the custom webapp logo when workspace branding is unavailable', () => {
+  it('should render the custom webapp logo when footer_text empty', () => {
     renderSidebar({
       customConfig: {
         remove_webapp_brand: false,

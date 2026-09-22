@@ -5,10 +5,12 @@ import type { VisionFile } from '@/types/app'
 import { cn } from '@xsl/lomva-ui/cn'
 import { toast } from '@xsl/lomva-ui/toast'
 import { useBoolean } from 'ahooks'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { buildAccentStyle } from '@/app/components/base/chat/accent-style'
 import Loading from '@/app/components/base/loading'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
+import { resolveUiConfig } from '@/models/ui-config'
 import { useSearchParams } from '@/next/navigation'
 import { useTextGenerationAppState } from './hooks/use-text-generation-app-state'
 import { useTextGenerationBatch } from './hooks/use-text-generation-batch'
@@ -64,13 +66,16 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
     promptConfig,
     savedMessages,
     siteInfo,
-    systemFeatures,
     textToSpeechConfig,
     visionConfig,
   } = useTextGenerationAppState({
     isInstalledApp,
     isWorkflow,
   })
+  // ui_config.components.show_batch_tab：批量 tab 默认隐藏（2026-09-22 拍板）；
+  // 配置关闭时 ?mode=batch 落回 create（渲染期派生，URL 直达兜底，不引入 effect）
+  const showBatchTab = resolveUiConfig(siteInfo).components.show_batch_tab
+  const effectiveTab = !showBatchTab && currentTab === 'batch' ? 'create' : currentTab
   const {
     allFailedTaskList,
     allSuccessTaskList,
@@ -91,9 +96,6 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
     notify,
     t: translateBatchKey,
   })
-  useEffect(() => {
-    if (isCallBatchAPI) setRunControl(null)
-  }, [isCallBatchAPI])
   const showResultPanel = useCallback(() => {
     setTimeout(() => {
       showResultPanelState()
@@ -110,6 +112,7 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
   }, [resetBatchExecution, setIsCallBatchAPI, showResultPanel])
   const handleRunBatch = useCallback(
     (data: string[][]) => {
+      setRunControl(null)
       runBatchExecution(data, {
         onStart: () => {
           setControlSend(Date.now())
@@ -130,15 +133,16 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
   return (
     <div
       className={cn(
-        'bg-background-default-burn',
+        'bg-background-default-burn [.webapp-theme_&]:bg-[var(--bg)]',
         isPC ? 'flex' : 'flex-col',
         isInstalledApp ? 'h-full rounded-2xl shadow-md' : 'h-screen',
       )}
+      style={buildAccentStyle(siteInfo?.chat_color_theme)}
     >
       <TextGenerationSidebar
         accessMode={accessMode}
         allTasksRun={allTasksRun}
-        currentTab={currentTab}
+        currentTab={effectiveTab}
         customConfig={customConfig}
         inputs={inputs}
         inputsRef={inputsRef}
@@ -155,8 +159,8 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
         resultExisted={resultExisted}
         runControl={runControl}
         savedMessages={savedMessages}
+        showBatchTab={showBatchTab}
         siteInfo={siteInfo}
-        systemFeatures={systemFeatures}
         textToSpeechConfig={textToSpeechConfig}
         visionConfig={visionConfig}
       />

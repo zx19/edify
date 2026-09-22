@@ -202,7 +202,8 @@ const GenerationItem: FC<IGenerationItemProps> = ({
           <div
             className={cn(
               'flex h-10 items-center',
-              !inSidePanel && 'rounded-2xl border-t border-divider-subtle bg-chat-bubble-bg',
+              !inSidePanel &&
+                'rounded-2xl border-t border-divider-subtle bg-chat-bubble-bg [.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:shadow-[var(--shadow-xs)]',
             )}
           >
             <Loading type="area" />
@@ -214,7 +215,8 @@ const GenerationItem: FC<IGenerationItemProps> = ({
             <div
               className={cn(
                 'relative',
-                !inSidePanel && 'rounded-2xl border-t border-divider-subtle bg-chat-bubble-bg',
+                !inSidePanel &&
+                  'rounded-2xl border-t border-divider-subtle bg-chat-bubble-bg [.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:shadow-[var(--shadow-xs)]',
               )}
             >
               <WorkflowBody
@@ -307,7 +309,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                 <div className="h-full w-0.5 bg-divider-regular"></div>
                 <div
                   className={cn(
-                    'absolute left-0 flex h-4 w-4 items-center justify-center rounded-2xl border-[0.5px] border-divider-subtle bg-util-colors-blue-blue-500 shadow-xs',
+                    'absolute left-0 flex h-4 w-4 items-center justify-center rounded-2xl border-[0.5px] border-divider-subtle bg-util-colors-blue-blue-500 shadow-xs [.webapp-theme_&]:bg-[var(--accent)]',
                     isMobile ? 'top-[3.5px]' : 'top-2',
                   )}
                 >

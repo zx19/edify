@@ -150,6 +150,9 @@
   --color-state-accent-active-alt: color-mix(in srgb, var(--accent) 18%, transparent);
   --color-state-accent-solid: var(--accent);
   --color-components-option-card-option-selected-border: var(--accent);
+  --color-components-tab-active: var(
+    --accent
+  ); /* Tabs 选中下划线（text-generation 族实证蓝残留 #0033ff → accent） */
   --color-components-button-primary-bg: var(--accent);
   --color-components-button-primary-bg-hover: var(--accent-deep);
   --color-components-button-primary-bg-disabled: color-mix(in srgb, var(--accent) 14%, transparent);

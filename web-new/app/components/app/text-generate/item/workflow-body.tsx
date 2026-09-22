@@ -74,7 +74,7 @@ const WorkflowBody: FC<WorkflowBodyProps> = ({
               className={cn(
                 'cursor-pointer border-b-2 border-transparent py-3 system-sm-semibold-uppercase text-text-tertiary',
                 currentTab === 'RESULT' &&
-                  'border-util-colors-blue-brand-blue-brand-600 text-text-primary',
+                  'border-util-colors-blue-brand-blue-brand-600 text-text-primary [.webapp-theme_&]:border-[var(--text-1)] [.webapp-theme_&]:text-[var(--text-1)]',
               )}
               onClick={() => onSwitchTab('RESULT')}
             >
@@ -84,7 +84,7 @@ const WorkflowBody: FC<WorkflowBodyProps> = ({
               className={cn(
                 'cursor-pointer border-b-2 border-transparent py-3 system-sm-semibold-uppercase text-text-tertiary',
                 currentTab === 'DETAIL' &&
-                  'border-util-colors-blue-brand-blue-brand-600 text-text-primary',
+                  'border-util-colors-blue-brand-blue-brand-600 text-text-primary [.webapp-theme_&]:border-[var(--text-1)] [.webapp-theme_&]:text-[var(--text-1)]',
               )}
               onClick={() => onSwitchTab('DETAIL')}
             >

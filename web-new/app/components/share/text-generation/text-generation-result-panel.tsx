@@ -143,7 +143,7 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
             ? isShowResultPanel
               ? 'bg-background-default-burn'
               : 'border-t-[0.5px] border-divider-regular bg-components-panel-bg'
-            : 'bg-chatbot-bg',
+            : 'bg-chatbot-bg [.webapp-theme_&]:bg-[var(--bg-soft)]',
         )}
       >
         {isCallBatchAPI && (

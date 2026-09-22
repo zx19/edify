@@ -37,7 +37,11 @@ const SavedItems: FC<ISavedItemsProps> = ({
         <>
           {list.map(({ id, answer }) => (
             <div key={id} className="relative">
-              <div className={cn('rounded-2xl bg-background-section-burn p-4')}>
+              <div
+                className={cn(
+                  'rounded-2xl bg-background-section-burn p-4 [.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)]',
+                )}
+              >
                 <Markdown content={answer} />
               </div>
               <div className="mt-1 h-4 px-4 system-xs-regular text-text-quaternary">
