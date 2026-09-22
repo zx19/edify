@@ -84,3 +84,47 @@ describe('webAppLoginStatus', () => {
     expect(getPublicMock).toHaveBeenCalledWith('/login/status?app_code=workflow-app')
   })
 })
+
+/** 测试用假 passport（payload 带 app_code 的 JWT 形态） */
+const makePassport = (appCode: string) => {
+  const b64url = (obj: object) =>
+    btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  return `${b64url({ alg: 'none', typ: 'JWT' })}.${b64url({ app_code: appCode, app_id: 'app-id', end_user_id: 'u-1' })}.sig`
+}
+
+describe('getWebAppPassport 错配防护（2026-09-22 Safari对Chrome错案）', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('discards a passport whose app_code does not match the current address', () => {
+    const address = { kind: 'default' as const, code: 'app-a' }
+    setWebAppPassport(address, makePassport('app-b'))
+
+    expect(getWebAppPassport(address)).toBe('')
+    expect(localStorage.getItem('passport-app-a')).toBeNull()
+  })
+
+  it('keeps a passport whose app_code matches the current address', () => {
+    const address = { kind: 'default' as const, code: 'app-a' }
+    const token = makePassport('app-a')
+    setWebAppPassport(address, token)
+
+    expect(getWebAppPassport(address)).toBe(token)
+  })
+
+  it('keeps opaque legacy passports untouched（无 app_code 可判时不阻断）', () => {
+    const address = { kind: 'default' as const, code: 'app-a' }
+    setWebAppPassport(address, 'legacy-opaque-passport')
+
+    expect(getWebAppPassport(address)).toBe('legacy-opaque-passport')
+  })
+
+  it('does not validate environment passports（结构未实证，暂不校验）', () => {
+    const env = { kind: 'environment' as const, code: 'env-app' }
+    const token = makePassport('some-other-app')
+    setWebAppPassport(env, token)
+
+    expect(getWebAppPassport(env)).toBe(token)
+  })
+})
