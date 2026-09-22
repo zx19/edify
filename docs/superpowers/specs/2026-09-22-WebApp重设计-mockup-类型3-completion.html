@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebApp 重设计 Mockup · 类型 3/4 /completion + /workflow（text-generation）</title>
+<style>
+  /* ===== 视觉语言定稿：白+黑+橙（token 值与 packages/lomva-tokens/tokens.css 一致） ===== */
+  :root {
+    --bg: #ffffff; --bg-soft: #f7f7f8; --card: #ffffff;
+    --border: #e8e8ea; --border-strong: #d9d9dc;
+    --text-1: #0a0a0b; --text-2: #3d3d42; --text-3: #8a8a93;
+    --accent: #ff8c00; --accent-soft: #fff3e0; --accent-deep: #e67a00;
+    --danger: #e5484d; --danger-soft: #fef3f2;
+    --success: #12a150; --success-soft: #e9f9ef;
+    --gray-pill-bg: #f2f2f4; --gray-pill-fg: #3d3d42;
+    --accent-pill-bg: #fff3e0; --accent-pill-fg: #e67a00;
+    --radius: 12px; --radius-btn: 9px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-sm: 0 1px 3px rgb(10 10 11 / .06);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .1);
+    --font: 'Inter', 'SF Pro Text', -apple-system, 'PingFang SC', 'system-ui', sans-serif;
+    --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+    --tool-bg: #1c1c20; --tool-fg: #c9c9d1;
+  }
+  .stage[data-theme='dark'] {
+    --bg: #0a0a0b; --bg-soft: #17171a; --card: #1c1c20;
+    --border: #2a2a2f; --border-strong: #3a3a41;
+    --text-1: #f7f7f8; --text-2: #c9c9d1; --text-3: #7c7c87;
+    --accent: #ffa940; --accent-soft: #3a2a14; --accent-deep: #ff8c00;
+    --danger: #f2555a; --danger-soft: #3b1618;
+    --success: #3ecf8e; --success-soft: #0f2e21;
+    --gray-pill-bg: #26262b; --gray-pill-fg: #c9c9d1;
+    --accent-pill-bg: #3a2a14; --accent-pill-fg: #ffa940;
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / .4);
+    --shadow-md: 0 10px 34px rgb(0 0 0 / .5);
+  }
+  .stage[data-accent='blue'] { --accent: #1c64f2; --accent-soft: #e1effe; --accent-deep: #175cd3; --accent-pill-bg: #e1effe; --accent-pill-fg: #175cd3; }
+  .stage[data-accent='green'] { --accent: #12a150; --accent-soft: #e9f9ef; --accent-deep: #0e7a3d; --accent-pill-bg: #e9f9ef; --accent-pill-fg: #0e7a3d; }
+  .stage[data-theme='dark'][data-accent='blue'] { --accent: #6ea8fe; --accent-soft: #16294d; --accent-deep: #9cc2ff; --accent-pill-bg: #16294d; --accent-pill-fg: #9cc2ff; }
+  .stage[data-theme='dark'][data-accent='green'] { --accent: #3ecf8e; --accent-soft: #0f2e21; --accent-deep: #6fddaa; --accent-pill-bg: #0f2e21; --accent-pill-fg: #6fddaa; }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body { font-family:var(--font); background:#e9e9ec; color:#0a0a0b; font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; border:0; background:none; color:inherit; }
+  input,textarea,select { font-family:inherit; }
+  svg { display:block; }
+
+  /* ===== mockup 评审工具条（非产品 UI） ===== */
+  .toolbar { position:sticky; top:0; z-index:100; background:var(--tool-bg); color:var(--tool-fg); padding:10px 16px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; font-size:12px; }
+  .toolbar .t-title { font-weight:700; color:#fff; letter-spacing:.02em; }
+  .toolbar .t-group { display:flex; align-items:center; gap:6px; }
+  .toolbar .t-label { color:#7c7c87; }
+  .toolbar .t-btn { padding:4px 10px; border-radius:7px; color:var(--tool-fg); font-size:12px; transition:background .12s; }
+  .toolbar .t-btn:hover { background:#2a2a2f; }
+  .toolbar .t-btn.on { background:#ff8c00; color:#fff; font-weight:600; }
+  .toolbar .t-note { color:#7c7c87; margin-left:auto; }
+
+  /* ===== 舞台 ===== */
+  .stage { background:var(--bg); color:var(--text-1); min-height:calc(100vh - 44px); }
+  .shell { display:flex; height:calc(100vh - 44px); overflow:hidden; }
+
+  /* ===== 左：表单栏 ===== */
+  .side { width:480px; max-width:46%; flex:none; background:var(--bg); border-right:1px solid var(--border); display:flex; flex-direction:column; }
+  .side-hd { display:flex; align-items:center; gap:10px; padding:16px 20px 0; }
+  .app-icon { width:32px; height:32px; border-radius:9px; background:var(--accent-soft); display:grid; place-items:center; font-size:17px; flex:none; }
+  .side-app-name { font-weight:600; font-size:14px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .icon-btn { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; color:var(--text-3); transition:background .12s,color .12s; flex:none; }
+  .icon-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .side-desc { margin:10px 20px 0; font-size:12.5px; color:var(--text-3); line-height:1.7; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .side-desc-more { font-size:12px; color:var(--accent-deep); font-weight:600; margin:4px 20px 0; }
+
+  /* Tabs */
+  .tabs { display:flex; gap:2px; padding:14px 20px 0; border-bottom:1px solid var(--border); }
+  .tab { padding:8px 4px; margin-right:14px; font-size:13.5px; color:var(--text-3); border-bottom:2px solid transparent; transition:color .12s,border-color .12s; display:flex; align-items:center; gap:6px; }
+  .tab:hover { color:var(--text-1); }
+  .tab.on { color:var(--accent-deep); border-bottom-color:var(--accent); font-weight:600; }
+  .tab .badge { font-size:10.5px; font-weight:700; padding:1px 7px; border-radius:99px; background:var(--gray-pill-bg); color:var(--gray-pill-fg); }
+  .tab.on .badge { background:var(--accent-pill-bg); color:var(--accent-pill-fg); }
+
+  .side-body { flex:1; overflow-y:auto; padding:18px 20px; }
+  .fld { margin-bottom:14px; }
+  .fld label { display:block; font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:5px; }
+  .fld label .req { color:var(--danger); margin-left:2px; }
+  .fld input[type=text], .fld select, .fld textarea { width:100%; border:1px solid var(--border); border-radius:var(--radius-btn); background:var(--bg); color:var(--text-1); font-size:13px; padding:8px 10px; outline:0; transition:border-color .12s, box-shadow .12s; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .fld .hint { font-size:11px; color:var(--text-3); margin-top:4px; }
+
+  .side-actions { display:flex; gap:8px; margin-top:18px; }
+  .btn-ghost { height:34px; padding:0 14px; border-radius:var(--radius-btn); border:1px solid var(--border); background:var(--card); font-size:12.5px; font-weight:500; color:var(--text-2); }
+  .btn-ghost:hover { background:var(--bg-soft); }
+  .btn-accent { display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 16px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; font-weight:600; font-size:13px; box-shadow:var(--shadow-xs); }
+  .btn-accent:hover { background:var(--accent-deep); }
+  .btn-accent:disabled { background:var(--gray-pill-bg); color:var(--text-3); box-shadow:none; cursor:not-allowed; }
+  .btn-accent .grow { flex:1; }
+
+  /* CSV 批量 */
+  .csv-drop { border:1.5px dashed var(--border-strong); border-radius:12px; background:var(--bg-soft); padding:26px 16px; text-align:center; font-size:12.5px; color:var(--text-3); transition:all .12s; cursor:pointer; }
+  .csv-drop:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .csv-drop .csv-ico { width:34px; height:34px; margin:0 auto 8px; border-radius:9px; background:var(--success-soft); color:var(--success); display:grid; place-items:center; font-size:11px; font-weight:700; }
+  .csv-drop b { color:var(--accent-deep); font-weight:600; }
+  .csv-note { font-size:12px; color:var(--text-2); margin:14px 0 6px; font-weight:600; }
+  .csv-tpl { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--accent-deep); font-weight:600; }
+
+  /* 已保存 */
+  .saved-item { border:1px solid var(--border); border-radius:12px; background:var(--card); padding:12px 14px; margin-bottom:8px; transition:border-color .12s; }
+  .saved-item:hover { border-color:var(--border-strong); }
+  .saved-item .sv-text { font-size:12.5px; color:var(--text-2); line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .saved-item .sv-ft { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:11px; color:var(--text-3); }
+  .saved-item .sv-ft .ops { margin-left:auto; display:flex; gap:2px; }
+
+  /* 左栏页脚（桌面 = 左栏底部，chat 口径） */
+  .side-foot { border-top:1px solid var(--border); padding:10px 20px; display:flex; align-items:center; gap:5px; font-size:11px; letter-spacing:.04em; color:var(--text-3); }
+  .side-foot b { color:var(--text-2); font-weight:600; }
+
+  /* ===== 右：结果区 ===== */
+  .result { flex:1; min-width:0; background:var(--bg-soft); display:flex; flex-direction:column; }
+  .result-scroll { flex:1; overflow-y:auto; padding:28px 36px; }
+  .result-col { max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+
+  /* 空态 */
+  .empty { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60%; color:var(--text-3); }
+  .empty .spark { font-size:30px; opacity:.5; margin-bottom:10px; }
+  .empty .t { font-size:13px; }
+
+  /* 结果卡 */
+  .res-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-xs); padding:16px 18px; }
+  .res-batch-tag { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--text-3); margin-bottom:8px; }
+  .res-batch-tag .no { background:var(--gray-pill-bg); color:var(--gray-pill-fg); border-radius:6px; padding:1px 7px; }
+
+  /* 工作流过程卡 */
+  .wf { border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:12px; background:var(--card); }
+  .wf-hd { display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:12.5px; font-weight:600; color:var(--text-2); cursor:pointer; }
+  .wf-hd:hover { background:var(--bg-soft); }
+  .wf-hd .chev { margin-left:auto; transition:transform .15s; color:var(--text-3); }
+  .wf.open .wf-hd .chev { transform:rotate(90deg); }
+  .wf-bd { display:none; padding:6px 14px 12px; }
+  .wf.open .wf-bd { display:block; }
+  .wf-step { display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:9px; font-size:12.5px; color:var(--text-2); }
+  .wf-step:hover { background:var(--bg-soft); }
+  .wf-step .ic { width:22px; height:22px; border-radius:6px; display:grid; place-items:center; font-size:11px; background:var(--gray-pill-bg); flex:none; }
+  .wf-step .ok { margin-left:auto; color:var(--success); font-size:11px; font-weight:700; }
+
+  /* 结果/详情 小 tab */
+  .res-tabs { display:flex; gap:2px; border-bottom:1px solid var(--border); margin-bottom:10px; }
+  .res-tab { padding:6px 4px; margin-right:12px; font-size:12.5px; color:var(--text-3); border-bottom:2px solid transparent; }
+  .res-tab.on { color:var(--text-1); border-bottom-color:var(--text-1); font-weight:600; }
+
+  .answer-body { font-size:14px; line-height:1.75; color:var(--text-1); }
+  .answer-body p { margin:0 0 10px; }
+  .answer-body ul { margin:0 0 10px 18px; }
+  .answer-body code { font-family:var(--mono); font-size:12.5px; background:var(--bg-soft); border:1px solid var(--border); border-radius:6px; padding:1px 5px; }
+
+  .res-foot { display:flex; align-items:center; gap:4px; margin-top:10px; }
+  .op-btn { width:26px; height:26px; border-radius:7px; display:grid; place-items:center; color:var(--text-3); transition:background .12s,color .12s; }
+  .op-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .op-btn.on { color:var(--accent-deep); background:var(--accent-soft); }
+  .res-foot .save-hint { margin-left:auto; font-size:11px; color:var(--text-3); }
+
+  /* 流式/停止 */
+  .streaming-dot { display:inline-block; width:7px; height:7px; border-radius:99px; background:var(--accent); animation:pulse 1s infinite ease-in-out; }
+  @keyframes pulse { 50% { opacity:.25; } }
+  .btn-stop { display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 12px; border-radius:8px; border:1px solid var(--border); background:var(--card); font-size:12.5px; color:var(--text-2); box-shadow:var(--shadow-xs); }
+
+  /* 批量执行头 + 失败重试条 */
+  .batch-hd { display:flex; align-items:center; margin-bottom:14px; font-size:12.5px; font-weight:700; letter-spacing:.05em; color:var(--text-2); text-transform:uppercase; }
+  .batch-hd .dl { margin-left:auto; display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--accent-deep); font-weight:600; }
+  .batch-fail { position:sticky; bottom:14px; display:flex; align-items:center; gap:8px; border:1px solid var(--danger); background:var(--danger-soft); color:var(--danger); border-radius:10px; padding:10px 14px; font-size:12.5px; }
+  .batch-fail .retry { margin-left:auto; font-weight:700; text-transform:uppercase; font-size:11.5px; }
+
+  /* 标注 chip */
+  .anno { display:inline-block; font-size:10.5px; color:var(--accent-pill-fg); background:var(--accent-pill-bg); border-radius:5px; padding:1px 6px; font-weight:600; vertical-align:2px; margin-left:6px; }
+
+  /* 移动端 frame */
+  .m-section { padding:28px 0 40px; }
+  .m-title { text-align:center; font-size:12px; color:#8a8a93; margin-bottom:14px; letter-spacing:.04em; }
+  .m-frame { width:390px; height:720px; margin:0 auto; border-radius:28px; border:1px solid var(--border-strong); overflow:hidden; background:var(--bg); color:var(--text-1); box-shadow:var(--shadow-md); position:relative; display:flex; flex-direction:column; }
+  .m-body { flex:1; padding:14px; background:var(--bg); overflow:hidden; display:flex; flex-direction:column; }
+  .m-drawer { position:absolute; inset:0; z-index:10; display:flex; flex-direction:column; justify-content:flex-end; }
+  .m-drawer .d-mask { position:absolute; inset:0; background:rgb(10 10 11 / .35); }
+  .m-drawer .d-panel { position:relative; height:62%; background:var(--bg-soft); border-radius:16px 16px 0 0; box-shadow:var(--shadow-md); display:flex; flex-direction:column; }
+  .m-drawer .d-handle { width:32px; height:4px; border-radius:99px; background:var(--border-strong); margin:8px auto; flex:none; }
+  .m-note { text-align:center; font-size:11.5px; color:#8a8a93; margin-top:12px; }
+
+  /* 状态切换 */
+  .view { display:none; }
+  .view.on { display:block; }
+  .stage.hide-saved .tab-saved { display:none; } /* workflow 型无已保存 tab */
+</style>
+</head>
+<body>
+
+<!-- ================= mockup 评审工具条（非产品 UI） ================= -->
+<div class="toolbar">
+  <span class="t-title">类型3/4 text-generation mockup</span>
+  <div class="t-group"><span class="t-label">结果区状态</span>
+    <button class="t-btn on" data-state="empty">空态</button>
+    <button class="t-btn" data-state="running">运行中</button>
+    <button class="t-btn" data-state="done">结果态（含工作流过程卡）</button>
+    <button class="t-btn" data-state="batch">批量执行</button>
+  </div>
+  <div class="t-group"><span class="t-label">主题</span>
+    <button class="t-btn on" data-theme-btn="light">浅色</button>
+    <button class="t-btn" data-theme-btn="dark">深色</button>
+  </div>
+  <div class="t-group"><span class="t-label">accent 注入</span>
+    <button class="t-btn on" data-accent-btn="orange">橙（默认）</button>
+    <button class="t-btn" data-accent-btn="blue">蓝</button>
+    <button class="t-btn" data-accent-btn="green">绿</button>
+  </div>
+  <span class="t-note">橙标 = 注记 · 左栏 tab 可点击切换</span>
+</div>
+
+<div class="stage" id="stage" data-theme="light" data-accent="orange">
+<div class="shell">
+
+  <!-- ================= 左：表单栏 ================= -->
+  <aside class="side">
+    <div class="side-hd">
+      <div class="app-icon">🤖</div>
+      <div class="side-app-name">测试1</div>
+      <button class="icon-btn" title="更多（主题/隐私政策/关于/退出登录）">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      </button>
+    </div>
+    <div class="side-desc">本应用按保单类型生成理赔材料清单，支持批量 CSV 跑批。提交前请先完善变量。<span class="anno">描述卡：超 3 行出「展开」</span></div>
+
+    <div class="tabs">
+      <button class="tab on" data-tab="create">运行一次</button>
+      <button class="tab" data-tab="batch">批量运行</button>
+      <button class="tab tab-saved" data-tab="saved">已保存<span class="badge">2</span><span class="anno">仅 completion 型</span></button>
+    </div>
+
+    <div class="side-body">
+      <!-- 运行一次 -->
+      <div class="tab-pane" data-pane="create">
+        <div class="fld"><label>姓名<span class="req">*</span></label><input type="text" placeholder="姓名"></div>
+        <div class="fld"><label>保单类型</label>
+          <select><option>住院医疗</option><option>重疾</option><option>意外</option></select>
+        </div>
+        <div class="fld"><label>补充说明</label><textarea rows="3" placeholder="可选"></textarea></div>
+        <div class="side-actions">
+          <button class="btn-ghost">清空</button>
+          <button class="btn-accent" style="flex:1;justify-content:center">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            运行
+          </button>
+        </div>
+      </div>
+
+      <!-- 批量运行 -->
+      <div class="tab-pane" data-pane="batch" style="display:none">
+        <div class="csv-drop">
+          <div class="csv-ico">CSV</div>
+          将您的 CSV 文件拖放到此处，或<b>浏览</b>
+        </div>
+        <div class="csv-note">CSV 文件必须符合以下结构：</div>
+        <span class="csv-tpl">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          下载模板
+        </span>
+        <div class="side-actions">
+          <button class="btn-accent" style="flex:1;justify-content:center" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            运行
+          </button>
+        </div>
+      </div>
+
+      <!-- 已保存 -->
+      <div class="tab-pane" data-pane="saved" style="display:none">
+        <div class="saved-item">
+          <div class="sv-text">住院医疗理赔材料：出院小结、费用清单、发票原件、医保结算单……</div>
+          <div class="sv-ft">
+            <span>09-18 14:22</span>
+            <span class="ops">
+              <button class="op-btn" title="复制"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <button class="op-btn" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <div class="saved-item">
+          <div class="sv-text">重疾险理赔指引：确诊证明、病理报告、保险合同……</div>
+          <div class="sv-ft">
+            <span>09-17 10:05</span>
+            <span class="ops">
+              <button class="op-btn" title="复制"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <button class="op-btn" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-foot">
+      Powered by <b>杏树林</b><span class="anno">桌面左栏底部（chat 口径）</span>
+    </div>
+  </aside>
+
+  <!-- ================= 右：结果区 ================= -->
+  <div class="result">
+    <div class="result-scroll">
+      <div class="result-col">
+
+        <!-- 空态 -->
+        <div class="view on" data-view="empty">
+          <div class="empty">
+            <div class="spark">✦</div>
+            <div class="t">AI 会在这里给你惊喜。</div>
+          </div>
+        </div>
+
+        <!-- 运行中 -->
+        <div class="view" data-view="running">
+          <div class="res-card">
+            <div style="display:flex;align-items:center;gap:8px;color:var(--text-3);font-size:13px">
+              <span class="streaming-dot"></span>正在生成…
+            </div>
+            <div class="answer-body" style="margin-top:10px;color:var(--text-3)">
+              <p>理赔一般需要以下材料：</p>
+            </div>
+            <div class="res-foot">
+              <button class="btn-stop">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                停止响应
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 结果态（工作流过程卡） -->
+        <div class="view" data-view="done">
+          <div class="res-card">
+            <div class="wf open" onclick="this.classList.toggle('open')">
+              <div class="wf-hd">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+                工作流
+                <svg class="chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+              <div class="wf-bd">
+                <div class="wf-step"><span class="ic">⛁</span>用户输入<span class="ok">✓</span></div>
+                <div class="wf-step"><span class="ic">◉</span>LLM<span class="ok">✓</span></div>
+                <div class="wf-step"><span class="ic">↳</span>输出<span class="ok">✓</span></div>
+              </div>
+            </div>
+            <div class="res-tabs">
+              <span class="res-tab on">结果</span>
+              <span class="res-tab">详情<span class="anno">inputs+meta</span></span>
+            </div>
+            <div class="answer-body">
+              <p>理赔一般需要以下材料：</p>
+              <ul>
+                <li>出院小结或诊断证明</li>
+                <li>费用清单与 <code>发票原件</code></li>
+                <li>医保结算单（如有）</li>
+              </ul>
+            </div>
+            <div class="res-foot">
+              <button class="op-btn" title="复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <button class="op-btn" title="保存（completion 型）"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></button>
+              <button class="op-btn" title="赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+              <button class="op-btn" title="反对"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:scaleY(-1)"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+              <span class="save-hint">TextGenerationRes 族外共享件（双层口径）</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 批量执行 -->
+        <div class="view" data-view="batch">
+          <div class="batch-hd">
+            3 次执行
+            <span class="dl">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              下载结果
+            </span>
+          </div>
+          <div class="res-card">
+            <div class="res-batch-tag"><span class="no">01</span>张三 · 住院医疗</div>
+            <div class="answer-body"><p>理赔材料：出院小结、费用清单、发票原件……</p></div>
+          </div>
+          <div class="res-card">
+            <div class="res-batch-tag"><span class="no">02</span>李四 · 重疾</div>
+            <div class="answer-body"><p>理赔材料：确诊证明、病理报告……</p></div>
+          </div>
+          <div class="batch-fail">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 21h22L12 2zm0 6 7 13H5L12 8z"/></svg>
+            1 项任务失败
+            <span class="retry">重试全部失败</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 移动端形态 ================= -->
+<div class="m-section">
+  <div class="m-title">移动端（390px）—— 上表单 + 底部结果抽屉（保留现状形态，只换 token）</div>
+  <div class="m-frame">
+    <div class="side-hd" style="padding:14px 14px 0">
+      <div class="app-icon" style="width:28px;height:28px;font-size:14px">🤖</div>
+      <div class="side-app-name">测试1</div>
+      <button class="icon-btn" title="更多">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      </button>
+    </div>
+    <div class="tabs" style="padding:12px 14px 0">
+      <button class="tab on">运行一次</button>
+      <button class="tab">批量运行</button>
+    </div>
+    <div class="m-body">
+      <div class="fld"><label>姓名<span class="req">*</span></label><input type="text" placeholder="姓名"></div>
+      <div class="side-actions">
+        <button class="btn-ghost">清空</button>
+        <button class="btn-accent" style="flex:1;justify-content:center">运行</button>
+      </div>
+    </div>
+    <div class="side-foot" style="justify-content:center">Powered by <b>杏树林</b><span class="anno">移动底部一行（chatbot 口径）</span></div>
+
+    <!-- 底部结果抽屉（展示态） -->
+    <div class="m-drawer">
+      <div class="d-mask"></div>
+      <div class="d-panel">
+        <div class="d-handle"></div>
+        <div style="padding:4px 16px 16px;overflow:hidden">
+          <div class="res-card" style="box-shadow:none">
+            <div class="res-tabs">
+              <span class="res-tab on">结果</span>
+              <span class="res-tab">详情</span>
+            </div>
+            <div class="answer-body" style="font-size:13.5px"><p>理赔材料：出院小结、费用清单与发票原件、医保结算单（如有）。</p></div>
+            <div class="res-foot">
+              <button class="op-btn" title="复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+              <button class="op-btn" title="赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="m-note">抽屉 drag handle 开合交互保留；移动端无左栏，powered by 落底部一行</div>
+</div>
+
+</div><!-- /stage -->
+
+<script>
+  const stage = document.getElementById('stage')
+  // 结果区状态切换
+  document.querySelectorAll('[data-state]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-state]').forEach(x => x.classList.toggle('on', x === b))
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.dataset.view === b.dataset.state))
+  })
+  // 主题
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-theme-btn]').forEach(x => x.classList.toggle('on', x === b))
+    stage.dataset.theme = b.dataset.themeBtn
+  })
+  // accent 注入演示
+  document.querySelectorAll('[data-accent-btn]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-accent-btn]').forEach(x => x.classList.toggle('on', x === b))
+    stage.dataset.accent = b.dataset.accentBtn
+  })
+  // 左栏 tab 切换
+  document.querySelectorAll('.side .tab').forEach(t => t.onclick = () => {
+    document.querySelectorAll('.side .tab').forEach(x => x.classList.toggle('on', x === t))
+    document.querySelectorAll('.tab-pane').forEach(p => p.style.display = p.dataset.pane === t.dataset.tab ? '' : 'none')
+  })
+</script>
+</body>
+</html>
