@@ -131,9 +131,11 @@ const TextGeneration: FC<IMainProps> = ({ isInstalledApp = false, isWorkflow = f
     )
   }
   return (
+    // 家族根自挂 webapp-theme 作用域（chat-with-history 同款机制）：
+    // share 路由经 shareLayout 已有作用域（嵌套幂等）；installed-app（console 嵌入 webapp 面）经此自动获得新视觉——同源三用
     <div
       className={cn(
-        'bg-background-default-burn [.webapp-theme_&]:bg-[var(--bg)]',
+        'webapp-theme bg-[var(--bg)]',
         isPC ? 'flex' : 'flex-col',
         isInstalledApp ? 'h-full rounded-2xl shadow-md' : 'h-screen',
       )}

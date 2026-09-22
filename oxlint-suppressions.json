@@ -5314,14 +5314,6 @@
       "count": 1
     }
   },
-  "web-new/service/webapp-auth.ts": {
-    "no-restricted-globals": {
-      "count": 6
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
   "web-new/service/workflow.ts": {
     "no-restricted-imports": {
       "count": 1

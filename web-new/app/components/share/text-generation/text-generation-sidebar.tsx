@@ -3,7 +3,6 @@ import type { InputValueTypes, TextGenerationCustomConfig, TextGenerationRunCont
 import type { PromptConfig, SavedMessage, TextToSpeechConfig } from '@/models/debug'
 import type { SiteInfo } from '@/models/share'
 import type { VisionFile, VisionSettings } from '@/types/app'
-import { RiArrowDownSLine, RiArrowUpSLine } from '@remixicon/react'
 import { cn } from '@xsl/lomva-ui/cn'
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@xsl/lomva-ui/tabs'
 import { useCallback, useState } from 'react'
@@ -45,6 +44,12 @@ type TextGenerationSidebarProps = {
   visionConfig: VisionSettings
 }
 
+/**
+ * text-generation 族左侧栏（completion/workflow 单元重写 2026-09-22，mockup 类型3）：
+ * 单实现消费 token 变量——家族根（../index.tsx）自挂 .webapp-theme 作用域，
+ * share 路由与 installed-app 嵌入面同一生效；不做无作用域降级（console debug 不消费本壳）。
+ * 品牌链：remove_webapp_brand 隐藏 → ui_config.brand.footer_text → replace_webapp_logo → 默认「杏树林」。
+ */
 const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
   accessMode,
   allTasksRun,
@@ -83,20 +88,17 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
       value={currentTab}
       onValueChange={onTabChange}
       className={cn(
-        'relative flex h-full shrink-0 flex-col',
-        isPC ? 'w-150 max-w-[50%]' : resultExisted ? 'h-[calc(100%-64px)]' : '',
+        'relative flex h-full shrink-0 flex-col bg-[var(--bg)]',
+        isPC
+          ? 'w-150 max-w-[50%] border-r border-[var(--border)]'
+          : resultExisted
+            ? 'h-[calc(100%-64px)]'
+            : '',
         isInstalledApp && 'rounded-l-2xl',
       )}
     >
-      <div
-        className={cn(
-          'shrink-0 space-y-4 border-b border-divider-subtle [.webapp-theme_&]:border-[var(--border)]',
-          isPC
-            ? 'bg-components-panel-bg p-8 pb-0 [.webapp-theme_&]:bg-[var(--bg)] [.webapp-theme_&]:p-5 [.webapp-theme_&]:pb-0'
-            : 'p-4 pb-0',
-        )}
-      >
-        <div className="flex items-center gap-3">
+      <div className={cn('shrink-0 space-y-4', isPC ? 'p-5 pb-0' : 'p-4 pb-0')}>
+        <div className="flex items-center gap-2.5">
           <AppIcon
             size={isPC ? 'large' : 'small'}
             iconType={siteInfo.icon_type}
@@ -104,7 +106,7 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
             background={siteInfo.icon_background || appDefaultIconBackground}
             imageUrl={siteInfo.icon_url}
           />
-          <div className="grow truncate system-md-semibold text-text-secondary [.webapp-theme_&]:text-[14px] [.webapp-theme_&]:font-semibold [.webapp-theme_&]:text-[var(--text-1)]">
+          <div className="grow truncate text-[14px] font-semibold text-[var(--text-1)]">
             {siteInfo.title}
           </div>
           <MenuDropdown
@@ -117,30 +119,30 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
             <div
               ref={handleDescRef}
               className={cn(
-                'relative system-xs-regular wrap-break-word whitespace-pre-wrap text-text-tertiary',
+                'relative text-[12.5px] leading-6 wrap-break-word whitespace-pre-wrap text-[var(--text-3)]',
                 !descExpanded && 'line-clamp-3',
                 descExpanded && 'max-h-32 overflow-y-auto',
               )}
             >
               {siteInfo.description}
               {!descExpanded && showDescToggle && (
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-components-panel-bg-transparent to-components-panel-bg [.webapp-theme_&]:to-[var(--bg)]" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-transparent to-[var(--bg)]" />
               )}
             </div>
             {showDescToggle && (
               <button
                 type="button"
-                className="mt-0.5 flex items-center gap-0.5 system-xs-regular text-text-accent hover:opacity-80 [.webapp-theme_&]:font-semibold [.webapp-theme_&]:text-[var(--accent-deep)]"
+                className="mt-0.5 flex items-center gap-0.5 text-[12px] font-semibold text-[var(--accent-deep)] hover:opacity-80"
                 onClick={() => setDescExpanded((v) => !v)}
               >
                 {descExpanded ? (
                   <>
-                    <RiArrowUpSLine className="size-3" />
+                    <span aria-hidden className="i-ri-arrow-up-s-line size-3" />
                     {t(($) => $['chat.collapse'], { ns: 'share' })}
                   </>
                 ) : (
                   <>
-                    <RiArrowDownSLine className="size-3" />
+                    <span aria-hidden className="i-ri-arrow-down-s-line size-3" />
                     {t(($) => $['chat.expand'], { ns: 'share' })}
                   </>
                 )}
@@ -148,7 +150,7 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
             )}
           </div>
         )}
-        <TabsList className="w-full">
+        <TabsList className="w-full border-b border-[var(--border)]">
           <TabsTab value="create">
             <span className="ml-2">{t(($) => $['generation.tabs.create'], { ns: 'share' })}</span>
           </TabsTab>
@@ -168,12 +170,12 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
       </div>
       <div
         className={cn(
-          'h-0 grow overflow-y-auto bg-components-panel-bg [.webapp-theme_&]:bg-[var(--bg)]',
-          isPC ? 'px-8 [.webapp-theme_&]:px-5' : 'px-4',
+          'h-0 grow overflow-y-auto bg-[var(--bg)]',
+          isPC ? 'px-5' : 'px-4',
           !isPC &&
             resultExisted &&
             customConfig?.remove_webapp_brand &&
-            'rounded-b-2xl border-b-[0.5px] border-divider-regular',
+            'rounded-b-2xl border-b-[0.5px] border-[var(--border)]',
         )}
       >
         <TabsPanel value="create" keepMounted>
@@ -201,7 +203,7 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
         {!isWorkflow && (
           <TabsPanel value="saved">
             <SavedItems
-              className={cn(isPC ? 'mt-6' : 'mt-4')}
+              className={cn(isPC ? 'mt-5' : 'mt-4')}
               isShowTextToSpeech={textToSpeechConfig?.enabled}
               list={savedMessages}
               onRemove={onRemoveSavedMessage}
@@ -213,24 +215,18 @@ const TextGenerationSidebar: FC<TextGenerationSidebarProps> = ({
       {!customConfig?.remove_webapp_brand && (
         <div
           className={cn(
-            'flex shrink-0 items-center gap-1.5 border-t border-transparent bg-components-panel-bg py-3 [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--bg)] [.webapp-theme_&]:py-2.5',
-            isPC ? 'px-8 [.webapp-theme_&]:px-5' : 'px-4',
-            !isPC && 'justify-center',
-            !isPC && resultExisted && 'rounded-b-2xl border-b-[0.5px] border-divider-regular',
+            'flex shrink-0 items-center gap-1 border-t border-[var(--border)] bg-[var(--bg)] py-2.5 text-[11px] tracking-wide text-[var(--text-3)]',
+            isPC ? 'px-5' : 'justify-center px-4',
+            !isPC && resultExisted && 'rounded-b-2xl border-b-[0.5px] border-b-[var(--border)]',
           )}
         >
-          <div className="system-2xs-medium-uppercase text-text-tertiary [.webapp-theme_&]:text-[11px] [.webapp-theme_&]:tracking-wide [.webapp-theme_&]:text-[var(--text-3)]">
-            {t(($) => $['chat.poweredBy'], { ns: 'share' })}
-          </div>
-          {/* 品牌链（chat/chatbot 同口径）：ui_config.brand.footer_text → replace_webapp_logo → 默认「杏树林」（DifyLogo 退役） */}
+          <span>{t(($) => $['chat.poweredBy'], { ns: 'share' })}</span>
           {uiConfig.brand.footer_text ? (
-            <span className="truncate text-[11px] text-[var(--text-3,#8a8a93)]">
-              {uiConfig.brand.footer_text}
-            </span>
+            <span className="truncate">{uiConfig.brand.footer_text}</span>
           ) : customConfig?.replace_webapp_logo ? (
             <img src={customConfig.replace_webapp_logo} alt="logo" className="block h-4 w-auto" />
           ) : (
-            <b className="text-[11px] font-semibold text-[var(--text-2,#3d3d42)]">杏树林</b>
+            <b className="font-semibold text-[var(--text-2)]">杏树林</b>
           )}
         </div>
       )}

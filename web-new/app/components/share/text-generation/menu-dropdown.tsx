@@ -55,7 +55,7 @@ const MenuDropdown: FC<Props> = ({ data, placement, hideLogout }) => {
             <IconButton
               aria-label={t(($) => $['operation.more'], { ns: 'common' })}
               size="lg"
-              className="data-popup-open:bg-state-base-hover [.webapp-theme_&]:data-popup-open:bg-[var(--bg-soft)]"
+              className="data-popup-open:bg-[var(--bg-soft)]"
             >
               <span aria-hidden className="i-ri-more-fill size-4" />
             </IconButton>
@@ -64,9 +64,9 @@ const MenuDropdown: FC<Props> = ({ data, placement, hideLogout }) => {
         <DropdownMenuContent
           placement={placement || 'bottom-end'}
           sideOffset={4}
-          className="w-[224px] [.webapp-theme_&]:w-[200px]"
+          className="w-[200px]"
         >
-          <div className="px-3 py-1.5 system-md-regular text-text-secondary [.webapp-theme_&]:text-[13px] [.webapp-theme_&]:text-[var(--text-2)]">
+          <div className="px-3 py-1.5 text-[13px] text-[var(--text-2)]">
             <div className="flex items-center gap-2">
               <div className="grow">{t(($) => $['theme.theme'], { ns: 'common' })}</div>
               <ThemeSwitcher />
