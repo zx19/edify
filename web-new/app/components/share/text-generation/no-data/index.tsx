@@ -1,15 +1,15 @@
 import type { FC } from 'react'
-import { RiSparklingFill } from '@remixicon/react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 type INoDataProps = {}
+/** 结果区空态（重写 2026-09-22）：spark 图标 + 三级灰文案 */
 const NoData: FC<INoDataProps> = () => {
   const { t } = useTranslation()
   return (
     <div className="flex size-full flex-col items-center justify-center">
-      <RiSparklingFill className="size-12 text-text-empty-state-icon" />
-      <div className="mt-2 system-sm-regular text-text-quaternary">
+      <span aria-hidden className="i-ri-sparkling-fill size-12 text-[var(--border-strong)]" />
+      <div className="mt-2 text-[13px] text-[var(--text-3)]">
         {t(($) => $['generation.noData'], { ns: 'share' })}
       </div>
     </div>

@@ -44,6 +44,11 @@ type TextGenerationResultPanelProps = {
   visionConfig: VisionSettings
 }
 
+/**
+ * 结果面板（completion/workflow 单元重写 2026-09-22，mockup 类型3）：
+ * 桌面右列 bg-soft / 移动端底部抽屉（drag handle 交互保留）；批量执行头/失败重试条 token 化。
+ * 结构行为与原实现一致；Result（result/）为行为载体不动。
+ */
 const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
   allFailedTaskList,
   allSuccessTaskList,
@@ -114,12 +119,13 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
         isPC
           ? 'h-full w-0 grow'
           : isShowResultPanel
-            ? 'fixed inset-0 z-50 bg-background-overlay backdrop-blur-xs'
+            ? 'fixed inset-0 z-50 bg-black/40 backdrop-blur-xs'
             : resultExisted
-              ? 'relative h-16 shrink-0 overflow-hidden bg-background-default-burn pt-2.5'
+              ? 'relative h-16 shrink-0 overflow-hidden pt-2.5'
               : '',
       )}
     >
+      {/* 移动端抽屉 drag handle（交互保留） */}
       {!isPC && (
         <div
           className={cn(
@@ -132,7 +138,7 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
             else onShowResultPanel()
           }}
         >
-          <div className="h-1 w-8 cursor-grab rounded-sm bg-divider-solid" />
+          <div className="h-1 w-8 cursor-grab rounded-sm bg-[var(--border-strong)]" />
         </div>
       )}
       <div
@@ -141,9 +147,9 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
           !isPC && 'h-[calc(100vh-36px)] rounded-t-2xl shadow-lg backdrop-blur-xs',
           !isPC
             ? isShowResultPanel
-              ? 'bg-background-default-burn'
-              : 'border-t-[0.5px] border-divider-regular bg-components-panel-bg'
-            : 'bg-chatbot-bg [.webapp-theme_&]:bg-[var(--bg-soft)]',
+              ? 'bg-[var(--bg-soft)]'
+              : 'border-t-[0.5px] border-[var(--border)] bg-[var(--bg)]'
+            : 'bg-[var(--bg-soft)]',
         )}
       >
         {isCallBatchAPI && (
@@ -153,7 +159,7 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
               !isPC && 'px-4 pt-3 pb-1',
             )}
           >
-            <div className="system-md-semibold-uppercase text-text-primary">
+            <div className="text-[12.5px] font-bold tracking-wide text-[var(--text-2)] uppercase">
               {t(($) => $['generation.executions'], { ns: 'share', num: allTaskList.length })}
             </div>
             {allSuccessTaskList.length > 0 && <ResDownload isMobile={!isPC} values={exportRes} />}
@@ -175,18 +181,18 @@ const TextGenerationResultPanel: FC<TextGenerationResultPanelProps> = ({
           )}
         </div>
         {isCallBatchAPI && allFailedTaskList.length > 0 && (
-          <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl border border-components-panel-border bg-components-panel-bg-blur p-3 shadow-lg backdrop-blur-xs">
-            <span aria-hidden className="i-ri-error-warning-fill size-4 text-text-destructive" />
-            <div className="system-sm-medium text-text-secondary">
+          <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl border border-[var(--danger)] bg-[var(--danger-soft)] p-3 shadow-[var(--shadow-md)]">
+            <span aria-hidden className="i-ri-error-warning-fill size-4 text-[var(--danger)]" />
+            <div className="text-[12.5px] font-medium text-[var(--danger)]">
               {t(($) => $['generation.batchFailed.info'], {
                 ns: 'share',
                 num: allFailedTaskList.length,
               })}
             </div>
-            <div className="h-3.5 w-px bg-divider-regular"></div>
+            <div className="h-3.5 w-px bg-[var(--danger)] opacity-30"></div>
             <button
               type="button"
-              className="inline cursor-pointer border-none bg-transparent p-0 text-left system-sm-semibold-uppercase text-text-accent focus-visible:ring-1 focus-visible:ring-components-input-border-active focus-visible:outline-hidden"
+              className="inline cursor-pointer border-none bg-transparent p-0 text-left text-[11.5px] font-bold tracking-wide text-[var(--danger)] uppercase focus-visible:ring-1 focus-visible:ring-[var(--danger)] focus-visible:outline-hidden"
               onClick={handleRetryAllFailedTask}
             >
               {t(($) => $['generation.batchFailed.retry'], { ns: 'share' })}
