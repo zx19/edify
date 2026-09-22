@@ -83,3 +83,21 @@
 - **批量 tab 行为变更**是本族唯一的功能性变更（默认隐藏），验收须双态实证（未配置=无 tab 且 ?mode=batch 落回 create；配置 true=tab 出现可跑批）。
 - **isInstalledApp 变体**（工作台嵌入）走查待工作台线起量后复核。
 - e2e 缺口同 chat（M2 阻塞链），登记 reports/test-gaps.md。
+
+## 9. 实现核销（2026-09-22，commit c5605c62ec）
+
+| 表行 | 实现 | 验证 |
+|---|---|---|
+| §1 双列换肤（左白右 bg-soft） | index.tsx 壳 + result-panel bg-chatbot-bg 作用域覆盖 | ✅ QA 桌面截图实测 |
+| §1 accent 注入 | 壳根 buildAccentStyle(siteInfo.chat_color_theme) | ✅ spec 绿；实机待有配置应用 |
+| §2 侧栏 token 化 + tabs accent 下划线 | sidebar + tokens.css tab-active 重映射 | ✅ QA 截图：运行一次橙下划线、蓝下划线消失 |
+| §2 批量 tab 默认隐藏 | show_batch_tab 门禁 + 渲染期派生落回 | ✅ QA 实证：未配置应用 tab 仅剩「运行一次」；spec 双态用例 |
+| §2 品牌链杏树林（systemFeatures 出链） | sidebar 页脚新链 | ✅ QA 双视口截图「POWERED BY 杏树林」、hasDifyLogo=false |
+| §3 菜单视觉对齐 | menu-dropdown trigger 换 i-ri-more-fill 等 | ✅ 族 spec 绿 |
+| §4 运行一次表单/按钮 | 共享件+重映射携带，零族内改动 | ✅ QA 运行钮橙、可跑通 |
+| §5 批量区 | 复核无残留（中性 token + accent 链接已携带） | ✅ 代码扫描无蓝色残留 |
+| §6 结果面板/过程卡/结果详情 tab | 过程卡=chat 族已重写件携带；结果/详情 tab 双层（白卡+深色下划线） | ✅ QA 运行后截图实证 |
+| §6 TextGenerationRes/SavedItems 双层 | item 结果卡/moreLikeThis 蓝块 accent 化、saved-items 卡 | ✅ 双层类；族 24 spec 145 用例全绿 |
+| lint 顺手清 | set-state-in-effect 两处改事件内/渲染期派生 | ✅ vp check 过 |
+
+**遗留走查项（实机）**：①completion 型应用（已保存 tab/保存结果/moreLikeThis）；②有变量表单的应用（8 字段型/vision 上传）；③accent 换色；④批量配置开启态端到端跑批。①②③依赖 QA 应用配置，④可用 ui_config 开启后回归。

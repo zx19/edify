@@ -2982,11 +2982,6 @@
       "count": 1
     }
   },
-  "web-new/app/components/share/text-generation/index.tsx": {
-    "eslint-react/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "web-new/app/components/share/text-generation/no-data/index.tsx": {
     "typescript/no-empty-object-type": {
       "count": 1

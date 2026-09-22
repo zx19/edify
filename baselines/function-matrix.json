@@ -951,8 +951,8 @@
         "族外共享件 app/text-generate/{item,saved-items} spec（console 消费面）"
       ],
       "e2e": [],
-      "status": "重写中",
-      "notes": "三件套 09-22 齐（清单/mockup 用户评审通过/对照表）；isWorkflow=false；saved tab 专属"
+      "status": "追平",
+      "notes": "三件套 09-22 齐（清单/mockup 用户评审通过/对照表）；isWorkflow=false；saved tab 专属；重写完成 09-22（对照表实现核销节）"
     },
     {
       "id": "/env/workflow/[token]",
@@ -1037,8 +1037,8 @@
         "族外共享件 app/text-generate/{item,saved-items} spec（console 消费面）"
       ],
       "e2e": [],
-      "status": "重写中",
-      "notes": "与 completion 同族（isWorkflow=true）；工作流过程卡专属；三件套同 completion 行"
+      "status": "追平",
+      "notes": "与 completion 同族（isWorkflow=true）；工作流过程卡专属；三件套同 completion 行；重写完成 09-22（对照表实现核销节）"
     },
     {
       "id": "/account",
