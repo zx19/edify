@@ -17,7 +17,8 @@
     }
   },
   "notes": [
-    "计划头部实测基线「路由 140」含 web/app/components/main-nav/layout.tsx——该文件位于非路由目录（app/components/），App Router 下不产生路由；本矩阵按语义计 139（106 page + 33 路由 layout）"
+    "计划头部实测基线「路由 140」含 web/app/components/main-nav/layout.tsx——该文件位于非路由目录（app/components/），App Router 下不产生路由；本矩阵按语义计 139（106 page + 33 路由 layout）",
+    "⚠️ scripts/build-function-matrix.mjs 是种子期生成器——回填期运行会整表覆盖手工行（09-22 实证踩踏过一次，已恢复）。回填期禁止再跑，或先改造为合并模式"
   ],
   "rows": [
     {
@@ -882,12 +883,15 @@
       "id": "/agent/[token]",
       "route": "/agent/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/agent/[token]/page.tsx",
-      "contracts": [],
+      "file": "web-new/app/(shareLayout)/agent/[token]/page.tsx",
+      "contracts": [
+        "ChatWithHistoryWrapProps.isNewAgent + renderAgentContent（AgentRosterResponseContent）——chat 单元兼容面"
+      ],
       "i18nKeys": [],
-      "tests": [],
+      "tests": ["chat 族 spec 携带（agent-roster-response-content 含于 chat 族）"],
       "e2e": [],
-      "status": "pending"
+      "status": "追平",
+      "notes": "/agent 死路由未删——实证仍被消费（Agent 应用 roster 渲染路径），重写后由 chat 族携带；09-22 冒烟实证（chat-root 渲染、品牌链杏树林生效）"
     },
     {
       "id": "/chat/[token]",
@@ -958,12 +962,15 @@
       "id": "/env/workflow/[token]",
       "route": "/env/workflow/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/env/workflow/[token]/page.tsx",
-      "contracts": [],
+      "file": "web-new/app/(shareLayout)/env/workflow/[token]/page.tsx",
+      "contracts": [
+        "同 /workflow/[token]（text-generation 族 isWorkflow=true）；token 解析指向企业环境部署（enterprise-app-deploy EnvironmentSite）"
+      ],
       "i18nKeys": [],
-      "tests": [],
+      "tests": ["text-generation 族 spec 携带"],
       "e2e": [],
-      "status": "pending"
+      "status": "追平",
+      "notes": "与 /workflow 同构零差异 UI；completion 单元携带。实机走查待 QA 有环境部署应用"
     },
     {
       "id": "/webapp-reset-password/check-code",
