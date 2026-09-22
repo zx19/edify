@@ -1,0 +1,8 @@
+{
+  "$comment": "completion/workflow 单元（类型3/4 /completion|/workflow/[token]，share/text-generation 族）data-testid 冻结清单。2026-09-22 实证：族内源码零 data-testid（QA 运行态 testidCounts 为空 + 源码 grep 无命中）。重写按需新增的 testid 须回本文件登记。e2e 无引用。",
+  "generatedAt": "2026-09-22",
+  "source": "web-new/app/components/share/text-generation/** + web-new/app/(shareLayout)/{completion,workflow}/** （--exclude-dir=__tests__）",
+  "e2eReferenced": [],
+  "testids": [],
+  "dynamicTestidPatterns": []
+}

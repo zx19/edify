@@ -938,12 +938,21 @@
       "id": "/completion/[token]",
       "route": "/completion/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/completion/[token]/page.tsx",
-      "contracts": [],
-      "i18nKeys": [],
-      "tests": [],
+      "file": "web-new/app/(shareLayout)/completion/[token]/page.tsx",
+      "contracts": [
+        "IMainProps {isInstalledApp, isWorkflow}（share/text-generation/index.tsx:18-21）",
+        "oRPC web（site/parameters/meta）+ ssePost 流式（completion-messages / workflows/run 双接口，service/share.ts:72,109）",
+        "baselines/completion-unit-testids.json（族内零 testid 实证登记）",
+        "ui_config.components.show_batch_tab（批量 tab 默认隐藏，2026-09-22 拍板）"
+      ],
+      "i18nKeys": ["share.json: generation.*/chat.poweredBy 等"],
+      "tests": [
+        "text-generation 族 spec（hooks/result/run-*/index 等）",
+        "族外共享件 app/text-generate/{item,saved-items} spec（console 消费面）"
+      ],
       "e2e": [],
-      "status": "pending"
+      "status": "重写中",
+      "notes": "三件套 09-22 齐（清单/mockup 用户评审通过/对照表）；isWorkflow=false；saved tab 专属"
     },
     {
       "id": "/env/workflow/[token]",
@@ -1015,12 +1024,21 @@
       "id": "/workflow/[token]",
       "route": "/workflow/[token]",
       "zone": "webapp",
-      "file": "web/app/(shareLayout)/workflow/[token]/page.tsx",
-      "contracts": [],
-      "i18nKeys": [],
-      "tests": [],
+      "file": "web-new/app/(shareLayout)/workflow/[token]/page.tsx",
+      "contracts": [
+        "IMainProps {isInstalledApp, isWorkflow}（share/text-generation/index.tsx:18-21）",
+        "oRPC web（site/parameters/meta）+ ssePost 流式（completion-messages / workflows/run 双接口，service/share.ts:72,109）",
+        "baselines/completion-unit-testids.json（族内零 testid 实证登记）",
+        "ui_config.components.show_batch_tab（批量 tab 默认隐藏，2026-09-22 拍板）"
+      ],
+      "i18nKeys": ["share.json: generation.*/chat.poweredBy 等"],
+      "tests": [
+        "text-generation 族 spec（hooks/result/run-*/index 等）",
+        "族外共享件 app/text-generate/{item,saved-items} spec（console 消费面）"
+      ],
       "e2e": [],
-      "status": "pending"
+      "status": "重写中",
+      "notes": "与 completion 同族（isWorkflow=true）；工作流过程卡专属；三件套同 completion 行"
     },
     {
       "id": "/account",
