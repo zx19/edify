@@ -101,3 +101,11 @@
 | lint 顺手清 | set-state-in-effect 两处改事件内/渲染期派生 | ✅ vp check 过 |
 
 **遗留走查项（实机）**：①completion 型应用（已保存 tab/保存结果/moreLikeThis）；②有变量表单的应用（8 字段型/vision 上传）；③accent 换色；④批量配置开启态端到端跑批。①②③依赖 QA 应用配置，④可用 ui_config 开启后回归。
+
+### 回炉注记（2026-09-22 晚，用户纠偏「重写模块≠换肤」）
+
+首版实现以 `[.webapp-theme_&]` 双层补丁覆盖在 Dify 旧组件上（换肤形态），已按「呈现层新写」口径回炉：
+- **家族根自挂 `.webapp-theme`**（index.tsx，chat-with-history 同款机制）——族内组件单实现消费 `var(--*)`，installed-app 嵌入面自动获得新视觉（同源三用）；share 路由经 shareLayout 嵌套幂等。
+- 新写：sidebar / menu-dropdown / run-once / run-batch(csv-reader,csv-download) / result-panel / no-data / saved-items（commits fee86b8af6 / 320ea9c31a / 049a88150f）。
+- **真·console 共享件**（text-generate/item、workflow-body、action-groups——debug 面板无作用域消费）保留双层机制，不动。
+- 验证：族 145 用例绿；实机回归（tab 默认隐藏、active 下划线 rgb(255,140,0)、页脚杏树林）。

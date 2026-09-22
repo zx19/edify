@@ -111,3 +111,7 @@
 | console 零影响 | chat-with-history 族 348 用例全绿；双层类保 try-app | ✅ |
 
 **遗留走查项（实机）**：①欢迎屏 hero + 建议问题列（需有 opening_statement 的应用）；②表单卡新视觉（需有变量表单的应用）；③accent 换色实机（需配 chat_color_theme 的应用）。三项 spec 已覆盖逻辑，视觉待人信号。
+
+### 回炉注记（2026-09-22 晚，用户纠偏「重写模块≠换肤」）
+
+chat-wrapper 欢迎屏/描述卡、inputs-form/view-form-dropdown 首版为双层补丁，已回炉为单实现新写（commit 48db1bb17e）；`explore/try-app` 容器挂 `.webapp-theme`（console 内嵌 webapp 预览面与 /chatbot 同视觉，同源三用）。chatbot 族 120 + explore 173 用例全绿。
