@@ -36,15 +36,12 @@ const SavedItems: FC<ISavedItemsProps> = ({
       ) : (
         <>
           {list.map(({ id, answer }) => (
+            // 仅 text-generation 族侧栏消费（webapp 面，家族根自带作用域）——单实现 token 化
             <div key={id} className="relative">
-              <div
-                className={cn(
-                  'rounded-2xl bg-background-section-burn p-4 [.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)]',
-                )}
-              >
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4">
                 <Markdown content={answer} />
               </div>
-              <div className="mt-1 h-4 px-4 system-xs-regular text-text-quaternary">
+              <div className="mt-1 h-4 px-4 text-[11px] text-[var(--text-3)]">
                 <span>
                   {answer.length} {t(($) => $['unit.char'], { ns: 'common' })}
                 </span>
