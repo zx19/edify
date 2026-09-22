@@ -187,6 +187,8 @@
   .view { display:none; }
   .view.on { display:block; }
   .stage.hide-saved .tab-saved { display:none; } /* workflow 型无已保存 tab */
+  .tab-batch { display:none !important; } /* ui_config.components.show_batch_tab：默认隐藏（2026-09-22 拍板） */
+  .stage.show-batch .tab-batch { display:flex !important; }
 </style>
 </head>
 <body>
@@ -209,6 +211,9 @@
     <button class="t-btn" data-accent-btn="blue">蓝</button>
     <button class="t-btn" data-accent-btn="green">绿</button>
   </div>
+  <div class="t-group"><span class="t-label">ui_config 演示</span>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none"><input type="checkbox" id="ckBatch" style="accent-color:#ff8c00">批量 tab（默认隐藏）</label>
+  </div>
   <span class="t-note">橙标 = 注记 · 左栏 tab 可点击切换</span>
 </div>
 
@@ -228,7 +233,7 @@
 
     <div class="tabs">
       <button class="tab on" data-tab="create">运行一次</button>
-      <button class="tab" data-tab="batch">批量运行</button>
+      <button class="tab tab-batch" data-tab="batch">批量运行<span class="anno">ui_config 配置才显示，默认隐藏</span></button>
       <button class="tab tab-saved" data-tab="saved">已保存<span class="badge">2</span><span class="anno">仅 completion 型</span></button>
     </div>
 
@@ -408,7 +413,7 @@
     </div>
     <div class="tabs" style="padding:12px 14px 0">
       <button class="tab on">运行一次</button>
-      <button class="tab">批量运行</button>
+      <button class="tab tab-batch">批量运行</button>
     </div>
     <div class="m-body">
       <div class="fld"><label>姓名<span class="req">*</span></label><input type="text" placeholder="姓名"></div>
@@ -467,6 +472,11 @@
     document.querySelectorAll('.side .tab').forEach(x => x.classList.toggle('on', x === t))
     document.querySelectorAll('.tab-pane').forEach(p => p.style.display = p.dataset.pane === t.dataset.tab ? '' : 'none')
   })
+  // ui_config 演示：批量 tab（默认隐藏）
+  document.getElementById('ckBatch').onchange = (e) => {
+    stage.classList.toggle('show-batch', e.target.checked)
+    if (!e.target.checked) document.querySelector('.side .tab[data-tab="create"]').click()
+  }
 </script>
 </body>
 </html>

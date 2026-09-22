@@ -12,6 +12,8 @@ export type WebAppUiConfig = {
     show_citation?: boolean
     show_message_actions?: boolean
     show_suggested_questions?: boolean
+    /** 批量运行 tab（text-generation 族）：默认隐藏，配置 true 才显示（2026-09-22 用户拍板） */
+    show_batch_tab?: boolean
   }
   brand?: {
     footer_text?: string
@@ -28,6 +30,7 @@ export type ResolvedWebAppUiConfig = {
     show_citation: boolean
     show_message_actions: boolean
     show_suggested_questions: boolean
+    show_batch_tab: boolean
   }
   brand: {
     footer_text: string
@@ -49,6 +52,7 @@ export function resolveUiConfig(site: UiConfigCarrier): ResolvedWebAppUiConfig {
       show_citation: ui?.components?.show_citation ?? true,
       show_message_actions: ui?.components?.show_message_actions ?? true,
       show_suggested_questions: ui?.components?.show_suggested_questions ?? true,
+      show_batch_tab: ui?.components?.show_batch_tab ?? false,
     },
     brand: {
       footer_text: ui?.brand?.footer_text ?? '',

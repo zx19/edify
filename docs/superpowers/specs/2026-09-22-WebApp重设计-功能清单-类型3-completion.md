@@ -47,6 +47,8 @@
 
 ## 5. 批量运行（`run-batch/`）
 
+> **2026-09-22 用户拍板：批量运行 tab 改为可配置——`ui_config.components.show_batch_tab`，默认隐藏**（现状恒显变更；URL `?mode=batch` 兜底逻辑同步：配置关闭时忽略 batch 落回 create）。
+
 | 功能 | 代码 | QA |
 |---|---|---|
 | CSV 拖放区（拖放或浏览） | `run-batch/index.tsx`、`csv-reader` | ✅ |
