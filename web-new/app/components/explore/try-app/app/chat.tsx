@@ -57,7 +57,14 @@ const TryApp: FC<Props> = ({ appId, appDetail, className }) => {
         } as EmbeddedChatbotContextValue
       }
     >
-      <div className={cn('flex h-full flex-col rounded-2xl bg-background-section-burn', className)}>
+      {/* try-app = console 内嵌的 webapp 预览面（同源三用）——挂 webapp-theme 作用域，
+          chatbot 族组件单实现消费 token 变量，与 /chatbot 同视觉 */}
+      <div
+        className={cn(
+          'webapp-theme flex h-full flex-col rounded-2xl bg-background-section-burn',
+          className,
+        )}
+      >
         <div className="flex shrink-0 justify-between p-3">
           <div className="flex grow items-center space-x-2">
             <AppIcon

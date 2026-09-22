@@ -12,6 +12,11 @@ type Props = Readonly<{
   setCollapsed: (collapsed: boolean) => void
 }>
 
+/**
+ * chatbot 变量表单卡（重写 2026-09-22，mockup 类型2）：
+ * 单实现消费 token（share 路由经 shareLayout、try-app 经容器挂类均有作用域）。
+ * 交互不变：collapsed 态「编辑」/ 展开态（有会话）「关闭」/ 新会话「开始对话」。
+ */
 const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
   const { t } = useTranslation()
   const {
@@ -26,7 +31,6 @@ const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
 
   if (allInputsHidden || inputsForms.length === 0) return null
 
-  // 双层：base = Dify 等效（try-app 无作用域），[.webapp-theme_&] = mockup 新视觉
   return (
     <div
       data-testid="inputs-form-node"
@@ -38,27 +42,25 @@ const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
     >
       <div
         className={cn(
-          'w-full max-w-2xl rounded-2xl border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-md',
-          '[.webapp-theme_&]:rounded-[14px] [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:shadow-[var(--shadow-sm)]',
-          collapsed &&
-            'border border-components-card-border bg-components-card-bg shadow-none [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)]',
+          'w-full max-w-2xl rounded-[14px] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]',
+          collapsed && 'shadow-none',
           isTryApp && 'max-w-[auto]',
         )}
       >
         <div
           className={cn(
-            'flex items-center gap-3 rounded-t-2xl px-6 py-4 [.webapp-theme_&]:rounded-t-[14px]',
-            !collapsed && 'border-b border-divider-subtle [.webapp-theme_&]:border-[var(--border)]',
+            'flex items-center gap-3 rounded-t-[14px] px-6 py-4',
+            !collapsed && 'border-b border-[var(--border)]',
             isMobile && 'px-4 py-3',
           )}
         >
           <div className="i-custom-public-other-message-3-fill size-6 shrink-0" />
-          <div className="grow system-xl-semibold text-text-secondary [.webapp-theme_&]:text-[13px] [.webapp-theme_&]:font-semibold [.webapp-theme_&]:text-[var(--text-1)]">
+          <div className="grow text-[13px] font-semibold text-[var(--text-1)]">
             {t(($) => $['chat.chatSettingsTitle'], { ns: 'share' })}
           </div>
           {collapsed && (
             <Button
-              className="text-text-tertiary uppercase"
+              className="text-[var(--text-3)] uppercase"
               size="small"
               variant="ghost"
               onClick={() => setCollapsed(false)}
@@ -68,7 +70,7 @@ const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
           )}
           {!collapsed && currentConversationId && (
             <Button
-              className="text-text-tertiary uppercase"
+              className="text-[var(--text-3)] uppercase"
               size="small"
               variant="ghost"
               onClick={() => setCollapsed(true)}
@@ -83,7 +85,7 @@ const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
           </div>
         )}
         {!collapsed && !currentConversationId && (
-          <div className={cn('p-6', isMobile && 'p-4')}>
+          <div className={cn('px-6 pb-6', isMobile && 'px-4 pb-4')}>
             <Button
               variant="primary"
               className="w-full"

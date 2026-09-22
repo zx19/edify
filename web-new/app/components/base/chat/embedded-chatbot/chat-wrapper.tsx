@@ -286,28 +286,28 @@ const ChatWrapper = () => {
 
   const descriptionNode = useMemo(() => {
     if (!description || currentConversationId || hasSent) return null
-    // 双层：base = Dify 等效（try-app 无作用域），[.webapp-theme_&] = mockup 新视觉
+    // mockup 类型2 描述卡：单实现消费 token（族经 shareLayout/try-app 均有作用域）
     return (
       <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
-        <div className="w-full max-w-2xl rounded-2xl border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-md [.webapp-theme_&]:rounded-xl [.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:shadow-none">
+        <div className="w-full max-w-2xl rounded-xl border border-[var(--border)] bg-[var(--card)]">
           <div className={cn('p-6', isMobile && 'p-4')}>
             <div
               ref={descRef}
               className={cn(
-                'relative system-xs-regular wrap-break-word whitespace-pre-wrap text-text-tertiary [.webapp-theme_&]:text-[12.5px] [.webapp-theme_&]:leading-7 [.webapp-theme_&]:text-[var(--text-2)]',
+                'relative text-[12.5px] leading-7 wrap-break-word whitespace-pre-wrap text-[var(--text-2)]',
                 !descExpanded && 'line-clamp-3',
                 descExpanded && 'max-h-32 overflow-y-auto',
               )}
             >
               {description}
               {!descExpanded && showDescToggle && (
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-components-panel-bg-transparent to-components-panel-bg [.webapp-theme_&]:to-[var(--card)]" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-transparent to-[var(--card)]" />
               )}
             </div>
             {showDescToggle && (
               <button
                 type="button"
-                className="mt-0.5 flex items-center gap-0.5 system-xs-regular text-text-accent hover:opacity-80 [.webapp-theme_&]:font-semibold [.webapp-theme_&]:text-[var(--accent-deep)]"
+                className="mt-0.5 flex items-center gap-0.5 text-[12px] font-semibold text-[var(--accent-deep)] hover:opacity-80"
                 onClick={() => setDescExpanded((v) => !v)}
               >
                 {descExpanded ? (
@@ -358,7 +358,7 @@ const ChatWrapper = () => {
     if (!collapsed && inputsForms.length > 0 && !allInputsHidden) return null
     if (!appData?.site) return null
     // mockup 类型2 欢迎屏：居中图标 + 应用名标题 + 开场白副标题 + 建议问题列表
-    // 双层：base = Dify 等效（try-app 无作用域渲染用），[.webapp-theme_&] = 新视觉
+    // 单实现消费 token（族经 shareLayout/try-app 均有作用域）
     const questions = (welcomeMessage.suggestedQuestions ?? []).filter((q) => !!q && q.trim())
     return (
       <div
@@ -367,7 +367,7 @@ const ChatWrapper = () => {
           isMobile && 'min-h-[30vh] px-4 py-4',
         )}
       >
-        <div className="grid size-15 place-items-center rounded-2xl bg-background-default-subtle shadow-xs [.webapp-theme_&]:bg-[var(--accent-soft)] [.webapp-theme_&]:shadow-[var(--shadow-sm)]">
+        <div className="grid size-15 place-items-center rounded-2xl bg-[var(--accent-soft)] shadow-[var(--shadow-sm)]">
           <AppIcon
             size="large"
             iconType={appData.site.icon_type}
@@ -376,10 +376,10 @@ const ChatWrapper = () => {
             imageUrl={appData.site.icon_url}
           />
         </div>
-        <div className="mt-3.5 text-center text-xl font-bold tracking-tight text-text-primary [.webapp-theme_&]:text-[var(--text-1)]">
+        <div className="mt-3.5 text-center text-xl font-bold tracking-tight text-[var(--text-1)]">
           {appData.site.title}
         </div>
-        <div className="mt-1.5 max-w-105 text-center text-[13px] leading-7 text-text-tertiary [.webapp-theme_&]:text-[var(--text-3)]">
+        <div className="mt-1.5 max-w-105 text-center text-[13px] leading-7 text-[var(--text-3)]">
           <Markdown content={welcomeMessage.content} />
         </div>
         {questions.length > 0 && (
@@ -388,11 +388,7 @@ const ChatWrapper = () => {
               <button
                 type="button"
                 key={question}
-                className={cn(
-                  'rounded-xl border-[0.5px] border-components-button-secondary-border bg-components-button-secondary-bg px-3.5 py-2.5 text-left text-[13px] text-text-secondary shadow-xs transition-colors',
-                  '[.webapp-theme_&]:border [.webapp-theme_&]:border-[var(--border)] [.webapp-theme_&]:bg-[var(--card)] [.webapp-theme_&]:text-[var(--text-2)] [.webapp-theme_&]:shadow-none',
-                  'hover:bg-components-button-secondary-bg-hover [.webapp-theme_&]:hover:border-[var(--accent)] [.webapp-theme_&]:hover:bg-[var(--accent-soft)] [.webapp-theme_&]:hover:text-[var(--accent-deep)]',
-                )}
+                className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 py-2.5 text-left text-[13px] text-[var(--text-2)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)]"
                 onClick={() => doSend(question)}
               >
                 {question}
