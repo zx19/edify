@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebApp 重设计 Mockup v2 · 类型 2 /chatbot(嵌入式)</title>
+<style>
+  /* ===== token:与 packages/lomva-tokens/tokens.css 一致 ===== */
+  :root {
+    --bg: #ffffff; --bg-soft: #f7f7f8; --card: #ffffff;
+    --border: #e8e8ea; --border-strong: #d9d9dc;
+    --text-1: #0a0a0b; --text-2: #3d3d42; --text-3: #8a8a93;
+    --accent: #ff8c00; --accent-soft: #fff3e0; --accent-deep: #e67a00;
+    --danger: #e5484d; --danger-soft: #fef3f2;
+    --success: #12a150; --success-soft: #e9f9ef;
+    --radius: 12px; --radius-btn: 9px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-sm: 0 1px 3px rgb(10 10 11 / .06);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .1);
+    --font: 'Inter', 'SF Pro Text', -apple-system, 'PingFang SC', 'system-ui', sans-serif;
+    --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+    --tool-bg: #1c1c20; --tool-fg: #c9c9d1;
+  }
+  .stage[data-theme='dark'] {
+    --bg: #0a0a0b; --bg-soft: #17171a; --card: #1c1c20;
+    --border: #2a2a2f; --border-strong: #3a3a41;
+    --text-1: #f7f7f8; --text-2: #c9c9d1; --text-3: #7c7c87;
+    --accent: #ffa940; --accent-soft: #3a2a14; --accent-deep: #ff8c00;
+    --danger: #f2555a; --danger-soft: #3b1618;
+    --success: #3ecf8e; --success-soft: #0f2e21;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .3);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / .4);
+    --shadow-md: 0 10px 34px rgb(0 0 0 / .5);
+  }
+  /* accent 注入演示(chat_color_theme):工具条改这三档 */
+  .stage[data-accent='green'] { --accent:#12a150; --accent-soft:#e9f9ef; --accent-deep:#0e8340; }
+  .stage[data-accent='blue'] { --accent:#2563eb; --accent-soft:#dbeafe; --accent-deep:#1d4ed8; }
+  .stage[data-theme='dark'][data-accent='green'] { --accent:#3ecf8e; --accent-soft:#0f2e21; --accent-deep:#12a150; }
+  .stage[data-theme='dark'][data-accent='blue'] { --accent:#4f83f8; --accent-soft:#15244a; --accent-deep:#2563eb; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:#e9e9ec; font-size:14px; -webkit-font-smoothing:antialiased; }
+  button { font-family:inherit; cursor:pointer; border:0; background:none; color:inherit; }
+  input,textarea,select { font-family:inherit; }
+  svg { display:block; }
+
+  /* ===== 评审工具条(非产品 UI) ===== */
+  .toolbar { position:sticky; top:0; z-index:200; background:var(--tool-bg); color:var(--tool-fg); padding:10px 16px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; font-size:12px; }
+  .toolbar .t-title { font-weight:700; color:#fff; }
+  .toolbar .t-group { display:flex; align-items:center; gap:6px; }
+  .toolbar .t-label { color:#7c7c87; }
+  .toolbar .t-btn { padding:4px 10px; border-radius:7px; color:var(--tool-fg); font-size:12px; transition:background .12s; }
+  .toolbar .t-btn:hover { background:#2a2a2f; }
+  .toolbar .t-btn.on { background:#ff8c00; color:#fff; font-weight:600; }
+  .toolbar .t-check { display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none; }
+  .toolbar input[type=checkbox] { accent-color:#ff8c00; }
+  .toolbar .t-note { color:#7c7c87; margin-left:auto; }
+
+  .stage { background:var(--bg); color:var(--text-1); }
+  .sec-label { max-width:960px; margin:0 auto; padding:20px 24px 10px; font-size:13px; font-weight:650; color:var(--text-2); display:flex; gap:8px; align-items:center; }
+  .sec-label span { font-weight:400; color:var(--text-3); }
+
+  /* ===== 桌面直连全屏壳 ===== */
+  .shell { position:relative; display:flex; flex-direction:column; height:640px; margin:0 24px; border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--bg); }
+  .hd { height:40px; flex:none; display:flex; align-items:center; gap:8px; padding:0 12px; }
+  .hd-app { display:flex; align-items:center; gap:8px; min-width:0; }
+  .app-icon { width:22px; height:22px; border-radius:6px; background:var(--accent-soft); display:grid; place-items:center; font-size:12px; flex:none; }
+  .hd-app-name { font-weight:600; font-size:13px; color:var(--text-2); white-space:nowrap; }
+  .hd-right { margin-left:auto; display:flex; align-items:center; gap:2px; }
+  .icon-btn { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; color:var(--text-3); transition:background .12s,color .12s; flex:none; }
+  .icon-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .hd-btn { display:flex; align-items:center; gap:5px; height:28px; padding:0 9px; border-radius:8px; color:var(--text-2); font-size:12.5px; font-weight:500; }
+  .hd-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .powered-hd { font-size:11px; color:var(--text-3); margin-left:8px; white-space:nowrap; }
+  .powered-hd b { color:var(--text-2); font-weight:600; }
+  .stage[data-cond-lock='on'] .reset-btn { display:none; }
+  .stage[data-cond-form='off'] .only-form { display:none !important; }
+  .stage[data-cond-expand='off'] .only-expand { display:none !important; }
+
+  /* 消息区(chat 族同语言) */
+  .chat-scroll { flex:1; overflow-y:auto; }
+  .chat-col { max-width:720px; margin:0 auto; padding:24px 24px 16px; display:flex; flex-direction:column; gap:24px; }
+  .msg-user { display:flex; flex-direction:column; align-items:flex-end; }
+  .capsule { max-width:75%; width:fit-content; background:var(--bg-soft); border-radius:var(--radius); padding:9px 14px; font-size:14px; line-height:1.65; }
+  .answer { font-size:14px; line-height:1.8; }
+  .answer p { margin:0 0 10px; }
+  .answer ul { margin:2px 0 10px 20px; display:flex; flex-direction:column; gap:5px; }
+  .fold { margin-bottom:10px; }
+  .fold-bar { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; border-radius:999px; background:var(--bg-soft); color:var(--text-2); font-size:12.5px; font-weight:500; cursor:pointer; }
+  .fold-bar:hover { background:var(--border); }
+  .fold-body { display:none; margin:8px 0 2px; padding-left:12px; border-left:2px solid var(--border); color:var(--text-2); font-size:13px; line-height:1.7; }
+  .fold.open .fold-body { display:block; }
+  .msg-ops { display:flex; align-items:center; gap:2px; margin-top:5px; opacity:0; transition:opacity .12s; }
+  .msg-user:hover .msg-ops, .answer:hover .msg-ops { opacity:1; }
+  .op-btn { width:26px; height:26px; border-radius:7px; display:grid; place-items:center; color:var(--text-3); }
+  .op-btn:hover { background:var(--bg-soft); color:var(--text-1); }
+  .suggest-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:2px; }
+  .pill { height:30px; padding:0 13px; border-radius:999px; border:1px solid var(--border); background:var(--card); color:var(--text-2); font-size:12.5px; display:inline-flex; align-items:center; }
+  .pill:hover { border-color:var(--accent); color:var(--accent-deep); background:var(--accent-soft); }
+
+  /* 输入区 */
+  .dock { flex:none; padding:10px 24px 16px; }
+  .dock-in { max-width:720px; margin:0 auto; }
+  .composer { border:1px solid var(--border-strong); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow-sm); padding:12px 12px 8px; }
+  .composer:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .composer textarea { width:100%; border:0; outline:0; resize:none; background:transparent; color:var(--text-1); font-size:14px; line-height:1.6; }
+  .composer textarea::placeholder { color:var(--text-3); }
+  .composer-bar { display:flex; align-items:center; gap:4px; margin-top:6px; }
+  .send-btn { margin-left:auto; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#fff; display:grid; place-items:center; flex:none; }
+  .send-btn:hover { background:var(--accent-deep); }
+  .send-btn[disabled] { background:var(--bg-soft); color:var(--text-3); cursor:not-allowed; }
+  .dock-hint { text-align:center; font-size:11px; color:var(--text-3); margin-top:8px; }
+
+  /* 欢迎屏(仅作用于直连壳,气泡窗/移动帧为静态演示不受状态影响) */
+  .shell .welcome { flex:1; display:none; overflow-y:auto; }
+  .stage[data-state='welcome'] .shell .welcome { display:flex; }
+  .stage[data-state='welcome'] .shell .chat-scroll, .stage[data-state='welcome'] .shell .dock { display:none; }
+  .welcome-in { margin:auto; width:min(720px,100%); padding:32px 24px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .w-icon { width:56px; height:56px; border-radius:14px; background:var(--accent-soft); display:grid; place-items:center; font-size:30px; box-shadow:var(--shadow-xs); }
+  .w-title { margin-top:16px; font-size:20px; font-weight:650; }
+  .w-sub { margin-top:8px; font-size:13.5px; color:var(--text-2); line-height:1.7; max-width:520px; }
+  .suggest-grid { margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:560px; }
+  .sg-card { text-align:left; border:1px solid var(--border); border-radius:var(--radius); background:var(--card); padding:11px 13px; }
+  .sg-card:hover { border-color:var(--accent); box-shadow:var(--shadow-xs); }
+  .sg-t { font-size:13px; font-weight:600; }
+  .sg-s { font-size:12px; color:var(--text-3); margin-top:2px; }
+  .w-composer { margin-top:22px; width:100%; }
+
+  /* 聊天设置卡(变量表单,chatbot 形态) */
+  .vform { display:none; margin-top:18px; width:100%; text-align:left; border:1px solid var(--border); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow-xs); }
+  .stage[data-cond-form='on'] .vform { display:block; }
+  .vf-head { display:flex; align-items:center; gap:8px; padding:12px 16px; cursor:pointer; user-select:none; }
+  .vf-head .t { font-size:13px; font-weight:600; }
+  .vf-head .chev { margin-left:auto; color:var(--text-3); transition:transform .15s; }
+  .vform.closed .vf-head .chev { transform:rotate(-90deg); }
+  .vform.closed .vf-body, .vform.closed .vf-foot { display:none; }
+  .vf-body { padding:2px 16px 14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .vf-field { display:flex; flex-direction:column; gap:6px; }
+  .vf-label { font-size:12.5px; font-weight:550; color:var(--text-2); }
+  .vf-label .req { color:var(--danger); margin-left:2px; }
+  .vf-input, .vf-select { border:1px solid var(--border-strong); border-radius:8px; background:var(--bg); color:var(--text-1); font-size:13px; padding:8px 10px; outline:0; width:100%; }
+  .vf-input:focus, .vf-select:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .vf-foot { display:flex; justify-content:flex-end; padding:0 16px 14px; }
+  .btn-primary { display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 15px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; font-weight:600; font-size:12.5px; box-shadow:var(--shadow-xs); }
+  .btn-primary:hover { background:var(--accent-deep); }
+
+  /* ===== 嵌入气泡窗(模拟宿主页) ===== */
+  .host { position:relative; height:560px; margin:12px 24px 0; border:1px dashed var(--border-strong); border-radius:14px; background:
+    repeating-linear-gradient(45deg, var(--bg-soft) 0 14px, transparent 14px 28px); overflow:hidden; }
+  .host-note { position:absolute; top:14px; left:16px; font-size:12px; color:var(--text-3); }
+  .bubble { position:absolute; right:24px; bottom:24px; width:400px; height:600px; max-height:calc(100% - 32px); background:var(--bg); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow-md); display:flex; flex-direction:column; overflow:hidden; transition:width .22s cubic-bezier(.2,.8,.25,1), height .22s cubic-bezier(.2,.8,.25,1); }
+  .bubble.expanded { width:min(680px,calc(100% - 48px)); height:calc(100% - 32px); }
+  .bubble .hd { border-bottom:1px solid var(--border); }
+  .bubble .chat-col { padding:18px 16px 12px; gap:18px; max-width:none; }
+  .bubble .dock { padding:8px 12px 12px; }
+  .bubble .capsule { max-width:85%; }
+  .bubble .suggest-grid { grid-template-columns:1fr; }
+  .bubble .welcome-in { padding:24px 16px; }
+  .bubble .w-icon { width:44px; height:44px; font-size:23px; border-radius:12px; }
+  .bubble .w-title { font-size:17px; }
+  .bubble-foot { flex:none; text-align:center; font-size:11px; color:var(--text-3); padding:6px 0 8px; }
+  .bubble-foot b { color:var(--text-2); font-weight:600; }
+
+  /* ===== 移动端帧 ===== */
+  .mobile-lab { padding:28px 24px 40px; }
+  .ml-row { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; }
+  .phone { width:390px; height:700px; border-radius:36px; border:9px solid #141416; background:var(--bg-soft); overflow:hidden; flex:none; padding:10px; }
+  .phone-card { height:100%; background:var(--bg); border-radius:22px; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-sm); }
+  .phone-card .hd { border-bottom:1px solid var(--border); }
+  .phone-card .chat-col { padding:16px 14px 10px; gap:16px; max-width:none; }
+  .phone-card .dock { padding:8px 10px 10px; }
+  .phone-card .capsule { max-width:85%; }
+
+  .notes { max-width:960px; margin:0 auto; padding:26px 24px 60px; color:var(--text-2); font-size:13px; line-height:1.9; }
+  .notes h2 { font-size:15px; color:var(--text-1); margin-bottom:8px; }
+  .notes code { font-family:var(--mono); font-size:12px; background:var(--bg-soft); border:1px solid var(--border); border-radius:5px; padding:1px 5px; }
+  .notes li { margin-left:20px; }
+
+  .toast { position:fixed; left:50%; bottom:40px; transform:translateX(-50%) translateY(8px); background:var(--text-1); color:var(--bg); font-size:12.5px; padding:8px 14px; border-radius:9px; opacity:0; transition:.18s; z-index:300; pointer-events:none; box-shadow:var(--shadow-md); }
+  .toast.show { opacity:1; transform:translateX(-50%); }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="t-title">类型2 /chatbot mockup v2</span>
+  <div class="t-group"><span class="t-label">直连屏状态</span>
+    <button class="t-btn on" data-st="welcome">欢迎屏</button>
+    <button class="t-btn" data-st="chat">对话中</button>
+  </div>
+  <div class="t-group"><span class="t-label">主题</span>
+    <button class="t-btn on" data-th="light">浅色</button>
+    <button class="t-btn" data-th="dark">深色</button>
+  </div>
+  <div class="t-group"><span class="t-label">accent 注入(chat_color_theme)</span>
+    <button class="t-btn on" data-ac="default">默认橙</button>
+    <button class="t-btn" data-ac="green">绿</button>
+    <button class="t-btn" data-ac="blue">蓝</button>
+  </div>
+  <div class="t-group"><span class="t-label">条件项</span>
+    <label class="t-check"><input type="checkbox" id="ck-expand" checked>展开/收起钮(iframe 内)</label>
+    <label class="t-check"><input type="checkbox" id="ck-lock">URL 锁定会话(禁重置)</label>
+    <label class="t-check"><input type="checkbox" id="ck-form">变量表单</label>
+  </div>
+  <span class="t-note">iframe 协议/embed.js/URL 参数契约 = 保留红线,本稿不动</span>
+</div>
+
+<div class="stage" id="stage" data-theme="light" data-state="welcome" data-accent="default" data-cond-expand="on" data-cond-lock="off" data-cond-form="off">
+
+  <!-- ===== 桌面直连全屏 ===== -->
+  <div class="sec-label">形态一:桌面直连全屏 <span>header 中性化;Powered by 在 header 右(沿用现状落点,末级杏树林)</span></div>
+  <div class="shell">
+    <header class="hd">
+      <div class="hd-app"><span class="app-icon">🌳</span><span class="hd-app-name">杏树林智能助手</span></div>
+      <div class="hd-right">
+        <button class="hd-btn only-form" title="查看变量"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>查看变量</button>
+        <button class="hd-btn reset-btn" title="重置对话"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>重置对话</button>
+        <span class="powered-hd">Powered by <b>杏树林</b></span>
+      </div>
+    </header>
+
+    <!-- 对话态 -->
+    <div class="chat-scroll">
+      <div class="chat-col">
+        <div class="msg-user">
+          <div class="capsule">你好,请用一句话介绍你自己</div>
+          <div class="msg-ops">
+            <button class="op-btn" title="复制" data-toast="已复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+          </div>
+        </div>
+        <div class="answer">
+          <div class="fold" data-fold>
+            <span class="fold-bar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>已深度思考(0.7s)</span>
+            <div class="fold-body">用户希望我一句话自我介绍,回答应简洁、突出核心能力。</div>
+          </div>
+          <p>你好!我是<strong>杏树林智能助手</strong>,基于大模型为你提供产品咨询、理赔指引和材料预审服务。</p>
+          <ul><li>解答保险产品条款与保障范围问题</li><li>指引理赔流程,预审材料完整性</li><li>生成周报、纪要等常用文档</li></ul>
+          <div class="msg-ops">
+            <button class="op-btn" title="赞同" data-toast="已反馈赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+            <button class="op-btn" title="反对" data-toast="已反馈"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleY(-1)"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+            <button class="op-btn" title="复制" data-toast="已复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+            <button class="op-btn" title="重新生成" data-toast="重新生成"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          </div>
+          <div class="suggest-pills">
+            <button class="pill" data-toast="直接发送(演示)">理赔需要哪些材料?</button>
+            <button class="pill" data-toast="直接发送(演示)">理赔一般多久到账?</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dock">
+      <div class="dock-in">
+        <div class="composer">
+          <textarea rows="1" placeholder="和 杏树林智能助手 聊天"></textarea>
+          <div class="composer-bar">
+            <button class="icon-btn" title="附件(条件)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+            <button class="icon-btn" title="语音(条件)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg></button>
+            <button class="send-btn" disabled><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 欢迎屏 -->
+    <div class="welcome">
+      <div class="welcome-in">
+        <div class="w-icon">🌳</div>
+        <div class="w-title">你好,我是杏树林智能助手</div>
+        <div class="w-sub">基于大模型为你提供产品咨询、理赔指引和材料预审服务。</div>
+        <div class="suggest-grid">
+          <button class="sg-card" data-toast="直接发送(演示)"><div class="sg-t">理赔流程指引</div><div class="sg-s">从报案到到账的完整步骤</div></button>
+          <button class="sg-card" data-toast="直接发送(演示)"><div class="sg-t">材料预审</div><div class="sg-s">上传清单,检查材料完整性</div></button>
+        </div>
+        <div class="vform" id="vform">
+          <div class="vf-head" id="vf-head">
+            <span class="t">聊天设置</span>
+            <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="vf-body">
+            <div class="vf-field"><label class="vf-label">姓名<span class="req">*</span></label><input class="vf-input" placeholder="请输入姓名"></div>
+            <div class="vf-field"><label class="vf-label">保单号</label><input class="vf-input" placeholder="选填"></div>
+          </div>
+          <div class="vf-foot"><button class="btn-primary" data-toast="开始对话(演示)">开始对话</button></div>
+        </div>
+        <div class="w-composer">
+          <div class="composer">
+            <textarea rows="1" placeholder="和 杏树林智能助手 聊天"></textarea>
+            <div class="composer-bar">
+              <button class="icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+              <button class="send-btn" disabled><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 嵌入气泡窗 ===== -->
+  <div class="sec-label">形态二:嵌入气泡窗(宿主页内 iframe) <span>~400px 窄宽退化;展开/收起钮 = 协议行为(isToggledByButton && !isDraggable)</span></div>
+  <div class="host">
+    <span class="host-note">模拟宿主页(embed.js 注入 iframe;协议三消息 ready/config/expand-change 不动)</span>
+    <div class="bubble" id="bubble">
+      <header class="hd">
+        <div class="hd-app"><span class="app-icon">🌳</span><span class="hd-app-name">杏树林智能助手</span></div>
+        <div class="hd-right">
+          <button class="icon-btn reset-btn" title="重置对话"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          <button class="icon-btn only-expand" id="btn-expand" title="展开/收起(上行 expand-change)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+        </div>
+      </header>
+      <div class="chat-scroll">
+        <div class="chat-col">
+          <div class="msg-user"><div class="capsule">理赔要准备什么?</div></div>
+          <div class="answer">
+            <p>住院医疗理赔一般需要:</p>
+            <ul><li>住院发票原件</li><li>费用明细清单</li><li>出院小结</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="dock">
+        <div class="composer">
+          <textarea rows="1" placeholder="继续提问"></textarea>
+          <div class="composer-bar">
+            <button class="send-btn" disabled style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="bubble-foot">Powered by <b>杏树林</b></div>
+    </div>
+  </div>
+
+  <!-- ===== 移动端帧 ===== -->
+  <section class="mobile-lab">
+    <div class="sec-label" style="padding:0 0 14px">移动端 <span>rounded-2xl 卡片保留;头部中性(蓝渐变退役);Powered by 在页脚</span></div>
+    <div class="ml-row">
+      <div class="phone">
+        <div class="phone-card">
+          <header class="hd">
+            <div class="hd-app"><span class="app-icon">🌳</span><span class="hd-app-name">杏树林智能助手</span></div>
+            <div class="hd-right"><button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>
+          </header>
+          <div class="chat-scroll">
+            <div class="chat-col">
+              <div class="msg-user"><div class="capsule">你好</div></div>
+              <div class="answer"><p>你好!我是<strong>杏树林智能助手</strong>,有什么可以帮你的?</p></div>
+            </div>
+          </div>
+          <div class="dock"><div class="composer"><textarea rows="1" placeholder="和 杏树林智能助手 聊天"></textarea><div class="composer-bar"><button class="send-btn" disabled style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div></div></div>
+          <div class="bubble-foot">Powered by <b>杏树林</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes">
+    <h2>设计落点注记(对照 2026-09-24-WebApp重设计-design.md §4)</h2>
+    <ul>
+      <li><b>无抽屉</b>:嵌入式无会话历史(现状如此),会话管理不存在,方向 A 的抽屉不适用。</li>
+      <li><b>header 中性化</b>:不再吃 chat_color_theme 蓝底(<code>chat_color_theme_inverted</code> 退役口径);accent 只注入交互件(发送钮/focus 环/建议 hover/设置卡 CTA)——工具条「accent 注入」可演示换色。</li>
+      <li><b>聊天核心 = chat 族同语言</b>:浅灰胶囊/无框回答/hover 操作条/折叠条族/悬浮输入卡,全部复用。</li>
+      <li><b>Powered by 落点沿用现状</b>:桌面 header 右;气泡窗/移动 = 窗口或卡片底部。</li>
+      <li><b>保留红线逐字保全</b>:iframe 三消息协议(ready/config/expand-change)、embed.js 父页行为、URL 参数契约(<code>sys.*</code>/<code>user.*</code>/inputs 预填/locale/sendOnEnter/conversation_id)。展开/收起钮演示 = 协议条件(isToggledByButton && !isDraggable)。</li>
+      <li><b>条件项演示</b>:勾「URL 锁定会话」→ 重置钮消失;勾「变量表单」→ 欢迎屏出「聊天设置」卡(开始对话 CTA);勾掉「展开/收起钮」→ 气泡窗该钮消失。</li>
+      <li><b>去 Dify 化</b>:isDify() referrer 恒 false 分支删除(删旧台账);createTheme/CssTransform 样式串机制由 token + accent 注入替代。</li>
+      <li><b>hideProcessDetail</b>:chatbot 隐藏工作流过程明细(现状语义保留);深度思考折叠条保留(QA 实证)。</li>
+    </ul>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const stage = document.getElementById('stage');
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+$$('.t-btn[data-st]').forEach(b => b.onclick = () => { $$('.t-btn[data-st]').forEach(x => x.classList.toggle('on', x === b)); stage.dataset.state = b.dataset.st; });
+$$('.t-btn[data-th]').forEach(b => b.onclick = () => { $$('.t-btn[data-th]').forEach(x => x.classList.toggle('on', x === b)); stage.dataset.theme = b.dataset.th; });
+$$('.t-btn[data-ac]').forEach(b => b.onclick = () => { $$('.t-btn[data-ac]').forEach(x => x.classList.toggle('on', x === b)); stage.dataset.accent = b.dataset.ac; });
+$('#ck-expand').onchange = e => stage.dataset.condExpand = e.target.checked ? 'on' : 'off';
+$('#ck-lock').onchange = e => stage.dataset.condLock = e.target.checked ? 'on' : 'off';
+$('#ck-form').onchange = e => stage.dataset.condForm = e.target.checked ? 'on' : 'off';
+$('#btn-expand').onclick = () => $('#bubble').classList.toggle('expanded');
+$('#vf-head').onclick = () => $('#vform').classList.toggle('closed');
+$$('[data-fold] .fold-bar').forEach(bar => bar.onclick = () => bar.closest('.fold').classList.toggle('open'));
+let toastTimer = null;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1600); }
+$$('[data-toast]').forEach(b => b.addEventListener('click', () => toast(b.dataset.toast)));
+</script>
+</body>
+</html>
