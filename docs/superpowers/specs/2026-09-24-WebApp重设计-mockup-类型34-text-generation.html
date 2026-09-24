@@ -52,7 +52,7 @@
 
   /* ===== 舞台 ===== */
   .stage { background:var(--bg); color:var(--text-1); }
-  .shell { display:flex; flex-direction:column; min-height:calc(100vh - 42px); }
+  .shell { display:flex; flex-direction:column; height:calc(100vh - 60px); min-height:560px; overflow:hidden; }
 
   /* 极薄 header */
   .hd { height:40px; flex:none; display:flex; align-items:center; gap:8px; padding:0 16px; }
@@ -71,11 +71,8 @@
   .theme-seg button { flex:1; height:24px; border-radius:6px; font-size:12px; color:var(--text-3); font-weight:500; }
   .theme-seg button.on { background:var(--card); color:var(--text-1); font-weight:600; box-shadow:var(--shadow-xs); }
 
-  /* 单列 720 */
-  .col { width:min(720px,100%); margin:0 auto; padding:20px 24px 40px; flex:1; }
-
   /* segment 切换条 */
-  .seg-wrap { display:flex; justify-content:center; padding:4px 0 18px; }
+  .seg-wrap { display:flex; justify-content:center; padding:4px 0 12px; flex:none; }
   .seg { display:inline-flex; background:var(--bg-soft); border-radius:10px; padding:3px; gap:2px; }
   .seg button { height:30px; padding:0 16px; border-radius:8px; font-size:13px; font-weight:500; color:var(--text-3); display:inline-flex; align-items:center; gap:6px; transition:color .12s; }
   .seg button.on { background:var(--card); color:var(--text-1); font-weight:600; box-shadow:var(--shadow-xs); }
@@ -83,15 +80,30 @@
   .stage[data-ui-batch='off'] .seg [data-view='batch'] { display:none; }
   .stage[data-type='workflow'] .seg [data-view='saved'] { display:none; }
 
+  /* 视图容器 */
+  .views { flex:1; min-height:0; }
+  .view { display:none; height:100%; }
+  .stage[data-view='run'] [data-v='run'], .stage[data-view='batch'] [data-v='batch'], .stage[data-view='saved'] [data-v='saved'] { display:block; }
+
+  /* 运行一次:桌面双列(左表单 360 独立滚动 / 右结果自适应独立滚动) */
+  .run-wrap { display:flex; gap:28px; height:100%; width:min(1080px,100%); margin:0 auto; padding:4px 24px 12px; }
+  .form-panel { width:360px; flex:none; overflow-y:auto; padding:2px 4px 20px 2px; }
+  .res-pane { flex:1; min-width:0; overflow-y:auto; padding:2px 4px 20px; }
+  @media (max-width: 900px) {
+    .run-wrap { flex-direction:column; overflow-y:auto; gap:18px; }
+    .form-panel { width:100%; overflow:visible; }
+    .res-pane { overflow:visible; }
+  }
+  /* 批量/已保存:单列 720 */
+  .view-col { width:min(720px,100%); margin:0 auto; height:100%; overflow-y:auto; padding:4px 24px 20px; }
+
   /* 表单 */
   .f-title { font-size:15px; font-weight:650; margin-bottom:4px; }
   .f-sub { font-size:12.5px; color:var(--text-3); margin-bottom:16px; }
-  .f-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .f-grid { display:grid; grid-template-columns:1fr; gap:14px; }
   .vf-field { display:flex; flex-direction:column; gap:6px; }
-  .vf-field.full { grid-column:1 / -1; }
   .vf-label { font-size:12.5px; font-weight:550; color:var(--text-2); }
   .vf-label .req { color:var(--danger); margin-left:2px; }
-  .vf-label .hid { margin-left:6px; font-size:11px; color:var(--text-3); font-weight:400; }
   .vf-input, .vf-select, .vf-textarea { border:1px solid var(--border-strong); border-radius:8px; background:var(--bg); color:var(--text-1); font-size:13px; padding:8px 10px; outline:0; transition:border-color .12s, box-shadow .12s; width:100%; }
   .vf-input:focus, .vf-select:focus, .vf-textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
   .vf-textarea { resize:vertical; min-height:64px; line-height:1.6; }
@@ -110,7 +122,7 @@
   .vision-add { width:64px; height:64px; border-radius:9px; border:1.5px dashed var(--border-strong); color:var(--text-3); display:grid; place-items:center; transition:border-color .12s,color .12s; }
   .vision-add:hover { border-color:var(--accent); color:var(--accent-deep); }
   .stage[data-ui-vision='off'] .vision-field { display:none; }
-  .f-ops { display:flex; align-items:center; gap:10px; margin-top:18px; }
+  .f-ops { display:flex; align-items:center; gap:10px; margin-top:18px; position:sticky; bottom:0; background:var(--bg); padding:10px 0 4px; }
   .btn-ghost { height:36px; padding:0 16px; border-radius:var(--radius-btn); border:1px solid var(--border-strong); color:var(--text-2); font-size:13px; font-weight:550; }
   .btn-ghost:hover { background:var(--bg-soft); }
   .btn-run { margin-left:auto; display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 22px; border-radius:var(--radius-btn); background:var(--accent); color:#fff; font-weight:650; font-size:13.5px; box-shadow:var(--shadow-xs); }
@@ -119,9 +131,8 @@
   .spinner { width:13px; height:13px; border:2px solid rgb(255 255 255 / .35); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
 
-  /* 结果区 */
-  .res { margin-top:28px; }
-  .res-head { display:flex; align-items:center; gap-8px; margin-bottom:12px; }
+  /* 结果区(右列) */
+  .res-head { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
   .res-title { font-size:13px; font-weight:650; color:var(--text-2); display:flex; align-items:center; gap:7px; }
   .res-empty { border:1.5px dashed var(--border); border-radius:var(--radius); padding:34px 20px; text-align:center; color:var(--text-3); font-size:13px; }
   .res-loading { display:flex; align-items:center; justify-content:center; gap:9px; padding:34px; color:var(--text-3); font-size:13px; }
@@ -171,8 +182,6 @@
   .task-no { margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--text-3); }
 
   /* 批量视图 */
-  .view { display:none; }
-  .stage[data-view='run'] [data-v='run'], .stage[data-view='batch'] [data-v='batch'], .stage[data-view='saved'] [data-v='saved'] { display:block; }
   .csv-drop { border:1.5px dashed var(--border-strong); border-radius:var(--radius); padding:34px 20px; text-align:center; color:var(--text-3); font-size:13px; cursor:pointer; transition:border-color .12s,color .12s; }
   .csv-drop:hover { border-color:var(--accent); color:var(--accent-deep); }
   .csv-meta { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:12.5px; }
@@ -186,12 +195,12 @@
 
   /* 已保存视图 */
   .saved-item { border:1px solid var(--border); border-radius:var(--radius); background:var(--card); padding:12px 14px; margin-bottom:10px; }
-  .saved-t { font-size:13px; line-height:1.65; color:var(--text-1); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .saved-t { font-size:13px; line-height:1.65; color:var(--text-1); display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .saved-foot { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:11.5px; color:var(--text-3); }
   .saved-foot .op-text { height:24px; padding:0 8px; font-size:12px; }
 
-  /* 页脚 */
-  .col-foot { text-align:center; padding:26px 0 6px; font-size:11.5px; color:var(--text-3); }
+  /* 页脚(壳底部居中) */
+  .col-foot { flex:none; text-align:center; padding:8px 0 10px; font-size:11.5px; color:var(--text-3); }
   .col-foot b { color:var(--text-2); font-weight:600; }
 
   /* 移动端帧 */
@@ -201,7 +210,6 @@
   .ml-row { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; }
   .phone { width:390px; height:720px; border-radius:36px; border:9px solid #141416; background:var(--bg); overflow:hidden; flex:none; }
   .phone .col { padding:14px 16px 24px; }
-  .phone .f-grid { grid-template-columns:1fr; }
   .phone .seg-wrap { padding-bottom:12px; }
 
   .notes { max-width:860px; margin:0 auto; padding:26px 24px 60px; color:var(--text-2); font-size:13px; line-height:1.9; }
@@ -236,7 +244,7 @@
     <label class="t-check"><input type="checkbox" id="ck-ops" checked>消息操作</label>
     <label class="t-check"><input type="checkbox" id="ck-vision">vision 图传</label>
   </div>
-  <span class="t-note">D7 单列 · D8 segment · D10 结果流内</span>
+  <span class="t-note">D7 修正:运行一次 = 桌面双列 · D8 segment · D10 移动单列</span>
 </div>
 
 <div class="stage" id="stage" data-theme="light" data-type="workflow" data-view="run" data-rs="empty" data-ui-batch="off" data-ui-steps="on" data-ui-ops="on" data-ui-vision="off">
@@ -257,143 +265,150 @@
       </div>
     </header>
 
-    <div class="col">
-      <div class="seg-wrap">
-        <div class="seg" id="seg">
-          <button data-view="run" class="on">运行一次</button>
-          <button data-view="batch">批量运行</button>
-          <button data-view="saved">已保存<span class="badge">3</span></button>
-        </div>
+    <div class="seg-wrap">
+      <div class="seg" id="seg">
+        <button data-view="run" class="on">运行一次</button>
+        <button data-view="batch">批量运行</button>
+        <button data-view="saved">已保存<span class="badge">3</span></button>
       </div>
-
-      <!-- ===== 运行一次 ===== -->
-      <div class="view" data-v="run">
-        <div class="f-title">启动变量</div>
-        <div class="f-sub">带 <span style="color:var(--danger)">*</span> 为必填;隐藏变量不在此渲染(URL/默认值注入,见注记)</div>
-        <div class="f-grid">
-          <div class="vf-field"><label class="vf-label">投保人姓名<span class="req">*</span></label><input class="vf-input" placeholder="text" value="张三"></div>
-          <div class="vf-field"><label class="vf-label">年龄</label><input class="vf-input" type="number" placeholder="number(选填)"></div>
-          <div class="vf-field"><label class="vf-label">保障类型</label><select class="vf-select"><option>住院医疗</option><option>重大疾病</option><option>意外伤害</option></select></div>
-          <div class="vf-field vision-field"><label class="vf-label">患处照片(vision)</label>
-            <div class="vision-row"><div class="vision-thumb">🩹<button>×</button></div><button class="vision-add">＋</button></div>
-          </div>
-          <div class="vf-field full"><label class="vf-label">事故经过</label><textarea class="vf-textarea" placeholder="paragraph">2026-09-20 骑自行车摔伤,当晚急诊缝针 3 针……</textarea></div>
-          <div class="vf-field"><label class="vf-label">诊断证明<span class="req">*</span></label><div class="vf-file">点击或拖拽上传(单文件)</div></div>
-          <div class="vf-field"><label class="vf-label">附加材料</label>
-            <div class="vf-file">点击或拖拽上传(多文件)</div>
-            <div class="file-chips"><span class="file-chip">📄 费用明细.pdf<button>×</button></span><span class="file-chip">🖼 发票照片.jpg<button>×</button></span></div>
-          </div>
-          <div class="vf-field full"><label class="vf-label">扩展信息(json_object)</label><textarea class="vf-textarea mono" placeholder='{ "key": "value" }'>{ "channel": "webapp", "source": "claim-precheck" }</textarea></div>
-          <div class="vf-field full"><label class="vf-check"><input type="checkbox" checked>信息真实性确认<span class="req">*</span></label></div>
-        </div>
-        <div class="f-ops">
-          <button class="btn-ghost" data-toast="已清空(演示)">清空</button>
-          <button class="btn-run" id="btn-run"><svg id="ico-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg><span id="run-label">运 行</span></button>
-        </div>
-
-        <!-- 结果区:流内 -->
-        <div class="res" id="res">
-          <div class="res-head"><span class="res-title">结果</span></div>
-
-          <div class="res-empty" id="res-empty">填写表单并点击运行,结果将在这里出现</div>
-          <div class="res-loading" id="res-loading" style="display:none"><span class="spinner dark"></span>正在运行…(运行钮原位为 ⏹ 停止)</div>
-
-          <div id="res-done" style="display:none">
-            <!-- workflow 过程卡(类型4;show_workflow_steps 关时整卡不渲染) -->
-            <div class="wf-card closed" id="wf-card">
-              <div class="wf-head" id="wf-head">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                <span class="t">工作流执行过程</span>
-                <span class="wf-badge">✓ 3 步全部成功 · 2.4s</span>
-                <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
-              </div>
-              <div class="wf-body">
-                <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>用户输入<span class="meta">8 变量 · 12ms</span></div>
-                <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>LLM 材料预审<span class="meta">deepseek-v3 · 2.1s · 812 tokens</span></div>
-                <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>输出<span class="meta">3 字段 · 260ms</span></div>
-              </div>
-            </div>
-
-            <!-- TextGenerationRes 结果项 -->
-            <div class="res-item">
-              <div class="res-tabs">
-                <button class="on" data-tab="result">结果</button>
-                <button data-tab="detail">详情</button>
-              </div>
-              <div class="res-body" data-tabv="result">
-                <div class="fold" data-fold>
-                  <span class="fold-bar"><svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>已深度思考(1.1s)</span>
-                  <div class="fold-body">逐项核对材料清单:诊断证明、费用明细、发票照片已齐;缺出院小结,需提示用户补充。</div>
-                </div>
-                <div class="md">
-                  <p><strong>预审结论:材料基本齐备,缺 1 项。</strong></p>
-                  <ul>
-                    <li>✅ 诊断证明、费用明细清单、发票照片已收到</li>
-                    <li>⚠️ 缺 <strong>出院小结</strong>(住院医疗理赔必需)</li>
-                    <li>📌 事故经过描述与诊断证明一致,无需补充说明</li>
-                  </ul>
-                  <p>补齐出院小结后即可正式提交,预计审核时效 <strong>3 个工作日</strong>。</p>
-                </div>
-              </div>
-              <div class="res-body" data-tabv="detail" style="display:none">
-                <table class="detail-table">
-                  <tr><td>投保人姓名</td><td>张三</td></tr>
-                  <tr><td>保障类型</td><td>住院医疗</td></tr>
-                  <tr><td>附加材料</td><td>费用明细.pdf · 发票照片.jpg</td></tr>
-                  <tr><td>模型</td><td class="mono">deepseek-v3</td></tr>
-                  <tr><td>耗时 / tokens</td><td class="mono">2.4s · 812 tok</td></tr>
-                  <tr><td>任务编号</td><td class="mono">task-01JZX4…8FQ2</td></tr>
-                </table>
-              </div>
-              <div class="res-ops">
-                <button class="op-btn" title="复制" data-toast="已复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
-                <button class="op-btn" title="赞同" data-toast="已反馈赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
-                <button class="op-btn" title="反对" data-toast="已反馈"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleY(-1)"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
-                <button class="op-btn" title="朗读(TTS 开启时)" data-toast="朗读(TTS 条件项)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5ZM15.5 8.5a5 5 0 0 1 0 7"/></svg></button>
-                <button class="op-text only-completion" data-toast="已保存到「已保存」tab(演示)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16Z"/></svg>保存</button>
-                <button class="op-text only-completion" data-toast="再来一条(moreLikeThis,需开启)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>再来一条</button>
-                <span class="task-no">task-01JZX4…8FQ2</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== 批量运行 ===== -->
-      <div class="view" data-v="batch">
-        <div class="f-title">批量运行</div>
-        <div class="f-sub">上传 CSV 批量执行,每行一条输入</div>
-        <div class="csv-drop" data-toast="选择 CSV(演示)">拖放 CSV 到此处,或点击浏览</div>
-        <div class="csv-meta"><a data-toast="下载 CSV 模板(按变量生成)">↓ 下载 CSV 模板</a><span style="color:var(--text-3)">模板按启动变量自动生成列</span></div>
-        <div class="csv-note">CSV 结构:第 1 行为变量名,须与表单变量一一对应;<code>投保人姓名</code>、<code>事故经过</code> 等必填列不可缺。</div>
-        <div class="f-ops"><button class="btn-run" style="margin-left:auto" data-toast="开始批量执行(演示)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg>批量执行</button></div>
-        <div class="res">
-          <div class="res-head"><span class="res-title">批量结果</span></div>
-          <div class="batch-head">
-            <span>共 12 条</span><span class="batch-ok">✓ 成功 11</span><span class="batch-bad">✗ 失败 1</span>
-            <span class="spacer"></span>
-            <button class="op-text" data-toast="失败重试(演示)">重试失败</button>
-            <button class="op-text" data-toast="下载结果 CSV(演示)">↓ 下载结果</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== 已保存(completion 型专属) ===== -->
-      <div class="view" data-v="saved">
-        <div class="f-title">已保存</div>
-        <div class="f-sub">运行结果点「保存」后进入此处(completion 型专属,workflow 型无此 tab)</div>
-        <div class="saved-item">
-          <div class="saved-t">预审结论:材料基本齐备,缺 1 项。✅ 诊断证明、费用明细清单、发票照片已收到;⚠️ 缺出院小结……</div>
-          <div class="saved-foot"><span>2026-09-24 09:12</span><span style="flex:1"></span><button class="op-text" data-toast="查看(演示)">查看</button><button class="op-text" data-toast="已删除(演示)">删除</button></div>
-        </div>
-        <div class="saved-item">
-          <div class="saved-t">保障范围解读:住院医疗涵盖床位费、手术费、药品费(医保目录内)……</div>
-          <div class="saved-foot"><span>2026-09-23 17:40</span><span style="flex:1"></span><button class="op-text" data-toast="查看(演示)">查看</button><button class="op-text" data-toast="已删除(演示)">删除</button></div>
-        </div>
-      </div>
-
-      <div class="col-foot">Powered by <b>杏树林</b></div>
     </div>
+
+    <div class="views">
+      <!-- ===== 运行一次:桌面双列 ===== -->
+      <div class="view" data-v="run">
+        <div class="run-wrap">
+          <div class="form-panel">
+            <div class="f-title">启动变量</div>
+            <div class="f-sub">带 <span style="color:var(--danger)">*</span> 为必填;隐藏变量不在此渲染(URL/默认值注入,见注记)</div>
+            <div class="f-grid">
+              <div class="vf-field"><label class="vf-label">投保人姓名<span class="req">*</span></label><input class="vf-input" placeholder="text" value="张三"></div>
+              <div class="vf-field"><label class="vf-label">年龄</label><input class="vf-input" type="number" placeholder="number(选填)"></div>
+              <div class="vf-field"><label class="vf-label">保障类型</label><select class="vf-select"><option>住院医疗</option><option>重大疾病</option><option>意外伤害</option></select></div>
+              <div class="vf-field vision-field"><label class="vf-label">患处照片(vision)</label>
+                <div class="vision-row"><div class="vision-thumb">🩹<button>×</button></div><button class="vision-add">＋</button></div>
+              </div>
+              <div class="vf-field"><label class="vf-label">事故经过</label><textarea class="vf-textarea" placeholder="paragraph">2026-09-20 骑自行车摔伤,当晚急诊缝针 3 针……</textarea></div>
+              <div class="vf-field"><label class="vf-label">诊断证明<span class="req">*</span></label><div class="vf-file">点击或拖拽上传(单文件)</div></div>
+              <div class="vf-field"><label class="vf-label">附加材料</label>
+                <div class="vf-file">点击或拖拽上传(多文件)</div>
+                <div class="file-chips"><span class="file-chip">📄 费用明细.pdf<button>×</button></span><span class="file-chip">🖼 发票照片.jpg<button>×</button></span></div>
+              </div>
+              <div class="vf-field"><label class="vf-label">扩展信息(json_object)</label><textarea class="vf-textarea mono" placeholder='{ "key": "value" }'>{ "channel": "webapp", "source": "claim-precheck" }</textarea></div>
+              <div class="vf-field"><label class="vf-check"><input type="checkbox" checked>信息真实性确认<span class="req">*</span></label></div>
+            </div>
+            <div class="f-ops">
+              <button class="btn-ghost" data-toast="已清空(演示)">清空</button>
+              <button class="btn-run" id="btn-run"><svg id="ico-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg><span id="run-label">运 行</span></button>
+            </div>
+          </div>
+
+          <div class="res-pane" id="res">
+            <div class="res-head"><span class="res-title">结果</span></div>
+
+            <div class="res-empty" id="res-empty">填写表单并点击运行,结果将在这里出现</div>
+            <div class="res-loading" id="res-loading" style="display:none"><span class="spinner dark"></span>正在运行…(运行钮原位为 ⏹ 停止)</div>
+
+            <div id="res-done" style="display:none">
+              <!-- workflow 过程卡(类型4;show_workflow_steps 关时整卡不渲染) -->
+              <div class="wf-card closed" id="wf-card">
+                <div class="wf-head" id="wf-head">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                  <span class="t">工作流执行过程</span>
+                  <span class="wf-badge">✓ 3 步全部成功 · 2.4s</span>
+                  <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div class="wf-body">
+                  <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>用户输入<span class="meta">8 变量 · 12ms</span></div>
+                  <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>LLM 材料预审<span class="meta">deepseek-v3 · 2.1s · 812 tokens</span></div>
+                  <div class="wf-step"><span class="st-ico"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>输出<span class="meta">3 字段 · 260ms</span></div>
+                </div>
+              </div>
+
+              <!-- TextGenerationRes 结果项 -->
+              <div class="res-item">
+                <div class="res-tabs">
+                  <button class="on" data-tab="result">结果</button>
+                  <button data-tab="detail">详情</button>
+                </div>
+                <div class="res-body" data-tabv="result">
+                  <div class="fold" data-fold>
+                    <span class="fold-bar"><svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>已深度思考(1.1s)</span>
+                    <div class="fold-body">逐项核对材料清单:诊断证明、费用明细、发票照片已齐;缺出院小结,需提示用户补充。</div>
+                  </div>
+                  <div class="md">
+                    <p><strong>预审结论:材料基本齐备,缺 1 项。</strong></p>
+                    <ul>
+                      <li>✅ 诊断证明、费用明细清单、发票照片已收到</li>
+                      <li>⚠️ 缺 <strong>出院小结</strong>(住院医疗理赔必需)</li>
+                      <li>📌 事故经过描述与诊断证明一致,无需补充说明</li>
+                    </ul>
+                    <p>补齐出院小结后即可正式提交,预计审核时效 <strong>3 个工作日</strong>。</p>
+                  </div>
+                </div>
+                <div class="res-body" data-tabv="detail" style="display:none">
+                  <table class="detail-table">
+                    <tr><td>投保人姓名</td><td>张三</td></tr>
+                    <tr><td>保障类型</td><td>住院医疗</td></tr>
+                    <tr><td>附加材料</td><td>费用明细.pdf · 发票照片.jpg</td></tr>
+                    <tr><td>模型</td><td class="mono">deepseek-v3</td></tr>
+                    <tr><td>耗时 / tokens</td><td class="mono">2.4s · 812 tok</td></tr>
+                    <tr><td>任务编号</td><td class="mono">task-01JZX4…8FQ2</td></tr>
+                  </table>
+                </div>
+                <div class="res-ops">
+                  <button class="op-btn" title="复制" data-toast="已复制"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                  <button class="op-btn" title="赞同" data-toast="已反馈赞同"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
+                  <button class="op-btn" title="反对" data-toast="已反馈"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleY(-1)"><path d="M7 10v12M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg></button>
+                  <button class="op-btn" title="朗读(TTS 开启时)" data-toast="朗读(TTS 条件项)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5ZM15.5 8.5a5 5 0 0 1 0 7"/></svg></button>
+                  <button class="op-text only-completion" data-toast="已保存到「已保存」tab(演示)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16Z"/></svg>保存</button>
+                  <button class="op-text only-completion" data-toast="再来一条(moreLikeThis,需开启)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>再来一条</button>
+                  <span class="task-no">task-01JZX4…8FQ2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 批量运行(单列) ===== -->
+      <div class="view" data-v="batch">
+        <div class="view-col">
+          <div class="f-title">批量运行</div>
+          <div class="f-sub">上传 CSV 批量执行,每行一条输入</div>
+          <div class="csv-drop" data-toast="选择 CSV(演示)">拖放 CSV 到此处,或点击浏览</div>
+          <div class="csv-meta"><a data-toast="下载 CSV 模板(按变量生成)">↓ 下载 CSV 模板</a><span style="color:var(--text-3)">模板按启动变量自动生成列</span></div>
+          <div class="csv-note">CSV 结构:第 1 行为变量名,须与表单变量一一对应;<code>投保人姓名</code>、<code>事故经过</code> 等必填列不可缺。</div>
+          <div class="f-ops" style="position:static"><button class="btn-run" data-toast="开始批量执行(演示)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg>批量执行</button></div>
+          <div style="margin-top:24px">
+            <div class="res-head"><span class="res-title">批量结果</span></div>
+            <div class="batch-head">
+              <span>共 12 条</span><span class="batch-ok">✓ 成功 11</span><span class="batch-bad">✗ 失败 1</span>
+              <span class="spacer"></span>
+              <button class="op-text" data-toast="失败重试(演示)">重试失败</button>
+              <button class="op-text" data-toast="下载结果 CSV(演示)">↓ 下载结果</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 已保存(completion 型专属,单列) ===== -->
+      <div class="view" data-v="saved">
+        <div class="view-col">
+          <div class="f-title">已保存</div>
+          <div class="f-sub">运行结果点「保存」后进入此处(completion 型专属,workflow 型无此 tab)</div>
+          <div class="saved-item">
+            <div class="saved-t">预审结论:材料基本齐备,缺 1 项。✅ 诊断证明、费用明细清单、发票照片已收到;⚠️ 缺出院小结……</div>
+            <div class="saved-foot"><span>2026-09-24 09:12</span><span style="flex:1"></span><button class="op-text" data-toast="查看(演示)">查看</button><button class="op-text" data-toast="已删除(演示)">删除</button></div>
+          </div>
+          <div class="saved-item">
+            <div class="saved-t">保障范围解读:住院医疗涵盖床位费、手术费、药品费(医保目录内)……</div>
+            <div class="saved-foot"><span>2026-09-23 17:40</span><span style="flex:1"></span><button class="op-text" data-toast="查看(演示)">查看</button><button class="op-text" data-toast="已删除(演示)">删除</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-foot">Powered by <b>杏树林</b></div>
   </div>
 
   <!-- 移动端帧 -->
@@ -410,8 +425,8 @@
             <div class="vf-field"><label class="vf-label">投保人姓名<span class="req">*</span></label><input class="vf-input" value="张三"></div>
             <div class="vf-field"><label class="vf-label">诊断证明<span class="req">*</span></label><div class="vf-file">点击或拖拽上传</div></div>
           </div>
-          <div class="f-ops"><button class="btn-run" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg>运 行</button></div>
-          <div class="res">
+          <div class="f-ops" style="position:static"><button class="btn-run" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7Z"/></svg>运 行</button></div>
+          <div style="margin-top:20px">
             <div class="res-head"><span class="res-title">结果</span></div>
             <div class="wf-card closed">
               <div class="wf-head"><span class="t">工作流执行过程</span><span class="wf-badge">✓ 3 步 · 2.4s</span><svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>
@@ -425,12 +440,14 @@
   </section>
 
   <section class="notes">
-    <h2>设计落点注记(对照 2026-09-24-WebApp重设计-design.md §5)</h2>
+    <h2>设计落点注记(对照 2026-09-24-WebApp重设计-design.md §5,D7 修正后)</h2>
     <ul>
-      <li><b>D7 单列化</b>:废左右双列;表单在上、结果流内(替换式 = 最新一次)。</li>
+      <li><b>D7 修正(09-24)</b>:「运行一次」桌面 = 左表单(360px,独立滚动)+ 右结果(自适应,独立滚动)双列同屏迭代;窄窗(&lt;900px)与移动端单列上下。批量/已保存视图单列 720。</li>
+      <li><b>为什么不是全单列</b>:主交互是迭代调参(改输入→看结果反复),单列上下需滚动往返;playground 型产品(OpenAI Playground/Anthropic Console)桌面共识即左右分栏。</li>
+      <li><b>与 Dify 旧双列的区别</b>:左列只放表单——应用信息在 header、tab 上移 segment、品牌行在壳底;非重侧栏。</li>
       <li><b>D8 segment</b>:运行一次 / 批量运行* / 已保存*(*条件项:批量 = <code>ui_config.components.show_batch_tab</code> 默认隐;已保存 = completion 型专属,工具条切类型验证)。</li>
       <li><b>D10</b>:移动端结果流内,原底部抽屉 + drag handle 取消。</li>
-      <li>运行钮:运行中原位变 ⏹ + spinner(同 D4 口径),结果区不再单独出停止钮。</li>
+      <li>运行钮:运行中原位变 ⏹ + spinner(同 D4 口径),结果区不再单独出停止钮;表单列底部操作条 sticky。</li>
       <li>工作流过程卡:类型 4 专属,<code>show_workflow_steps</code>(既有列,非 ui_config)关闭时整卡不渲染;状态 badge 绿勾。</li>
       <li>隐藏变量:不在表单渲染(URL <code>sys.*</code>/默认值注入)——无可见 UI,仅注记。</li>
       <li>结果项:结果/详情双 tab(详情 = inputs + meta + 任务编号);保存/再来一条 = completion 专属;TTS 朗读条件显示。</li>
