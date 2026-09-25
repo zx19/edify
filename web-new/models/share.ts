@@ -8,6 +8,8 @@ export type ConversationItem = {
   name: string
   inputs: Record<string, any> | null
   introduction: string
+  created_at?: number | null // 后端 SimpleConversation 秒级 epoch;旧类型裁剪掉了,补回(D2 数据源)
+  updated_at?: number | null
 }
 
 export type SiteInfo = {
