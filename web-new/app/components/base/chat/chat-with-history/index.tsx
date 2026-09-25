@@ -22,7 +22,8 @@ type ChatWithHistoryProps = {
 
 /**
  * 壳层（chat 单元重写，方向 A）：无侧栏列、无悬停浮出面板——会话管理收进 overlay 抽屉。
- * 单列 flex-col：header（桌面/移动二选一）+ 内容区（ChatWrapper / Loading / 抽屉 overlay）。
+ * 单列 flex-col：header（桌面/移动二选一）+ 内容区（ChatWrapper / Loading）；
+ * 抽屉（含蒙层）挂壳层根：抽屉顶=壳顶，蒙层覆盖 40px header（z-40/50 高于 header）。
  * ⌘K(Ctrl+K) 唤出抽屉；ui_config.layout.show_conversation_sidebar=false → 不渲染抽屉、不响应 ⌘K。
  * 契约注记：sidebarCollapseState/handleSidebarCollapse 在 context/hooks 暂留（chat-wrapper、
  * use-chat-layout 仍消费，Task 5/7 清理），壳层自本任务起不再消费。
@@ -35,13 +36,22 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
   const drawerEnabled = resolveUiConfig(site).layout.show_conversation_sidebar
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-  // ⌘K / Ctrl+K 唤出/收起抽屉（聚焦搜索由抽屉自身 open 副作用承担）；ui_config 关时不响应
+  // ⌘K / Ctrl+K 唤出/收起抽屉（聚焦搜索由抽屉自身 open 副作用承担）；ui_config 关时不响应。
+  // 抽屉内弹窗（重命名/删除/关于）开着时 ⌘K 让位、不收起抽屉：window 层检测已开 modal——
+  // Base UI Dialog/AlertDialog popup 开态带 data-open（抽屉 aside 无 data-open，不误伤）。
   useEffect(() => {
     if (!drawerEnabled) return
     const handleKeydown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
-        setDrawerOpen((v) => !v)
+        setDrawerOpen((v) => {
+          if (
+            v &&
+            document.querySelector('[role="dialog"][data-open], [role="alertdialog"][data-open]')
+          )
+            return v
+          return !v
+        })
       }
     }
     window.addEventListener('keydown', handleKeydown)
@@ -65,10 +75,11 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
       <div className="relative min-h-0 grow">
         {appChatListDataLoading && <Loading type="app" />}
         {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
-        {drawerEnabled && (
-          <ConversationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-        )}
       </div>
+      {/* 抽屉挂壳层根（非内容容器）：absolute 定位相对壳根，蒙层/面板覆盖 40px header */}
+      {drawerEnabled && (
+        <ConversationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      )}
     </div>
   )
 }

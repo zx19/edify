@@ -30,6 +30,7 @@ const mockAppData: AppData = {
   can_replace_logo: false,
 }
 
+// 默认值不再含 sidebarCollapseState/handleSidebarCollapse：壳层去侧栏后 header 不消费 collapse 语义
 const mockContextDefaults: ChatWithHistoryContextValue = {
   appData: mockAppData,
   currentConversationId: '',
@@ -41,70 +42,162 @@ const mockContextDefaults: ChatWithHistoryContextValue = {
   handleRenameConversation: vi.fn(),
   handleDeleteConversation: vi.fn(),
   handleNewConversation: vi.fn(),
-  sidebarCollapseState: true,
-  handleSidebarCollapse: vi.fn(),
   isResponding: false,
   conversationRenaming: false,
   showConfig: false,
 } as unknown as ChatWithHistoryContextValue
 
-const setup = (overrides: Partial<ChatWithHistoryContextValue> = {}) => {
+type HeaderProps = Readonly<{
+  onOpenDrawer?: () => void
+  drawerEnabled?: boolean
+}>
+
+const setup = (
+  overrides: Partial<ChatWithHistoryContextValue> = {},
+  props: HeaderProps = { drawerEnabled: true },
+) => {
   vi.mocked(useChatWithHistoryContext).mockReturnValue({
     ...mockContextDefaults,
     ...overrides,
   })
-  return render(<Header />)
+  return render(<Header {...props} />)
 }
 
-describe('Header Component', () => {
+describe('Header Component（Task 4：40px 极薄桌面 header）', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  describe('Rendering', () => {
-    it('should render conversation name when conversation is selected', () => {
-      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
-      setup({
-        currentConversationId: 'conv-1',
-        currentConversationItem: mockConv,
-        sidebarCollapseState: true,
-      })
-      expect(screen.getByText('My Chat'))!.toBeInTheDocument()
+  describe('Structure（对照 mockup 类型1 header）', () => {
+    it('should render a 40px banner header', () => {
+      setup()
+      const header = screen.getByRole('banner')
+      expect(header).toHaveClass('h-10')
     })
 
-    it('should render ViewFormDropdown trigger when inputsForms are present', () => {
+    it('should render weakened app identity (small icon + name in text-2)', () => {
+      setup()
+      const titleEl = screen.getByText('Test App')
+      expect(titleEl).toHaveClass('font-semibold')
+      expect(titleEl).toHaveClass('text-[var(--text-2)]')
+    })
+
+    it('should render the drawer entry (☰) with conversation-history label when drawerEnabled', () => {
+      setup({}, { drawerEnabled: true, onOpenDrawer: vi.fn() })
+      expect(
+        screen.getByRole('button', { name: 'share.chat.conversationHistory' }),
+      ).toBeInTheDocument()
+    })
+
+    it('should hide the drawer entry when drawerEnabled is false', () => {
+      setup({}, { drawerEnabled: false, onOpenDrawer: vi.fn() })
+      expect(
+        screen.queryByRole('button', { name: 'share.chat.conversationHistory' }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('should never render the legacy expand-sidebar button even when collapse state is true', () => {
+      // 壳层已无侧栏列：旧「展开侧栏」钮连同 collapse 逻辑一并删除
+      setup({ sidebarCollapseState: true } as Partial<ChatWithHistoryContextValue>)
+      expect(
+        screen.queryByRole('button', { name: 'layout.sidebar.expandSidebar' }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('should render the conversation title dropdown only when a conversation exists', () => {
+      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
+      const { unmount } = setup({
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConv,
+      })
+      expect(screen.getByText('My Chat')).toBeInTheDocument()
+
+      unmount()
+      // 新会话/欢迎屏：无会话标题（mockup：welcome/form 态隐藏 hd-conv）
+      setup({ currentConversationId: '', currentConversationItem: undefined })
+      expect(screen.queryByText('My Chat')).not.toBeInTheDocument()
+    })
+
+    it('should render exactly the five header actions when everything is on (D11: no ⋯ menu)', () => {
       const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
       setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         inputsForms: [{ id: 'form-1' }],
       })
+      // ☰(1) + 会话标题▾(1) + 查看变量(1) + 重置对话(1) + 新对话(1) = 5
+      expect(screen.getAllByRole('button')).toHaveLength(5)
+    })
+  })
 
-      const buttons = screen.getAllByRole('button')
-      // Sidebar(1) + Conversation operation(1) + NewChat(1) + ResetChat(1) + ViewForm(1) = 5 buttons
-      expect(buttons).toHaveLength(5)
+  describe('Right action group', () => {
+    it('should render ViewFormDropdown whenever inputs forms exist (mockup form 态无会话也显示)', () => {
+      setup({ currentConversationId: '', inputsForms: [{ id: 'form-1' }] })
+      expect(
+        screen.getByRole('button', { name: 'share.chat.viewChatSettings' }),
+      ).toBeInTheDocument()
+    })
+
+    it('should not render ViewFormDropdown when inputsForms is empty', () => {
+      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
+      setup({ currentConversationId: 'conv-1', currentConversationItem: mockConv, inputsForms: [] })
+      expect(
+        screen.queryByRole('button', { name: 'share.chat.viewChatSettings' }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('should render reset-chat only inside an existing conversation（原位沿用）', () => {
+      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
+      const { unmount } = setup({
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConv,
+      })
+      expect(screen.getByRole('button', { name: 'share.chat.resetChat' })).toBeInTheDocument()
+
+      unmount()
+      setup({ currentConversationId: '' })
+      expect(screen.queryByRole('button', { name: 'share.chat.resetChat' })).not.toBeInTheDocument()
+    })
+
+    it('should always render the new-chat button（对照表：恒在）', () => {
+      setup({ currentConversationId: '' }, { drawerEnabled: false })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeInTheDocument()
+    })
+
+    it('should disable new-chat when already in a new conversation', () => {
+      setup({ isResponding: false, currentConversationId: '' })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeDisabled()
+    })
+
+    it('should disable new-chat while responding', () => {
+      setup({ isResponding: true, currentConversationId: 'conv-1' })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeDisabled()
     })
   })
 
   describe('Interactions', () => {
-    it('should handle new conversation', async () => {
+    it('should invoke onOpenDrawer when the ☰ button is clicked', async () => {
+      const onOpenDrawer = vi.fn()
+      setup({}, { drawerEnabled: true, onOpenDrawer })
+
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.conversationHistory' }))
+      expect(onOpenDrawer).toHaveBeenCalledTimes(1)
+    })
+
+    it('should handle new conversation via the reset button', async () => {
       const handleNewConversation = vi.fn()
-      setup({ handleNewConversation, sidebarCollapseState: true, currentConversationId: 'conv-1' })
+      setup({ handleNewConversation, currentConversationId: 'conv-1' })
 
-      const resetChatBtn = screen.getByRole('button', { name: 'share.chat.resetChat' })
-      await userEvent.click(resetChatBtn)
-
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.resetChat' }))
       expect(handleNewConversation).toHaveBeenCalled()
     })
 
-    it('should handle sidebar toggle', async () => {
-      const handleSidebarCollapse = vi.fn()
-      setup({ handleSidebarCollapse, sidebarCollapseState: true })
+    it('should handle new conversation via the new-chat button', async () => {
+      const handleNewConversation = vi.fn()
+      setup({ handleNewConversation, currentConversationId: 'conv-1' })
 
-      const sidebarBtn = screen.getByRole('button', { name: 'layout.sidebar.expandSidebar' })
-      await userEvent.click(sidebarBtn)
-
-      expect(handleSidebarCollapse).toHaveBeenCalledWith(false)
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.newChatTip' }))
+      expect(handleNewConversation).toHaveBeenCalled()
     })
 
     it('should render operation menu and handle pin', async () => {
@@ -114,17 +207,14 @@ describe('Header Component', () => {
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         handlePinConversation,
-        sidebarCollapseState: true,
       })
 
-      const trigger = screen.getByText('My Chat')
-      await userEvent.click(trigger)
+      await userEvent.click(screen.getByText('My Chat'))
 
       const pinBtn = await screen.findByText('explore.sidebar.action.pin')
-      expect(pinBtn)!.toBeInTheDocument()
+      expect(pinBtn).toBeInTheDocument()
 
       await userEvent.click(pinBtn)
-
       expect(handlePinConversation).toHaveBeenCalledWith('conv-1')
     })
 
@@ -136,7 +226,6 @@ describe('Header Component', () => {
         currentConversationItem: mockConv,
         handleUnpinConversation,
         pinnedConversationList: [{ id: 'conv-1' } as ConversationItem],
-        sidebarCollapseState: true,
       })
 
       await userEvent.click(screen.getByText('My Chat'))
@@ -152,7 +241,6 @@ describe('Header Component', () => {
       setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
-        sidebarCollapseState: true,
       })
 
       await userEvent.click(screen.getByText('My Chat'))
@@ -175,7 +263,6 @@ describe('Header Component', () => {
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         handleRenameConversation,
-        sidebarCollapseState: true,
       })
 
       await userEvent.click(screen.getByText('My Chat'))
@@ -183,7 +270,7 @@ describe('Header Component', () => {
       const renameMenuBtn = await screen.findByText('explore.sidebar.action.rename')
       await userEvent.click(renameMenuBtn)
 
-      expect(await screen.findByText('common.chat.renameConversation'))!.toBeInTheDocument()
+      expect(await screen.findByText('common.chat.renameConversation')).toBeInTheDocument()
 
       const input = screen.getByDisplayValue('My Chat')
       await userEvent.clear(input)
@@ -215,7 +302,6 @@ describe('Header Component', () => {
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
         handleDeleteConversation,
-        sidebarCollapseState: true,
       })
 
       await userEvent.click(screen.getByText('My Chat'))
@@ -224,7 +310,7 @@ describe('Header Component', () => {
       await userEvent.click(deleteMenuBtn)
 
       expect(handleDeleteConversation).not.toHaveBeenCalled()
-      expect(await screen.findByText('share.chat.deleteConversation.title'))!.toBeInTheDocument()
+      expect(await screen.findByText('share.chat.deleteConversation.title')).toBeInTheDocument()
 
       const confirmBtn = await screen.findByText('common.operation.confirm')
       await userEvent.click(confirmBtn)
@@ -246,7 +332,6 @@ describe('Header Component', () => {
       setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
-        sidebarCollapseState: true,
       })
 
       await userEvent.click(screen.getByText('My Chat'))
@@ -261,42 +346,9 @@ describe('Header Component', () => {
         expect(screen.queryByText('share.chat.deleteConversation.title')).not.toBeInTheDocument()
       })
     })
-
-    it('should handle empty translated delete content via fallback', async () => {
-      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
-      setup({
-        currentConversationId: 'conv-1',
-        currentConversationItem: mockConv,
-        sidebarCollapseState: true,
-      })
-
-      await userEvent.click(screen.getByText('My Chat'))
-      await userEvent.click(await screen.findByText('explore.sidebar.action.delete'))
-
-      expect(await screen.findByText('share.chat.deleteConversation.title'))!.toBeInTheDocument()
-    })
   })
 
   describe('Edge Cases', () => {
-    it('should not render inputs form dropdown if inputsForms is empty', () => {
-      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
-      setup({
-        currentConversationId: 'conv-1',
-        currentConversationItem: mockConv,
-        inputsForms: [],
-      })
-
-      const buttons = screen.getAllByRole('button')
-      // Sidebar(1) + Conversation operation(1) + NewChat(1) + ResetChat(1) = 4 buttons
-      expect(buttons).toHaveLength(4)
-    })
-
-    it('should render system title if conversation id is missing', () => {
-      setup({ currentConversationId: '', sidebarCollapseState: true })
-      const titleEl = screen.getByText('Test App')
-      expect(titleEl)!.toHaveClass('font-semibold')
-    })
-
     it('should render app icon from URL when icon_url is provided', () => {
       setup({
         appData: {
@@ -309,12 +361,11 @@ describe('Header Component', () => {
         },
       })
       const img = screen.getByAltText('app icon')
-      expect(img)!.toHaveAttribute('src', 'https://example.com/icon.png')
+      expect(img).toHaveAttribute('src', 'https://example.com/icon.png')
     })
 
     it('should handle undefined appData gracefully (optional chaining)', () => {
       setup({ appData: null as unknown as AppData })
-      // Just verify it doesn't crash and renders the basic structure
       expect(screen.getAllByRole('button').length).toBeGreaterThan(0)
     })
 
@@ -323,47 +374,14 @@ describe('Header Component', () => {
       const { container } = setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
-        sidebarCollapseState: true,
       })
-      // 分隔符已改为无文本竖线（mockup）；断言会话名下拉 trigger 存在即可
-      expect(container.querySelector('.i-ri-arrow-down-s-line'))!.toBeInTheDocument()
+      // 会话名下拉 trigger 仍存在（名称为空时仅显示箭头）
+      expect(container.querySelector('.i-ri-arrow-down-s-line')).toBeInTheDocument()
     })
 
-    it('should handle New Chat button state when currentConversationId is present but isResponding is true', () => {
-      setup({
-        isResponding: true,
-        sidebarCollapseState: true,
-        currentConversationId: 'conv-1',
-      })
-
-      const newChatBtn = screen.getByRole('button', { name: 'share.chat.newChatTip' })
-      expect(newChatBtn).toBeDisabled()
-    })
-
-    it('should handle New Chat button state when currentConversationId is missing and isResponding is false', () => {
-      setup({
-        isResponding: false,
-        sidebarCollapseState: true,
-        currentConversationId: '',
-      })
-
-      const newChatBtn = screen.getByRole('button', { name: 'share.chat.newChatTip' })
-      expect(newChatBtn).toBeDisabled()
-    })
-
-    it('should not render operation menu if conversation id is missing', () => {
-      setup({ currentConversationId: '', sidebarCollapseState: true })
+    it('should not render the title dropdown when conversation item is missing despite an id', () => {
+      setup({ currentConversationId: 'conv-1', currentConversationItem: undefined })
       expect(screen.queryByText('My Chat')).not.toBeInTheDocument()
-    })
-
-    it('should render operation menu whenever conversation exists（mockup：会话名下拉恒显，不再限收起态）', () => {
-      const mockConv = { id: 'conv-1', name: 'My Chat' } as ConversationItem
-      setup({
-        currentConversationId: 'conv-1',
-        currentConversationItem: mockConv,
-        sidebarCollapseState: false,
-      })
-      expect(screen.queryByText('My Chat')).toBeInTheDocument()
     })
 
     it('should pass empty rename value when conversation name is undefined', async () => {
@@ -371,7 +389,6 @@ describe('Header Component', () => {
       const { container } = setup({
         currentConversationId: 'conv-1',
         currentConversationItem: mockConv,
-        sidebarCollapseState: true,
       })
 
       const operationTrigger = container

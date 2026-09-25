@@ -20,18 +20,20 @@ import { useChatWithHistoryContext } from '../context'
 import Operation from './operation'
 
 /**
- * 桌面顶栏（chat 单元重写，mockup 类型1）：
- * 左 = 应用图标+名称（恒显）+ 当前会话名下拉（恒显，原仅侧栏收起时）；
- * 右 = 查看变量（有表单时）+ 重置对话（icon+文字）+ 降级组（侧栏隐藏/收起时：展开钮 + 新对话）。
+ * 桌面顶栏（chat 单元重写，mockup 类型1，40px 极薄）：
+ * 左 = ☰ 抽屉入口（drawerEnabled 时）+ 应用小图标+名（弱化）；
+ * 中左 = 会话标题▾ 操作下拉（仅当前会话存在时渲染；新会话/欢迎屏无标题）；
+ * 右 = 查看变量（有变量表单才显示）+ ↻重置对话（会话内）+ ＋新对话（恒在）。
+ * D11：header 无 ⋯ 更多菜单（菜单唯一落点=抽屉底部）；旧「展开侧栏」钮随壳层去侧栏删除。
  */
 type HeaderProps = Readonly<{
-  /** 打开会话抽屉（Task 3 透传签名；☰ 按钮 UI 归 Task 4 接线） */
+  /** 打开会话抽屉（☰ 按钮触发） */
   onOpenDrawer?: () => void
-  /** 抽屉入口显隐（ui_config.layout.show_conversation_sidebar 门控；Task 4 消费） */
+  /** 抽屉入口显隐（ui_config.layout.show_conversation_sidebar 门控） */
   drawerEnabled?: boolean
 }>
 
-const Header: FC<HeaderProps> = () => {
+const Header: FC<HeaderProps> = ({ onOpenDrawer, drawerEnabled = false }) => {
   const {
     appData,
     currentConversationId,
@@ -44,12 +46,9 @@ const Header: FC<HeaderProps> = () => {
     handleRenameConversation,
     handleDeleteConversation,
     handleNewConversation,
-    sidebarCollapseState,
-    handleSidebarCollapse,
     isResponding,
   } = useChatWithHistoryContext()
   const { t } = useTranslation()
-  const isSidebarCollapsed = sidebarCollapseState
 
   const isPin = pinnedConversationList.some((item) => item.id === currentConversationId)
 
@@ -93,52 +92,49 @@ const Header: FC<HeaderProps> = () => {
 
   return (
     <>
-      <div className="flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--border)] bg-[var(--bg)] px-4">
-        {isSidebarCollapsed && (
+      <header className="flex h-10 shrink-0 items-center gap-1 bg-[var(--bg)] px-3">
+        {drawerEnabled && (
           <IconButton
-            aria-label={t(($) => $['sidebar.expandSidebar'], { ns: 'layout' })}
-            onClick={() => handleSidebarCollapse(false)}
+            aria-label={t(($) => $['chat.conversationHistory'], { ns: 'share' })}
+            size="lg"
+            onClick={onOpenDrawer}
           >
-            <span aria-hidden className="i-ri-layout-left-2-line size-4" />
+            <span aria-hidden className="i-ri-menu-line size-4" />
           </IconButton>
         )}
-        <div className="flex min-w-0 items-center gap-2">
-          <div className="shrink-0">
-            <AppIcon
-              size="small"
-              iconType={appData?.site.icon_type}
-              icon={appData?.site.icon}
-              background={appData?.site.icon_background}
-              imageUrl={appData?.site.icon_url}
-            />
-          </div>
-          <div className="truncate text-[13.5px] font-semibold text-[var(--text-1)]">
+        {/* 应用标识弱化：24px 图标（mockup 22px，取最近 size 档）+ 名（text-2） */}
+        <div className="flex min-w-0 items-center gap-2 rounded-lg px-1.5 py-1">
+          <AppIcon
+            size="tiny"
+            iconType={appData?.site.icon_type}
+            icon={appData?.site.icon}
+            background={appData?.site.icon_background}
+            imageUrl={appData?.site.icon_url}
+          />
+          <span className="truncate text-[13px] font-semibold text-[var(--text-2)]">
             {appData?.site.title}
-          </div>
+          </span>
         </div>
         {currentConversationId && currentConversationItem && (
-          <>
-            <div className="mx-1 h-[18px] w-px shrink-0 bg-[var(--border)]" />
-            <Operation
-              title={currentConversationItem?.name || ''}
-              isPinned={!!isPin}
-              togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
-              isShowDelete
-              isShowRenameConversation
-              onRenameConversation={() => handleOperate('rename')}
-              onDelete={() => handleOperate('delete')}
-            />
-          </>
+          <Operation
+            title={currentConversationItem?.name || ''}
+            isPinned={!!isPin}
+            togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
+            isShowDelete
+            isShowRenameConversation
+            onRenameConversation={() => handleOperate('rename')}
+            onDelete={() => handleOperate('delete')}
+          />
         )}
-        <div className="ml-auto flex shrink-0 items-center gap-1.5">
-          {currentConversationId && inputsForms.length > 0 && <ViewFormDropdown />}
+        <div className="ml-auto flex shrink-0 items-center gap-0.5">
+          {inputsForms.length > 0 && <ViewFormDropdown />}
           {currentConversationId && (
             <Tooltip>
               <TooltipTrigger
                 render={
                   <button
                     type="button"
-                    className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
+                    className="flex h-7 items-center gap-1.5 rounded-lg px-2 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
                     onClick={handleNewConversation}
                   >
                     <span aria-hidden className="i-ri-reset-left-line size-3.5" />
@@ -149,28 +145,26 @@ const Header: FC<HeaderProps> = () => {
               <TooltipContent>{t(($) => $['chat.resetChat'], { ns: 'share' })}</TooltipContent>
             </Tooltip>
           )}
-          {isSidebarCollapsed && (
-            <Tooltip>
-              <TooltipTrigger
-                disabled={!currentConversationId}
-                render={
-                  <button
-                    type="button"
-                    aria-label={t(($) => $['chat.newChatTip'], { ns: 'share' })}
-                    className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)] disabled:cursor-not-allowed disabled:opacity-50"
-                    disabled={!currentConversationId || isResponding}
-                    onClick={handleNewConversation}
-                  >
-                    <span aria-hidden className="i-ri-add-line size-3.5" />
-                    {t(($) => $['chat.newChat'], { ns: 'share' })}
-                  </button>
-                }
-              />
-              <TooltipContent>{t(($) => $['chat.newChatTip'], { ns: 'share' })}</TooltipContent>
-            </Tooltip>
-          )}
+          <Tooltip>
+            <TooltipTrigger
+              disabled={!currentConversationId}
+              render={
+                <button
+                  type="button"
+                  aria-label={t(($) => $['chat.newChatTip'], { ns: 'share' })}
+                  className="flex h-7 items-center gap-1.5 rounded-lg px-2 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)] disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={!currentConversationId || isResponding}
+                  onClick={handleNewConversation}
+                >
+                  <span aria-hidden className="i-ri-add-line size-3.5" />
+                  {t(($) => $['chat.newChat'], { ns: 'share' })}
+                </button>
+              }
+            />
+            <TooltipContent>{t(($) => $['chat.newChatTip'], { ns: 'share' })}</TooltipContent>
+          </Tooltip>
         </div>
-      </div>
+      </header>
       <AlertDialog open={!!showConfirm} onOpenChange={(open) => !open && handleCancelConfirm()}>
         <AlertDialogContent>
           <div className="flex flex-col gap-2 px-6 pt-6 pb-4">

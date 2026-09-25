@@ -98,7 +98,7 @@ const mockHookValue = (
     // 其余字段留 undefined：呈现层子组件均被 mock，无人消费
   }) as unknown as ReturnType<typeof useChatWithHistory>
 
-describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉）', () => {
+describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉；Task 4：抽屉提至壳根 + ⌘K 对弹窗让位）', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mediaMock.current = 'pc'
@@ -117,6 +117,16 @@ describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉）', () => 
       expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument()
       // 抽屉默认挂载、关态
       expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'false')
+    })
+
+    it('should mount the drawer at the shell root so mask/panel cover the 40px header (抽屉顶=壳顶)', () => {
+      const { container } = render(<ChatWithHistory />)
+
+      // 抽屉（含蒙层）在壳层根节点内、不嵌在内容容器里：absolute inset-0 覆盖 header
+      expect(screen.getByTestId('conversation-drawer').parentElement).toBe(
+        container.firstElementChild,
+      )
+      expect(screen.getByTestId('conversation-drawer').parentElement).toHaveClass('webapp-theme')
     })
 
     it('should pass onOpenDrawer and drawerEnabled to the desktop header', () => {
@@ -196,6 +206,45 @@ describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉）', () => 
       fireEvent.keyDown(window, { key: 'k', altKey: true })
       fireEvent.keyDown(window, { key: 'j', metaKey: true })
       expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'false')
+    })
+
+    it('should not close the drawer with ⌘K while a modal (rename/delete/about) is open', () => {
+      render(<ChatWithHistory />)
+
+      fireEvent.keyDown(window, { key: 'k', metaKey: true })
+      expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'true')
+
+      // 模拟抽屉内弹窗打开：Base UI Dialog/AlertDialog popup 开态带 role + data-open
+      //（抽屉自身 aside 虽 role=dialog 但无 data-open，不误伤）
+      const modal = document.createElement('div')
+      modal.setAttribute('role', 'dialog')
+      modal.setAttribute('data-open', '')
+      document.body.appendChild(modal)
+
+      fireEvent.keyDown(window, { key: 'k', metaKey: true })
+      expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'true')
+
+      // 弹窗关闭后 ⌘K 恢复收起
+      modal.remove()
+      fireEvent.keyDown(window, { key: 'k', metaKey: true })
+      expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'false')
+    })
+
+    it('should yield ⌘K to an open alertdialog as well (delete-confirm variant)', () => {
+      render(<ChatWithHistory />)
+
+      fireEvent.keyDown(window, { key: 'k', metaKey: true })
+      expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'true')
+
+      const modal = document.createElement('div')
+      modal.setAttribute('role', 'alertdialog')
+      modal.setAttribute('data-open', '')
+      document.body.appendChild(modal)
+
+      fireEvent.keyDown(window, { key: 'k', metaKey: true })
+      expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'true')
+
+      modal.remove()
     })
   })
 
