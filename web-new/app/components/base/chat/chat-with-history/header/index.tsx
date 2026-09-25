@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import type { ConversationItem } from '@/models/share'
 import {
   AlertDialog,
@@ -23,7 +24,14 @@ import Operation from './operation'
  * 左 = 应用图标+名称（恒显）+ 当前会话名下拉（恒显，原仅侧栏收起时）；
  * 右 = 查看变量（有表单时）+ 重置对话（icon+文字）+ 降级组（侧栏隐藏/收起时：展开钮 + 新对话）。
  */
-const Header = () => {
+type HeaderProps = Readonly<{
+  /** 打开会话抽屉（Task 3 透传签名；☰ 按钮 UI 归 Task 4 接线） */
+  onOpenDrawer?: () => void
+  /** 抽屉入口显隐（ui_config.layout.show_conversation_sidebar 门控；Task 4 消费） */
+  drawerEnabled?: boolean
+}>
+
+const Header: FC<HeaderProps> = () => {
   const {
     appData,
     currentConversationId,

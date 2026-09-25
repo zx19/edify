@@ -11,29 +11,42 @@ import { resolveUiConfig } from '@/models/ui-config'
 import { buildAccentStyle } from '../accent-style'
 import ChatWrapper from './chat-wrapper'
 import { ChatWithHistoryContext, useChatWithHistoryContext } from './context'
+import ConversationDrawer from './drawer'
 import Header from './header'
 import HeaderInMobile from './header-in-mobile'
 import { useChatWithHistory } from './hooks'
-import Sidebar from './sidebar'
 
 type ChatWithHistoryProps = {
   className?: string
 }
 
+/**
+ * 壳层（chat 单元重写，方向 A）：无侧栏列、无悬停浮出面板——会话管理收进 overlay 抽屉。
+ * 单列 flex-col：header（桌面/移动二选一）+ 内容区（ChatWrapper / Loading / 抽屉 overlay）。
+ * ⌘K(Ctrl+K) 唤出抽屉；ui_config.layout.show_conversation_sidebar=false → 不渲染抽屉、不响应 ⌘K。
+ * 契约注记：sidebarCollapseState/handleSidebarCollapse 在 context/hooks 暂留（chat-wrapper、
+ * use-chat-layout 仍消费，Task 5/7 清理），壳层自本任务起不再消费。
+ */
 const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
-  const { appData, appChatListDataLoading, chatShouldReloadKey, isMobile, sidebarCollapseState } =
+  const { appData, appChatListDataLoading, chatShouldReloadKey, isMobile } =
     useChatWithHistoryContext()
-  const isSidebarCollapsed = sidebarCollapseState
   const site = appData?.site
-  // ui_config：show_conversation_sidebar=false → 侧栏整隐，hover 浮出面板也关闭（降级走 header 操作组）
-  const uiConfig = resolveUiConfig(site)
-  const sidebarEnabled = uiConfig.layout.show_conversation_sidebar
+  // 键义重映射：show_conversation_sidebar 原侧栏显隐 → 抽屉入口显隐
+  const drawerEnabled = resolveUiConfig(site).layout.show_conversation_sidebar
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
-  const [showSidePanel, setShowSidePanel] = useState(false)
-
+  // ⌘K / Ctrl+K 唤出/收起抽屉（聚焦搜索由抽屉自身 open 副作用承担）；ui_config 关时不响应
   useEffect(() => {
-    if (!isSidebarCollapsed) setShowSidePanel(false)
-  }, [isSidebarCollapsed])
+    if (!drawerEnabled) return
+    const handleKeydown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setDrawerOpen((v) => !v)
+      }
+    }
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [drawerEnabled])
 
   useDocumentTitle(site?.title || 'Chat')
 
@@ -41,38 +54,20 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
 
   return (
     <div
-      className={cn('webapp-theme flex h-full bg-[var(--bg)]', isMobile && 'flex-col', className)}
+      className={cn('webapp-theme relative flex h-full flex-col bg-[var(--bg)]', className)}
       style={accentStyle}
     >
-      {!isMobile && sidebarEnabled && (
-        <div
-          className={cn(
-            'flex w-62 flex-col border-r border-[var(--border)] transition-all duration-200 ease-in-out',
-            isSidebarCollapsed && 'w-0 overflow-hidden border-0 p-0!',
-          )}
-        >
-          <Sidebar />
-        </div>
+      {isMobile ? (
+        <HeaderInMobile onOpenDrawer={() => setDrawerOpen(true)} />
+      ) : (
+        <Header onOpenDrawer={() => setDrawerOpen(true)} drawerEnabled={drawerEnabled} />
       )}
-      {isMobile && <HeaderInMobile />}
-      <div className={cn('relative grow', isMobile && 'h-[calc(100%-56px)]')}>
-        {isSidebarCollapsed && sidebarEnabled && (
-          <div
-            className={cn(
-              'absolute top-0 z-20 flex h-full w-[256px] flex-col transition-all duration-500 ease-in-out',
-              showSidePanel ? 'left-0' : '-left-62',
-            )}
-            onMouseEnter={() => setShowSidePanel(true)}
-            onMouseLeave={() => setShowSidePanel(false)}
-          >
-            <Sidebar isPanel panelVisible={showSidePanel} />
-          </div>
+      <div className="relative min-h-0 grow">
+        {appChatListDataLoading && <Loading type="app" />}
+        {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
+        {drawerEnabled && (
+          <ConversationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
         )}
-        <div className="flex h-full flex-col bg-[var(--bg-soft)]">
-          {!isMobile && <Header />}
-          {appChatListDataLoading && <Loading type="app" />}
-          {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
-        </div>
       </div>
     </div>
   )

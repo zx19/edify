@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
 } from '@xsl/lomva-ui/alert-dialog'
 import { cn } from '@xsl/lomva-ui/cn'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useChatWithHistoryContext } from '../context'
 import List from '../sidebar/list'
@@ -51,6 +51,14 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
   const [keyword, setKeyword] = useState('')
   const [showConfirm, setShowConfirm] = useState<ConversationItem | null>(null)
   const [showRename, setShowRename] = useState<ConversationItem | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const prevOpenRef = useRef(false)
+
+  // ⌘K/☰ 打开后显式聚焦搜索框：open false→true（含挂载即开）时落焦；autoFocus 只在挂载生效故弃用
+  useEffect(() => {
+    if (open && !prevOpenRef.current) searchInputRef.current?.focus()
+    prevOpenRef.current = open
+  }, [open])
 
   // ESC 关闭；重命名/删除弹窗打开时让位给弹窗自身的 ESC，避免抽屉连带关闭
   useEffect(() => {
@@ -125,10 +133,12 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
           open ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
       />
-      {/* 抽屉本体：overlay 300px，不推挤布局；移动端 85% 宽由 Task 8 处理 */}
+      {/* 抽屉本体：overlay 300px，不推挤布局；移动端 85% 宽由 Task 8 处理。
+          关态 inert：移出 tab 序/禁交互（translate 动画照常，浏览器 inert 天然保留可见性） */}
       <aside
         role="dialog"
         aria-label={t(($) => $['chat.conversationHistory'], { ns: 'share' })}
+        inert={!open}
         className={cn(
           'absolute inset-y-0 left-0 z-50 flex w-[300px] flex-col border-r border-[var(--border)]',
           'bg-[var(--card)] shadow-[var(--shadow-md)] transition-transform duration-200 ease-out',
@@ -136,11 +146,11 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
         )}
       >
         <div className="flex shrink-0 flex-col gap-2.5 px-3 pt-3 pb-2">
-          {/* D1 搜索框：壳层 ⌘K 唤起时 autoFocus 落焦 */}
+          {/* D1 搜索框：壳层 ⌘K 唤起后由 open 副作用显式落焦（见上 useEffect） */}
           <div className="flex h-8 items-center gap-1.5 rounded-lg border border-[var(--border-strong)] px-2.5 text-[var(--text-3)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
             <span aria-hidden className="i-ri-search-line size-3.5" />
             <input
-              autoFocus={open}
+              ref={searchInputRef}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder={t(($) => $['chat.searchConversations'], { ns: 'share' })}

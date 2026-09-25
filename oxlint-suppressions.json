@@ -639,11 +639,6 @@
       "count": 18
     }
   },
-  "web-new/app/components/base/chat/chat-with-history/index.tsx": {
-    "eslint-react/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "web-new/app/components/base/chat/chat-with-history/inputs-form/__tests__/content.spec.tsx": {
     "jsx-a11y/click-events-have-key-events": {
       "count": 2

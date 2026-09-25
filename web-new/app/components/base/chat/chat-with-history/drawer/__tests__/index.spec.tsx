@@ -538,4 +538,40 @@ describe('ConversationDrawer', () => {
       expect(logo).toHaveAttribute('src', 'http://example.com/custom-logo.png')
     })
   })
+
+  describe('Closed-state tab order (T3 修正：关态 inert)', () => {
+    it('should set inert when closed and remove it when open', () => {
+      const { rerender } = render(<ConversationDrawer open={false} onClose={onClose} />)
+      const drawer = screen.getByRole('dialog', { name: 'share.chat.conversationHistory' })
+      expect(drawer).toHaveAttribute('inert')
+
+      rerender(<ConversationDrawer open onClose={onClose} />)
+      expect(drawer).not.toHaveAttribute('inert')
+
+      rerender(<ConversationDrawer open={false} onClose={onClose} />)
+      expect(drawer).toHaveAttribute('inert')
+    })
+  })
+
+  describe('Search focus on open (T3 修正：open false→true 显式落焦)', () => {
+    it('should focus the search input when mounted open', () => {
+      render(<ConversationDrawer open onClose={onClose} />)
+      expect(screen.getByPlaceholderText('share.chat.searchConversations')).toHaveFocus()
+    })
+
+    it('should focus the search input when open flips false → true', () => {
+      const { rerender } = render(<ConversationDrawer open={false} onClose={onClose} />)
+      const input = screen.getByPlaceholderText('share.chat.searchConversations')
+      expect(input).not.toHaveFocus()
+
+      rerender(<ConversationDrawer open onClose={onClose} />)
+      expect(input).toHaveFocus()
+    })
+
+    it('should not focus the search input while staying closed', () => {
+      const { rerender } = render(<ConversationDrawer open={false} onClose={onClose} />)
+      rerender(<ConversationDrawer open={false} onClose={onClose} />)
+      expect(screen.getByPlaceholderText('share.chat.searchConversations')).not.toHaveFocus()
+    })
+  })
 })

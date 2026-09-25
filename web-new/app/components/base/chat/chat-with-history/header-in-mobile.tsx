@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import type { ConversationItem } from '@/models/share'
 import {
   AlertDialog,
@@ -19,7 +20,12 @@ import MobileOperationDropdown from './header/mobile-operation-dropdown'
 import Operation from './header/operation'
 import Sidebar from './sidebar'
 
-const HeaderInMobile = () => {
+type HeaderInMobileProps = Readonly<{
+  /** 打开会话抽屉（Task 3 透传签名；移动端 ☰ 改接抽屉归 Task 8） */
+  onOpenDrawer?: () => void
+}>
+
+const HeaderInMobile: FC<HeaderInMobileProps> = () => {
   const {
     appData,
     currentConversationId,

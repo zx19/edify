@@ -3,8 +3,7 @@ import type { FC } from 'react'
 import type { AppData, SiteInfo } from '@/models/share'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useTheme } from 'next-themes'
-import * as React from 'react'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfoModal from '@/app/components/share/text-generation/info-modal'
 import { useWebAppStore } from '@/context/web-app-context'
@@ -125,4 +124,4 @@ const FooterMenu: FC<Props> = ({ site, customConfig, hideLogout }) => {
   )
 }
 
-export default React.memo(FooterMenu)
+export default memo(FooterMenu)
