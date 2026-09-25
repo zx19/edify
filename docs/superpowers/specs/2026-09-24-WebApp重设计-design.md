@@ -127,7 +127,7 @@
         Powered by 杏树林(壳底部居中)
 ```
 
-- 左列**只放表单**：应用信息在 header、tab 切换上移 segment、品牌行在壳底——是工作台双列，非 Dify 重侧栏。
+- 左列**只放表单**：应用信息在 header、tab 切换上移 segment、品牌行在壳底——是工作台双列，非 Dify 重侧栏。**应用描述并入 header ⋯「关于」弹窗**（现状侧栏描述卡与关于弹窗内容重复，取消独立卡片，09-25 拍板）。
 - 表单：8 字段型同 chat 欢迎屏样式族；vision 上传区条件显示；清空 + ▶运行（accent；运行中变 ⏹+spinner，结果区不再单独出停止钮——同 D4 口径）。
 - 结果区（替换式 = 最新一次）：空态轻提示 / Loading / TextGenerationRes（markdown/复制/赞踩/保存*/moreLikeThis*/TTS/结果·详情双 tab/任务编号；*completion 专属）/ workflow 过程卡（折叠卡片族，`show_workflow_steps` 关闭时不渲染）/ 深度思考折叠。
 - 移动端：单列，表单在上结果流内（D10，原底部抽屉 + drag handle 取消）。
