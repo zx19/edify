@@ -15,6 +15,9 @@ type OperationProps = {
   speechToTextConfig?: EnableType
   onShowVoiceInput?: () => void
   onSend: () => void
+  /** D4 发送键双态：响应中且带停止句柄 → 发送键变形 ■（同键位 发送⇄停止）；缺句柄时保持发送语义 */
+  isResponding?: boolean
+  onStopResponding?: () => void
   sendButtonLabel?: string
   sendButtonLoading?: boolean
   disabled?: boolean
@@ -29,11 +32,14 @@ const Operation: FC<OperationProps> = ({
   speechToTextConfig,
   onShowVoiceInput,
   onSend,
+  isResponding,
+  onStopResponding,
   sendButtonLabel,
   sendButtonLoading,
   disabled,
 }) => {
   const { t } = useTranslation()
+  const isStop = !!isResponding && !!onStopResponding
 
   return (
     <div className={cn('flex shrink-0 items-center justify-end')}>
@@ -55,22 +61,46 @@ const Operation: FC<OperationProps> = ({
           )}
         </div>
         <Button
-          aria-label={sendButtonLabel ? undefined : t(($) => $['operation.send'], { ns: 'common' })}
+          aria-label={
+            isStop
+              ? t(($) => $['operation.stopResponding'], { ns: 'appDebug' })
+              : sendButtonLabel
+                ? undefined
+                : t(($) => $['operation.send'], { ns: 'common' })
+          }
           className={cn(
             'ml-3 focus-visible:ring-inset',
-            sendButtonLabel ? 'px-3' : 'w-8 px-0',
+            sendButtonLabel && !isStop ? 'px-3' : 'w-8 px-0',
             // chat 单元重写：作用域内发送钮吃 accent（含 chat_color_theme 注入的覆盖值）；
             // 无作用域保持 variant primary 原样（console debug 面板零影响），createTheme 直改色值机制废弃
             '[.webapp-theme_&]:not-disabled:bg-[var(--accent)] [.webapp-theme_&]:not-disabled:hover:bg-[var(--accent-deep)]',
-            // 禁用态（mockup）：灰底三级灰图标（variant primary 的蓝色调禁用态在作用域内覆盖）
-            '[.webapp-theme_&]:disabled:bg-[var(--gray-pill-bg)] [.webapp-theme_&]:disabled:text-[var(--text-3)]',
+            // 禁用态（mockup .send-btn[disabled]）：浅灰底三级灰图标（variant primary 的蓝色调禁用态在作用域内覆盖）
+            '[.webapp-theme_&]:disabled:bg-[var(--bg-soft)] [.webapp-theme_&]:disabled:text-[var(--text-3)]',
+            // mockup .send-btn 30×30（size medium 的 32px 在作用域内收一档；停止态同色底仅换 ■ 图标）
+            '[.webapp-theme_&]:size-[30px]',
           )}
           variant="primary"
-          disabled={readonly || disabled}
-          loading={sendButtonLoading}
-          onClick={onSend}
+          disabled={readonly || (!isStop && disabled)}
+          loading={!isStop && sendButtonLoading}
+          onClick={isStop ? onStopResponding : onSend}
         >
-          {sendButtonLabel || <span className="i-ri-send-plane-2-fill size-4" aria-hidden="true" />}
+          {isStop ? (
+            <span className="size-3 rounded-[2.5px] bg-current" aria-hidden="true" />
+          ) : (
+            sendButtonLabel || (
+              <>
+                {/* mockup 发送钮 ↑（作用域内）；无作用域沿用 paper-plane（console 零影响） */}
+                <span
+                  className="i-ri-arrow-up-line hidden size-4 [.webapp-theme_&]:block"
+                  aria-hidden="true"
+                />
+                <span
+                  className="i-ri-send-plane-2-fill size-4 [.webapp-theme_&]:hidden"
+                  aria-hidden="true"
+                />
+              </>
+            )
+          )}
         </Button>
       </div>
     </div>

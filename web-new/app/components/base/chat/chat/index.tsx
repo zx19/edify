@@ -100,6 +100,8 @@ const Chat: FC<ChatProps> = ({
   onRegenerate,
   chatList,
   isResponding,
+  noStopResponding,
+  onStopResponding,
   noChatInput,
   showRegenerate,
   chatContainerClassName,
@@ -141,8 +143,8 @@ const Chat: FC<ChatProps> = ({
   renderAgentContent,
   onHumanInputFormSubmit,
   getHumanInputNodeData,
-  // noStopResponding/onStopResponding：契约暂留不消费——D4 停止交互落点移至发送键（Task 6 接入），
-  // 消息区停止响应按钮块已随 Task 5 移除
+  // noStopResponding/onStopResponding：D4 已由发送键双态承接（Task 6）——透传至 ChatInputArea，
+  // noStopResponding=true 时摘下停止句柄（发送键保持发送语义）
 }) => {
   const {
     currentLogItem,
@@ -281,6 +283,7 @@ const Chat: FC<ChatProps> = ({
                 speechToTextTarget={speechToTextTarget}
                 onBeforeSpeechToText={onBeforeSpeechToText}
                 onSend={onSend}
+                onStopResponding={noStopResponding ? undefined : onStopResponding}
                 inputs={inputs}
                 inputsForm={inputsForm}
                 theme={theme}

@@ -225,7 +225,7 @@ describe('ChatWrapper', () => {
     expect(await screen.findByText('Bot thinking...'))!.toBeInTheDocument()
   })
 
-  it('should handle manual message input; in-stream stop button removed (D4 落点移交 Task 6 发送键)', async () => {
+  it('should handle manual message input; stop interaction lives on the send key (D4 发送键双态)', async () => {
     const handleSend = vi.fn()
     const handleStop = vi.fn()
     vi.mocked(useChat).mockReturnValue({
@@ -255,11 +255,14 @@ describe('ChatWrapper', () => {
 
     rerender(<ChatWrapper />)
 
-    // Task 5：消息区停止钮已移除（停止交互暂缺，Task 6 发送键变形 ■ 接入）
-    expect(
-      screen.queryByRole('button', { name: /appDebug.operation.stopResponding/i }),
-    ).not.toBeInTheDocument()
-    expect(handleStop).not.toHaveBeenCalled()
+    // Task 6：D4 闭环——消息区停止钮移除后，发送键在响应中变形 ■（aria-label 切停止语义）
+    const stopButton = await screen.findByRole('button', {
+      name: 'appDebug.operation.stopResponding',
+    })
+    expect(screen.queryByRole('button', { name: 'common.operation.send' })).not.toBeInTheDocument()
+
+    fireEvent.click(stopButton)
+    expect(handleStop).toHaveBeenCalledTimes(1)
   })
 
   it('should handle regenerate and switch sibling', async () => {

@@ -861,7 +861,7 @@ describe('ChatInputArea', () => {
       expect(sendButton).toBeDisabled()
     })
 
-    it('should notify and NOT send while bot is responding', async () => {
+    it('should notify and NOT send while bot is responding without a stop handler (fallback send semantics)', async () => {
       const user = userEvent.setup({ delay: null })
       const onSend = vi.fn()
       render(<ChatInputArea onSend={onSend} isResponding visionConfig={mockVisionConfig} />)
@@ -934,6 +934,86 @@ describe('ChatInputArea', () => {
       await user.type(getTextarea()!, 'No onSend')
       await user.click(screen.getByRole('button', { name: 'common.operation.send' }))
       // Should not throw
+    })
+  })
+
+  // -------------------------------------------------------------------------
+  // D4：发送⇄停止同键位——isResponding + onStopResponding 时发送键变形 ■
+  describe('Stop Responding (D4 send-key dual state)', () => {
+    it('should morph the send button into a stop button while responding', async () => {
+      const user = userEvent.setup({ delay: null })
+      const onSend = vi.fn()
+      const onStopResponding = vi.fn()
+      render(
+        <ChatInputArea
+          onSend={onSend}
+          isResponding
+          onStopResponding={onStopResponding}
+          visionConfig={mockVisionConfig}
+        />,
+      )
+
+      const stopButton = screen.getByRole('button', {
+        name: 'appDebug.operation.stopResponding',
+      })
+      expect(
+        screen.queryByRole('button', { name: 'common.operation.send' }),
+      ).not.toBeInTheDocument()
+
+      await user.click(stopButton)
+
+      expect(onStopResponding).toHaveBeenCalledTimes(1)
+      expect(onSend).not.toHaveBeenCalled()
+    })
+
+    it('should offer an enabled stop button with an empty composer while responding', () => {
+      render(
+        <ChatInputArea isResponding onStopResponding={vi.fn()} visionConfig={mockVisionConfig} />,
+      )
+
+      expect(
+        screen.getByRole('button', { name: 'appDebug.operation.stopResponding' }),
+      ).toBeEnabled()
+    })
+
+    it('should keep the typed draft and not toast when stopping a response', async () => {
+      const user = userEvent.setup({ delay: null })
+      const onStopResponding = vi.fn()
+      render(
+        <ChatInputArea
+          onSend={vi.fn()}
+          isResponding
+          onStopResponding={onStopResponding}
+          visionConfig={mockVisionConfig}
+        />,
+      )
+      const textarea = getTextarea()!
+
+      await user.type(textarea, 'Keep this draft')
+      await user.click(screen.getByRole('button', { name: 'appDebug.operation.stopResponding' }))
+
+      expect(onStopResponding).toHaveBeenCalledTimes(1)
+      expect(textarea).toHaveValue('Keep this draft')
+      expect(mockNotify).not.toHaveBeenCalled()
+    })
+
+    it('should restore the send button when responding ends', () => {
+      const { rerender } = render(
+        <ChatInputArea isResponding onStopResponding={vi.fn()} visionConfig={mockVisionConfig} />,
+      )
+      expect(
+        screen.getByRole('button', { name: 'appDebug.operation.stopResponding' }),
+      ).toBeInTheDocument()
+
+      rerender(
+        <ChatInputArea
+          isResponding={false}
+          onStopResponding={vi.fn()}
+          visionConfig={mockVisionConfig}
+        />,
+      )
+
+      expect(screen.getByRole('button', { name: 'common.operation.send' })).toBeInTheDocument()
     })
   })
 

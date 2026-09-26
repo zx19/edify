@@ -50,6 +50,8 @@ vi.mock('../chat-input-area', () => ({
     onBeforeSpeechToText,
     speechToTextTarget,
     theme,
+    isResponding,
+    onStopResponding,
   }: {
     customPlaceholder?: string
     disabled?: boolean
@@ -58,6 +60,8 @@ vi.mock('../chat-input-area', () => ({
     onBeforeSpeechToText?: () => Promise<unknown>
     speechToTextTarget?: SpeechToTextTarget
     theme?: { primaryColor: string }
+    isResponding?: boolean
+    onStopResponding?: () => void
   }) => (
     <div
       data-testid="chat-input-area"
@@ -74,6 +78,8 @@ vi.mock('../chat-input-area', () => ({
           : speechToTextTarget?.type
       }
       data-theme-color={theme?.primaryColor}
+      data-is-responding={String(!!isResponding)}
+      data-has-on-stop={String(!!onStopResponding)}
     >
       {footerNotice}
     </div>
@@ -278,18 +284,27 @@ describe('Chat', () => {
     })
   })
 
-  describe('停止响应（Task 5 移除消息区停止钮——D4 落点移至发送键，Task 6 接入）', () => {
+  describe('停止响应（D4：消息区停止钮已移除，发送键双态承接——Task 6 接线）', () => {
     it('should never render the in-stream stop button, even while responding', () => {
       renderChat({ isResponding: true, noStopResponding: false })
       expect(screen.queryByTestId('stop-responding-container')).not.toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: /stopResponding/i })).not.toBeInTheDocument()
     })
 
-    it('should still accept onStopResponding/noStopResponding props without rendering (契约暂留)', () => {
+    it('should pass isResponding/onStopResponding through to ChatInputArea (发送键双态)', () => {
       const onStopResponding = vi.fn()
-      renderChat({ isResponding: true, noStopResponding: true, onStopResponding })
-      expect(screen.queryByTestId('stop-responding-container')).not.toBeInTheDocument()
-      expect(onStopResponding).not.toHaveBeenCalled()
+      renderChat({ isResponding: true, onStopResponding })
+
+      const inputArea = screen.getByTestId('chat-input-area')
+      expect(inputArea).toHaveAttribute('data-is-responding', 'true')
+      expect(inputArea).toHaveAttribute('data-has-on-stop', 'true')
+    })
+
+    it('should withhold the stop handler from ChatInputArea when noStopResponding=true', () => {
+      renderChat({ isResponding: true, noStopResponding: true, onStopResponding: vi.fn() })
+
+      const inputArea = screen.getByTestId('chat-input-area')
+      expect(inputArea).toHaveAttribute('data-is-responding', 'true')
+      expect(inputArea).toHaveAttribute('data-has-on-stop', 'false')
     })
   })
 

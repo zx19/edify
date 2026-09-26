@@ -42,6 +42,8 @@ type ChatInputAreaProps = {
   speechToTextTarget?: SpeechToTextTarget
   onBeforeSpeechToText?: () => Promise<unknown>
   onSend?: OnSend
+  /** D4：响应中发送键变形 ■（透传至 Operation；缺省保持发送语义+等待提示） */
+  onStopResponding?: () => void
   inputs?: Record<string, unknown>
   inputsForm?: InputForm[]
   theme?: Theme | null
@@ -74,6 +76,7 @@ const ChatInputArea = ({
   speechToTextTarget,
   onBeforeSpeechToText,
   onSend,
+  onStopResponding,
   inputs = {},
   inputsForm = [],
   theme,
@@ -286,6 +289,8 @@ const ChatInputArea = ({
       speechToTextConfig={speechToTextConfig}
       onShowVoiceInput={speechToTextTarget ? handleShowVoiceInput : undefined}
       onSend={handleSend}
+      isResponding={isResponding}
+      onStopResponding={onStopResponding}
       sendButtonLabel={sendButtonLabel}
       sendButtonLoading={sendButtonLoading}
       disabled={!canSend}
@@ -304,8 +309,9 @@ const ChatInputArea = ({
       <div
         className={cn(
           'pointer-events-auto relative z-10 overflow-hidden rounded-xl border border-components-chat-input-border bg-components-panel-bg-blur pb-2.25 shadow-md',
-          // chat 单元重写：作用域内 focus 出 accent 描边+晕环（mockup 输入区）；无作用域视觉不变
-          '[.webapp-theme_&]:focus-within:border-[var(--accent)] [.webapp-theme_&]:focus-within:shadow-[0_0_0_3px_var(--accent-soft)]',
+          // chat 单元重写：作用域内悬浮卡对齐 mockup .composer（radius 12/1px border 基类已合）——
+          // focus 出 accent 描边+晕环、阴影收 shadow-sm；无作用域视觉不变
+          '[.webapp-theme_&]:shadow-sm [.webapp-theme_&]:focus-within:border-[var(--accent)] [.webapp-theme_&]:focus-within:shadow-[0_0_0_3px_var(--accent-soft)]',
           isDragActive &&
             'border border-dashed border-components-option-card-option-selected-border',
           disabled && 'pointer-events-none border-components-panel-border opacity-50 shadow-none',

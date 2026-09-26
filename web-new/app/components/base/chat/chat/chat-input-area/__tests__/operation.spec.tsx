@@ -101,6 +101,106 @@ describe('Operation', () => {
     })
   })
 
+  // D4：发送⇄停止同键位——响应中发送键变形 ■（aria-label 切停止语义、点击调 onStopResponding）
+  describe('Send/Stop Dual State (D4)', () => {
+    it('should morph the send button into a stop button while responding', async () => {
+      const user = userEvent.setup()
+      const onSend = vi.fn()
+      const onStopResponding = vi.fn()
+
+      render(<Operation onSend={onSend} isResponding onStopResponding={onStopResponding} />)
+
+      const stopButton = screen.getByRole('button', {
+        name: 'appDebug.operation.stopResponding',
+      })
+      expect(stopButton).toBeEnabled()
+      expect(
+        screen.queryByRole('button', { name: 'common.operation.send' }),
+      ).not.toBeInTheDocument()
+
+      await user.click(stopButton)
+
+      expect(onStopResponding).toHaveBeenCalledTimes(1)
+      expect(onSend).not.toHaveBeenCalled()
+    })
+
+    it('should keep the stop button enabled even when send is disabled (empty content)', () => {
+      render(<Operation onSend={vi.fn()} disabled isResponding onStopResponding={vi.fn()} />)
+
+      expect(
+        screen.getByRole('button', { name: 'appDebug.operation.stopResponding' }),
+      ).toBeEnabled()
+    })
+
+    it('should keep the stop button clickable when sendButtonLoading is set', async () => {
+      const user = userEvent.setup()
+      const onStopResponding = vi.fn()
+
+      render(
+        <Operation
+          onSend={vi.fn()}
+          sendButtonLoading
+          isResponding
+          onStopResponding={onStopResponding}
+        />,
+      )
+
+      const stopButton = screen.getByRole('button', {
+        name: 'appDebug.operation.stopResponding',
+      })
+      expect(stopButton).toBeEnabled()
+
+      await user.click(stopButton)
+      expect(onStopResponding).toHaveBeenCalledTimes(1)
+    })
+
+    it('should keep send semantics while responding when no stop handler is provided', async () => {
+      const user = userEvent.setup()
+      const onSend = vi.fn()
+
+      render(<Operation onSend={onSend} isResponding />)
+
+      const sendButton = screen.getByRole('button', { name: 'common.operation.send' })
+      await user.click(sendButton)
+
+      expect(onSend).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not call the stop handler when readonly', async () => {
+      const user = userEvent.setup()
+      const onStopResponding = vi.fn()
+
+      render(
+        <Operation onSend={vi.fn()} readonly isResponding onStopResponding={onStopResponding} />,
+      )
+
+      const stopButton = screen.getByRole('button', {
+        name: 'appDebug.operation.stopResponding',
+      })
+      expect(stopButton).toBeDisabled()
+
+      await user.click(stopButton)
+
+      expect(onStopResponding).not.toHaveBeenCalled()
+    })
+
+    it('should restore the send button when responding ends', () => {
+      const { rerender } = render(
+        <Operation onSend={vi.fn()} isResponding onStopResponding={vi.fn()} />,
+      )
+      expect(
+        screen.getByRole('button', { name: 'appDebug.operation.stopResponding' }),
+      ).toBeInTheDocument()
+
+      rerender(<Operation onSend={vi.fn()} isResponding={false} onStopResponding={vi.fn()} />)
+
+      expect(screen.getByRole('button', { name: 'common.operation.send' })).toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'appDebug.operation.stopResponding' }),
+      ).not.toBeInTheDocument()
+    })
+  })
+
   describe('Voice Input Button', () => {
     it('should call onShowVoiceInput when clicked', async () => {
       const user = userEvent.setup()
