@@ -53,6 +53,15 @@ describe('More', () => {
     expect(screen.queryByTestId('more-container')).not.toBeInTheDocument()
   })
 
+  it('should use the 12px tertiary-token styling pinned to the row end (D5 收编操作行行尾)', () => {
+    render(<More more={mockMoreData} />)
+    expect(screen.getByTestId('more-container')).toHaveClass(
+      'ml-auto',
+      'text-[12px]',
+      'text-[var(--text-3)]',
+    )
+  })
+
   it('should correctly format large token counts', () => {
     const dataWithLargeTokens = { ...mockMoreData, tokens: 1234567 }
     render(<More more={dataWithLargeTokens} />)

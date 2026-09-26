@@ -195,14 +195,26 @@ describe('Chat', () => {
       expect(screen.getByTestId('chat-root')).not.toHaveClass('flex-col')
     })
 
-    it('should apply px-8 spacing by default', () => {
-      const { container } = renderChat({ noSpacing: false })
-      expect(container.querySelector('.w-full')).toHaveClass('px-8')
+    it('should center the message column at 720px with the new-vision spacing by default (mockup chat-col)', () => {
+      renderChat({ noSpacing: false })
+      const col = screen.getByTestId('chat-container').firstElementChild
+      expect(col).toHaveClass(
+        'mx-auto',
+        'w-full',
+        'max-w-[720px]',
+        'flex-col',
+        'gap-[26px]',
+        'px-6',
+        'pb-5',
+        'pt-7',
+      )
     })
 
-    it('should omit px-8 when noSpacing=true', () => {
-      const { container } = renderChat({ noSpacing: true })
-      expect(container.querySelector('.w-full')).not.toHaveClass('px-8')
+    it('should omit the column padding when noSpacing=true (居中/间距保留)', () => {
+      renderChat({ noSpacing: true })
+      const col = screen.getByTestId('chat-container').firstElementChild
+      expect(col).not.toHaveClass('px-6')
+      expect(col).toHaveClass('mx-auto', 'max-w-[720px]', 'gap-[26px]')
     })
   })
 
@@ -266,35 +278,18 @@ describe('Chat', () => {
     })
   })
 
-  describe('Stop Responding Button', () => {
-    it('should show the stop button when isResponding=true and noStopResponding is falsy', () => {
+  describe('停止响应（Task 5 移除消息区停止钮——D4 落点移至发送键，Task 6 接入）', () => {
+    it('should never render the in-stream stop button, even while responding', () => {
       renderChat({ isResponding: true, noStopResponding: false })
-      expect(screen.getByTestId('stop-responding-container')).toBeInTheDocument()
-    })
-
-    it('should hide the stop button when noStopResponding=true', () => {
-      renderChat({ isResponding: true, noStopResponding: true })
       expect(screen.queryByTestId('stop-responding-container')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: /stopResponding/i })).not.toBeInTheDocument()
     })
 
-    it('should hide the stop button when isResponding=false', () => {
-      renderChat({ isResponding: false, noStopResponding: false })
-      expect(screen.queryByTestId('stop-responding-container')).not.toBeInTheDocument()
-    })
-
-    it('should call onStopResponding when the stop button is clicked', async () => {
-      const user = userEvent.setup()
+    it('should still accept onStopResponding/noStopResponding props without rendering (契约暂留)', () => {
       const onStopResponding = vi.fn()
-      renderChat({ isResponding: true, noStopResponding: false, onStopResponding })
-
-      await user.click(screen.getByText(/stopResponding/i))
-
-      expect(onStopResponding).toHaveBeenCalledTimes(1)
-    })
-
-    it('should render the stopResponding i18n key', () => {
-      renderChat({ isResponding: true, noStopResponding: false })
-      expect(screen.getByText(/stopResponding/i)).toBeInTheDocument()
+      renderChat({ isResponding: true, noStopResponding: true, onStopResponding })
+      expect(screen.queryByTestId('stop-responding-container')).not.toBeInTheDocument()
+      expect(onStopResponding).not.toHaveBeenCalled()
     })
   })
 
@@ -983,22 +978,28 @@ describe('Chat', () => {
       expect(screen.getByTestId('chat-footer')).toBeInTheDocument()
     })
 
-    it('should show footer when isResponding and noStopResponding is false', () => {
+    it('should not apply chatFooterClassName for isResponding alone (停止钮移除后不再是 footer 内容条件)', () => {
       renderChat({
         isResponding: true,
         noStopResponding: false,
         noChatInput: true,
+        chatFooterClassName: 'footer-extra-cls',
       })
       expect(screen.getByTestId('chat-footer')).toBeInTheDocument()
+      expect(screen.getByTestId('chat-footer')).not.toHaveClass('footer-extra-cls')
     })
 
-    it('should show footer when any footer content condition is true', () => {
+    it('should apply chatFooterClassName when a real footer content condition holds (输入区在)', () => {
       renderChat({
         isResponding: true,
         noStopResponding: false,
-        noChatInput: true,
+        noChatInput: false,
+        chatFooterClassName: 'footer-extra-cls',
       })
-      expect(screen.getByTestId('chat-footer')).toHaveClass('bg-chat-input-mask')
+      expect(screen.getByTestId('chat-footer')).toHaveClass(
+        'bg-chat-input-mask',
+        'footer-extra-cls',
+      )
     })
 
     it('should let footer blank space pass pointer events through', () => {
@@ -1006,17 +1007,6 @@ describe('Chat', () => {
       const footer = screen.getByTestId('chat-footer')
       expect(footer).toHaveClass('pointer-events-none')
       expect(footer.firstElementChild).toHaveClass('pointer-events-none')
-    })
-
-    it('should keep the stop responding button clickable inside the pass-through footer', () => {
-      renderChat({
-        isResponding: true,
-        noStopResponding: false,
-        noChatInput: true,
-      })
-      expect(screen.getByRole('button', { name: /stopResponding/i })).toHaveClass(
-        'pointer-events-auto',
-      )
     })
   })
 

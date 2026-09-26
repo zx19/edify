@@ -64,6 +64,8 @@ vi.mock('../header-in-mobile', () => ({
 vi.mock('../drawer', () => ({
   default: (props: DrawerProps) => {
     captured.drawerProps = props
+    // 注：mock 借 data-open 暴露 open 态供断言；真组件（drawer aside）并没有 data-open 属性——
+    // 壳层 ⌘K 让位检测正是靠「真抽屉无 data-open」排除误伤，勿把 mock 改成真渲染，防日后漂移。
     return <div data-testid="conversation-drawer" data-open={String(props.open)} />
   },
 }))

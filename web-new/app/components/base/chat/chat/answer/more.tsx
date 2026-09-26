@@ -9,8 +9,9 @@ type MoreProps = {
 }
 
 /**
- * 性能行（chat 单元重写，mockup 类型1）：常显弱化（三级灰小字），msg-foot 行内右侧。
- * 原 hover 才显现改为常显（对照表出入 #2 拍板落点）。
+ * 性能行（chat 单元回炉，mockup 类型1 .perf）：
+ * D5 收编——渲染在操作条行尾（ml-auto），随操作条 hover/focus 同行显现（推翻 09-13「常显弱化」拍板）；
+ * 12px 三级灰（var(--text-3)），单实现消费 var token。
  */
 const More: FC<MoreProps> = ({ more }) => {
   const { t } = useTranslation()
@@ -19,7 +20,7 @@ const More: FC<MoreProps> = ({ more }) => {
 
   return (
     <div
-      className="ml-auto flex items-center text-[11.5px] text-text-quaternary tabular-nums"
+      className="ml-auto flex items-center text-[12px] text-[var(--text-3)] tabular-nums"
       data-testid="more-container"
     >
       <div

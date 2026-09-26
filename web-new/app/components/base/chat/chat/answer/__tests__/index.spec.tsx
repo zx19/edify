@@ -71,7 +71,7 @@ describe('Answer Component', () => {
     })
 
     it('should render agent thoughts', () => {
-      const { container } = render(
+      render(
         <Answer
           {...defaultProps}
           item={
@@ -82,7 +82,7 @@ describe('Answer Component', () => {
           }
         />,
       )
-      expect(container.querySelector('.group')).toBeInTheDocument()
+      expect(screen.getByTestId('chat-answer-container')).toBeInTheDocument()
     })
 
     it('should render custom agent content when only agent response parts exist', () => {
@@ -280,7 +280,7 @@ describe('Answer Component', () => {
   })
 
   describe('Interactions', () => {
-    it('should handle switch sibling', () => {
+    it('should handle switch sibling inside the operation bar (操作条内 ‹ 1/2 ›)', () => {
       const mockSwitchSibling = vi.fn()
       render(
         <Answer
@@ -299,6 +299,7 @@ describe('Answer Component', () => {
       )
 
       const prevBtn = screen.getByRole('button', { name: 'Previous' })
+      expect(screen.getByTestId('operation-bar')).toContainElement(prevBtn)
       fireEvent.click(prevBtn)
       expect(mockSwitchSibling).toHaveBeenCalledWith('msg-0')
 
@@ -307,22 +308,72 @@ describe('Answer Component', () => {
       fireEvent.click(nextBtn)
       expect(mockSwitchSibling).toHaveBeenCalledWith('msg-2')
     })
+
+    it('should not render the operation bar while responding (流式中无操作条)', () => {
+      render(<Answer {...defaultProps} responding={true} />)
+      expect(screen.queryByTestId('operation-bar')).not.toBeInTheDocument()
+    })
+
+    it('should not render the whole msg-foot row (含性能行) when ui_config show_message_actions=false', () => {
+      render(
+        <Answer
+          {...defaultProps}
+          appData={
+            {
+              site: { ui_config: { components: { show_message_actions: false } } },
+            } as unknown as AppData
+          }
+          item={
+            {
+              ...defaultProps.item,
+              more: { messages: [{ text: 'more content' }] },
+              siblingCount: 2,
+              siblingIndex: 0,
+              nextSibling: 'msg-2',
+            } as unknown as ChatItem
+          }
+        />,
+      )
+      expect(screen.queryByTestId('operation-bar')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('more-container')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument()
+    })
   })
 
   describe('Edge Cases and Props', () => {
-    it('should handle hideAvatar properly', () => {
-      render(<Answer {...defaultProps} hideAvatar={true} />)
+    it('should carry group/answer on the root as the hover domain for the operation bar (D5)', () => {
+      render(<Answer {...defaultProps} />)
+      const root = screen.getByTestId('chat-answer-container')
+      // chat-answer-container 类名保留：markdown link 锚点滚动以它为 JS 钩子
+      expect(root).toHaveClass('group/answer', 'chat-answer-container')
+    })
+
+    it('should typeset the answer directly without the bubble card container (去气泡框)', () => {
+      render(<Answer {...defaultProps} />)
+      const inner = screen.getByTestId('chat-answer-container-inner')
+      // 去气泡：内容容器不再消费 var(--chat-answer-*) 双层内联样式
+      expect(inner.firstElementChild?.getAttribute('style')).toBeNull()
+    })
+
+    it('should not render any avatar node, with or without hideAvatar (D3 去头像)', () => {
+      const { container, unmount } = render(<Answer {...defaultProps} />)
+      expect(container.querySelector('.size-10')).toBeNull()
+      expect(screen.queryByTestId('emoji')).not.toBeInTheDocument()
+
+      unmount()
+      const { container: c2 } = render(<Answer {...defaultProps} hideAvatar={true} />)
+      expect(c2.querySelector('.size-10')).toBeNull()
       expect(screen.queryByTestId('emoji')).not.toBeInTheDocument()
     })
 
-    it('should render custom answerIcon', () => {
+    it('should accept but not render answerIcon (D3 去头像，契约暂留)', () => {
       render(
         <Answer
           {...defaultProps}
           answerIcon={<div data-testid="custom-answer-icon">Custom Icon</div>}
         />,
       )
-      expect(screen.getByTestId('custom-answer-icon')).toBeInTheDocument()
+      expect(screen.queryByTestId('custom-answer-icon')).not.toBeInTheDocument()
     })
 
     it('should handle hideProcessDetail with appData', () => {
@@ -342,7 +393,7 @@ describe('Answer Component', () => {
       expect(screen.getByTestId('chat-answer-container')).toBeInTheDocument()
     })
 
-    it('should render More component', () => {
+    it('should render the performance row inside the hover operation bar (D5 收编行尾)', () => {
       render(
         <Answer
           {...defaultProps}
@@ -354,7 +405,9 @@ describe('Answer Component', () => {
           }
         />,
       )
-      expect(screen.getByTestId('more-container')).toBeInTheDocument()
+      const more = screen.getByTestId('more-container')
+      expect(more).toBeInTheDocument()
+      expect(screen.getByTestId('operation-bar')).toContainElement(more)
     })
 
     it('should render content with hasHumanInput but contentIsEmpty and no agent_thoughts', () => {

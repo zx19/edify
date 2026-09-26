@@ -44,14 +44,11 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
     const handleKeydown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
-        setDrawerOpen((v) => {
-          if (
-            v &&
-            document.querySelector('[role="dialog"][data-open], [role="alertdialog"][data-open]')
-          )
-            return v
-          return !v
-        })
+        // DOM 读取上提到调用前：setState updater 须保持纯函数（T4 评审修正）
+        const modalOpen = !!document.querySelector(
+          '[role="dialog"][data-open], [role="alertdialog"][data-open]',
+        )
+        setDrawerOpen((v) => (v && modalOpen ? v : !v))
       }
     }
     window.addEventListener('keydown', handleKeydown)

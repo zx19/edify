@@ -204,6 +204,7 @@ type OperationProps = {
   index: number
   showPromptLog?: boolean
   noChatInput?: boolean
+  switchSibling?: (siblingMessageId: string) => void
 }
 
 const baseItem: ChatItem = {
@@ -244,7 +245,7 @@ const baseProps: OperationProps = {
 describe('Operation', () => {
   const renderOperation = (props = baseProps) => {
     return render(
-      <div className="group">
+      <div className="group/answer">
         <Operation {...props} />
       </div>,
     )
@@ -368,11 +369,15 @@ describe('Operation', () => {
       expect(screen.getByTestId('log-btn'))!.toBeInTheDocument()
     })
 
-    it('should keep hover-only controls visible when a descendant popup is open', () => {
+    it('should reveal the bar only on answer hover/focus or an open descendant popup (D5)', () => {
       renderOperation({ ...baseProps, showPromptLog: true })
 
       expect(screen.getByTestId('operation-bar')).toHaveClass(
-        'group-has-[[data-popup-open]]:opacity-100',
+        'opacity-0',
+        'transition-opacity',
+        'group-hover/answer:opacity-100',
+        'focus-within:opacity-100',
+        'group-has-[[data-popup-open]]/answer:opacity-100',
       )
     })
 
@@ -767,7 +772,7 @@ describe('Operation', () => {
       const { rerender } = renderOperation()
 
       rerender(
-        <div className="group">
+        <div className="group/answer">
           <Operation
             {...baseProps}
             item={{
@@ -943,7 +948,7 @@ describe('Operation', () => {
         feedback: { rating: 'dislike' as const, content: 'test content' },
       }
       rerender(
-        <div className="group">
+        <div className="group/answer">
           <Operation {...baseProps} item={itemDislike} />
         </div>,
       )
@@ -979,7 +984,7 @@ describe('Operation', () => {
       mockContextValue.onFeedback = undefined
       // Rerender to ensure the component closure gets the updated undefined value from the mock context
       rerender(
-        <div className="group">
+        <div className="group/answer">
           <Operation {...baseProps} />
         </div>,
       )
@@ -1228,6 +1233,70 @@ describe('Operation', () => {
 
       expect(screen.queryByTestId('annotation-edit-btn')).not.toBeInTheDocument()
       expect(screen.queryByTestId('edit-reply-modal')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('性能行收编（D5：随 hover 操作条同行右侧显现）', () => {
+    it('should render the performance row at the end of the operation bar when item.more exists', () => {
+      const item = {
+        ...baseItem,
+        more: { latency: 3.2, tokens: 812, tokens_per_second: 254 },
+      } as unknown as ChatItem
+      renderOperation({ ...baseProps, item })
+
+      const bar = screen.getByTestId('operation-bar')
+      const more = screen.getByTestId('more-container')
+      expect(bar).toContainElement(more)
+      expect(more).toHaveClass('ml-auto')
+    })
+
+    it('should not render the performance row when item.more is missing', () => {
+      renderOperation()
+      expect(screen.queryByTestId('more-container')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('多答案切换（操作条内 ‹ 1/2 ›，对照表 §4）', () => {
+    it('should render the sibling switch inside the bar and switch on click', async () => {
+      const user = userEvent.setup()
+      const switchSibling = vi.fn()
+      const item = {
+        ...baseItem,
+        siblingCount: 2,
+        siblingIndex: 0,
+        nextSibling: 'msg-2',
+      } as unknown as ChatItem
+      renderOperation({ ...baseProps, item, switchSibling })
+
+      const bar = screen.getByTestId('operation-bar')
+      const nextBtn = screen.getByRole('button', { name: 'Next' })
+      expect(bar).toContainElement(nextBtn)
+
+      await user.click(nextBtn)
+      expect(switchSibling).toHaveBeenCalledWith('msg-2')
+    })
+
+    it('should not switch when the requested sibling does not exist', async () => {
+      const user = userEvent.setup()
+      const switchSibling = vi.fn()
+      const item = {
+        ...baseItem,
+        siblingCount: 2,
+        siblingIndex: 1,
+        prevSibling: 'msg-0',
+      } as unknown as ChatItem
+      renderOperation({ ...baseProps, item, switchSibling })
+
+      await user.click(screen.getByRole('button', { name: 'Previous' }))
+      expect(switchSibling).toHaveBeenCalledWith('msg-0')
+
+      expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
+    })
+
+    it('should not render the sibling switch for a single answer', () => {
+      renderOperation()
+      expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Previous' })).not.toBeInTheDocument()
     })
   })
 })

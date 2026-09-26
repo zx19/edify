@@ -6,7 +6,6 @@ import userEvent from '@testing-library/user-event'
 import { toast } from '@xsl/lomva-ui/toast'
 import copy from 'copy-to-clipboard'
 import * as React from 'react'
-import { createTheme } from '../../embedded-chatbot/theme/theme'
 import { ChatContextProvider } from '../context-provider'
 import Question from '../question'
 
@@ -117,23 +116,38 @@ describe('Question component', () => {
     vi.clearAllMocks()
   })
 
-  it('should render the question content container and default avatar when hideAvatar is false', () => {
+  it('should render the question as a right-aligned soft capsule (mockup 类型1), with no avatar node', () => {
     const { container } = renderWithProvider(makeItem())
+
+    const capsule = screen.getByTestId('question-content')
+    expect(capsule).toHaveClass(
+      'w-fit',
+      'max-w-[75%]',
+      'whitespace-pre-wrap',
+      'rounded-[12px]',
+      'bg-[var(--bg-soft)]',
+      'px-3.5',
+      'py-2.5',
+      'text-[14px]',
+      'leading-[1.65]',
+      'text-[var(--text-1)]',
+    )
+    // 双层时代结束：不再有 var(--chat-bubble-user-*) 内联样式
+    expect(capsule.getAttribute('style')).toBeNull()
 
     const markdown = container.querySelector('.markdown-body')
     expect(markdown).toBeInTheDocument()
 
-    const avatar =
-      container.querySelector('.size-10') || container.querySelector('.size-10.shrink-0')
-    expect(avatar).toBeTruthy()
+    // D3 去头像：无头像节点（hideAvatar/questionIcon 契约暂留但不再渲染）
+    expect(container.querySelector('.size-10')).toBeNull()
+    expect(container.querySelector('.question-default-user-icon')).toBeNull()
   })
 
-  it('should hide avatar when hideAvatar is true', () => {
+  it('should not render an avatar whether or not hideAvatar is set (D3)', () => {
     const { container } = renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, {
       hideAvatar: true,
     })
-    const avatar = container.querySelector('.size-10')
-    expect(avatar).toBeNull()
+    expect(container.querySelector('.size-10')).toBeNull()
   })
 
   it('should call copy-to-clipboard and show a toast when copy action is clicked', async () => {
@@ -348,13 +362,15 @@ describe('Question component', () => {
     expect(screen.getByText(/audio1.mp3/i)).toBeInTheDocument()
   })
 
-  it('should apply theme bubble styles when theme provided', () => {
-    const theme = createTheme('#ff0000')
+  it('should reveal the action row only on hover/focus (mockup .msg-ops)', () => {
+    renderWithProvider(makeItem())
 
-    renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, { theme })
-
-    const contentContainer = screen.getByTestId('question-content')
-    expect(contentContainer.getAttribute('style')).not.toBeNull()
+    expect(screen.getByTestId('action-container')).toHaveClass(
+      'opacity-0',
+      'transition-opacity',
+      'group-hover/question:opacity-100',
+      'focus-within:opacity-100',
+    )
   })
 
   it('should cover composition lifecycle preventing enter submitting when composing', async () => {
@@ -473,21 +489,19 @@ describe('Question component', () => {
     expect(onRegenerate).toHaveBeenCalled()
   })
 
-  it('should render default question avatar icon when questionIcon is not provided', () => {
+  it('should not render the default question avatar icon (D3 去头像)', () => {
     const { container } = renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate)
 
-    const defaultIcon = container.querySelector('.question-default-user-icon')
-    expect(defaultIcon).toBeInTheDocument()
+    expect(container.querySelector('.question-default-user-icon')).not.toBeInTheDocument()
   })
 
-  it('should render custom questionIcon when provided', () => {
+  it('should accept but not render questionIcon (D3 去头像，契约暂留)', () => {
     const { container } = renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, {
       questionIcon: <div data-testid="custom-question-icon">CustomIcon</div>,
     })
 
-    expect(screen.getByTestId('custom-question-icon')).toBeInTheDocument()
-    const defaultIcon = container.querySelector('.question-default-user-icon')
-    expect(defaultIcon).not.toBeInTheDocument()
+    expect(screen.queryByTestId('custom-question-icon')).not.toBeInTheDocument()
+    expect(container.querySelector('.question-default-user-icon')).not.toBeInTheDocument()
   })
 
   it('should call switchSibling with next sibling ID when next button clicked and nextSibling exists', async () => {
@@ -677,16 +691,21 @@ describe('Question component', () => {
     expect(fileListParent).toHaveClass('mb-3')
   })
 
-  it('should render theme styles only in non-edit mode', () => {
-    const theme = createTheme('#00ff00', true)
+  it('should switch the capsule to the mockup edit-box in editing mode', async () => {
+    const user = userEvent.setup()
+    renderWithProvider(makeItem())
 
-    renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, { theme })
+    await user.click(screen.getByRole('button', { name: 'common.operation.edit' }))
 
-    const contentContainer = screen.getByTestId('question-content')
-    const styleAttr = contentContainer.getAttribute('style')
-
-    // In non-edit mode, theme styles should be applied
-    expect(styleAttr).not.toBeNull()
+    const box = screen.getByTestId('question-content')
+    expect(box).not.toHaveClass('bg-[var(--bg-soft)]', 'w-fit')
+    expect(box).toHaveClass(
+      'w-[min(560px,100%)]',
+      'rounded-[12px]',
+      'border',
+      'border-[var(--border-strong)]',
+      'bg-[var(--card)]',
+    )
   })
 
   it('should handle siblings at boundaries (first, middle, last)', async () => {
@@ -896,14 +915,13 @@ describe('Question component', () => {
     // Should not throw
   })
 
-  it('should render bubble via token 双层 var 样式（theme prop 已废弃不消费）', () => {
+  it('should render the capsule purely via new-vision token classes (theme prop 已废弃不消费)', () => {
     const theme = { chatBubbleColorStyle: 'backgroundColor: red' } as unknown as Theme
     renderWithProvider(makeItem(), vi.fn() as unknown as OnRegenerate, { theme })
     const content = screen.getByTestId('question-content')
-    const styleAttr = content.getAttribute('style')
-    expect(styleAttr).toContain('--chat-bubble-user-bg')
-    expect(styleAttr).toContain('--chat-bubble-user-fg')
-    expect(styleAttr).not.toContain('red')
+    // 黑底气泡时代的 var(--chat-bubble-user-*) 内联样式清除；着色全走 class token
+    expect(content.getAttribute('style')).toBeNull()
+    expect(content).toHaveClass('bg-[var(--bg-soft)]', 'text-[var(--text-1)]')
   })
 
   it('should handle undefined message_files', () => {

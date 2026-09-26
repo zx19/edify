@@ -225,7 +225,7 @@ describe('ChatWrapper', () => {
     expect(await screen.findByText('Bot thinking...'))!.toBeInTheDocument()
   })
 
-  it('should handle manual message input and stop responding', async () => {
+  it('should handle manual message input; in-stream stop button removed (D4 落点移交 Task 6 发送键)', async () => {
     const handleSend = vi.fn()
     const handleStop = vi.fn()
     vi.mocked(useChat).mockReturnValue({
@@ -255,11 +255,11 @@ describe('ChatWrapper', () => {
 
     rerender(<ChatWrapper />)
 
-    const stopButton = await screen.findByRole('button', {
-      name: /appDebug.operation.stopResponding/i,
-    })
-    fireEvent.click(stopButton)
-    expect(handleStop).toHaveBeenCalled()
+    // Task 5：消息区停止钮已移除（停止交互暂缺，Task 6 发送键变形 ■ 接入）
+    expect(
+      screen.queryByRole('button', { name: /appDebug.operation.stopResponding/i }),
+    ).not.toBeInTheDocument()
+    expect(handleStop).not.toHaveBeenCalled()
   })
 
   it('should handle regenerate and switch sibling', async () => {
@@ -1161,7 +1161,7 @@ describe('ChatWrapper', () => {
     }
   })
 
-  it('should render answer icon when configured', () => {
+  it('should not render the answer icon inside the message flow (D3 去头像，身份由 header/欢迎屏承担)', () => {
     const appDataWithAnswerIcon = {
       site: {
         ...mockAppData.site,
@@ -1181,10 +1181,10 @@ describe('ChatWrapper', () => {
 
     render(<ChatWrapper />)
     expect(screen.getByText('Answer'))!.toBeInTheDocument()
-    expect(screen.getByAltText('answer icon'))!.toBeInTheDocument()
+    expect(screen.queryByAltText('answer icon'))!.not.toBeInTheDocument()
   })
 
-  it('should render question icon fallback when user avatar is available', () => {
+  it('should not render the user avatar inside the message flow (D3 去头像)', () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       initUserVariables: {
@@ -1199,10 +1199,11 @@ describe('ChatWrapper', () => {
     } as unknown as ChatHookReturn)
 
     render(<ChatWrapper />)
-    expect(screen.getByText('J'))!.toBeInTheDocument()
+    expect(screen.getByText('Question'))!.toBeInTheDocument()
+    expect(screen.queryByText('J'))!.not.toBeInTheDocument()
   })
 
-  it('should use fallback values for nullable appData, appMeta and avatar name', () => {
+  it('should use fallback values for nullable appData and appMeta without rendering an avatar initial', () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       appData: null as unknown as AppData,
@@ -1219,7 +1220,7 @@ describe('ChatWrapper', () => {
 
     render(<ChatWrapper />)
     expect(screen.getByText('Question with fallback avatar name'))!.toBeInTheDocument()
-    expect(screen.getByText('U'))!.toBeInTheDocument()
+    expect(screen.queryByText('U'))!.not.toBeInTheDocument()
   })
 
   it('should set handleStop on currentChatInstanceRef', () => {

@@ -21,7 +21,9 @@ import EditReplyModal from '@/app/components/app/annotation/edit-annotation-moda
 import Log from '@/app/components/base/chat/chat/log'
 import AnnotationCtrlButton from '@/app/components/base/features/new-feature-panel/annotation-reply/annotation-ctrl-button'
 import NewAudioButton from '@/app/components/base/new-audio-button'
+import ContentSwitch from '../content-switch'
 import { useChatContext } from '../context'
+import More from './more'
 
 type OperationProps = {
   item: ChatItem
@@ -29,6 +31,8 @@ type OperationProps = {
   index: number
   showPromptLog?: boolean
   noChatInput?: boolean
+  /** 多答案切换（操作条内 ‹ 1/2 ›，对照表 §4）；由 Answer 透传 */
+  switchSibling?: (siblingMessageId: string) => void
 }
 
 /** @deprecated chat 单元重写后操作条固定为回答左下流内行，不再支持定位（保留导出兼容 ChatProps 签名） */
@@ -72,12 +76,21 @@ const FeedbackTooltip = ({ content, children }: FeedbackTooltipProps) => {
 }
 
 /**
- * 消息操作条（chat 单元重写，mockup 类型1 消息区）：
- * 回答左下流内行——赞同/反对（反馈弹窗）、复制、重新生成、朗读（TTS 开启时）、标注、日志；
- * 原绝对定位 + 宽度计算机（operationWidth/positionRight）随 mockup 行式布局废弃。
+ * 消息操作条（chat 单元回炉，mockup 类型1 .msg-ops）：
+ * 回答末尾流内行——赞同/反对（反馈弹窗）、复制、重新生成、朗读（TTS 开启时）、标注、日志
+ * + 多答案切换（‹ 1/2 ›，前置分隔条）+ 性能行行尾（D5 收编，12px text-3）。
+ * D5 可见性：常态 opacity-0，answer hover / 行内 focus-within / 行内弹窗开（data-popup-open）时显现
+ * （「已有反馈常显」例外随 D5 一并退役——对照表 §4 操作栏默认可见性变化拍板）。
  * 交互行为全保留（反馈覆盖态/tooltip/弹窗/复制 toast/标注流）。
  */
-function Operation({ item, question, index, showPromptLog, noChatInput }: OperationProps) {
+function Operation({
+  item,
+  question,
+  index,
+  showPromptLog,
+  noChatInput,
+  switchSibling,
+}: OperationProps) {
   const { t } = useTranslation()
   const {
     config,
@@ -186,16 +199,22 @@ function Operation({ item, question, index, showPromptLog, noChatInput }: Operat
     setIsShowFeedbackModal(false)
   }
 
-  // mockup：常态下 hover 显现；已有反馈（赞/踩）时常显
-  const hoverRevealClassName =
-    hasUserFeedback || hasAdminFeedback
-      ? ''
-      : 'opacity-0 transition-opacity group-hover:opacity-100 group-has-[[data-popup-open]]:opacity-100'
+  const handleSwitchSibling = (direction: 'prev' | 'next') => {
+    if (direction === 'prev') {
+      if (item.prevSibling) switchSibling?.(item.prevSibling)
+    } else {
+      if (item.nextSibling) switchSibling?.(item.nextSibling)
+    }
+  }
+  const hasSiblingSwitch =
+    typeof item.siblingCount === 'number' &&
+    item.siblingCount > 1 &&
+    item.siblingIndex !== undefined
 
   return (
     <>
       <div
-        className={cn('flex items-center gap-0.5', hoverRevealClassName)}
+        className="mt-1.5 flex items-center gap-0.5 opacity-0 transition-opacity group-hover/answer:opacity-100 group-has-[[data-popup-open]]/answer:opacity-100 focus-within:opacity-100"
         data-testid="operation-bar"
       >
         {shouldShowUserFeedbackBar && !humanInputFormDataList?.length && (
@@ -388,6 +407,20 @@ function Operation({ item, question, index, showPromptLog, noChatInput }: Operat
             )}
           </div>
         )}
+        {hasSiblingSwitch && (
+          <>
+            <span aria-hidden className="mx-1.5 h-3.5 w-px bg-[var(--border)]" />
+            <ContentSwitch
+              count={item.siblingCount}
+              currentIndex={item.siblingIndex}
+              prevDisabled={!item.prevSibling}
+              nextDisabled={!item.nextSibling}
+              switchSibling={handleSwitchSibling}
+            />
+          </>
+        )}
+        {/* 性能行（D5 收编行尾，随操作条同行显现） */}
+        <More more={item.more} />
       </div>
       {canManageAnnotation && (
         <EditReplyModal

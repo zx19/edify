@@ -8,10 +8,8 @@ import type { SpeechToTextTarget } from '@/app/components/base/voice-input/types
 import type { HumanInputNodeType } from '@/app/components/workflow/nodes/human-input/types'
 import type { Node } from '@/app/components/workflow/types'
 import type { AppData, ToolIcon } from '@/models/share'
-import { Button } from '@xsl/lomva-ui/button'
 import { cn } from '@xsl/lomva-ui/cn'
 import { memo } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import Answer from './answer'
@@ -102,8 +100,6 @@ const Chat: FC<ChatProps> = ({
   onRegenerate,
   chatList,
   isResponding,
-  noStopResponding,
-  onStopResponding,
   noChatInput,
   showRegenerate,
   chatContainerClassName,
@@ -145,8 +141,9 @@ const Chat: FC<ChatProps> = ({
   renderAgentContent,
   onHumanInputFormSubmit,
   getHumanInputNodeData,
+  // noStopResponding/onStopResponding：契约暂留不消费——D4 停止交互落点移至发送键（Task 6 接入），
+  // 消息区停止响应按钮块已随 Task 5 移除
 }) => {
-  const { t } = useTranslation()
   const {
     currentLogItem,
     setCurrentLogItem,
@@ -203,11 +200,12 @@ const Chat: FC<ChatProps> = ({
           )}
         >
           {chatNode}
+          {/* 消息列（mockup chat-col）：720px 居中，flex-col gap-26px 驱动消息间距（消息自身不再带 mb） */}
           <div
             ref={chatContainerInnerRef}
             className={cn(
-              'w-full',
-              !noSpacing && 'px-8',
+              'mx-auto flex w-full max-w-[720px] flex-col gap-[26px]',
+              !noSpacing && 'px-6 pt-7 pb-5',
               chatContainerInnerClassName,
               isTryApp && 'px-0',
             )}
@@ -255,7 +253,7 @@ const Chat: FC<ChatProps> = ({
           data-testid="chat-footer"
           className={cn(
             'pointer-events-none absolute bottom-0 z-10 flex justify-center bg-chat-input-mask',
-            (hasTryToAsk || !noChatInput || !noStopResponding) && chatFooterClassName,
+            (hasTryToAsk || !noChatInput) && chatFooterClassName,
           )}
           ref={chatFooterRef}
         >
@@ -267,19 +265,6 @@ const Chat: FC<ChatProps> = ({
               isTryApp && 'px-0',
             )}
           >
-            {!noStopResponding && isResponding && (
-              <div data-testid="stop-responding-container" className="mb-2 flex justify-center">
-                <Button
-                  className="pointer-events-auto bg-components-panel-bg text-components-button-secondary-text inset-ring-components-panel-border"
-                  onClick={onStopResponding}
-                >
-                  <div className="i-custom-vender-solid-mediaAndDevices-stop-circle h-3.5 w-3.5" />
-                  <span className="text-xs font-normal">
-                    {t(($) => $['operation.stopResponding'], { ns: 'appDebug' })}
-                  </span>
-                </Button>
-              </div>
-            )}
             {hasTryToAsk && <TryToAsk suggestedQuestions={suggestedQuestions} onSend={onSend} />}
             {!noChatInput && (
               <ChatInputArea
