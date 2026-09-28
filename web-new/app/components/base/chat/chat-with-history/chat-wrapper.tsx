@@ -47,7 +47,6 @@ const ChatWrapper = () => {
     handleFeedback,
     currentChatInstanceRef,
     appData,
-    sidebarCollapseState,
     clearChatList,
     setClearChatList,
     setIsResponding,
@@ -291,83 +290,69 @@ const ChatWrapper = () => {
     [isInstalledApp, prepareHumanInputSubmission],
   )
 
-  const [collapsed, setCollapsed] = useState(!!currentConversationId)
   const [descExpanded, setDescExpanded] = useState(false)
 
   const description = appData?.site.description
   const [showDescToggle, setShowDescToggle] = useState(false)
-  const handleDescRef = useCallback((node: HTMLDivElement | null) => {
+  const handleDescRef = useCallback((node: HTMLElement | null) => {
     setShowDescToggle(!!node && node.scrollHeight > node.clientHeight)
   }, [])
 
+  // 空会话=欢迎屏（mockup 类型1）：无会话 id、未首发、无可见消息（开场白不算）
+  const isWelcome =
+    !currentConversationId && !hasSent && !chatList.some((item) => !item.isOpeningStatement)
+
+  // 应用描述收编：独立卡片取消,收为开场白下一行 line-clamp-1 + 「展开」链接
   const descriptionNode = useMemo(() => {
-    if (!description || currentConversationId || hasSent) return null
+    if (!description) return null
     return (
-      <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
-        <div className="w-full max-w-2xl rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
-          <div className={cn('p-6', isMobile && 'p-4')}>
-            <div
-              ref={handleDescRef}
-              className={cn(
-                'relative system-xs-regular wrap-break-word whitespace-pre-wrap text-text-tertiary',
-                !descExpanded && 'line-clamp-3',
-                descExpanded && 'max-h-32 overflow-y-auto',
-              )}
-            >
-              {description}
-              {!descExpanded && showDescToggle && (
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-b from-transparent to-[var(--card)]" />
-              )}
-            </div>
-            {showDescToggle && (
-              <button
-                type="button"
-                className="mt-0.5 flex items-center gap-0.5 text-xs text-[var(--accent-deep)] hover:opacity-80"
-                onClick={() => setDescExpanded((v) => !v)}
-              >
-                {descExpanded ? (
-                  <>
-                    <span aria-hidden className="i-ri-arrow-up-s-line size-3" />
-                    {t(($) => $['chat.collapse'], { ns: 'share' })}
-                  </>
-                ) : (
-                  <>
-                    <span aria-hidden className="i-ri-arrow-down-s-line size-3" />
-                    {t(($) => $['chat.expand'], { ns: 'share' })}
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
+      <div
+        className={cn(
+          'mt-1.5 max-w-full text-[12.5px] leading-5 text-[var(--text-3)]',
+          !descExpanded && 'flex items-baseline justify-center',
+        )}
+      >
+        <span
+          ref={handleDescRef}
+          className={cn(
+            'min-w-0 wrap-break-word whitespace-pre-wrap',
+            !descExpanded && 'line-clamp-1',
+          )}
+        >
+          {description}
+        </span>
+        {showDescToggle && (
+          <button
+            type="button"
+            className="ml-1 shrink-0 cursor-pointer text-[var(--accent-deep)] hover:opacity-80"
+            onClick={() => setDescExpanded((v) => !v)}
+          >
+            {descExpanded
+              ? t(($) => $['chat.collapse'], { ns: 'share' })
+              : t(($) => $['chat.expand'], { ns: 'share' })}
+          </button>
+        )}
       </div>
     )
-  }, [description, isMobile, currentConversationId, hasSent, descExpanded, showDescToggle, t])
+  }, [description, descExpanded, showDescToggle, handleDescRef, t])
 
-  const chatNode = useMemo(() => {
-    if (allInputsHidden || !inputsForms.length) return null
-    if (isMobile) {
-      if (!currentConversationId)
-        return <InputsForm collapsed={collapsed} setCollapsed={setCollapsed} />
-      return null
-    } else {
-      return <InputsForm collapsed={collapsed} setCollapsed={setCollapsed} />
-    }
-  }, [inputsForms.length, isMobile, currentConversationId, collapsed, allInputsHidden])
-
-  const welcome = useMemo(() => {
+  const welcomeNode = useMemo(() => {
+    if (!isWelcome) return null
     const welcomeMessage = chatList.find((item) => item.isOpeningStatement)
-    if (respondingState) return null
-    if (currentConversationId) return null
-    if (!welcomeMessage) return null
-    if (!collapsed && inputsForms.length > 0 && !allInputsHidden) return null
-    // mockup 类型1 欢迎屏：居中 64px 图标 + 标题（开场白 markdown）+ ui_config 副标题（空不渲染）
-    // + 建议问题 2×2 卡片格
-    const welcomeSubtitle = resolveUiConfig(appData?.site).brand.welcome_subtitle
-    const questions = (welcomeMessage.suggestedQuestions ?? []).filter((q) => !!q && q.trim())
+    const uiConfig = resolveUiConfig(appData?.site)
+    const welcomeSubtitle = uiConfig.brand.welcome_subtitle
+    const questions = (welcomeMessage?.suggestedQuestions ?? []).filter((q) => !!q && q.trim())
+    const showSuggestions = questions.length > 0 && uiConfig.components.show_suggested_questions
+    const showForm = !allInputsHidden && inputsForms.length > 0
+    const hasRequiredField = inputsForms.some((form) => form.required && form.hide !== true)
+    // mockup 类型1 欢迎屏：垂直居中 64px 图标 + 开场白标题 + 副标题(空不渲染)
+    // + 描述行(line-clamp-1+展开) + 建议问题 2×2 卡 + 变量表单(流内区块)
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-12">
-        <div className="grid size-16 place-items-center rounded-2xl bg-[var(--accent-soft)] shadow-[var(--shadow-sm)]">
+      <div
+        data-testid="welcome-screen"
+        className="flex w-full flex-col items-center px-4 pt-7 text-center sm:px-6 sm:pt-10"
+      >
+        <div className="grid size-16 place-items-center rounded-2xl bg-[var(--accent-soft)] shadow-[var(--shadow-xs)] max-sm:size-[52px] max-sm:rounded-[14px]">
           <AppIcon
             size="large"
             iconType={appData?.site.icon_type}
@@ -376,41 +361,35 @@ const ChatWrapper = () => {
             imageUrl={appData?.site.icon_url}
           />
         </div>
-        <div className="mt-4 max-w-3xl text-center text-2xl font-bold tracking-tight text-[var(--text-1)]">
-          <Markdown content={welcomeMessage.content} />
-        </div>
+        {welcomeMessage && (
+          <h1 className="mt-4 max-w-3xl text-[22px] font-semibold tracking-[0.01em] text-[var(--text-1)] max-sm:text-lg">
+            <Markdown content={welcomeMessage.content} />
+          </h1>
+        )}
         {welcomeSubtitle && (
-          <div className="mt-1.5 text-center text-[13.5px] text-[var(--text-3)]">
+          <p className="mt-2 max-w-[520px] text-sm leading-7 text-[var(--text-2)]">
             {welcomeSubtitle}
+          </p>
+        )}
+        {descriptionNode}
+        {showSuggestions && (
+          <div className="mt-6 grid w-full max-w-[560px] grid-cols-2 gap-2.5 max-sm:grid-cols-1">
+            {questions.map((question) => (
+              <button
+                type="button"
+                key={question}
+                className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 py-3 text-left text-[13px] text-[var(--text-2)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)] disabled:pointer-events-none disabled:opacity-50"
+                onClick={() => doSend(question)}
+              >
+                {question}
+              </button>
+            ))}
           </div>
         )}
-        {questions.length > 0 &&
-          resolveUiConfig(appData?.site).components.show_suggested_questions && (
-            <div className="mt-6 grid w-full max-w-2xl grid-cols-2 gap-2 max-sm:grid-cols-1">
-              {questions.map((question) => (
-                <button
-                  type="button"
-                  key={question}
-                  className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3.5 py-3 text-left text-[13px] text-[var(--text-2)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)] disabled:pointer-events-none disabled:opacity-50"
-                  onClick={() => doSend(question)}
-                >
-                  {question}
-                </button>
-              ))}
-            </div>
-          )}
+        {showForm && <InputsForm defaultOpen={hasRequiredField} />}
       </div>
     )
-  }, [
-    appData?.site,
-    chatList,
-    collapsed,
-    currentConversationId,
-    inputsForms.length,
-    respondingState,
-    allInputsHidden,
-    doSend,
-  ])
+  }, [appData?.site, chatList, isWelcome, allInputsHidden, inputsForms, descriptionNode, doSend])
 
   const answerIcon =
     appData?.site && appData.site.use_icon_as_answer_icon ? (
@@ -436,22 +415,19 @@ const ChatWrapper = () => {
         speechToTextTarget={speechToTextTarget}
         chatList={messageList}
         isResponding={respondingState}
+        centeredInput={isWelcome}
         chatContainerInnerClassName={`mx-auto pt-6 w-full max-w-[768px] ${isMobile && 'px-4'}`}
-        chatFooterClassName="pb-4"
-        chatFooterInnerClassName={`mx-auto w-full max-w-[768px] ${isMobile ? 'px-2' : 'px-4'}`}
+        chatFooterClassName={isWelcome ? undefined : 'pb-4'}
+        chatFooterInnerClassName={
+          isWelcome ? 'w-full' : `mx-auto w-full max-w-[768px] ${isMobile ? 'px-2' : 'px-4'}`
+        }
         onSend={doSend}
         inputs={currentConversationId ? (currentConversationInputs as any) : newConversationInputs}
         inputsForm={inputsForms}
         onRegenerate={doRegenerate}
         onStopResponding={handleStop}
         onHumanInputFormSubmit={handleSubmitHumanInputForm}
-        chatNode={
-          <>
-            {descriptionNode}
-            {chatNode}
-            {welcome}
-          </>
-        }
+        chatNode={welcomeNode}
         allToolIcons={appMeta?.tool_icons || {}}
         onFeedback={handleFeedback}
         suggestedQuestions={suggestedQuestions}
@@ -459,7 +435,6 @@ const ChatWrapper = () => {
         hideProcessDetail
         switchSibling={doSwitchSibling}
         inputDisabled={inputDisabled}
-        sidebarCollapseState={sidebarCollapseState}
         renderAgentContent={renderAgentContent}
         questionIcon={
           initUserVariables?.avatar_url ? (

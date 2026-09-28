@@ -68,6 +68,12 @@ export type ChatProps = {
   onFeatureBarClick?: (state: boolean) => void
   noSpacing?: boolean
   inputDisabled?: boolean
+  /**
+   * 空态欢迎屏布局（chat 单元重写，mockup 类型1）：滚动容器切换为整屏流，
+   * 消息列隐藏、chatNode 成居中欢迎列、输入区从底部 dock 变为流内居中。
+   * 仅条件类名切换——DOM 结构与 ChatInputArea 实例位置不变（保草稿与焦点）。
+   */
+  centeredInput?: boolean
   inputPlaceholder?: string
   inputPlaceholderBotName?: string
   sendButtonLabel?: string
@@ -129,6 +135,7 @@ const Chat: FC<ChatProps> = ({
   onFeatureBarClick,
   noSpacing,
   inputDisabled,
+  centeredInput = false,
   inputPlaceholder,
   inputPlaceholderBotName,
   sendButtonLabel,
@@ -167,6 +174,7 @@ const Chat: FC<ChatProps> = ({
     useChatLayout({
       chatList,
       sidebarCollapseState,
+      centeredInput,
     })
 
   const hasTryToAsk =
@@ -191,23 +199,39 @@ const Chat: FC<ChatProps> = ({
       onFeedback={onFeedback}
       getHumanInputNodeData={getHumanInputNodeData}
     >
-      <div data-testid="chat-root" className={cn('relative h-full', isTryApp && 'flex flex-col')}>
+      <div
+        data-testid="chat-root"
+        className={cn(
+          'h-full',
+          centeredInput
+            ? // 欢迎屏：整屏滚动流（mx-auto/mt-auto + footer 的 mb-auto 双自动外边距对分余量=整体垂直居中）
+              'flex flex-col overflow-x-hidden overflow-y-auto'
+            : 'relative',
+          isTryApp && 'flex flex-col',
+        )}
+      >
         <div
           data-testid="chat-container"
           ref={chatContainerRef}
           className={cn(
-            'relative h-full overflow-x-hidden overflow-y-auto',
+            'relative overflow-x-hidden',
+            centeredInput
+              ? // 欢迎屏：自身成居中列（不可再 h-full/内部滚动，滚动在 chat-root）
+                'mx-auto mt-auto w-full max-w-[720px] shrink-0 overflow-y-visible'
+              : 'h-full overflow-y-auto',
             isTryApp && 'h-0 grow',
             chatContainerClassName,
           )}
         >
           {chatNode}
-          {/* 消息列（mockup chat-col）：720px 居中，flex-col gap-26px 驱动消息间距（消息自身不再带 mb） */}
+          {/* 消息列（mockup chat-col）：720px 居中，flex-col gap-26px 驱动消息间距（消息自身不再带 mb）；欢迎屏态隐藏（无可见消息） */}
           <div
             ref={chatContainerInnerRef}
             className={cn(
-              'mx-auto flex w-full max-w-[720px] flex-col gap-[26px]',
+              'mx-auto w-full max-w-[720px] flex-col gap-[26px]',
               !noSpacing && 'px-6 pt-7 pb-5',
+              // 欢迎屏态隐藏消息列（无可见消息）;hidden/flex 互斥分支,避免同类工具冲突
+              centeredInput ? 'hidden' : 'flex',
               chatContainerInnerClassName,
               isTryApp && 'px-0',
             )}
@@ -254,7 +278,11 @@ const Chat: FC<ChatProps> = ({
         <div
           data-testid="chat-footer"
           className={cn(
-            'pointer-events-none absolute bottom-0 z-10 flex justify-center bg-chat-input-mask',
+            'pointer-events-none z-10 flex justify-center',
+            centeredInput
+              ? // 欢迎屏：流内居中（去 absolute/渐变罩；mb-auto 与容器 mt-auto 对分余量）
+                'static mx-auto mt-6 mb-auto w-full max-w-[720px] shrink-0 px-4 pb-7 sm:px-6 sm:pb-10'
+              : 'absolute bottom-0 bg-chat-input-mask',
             (hasTryToAsk || !noChatInput) && chatFooterClassName,
           )}
           ref={chatFooterRef}

@@ -68,53 +68,57 @@ describe('InputsFormNode', () => {
 
   it('should render nothing if allInputsHidden is true', () => {
     setMockContext({ allInputsHidden: true })
-    const { container } = render(<InputsFormNode collapsed={true} setCollapsed={vi.fn()} />)
+    const { container } = render(<InputsFormNode />)
     expect(container.firstChild).toBeNull()
   })
 
   it('should render nothing if inputsForms array is empty', () => {
     setMockContext({ inputsForms: [] })
-    const { container } = render(<InputsFormNode collapsed={true} setCollapsed={vi.fn()} />)
+    const { container } = render(<InputsFormNode />)
     expect(container.firstChild).toBeNull()
   })
 
-  it('should render collapsed state with edit button', async () => {
+  it('should collapse by default when defaultOpen is false (全选填折叠为「对话前请完善信息 ▾」)', async () => {
     const user = userEvent.setup()
-    const setCollapsed = vi.fn()
-    setMockContext({ currentConversationId: '' })
-    render(<InputsFormNode collapsed={true} setCollapsed={setCollapsed} />)
+    render(<InputsFormNode defaultOpen={false} />)
 
-    expect(screen.getByText('share.chat.chatSettingsTitle')).toBeInTheDocument()
-
-    // 重写后折叠钮为 chevron（aria-expanded=false 表示收起态）
-    const toggleBtn = screen.getByRole('button', { name: '' }) // 无文案图标钮
-    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
-    await user.click(toggleBtn)
-    expect(setCollapsed).toHaveBeenCalledWith(false)
-  })
-
-  it('should render expanded state with close button when a conversation exists', async () => {
-    const user = userEvent.setup()
-    const setCollapsed = vi.fn()
-    setMockContext({ currentConversationId: 'conv-1' })
-    render(<InputsFormNode collapsed={false} setCollapsed={setCollapsed} />)
-
-    // Real InputsFormContent should render the label
-    expect(screen.getByText('Test Label')).toBeInTheDocument()
+    // 标题行恒在,折叠态文案=对话前请完善信息
+    expect(screen.getByText('share.chat.completeInfoBeforeChat')).toBeInTheDocument()
+    // 折叠时表单内容不渲染
+    expect(screen.queryByText('Test Label')).not.toBeInTheDocument()
 
     const toggleBtn = screen.getByRole('button', { name: '' })
-    expect(toggleBtn).toHaveAttribute('aria-expanded', 'true')
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
+
     await user.click(toggleBtn)
-    expect(setCollapsed).toHaveBeenCalledWith(true)
+    expect(screen.getByText('Test Label')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '' })).toHaveAttribute('aria-expanded', 'true')
   })
 
-  it('should render start chat button with theme styling when no conversation exists', async () => {
+  it('should expand by default when defaultOpen is true (有必填默认展开)', async () => {
     const user = userEvent.setup()
-    const setCollapsed = vi.fn()
+    setMockContext({
+      inputsForms: [
+        { variable: 'req', type: InputVarType.textInput, label: 'Required Label', required: true },
+      ],
+    })
+    render(<InputsFormNode defaultOpen={true} />)
+
+    expect(screen.getByText('share.chat.completeInfoBeforeChat')).toBeInTheDocument()
+    expect(screen.getByText('Required Label')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '' })).toHaveAttribute('aria-expanded', 'true')
+
+    // 展开态仍可手动折叠
+    await user.click(screen.getByRole('button', { name: '' }))
+    expect(screen.queryByText('Required Label')).not.toBeInTheDocument()
+  })
+
+  it('should render start chat button with accent styling when no conversation exists', async () => {
+    const user = userEvent.setup()
     // theme.primaryColor 内联机制已退役：开始钮吃作用域 accent 类（chat_color_theme 由壳层注入 --accent 覆盖）
     setMockContext({ currentConversationId: '' })
 
-    render(<InputsFormNode collapsed={false} setCollapsed={setCollapsed} />)
+    render(<InputsFormNode defaultOpen={true} />)
     const startBtn = screen.getByRole('button', { name: /share.chat.startChat/i })
 
     expect(startBtn).toBeInTheDocument()
@@ -122,23 +126,31 @@ describe('InputsFormNode', () => {
 
     await user.click(startBtn)
     expect(mockHandleStartChat).toHaveBeenCalled()
-    expect(setCollapsed).toHaveBeenCalledWith(true)
+    // 开始聊天后表单收起(内部状态)
+    expect(screen.queryByText('Test Label')).not.toBeInTheDocument()
+  })
+
+  it('should not render start chat button when a conversation exists', () => {
+    setMockContext({ currentConversationId: 'conv-1' })
+    render(<InputsFormNode defaultOpen={true} />)
+
+    expect(screen.getByText('Test Label')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /share.chat.startChat/i })).not.toBeInTheDocument()
   })
 
   it('should apply mobile specific classes when isMobile is true', () => {
     setMockContext({ isMobile: true })
-    const { container } = render(<InputsFormNode collapsed={false} setCollapsed={vi.fn()} />)
+    render(<InputsFormNode defaultOpen={true} />)
 
-    // Prefer selecting by a test id if the component exposes it. Fallback to queries that
-    // don't rely on internal DOM structure so tests are less brittle.
-    const outerDiv =
-      screen.queryByTestId('inputs-form-node') ?? (container.firstChild as HTMLElement)
-    expect(outerDiv).toBeTruthy()
-    // Check for mobile-specific layout classes (pt-4)
-
-    // 重写后移动端差异：外层 pt-4 + 内容区 px-3
-    expect(outerDiv.className).toContain('pt-4')
+    // 移动端内容区 px-3(桌面 px-4)
     const contentWrapper = screen.getByText('Test Label').closest('[class*="px-3"]')
     expect(contentWrapper).toBeInTheDocument()
+  })
+
+  it('should render as a full-width welcome-flow block (表单在欢迎屏流内,与 720 列同宽)', () => {
+    const { container } = render(<InputsFormNode defaultOpen={false} />)
+    const root = container.firstChild as HTMLElement
+    expect(root.className).toContain('w-full')
+    expect(root.className).toContain('text-left')
   })
 })

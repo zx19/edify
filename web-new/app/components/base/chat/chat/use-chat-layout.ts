@@ -5,6 +5,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 type UseChatLayoutOptions = {
   chatList: ChatItem[]
   sidebarCollapseState?: boolean
+  /**
+   * 空态欢迎屏布局（chat 单元重写）：footer 在流内居中、不再 absolute 盖底——
+   * 测量副作用（容器 paddingBottom、footer 宽度内联写入）整体停用,
+   * 并在模式切换时清理/恢复内联样式。
+   */
+  centeredInput?: boolean
 }
 
 const setStyleValue = (
@@ -15,7 +21,11 @@ const setStyleValue = (
   if (element.style[property] !== value) element.style[property] = value
 }
 
-export const useChatLayout = ({ chatList, sidebarCollapseState }: UseChatLayoutOptions) => {
+export const useChatLayout = ({
+  chatList,
+  sidebarCollapseState,
+  centeredInput = false,
+}: UseChatLayoutOptions) => {
   const [width, setWidth] = useState(0)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const chatContainerInnerRef = useRef<HTMLDivElement>(null)
@@ -45,6 +55,9 @@ export const useChatLayout = ({ chatList, sidebarCollapseState }: UseChatLayoutO
       setWidth((currentWidth) => (currentWidth === nextWidth ? currentWidth : nextWidth))
     }
 
+    // 欢迎屏流内布局:footer 尺寸由 CSS 承担,不写内联宽度
+    if (centeredInput) return
+
     if (chatContainerRef.current && chatFooterRef.current)
       setStyleValue(chatFooterRef.current, 'width', `${chatContainerRef.current.clientWidth}px`)
 
@@ -54,7 +67,7 @@ export const useChatLayout = ({ chatList, sidebarCollapseState }: UseChatLayoutO
         'width',
         `${chatContainerInnerRef.current.clientWidth}px`,
       )
-  }, [])
+  }, [centeredInput])
 
   const scheduleResizeObserverUpdate = useCallback(() => {
     if (resizeObserverFrameRef.current !== null) return
@@ -105,6 +118,9 @@ export const useChatLayout = ({ chatList, sidebarCollapseState }: UseChatLayoutO
   }, [handleWindowResize])
 
   useEffect(() => {
+    // 欢迎屏流内布局:footer 不参与绝对定位测量,观察者整体停用
+    if (centeredInput) return
+
     if (chatFooterRef.current && chatContainerRef.current) {
       const resizeContainerObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
@@ -133,7 +149,25 @@ export const useChatLayout = ({ chatList, sidebarCollapseState }: UseChatLayoutO
         resizeFooterObserver.disconnect()
       }
     }
-  }, [scheduleResizeObserverUpdate])
+  }, [scheduleResizeObserverUpdate, centeredInput])
+
+  // 模式切换:进欢迎屏清掉对话态写入的内联尺寸;回对话态补一次测量(观察者首帧前不闪动)
+  useEffect(() => {
+    if (centeredInput) {
+      if (chatContainerRef.current) setStyleValue(chatContainerRef.current, 'paddingBottom', '')
+      if (chatFooterRef.current) setStyleValue(chatFooterRef.current, 'width', '')
+      if (chatFooterInnerRef.current) setStyleValue(chatFooterInnerRef.current, 'width', '')
+      return
+    }
+    if (chatFooterRef.current && chatContainerRef.current) {
+      setStyleValue(
+        chatContainerRef.current,
+        'paddingBottom',
+        `${chatFooterRef.current.getBoundingClientRect().height}px`,
+      )
+    }
+    handleWindowResize()
+  }, [centeredInput, handleWindowResize])
 
   useEffect(() => {
     const setUserScrolled = () => {

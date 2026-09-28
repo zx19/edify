@@ -176,11 +176,183 @@ describe('ChatWrapper', () => {
 
     render(<ChatWrapper />)
 
-    expect(await screen.findByText('Welcome'))!.toBeInTheDocument()
+    // 欢迎屏结构：居中列 + h1 开场白 + 建议问题 2×2 卡
+    const welcomeScreen = await screen.findByTestId('welcome-screen')
+    expect(welcomeScreen).toBeInTheDocument()
+    const title = screen.getByRole('heading', { level: 1 })
+    expect(title).toHaveTextContent('Welcome')
+    const suggestGrid = welcomeScreen.querySelector('.grid-cols-2')
+    expect(suggestGrid).toHaveClass('grid', 'max-w-[560px]')
+
     expect(await screen.findByText('Q1'))!.toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Q1'))
     expect(handleSend).toHaveBeenCalled()
+  })
+
+  it('should render welcome subtitle only when ui_config brand.welcome_subtitle is set', async () => {
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '',
+      appData: {
+        ...mockAppData,
+        site: {
+          ...mockAppData.site,
+          ui_config: { brand: { welcome_subtitle: 'Sub title text' } },
+        },
+      } as unknown as AppData,
+    })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
+
+    const { rerender } = render(<ChatWrapper />)
+    expect(await screen.findByText('Sub title text'))!.toBeInTheDocument()
+
+    // 副标题缺省(空串) → 不渲染
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '',
+    })
+    rerender(<ChatWrapper />)
+    expect(screen.queryByText('Sub title text')).not.toBeInTheDocument()
+    expect(screen.getByTestId('welcome-screen').querySelector('p')).toBeNull()
+  })
+
+  it('should collapse the app description into a single clamped line with an expand toggle', async () => {
+    // jsdom 无布局：临时垫 scrollHeight/clientHeight 让「展开」门控生效
+    const scrollHeightDesc = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollHeight')
+    const clientHeightDesc = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight')
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      get() {
+        return 80
+      },
+    })
+    Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
+      configurable: true,
+      get() {
+        return 20
+      },
+    })
+    const restoreLayoutProps = () => {
+      for (const [prop, desc] of [
+        ['scrollHeight', scrollHeightDesc],
+        ['clientHeight', clientHeightDesc],
+      ] as const) {
+        if (desc) Object.defineProperty(HTMLElement.prototype, prop, desc)
+        else delete (HTMLElement.prototype as unknown as Record<string, unknown>)[prop]
+      }
+    }
+
+    try {
+      vi.mocked(useChatWithHistoryContext).mockReturnValue({
+        ...defaultContextValue,
+        currentConversationId: '',
+        appData: {
+          ...mockAppData,
+          site: {
+            ...mockAppData.site,
+            description: 'A very long description line',
+          },
+        } as unknown as AppData,
+      })
+      vi.mocked(useChat).mockReturnValue({
+        ...defaultChatHookReturn,
+        chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+      } as unknown as ChatHookReturn)
+
+      render(<ChatWrapper />)
+
+      const welcomeScreen = await screen.findByTestId('welcome-screen')
+      const descLine = screen.getByText('A very long description line')
+      expect(descLine).toHaveClass('line-clamp-1')
+      expect(descLine).not.toHaveClass('line-clamp-3')
+
+      // 「展开」→ 去掉 clamp;再点「折叠」→ 恢复
+      const expandBtn = await screen.findByRole('button', { name: 'share.chat.expand' })
+      fireEvent.click(expandBtn)
+      expect(screen.getByText('A very long description line')).not.toHaveClass('line-clamp-1')
+      fireEvent.click(screen.getByRole('button', { name: 'share.chat.collapse' }))
+      expect(screen.getByText('A very long description line')).toHaveClass('line-clamp-1')
+
+      // 描述行位于欢迎屏流内（独立描述卡已取消）
+      expect(welcomeScreen.contains(descLine)).toBe(true)
+    } finally {
+      restoreLayoutProps()
+    }
+  })
+
+  it('should center the composer inside the welcome flow in empty state (条件类名切换)', async () => {
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '',
+    })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
+
+    render(<ChatWrapper />)
+
+    const footer = screen.getByTestId('chat-footer')
+    expect(footer).toHaveClass('static', 'mx-auto', 'mb-auto')
+    expect(footer).not.toHaveClass('absolute', 'bg-chat-input-mask')
+    // 消息列隐藏(无可见消息);滚动容器=chat-root 整屏流
+    const container = screen.getByTestId('chat-container')
+    expect(container).toHaveClass('mx-auto', 'mt-auto', 'max-w-[720px]')
+    expect(container).not.toHaveClass('h-full')
+    expect(container.firstElementChild?.nextElementSibling).toHaveClass('hidden')
+    expect(screen.getByTestId('chat-root')).toHaveClass('overflow-y-auto')
+    // 输入区仍在 DOM 中（欢迎屏流内、视口中心）
+    expect(screen.getByRole('textbox')).toBeInTheDocument()
+    // 欢迎屏态布局测量停用:footer/容器不写内联尺寸(use-chat-layout centeredInput)
+    expect(footer.style.width).toBe('')
+    expect(container.style.paddingBottom).toBe('')
+  })
+
+  it('should dock the composer at the bottom in conversation mode', () => {
+    render(<ChatWrapper />)
+
+    const footer = screen.getByTestId('chat-footer')
+    expect(footer).toHaveClass('absolute', 'bottom-0', 'bg-chat-input-mask')
+  })
+
+  it('should keep the same composer instance across welcome-to-chat transition (保草稿)', () => {
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '',
+    })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
+
+    const { rerender } = render(<ChatWrapper />)
+    const textarea = screen.getByRole('textbox') as HTMLTextAreaElement
+    fireEvent.change(textarea, { target: { value: 'draft message' } })
+    expect(textarea.value).toBe('draft message')
+
+    // 首发后落底：hasSent 由 doSend 触发，这里直接切到对话态模拟
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: 'conv-1',
+    })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [
+        { id: 'q1', content: 'Hi' },
+        { id: 'a1', isAnswer: true, content: 'Hello' },
+      ],
+    } as unknown as ChatHookReturn)
+    rerender(<ChatWrapper />)
+
+    const dockedTextarea = screen.getByRole('textbox') as HTMLTextAreaElement
+    // 同一 DOM 节点 = 同一组件实例（条件类名而非条件挂载）
+    expect(dockedTextarea).toBe(textarea)
+    expect(dockedTextarea.value).toBe('draft message')
+    expect(screen.getByTestId('chat-footer')).toHaveClass('absolute', 'bottom-0')
   })
 
   it('should use opening statement from appConfig when conversation item has no introduction', () => {
@@ -1074,41 +1246,89 @@ describe('ChatWrapper', () => {
     expect(screen.getByText('User message'))!.toBeInTheDocument()
   })
 
-  it('should show chatNode and inputs form on desktop for new conversation', () => {
+  it('should show inputs form inside the welcome flow for new conversation (有必填默认展开)', async () => {
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '',
+      isMobile: false,
+      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: true }],
+    })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
+
+    render(<ChatWrapper />)
+    // 变量表单=欢迎屏流内区块;有必填默认展开
+    const welcomeScreen = await screen.findByTestId('welcome-screen')
+    expect(welcomeScreen).toHaveTextContent('share.chat.completeInfoBeforeChat')
+    const fieldLabel = screen.getByText('Test')
+    expect(fieldLabel).toBeInTheDocument()
+    expect(welcomeScreen.contains(fieldLabel)).toBe(true)
+  })
+
+  it('should collapse the inputs form by default when all fields are optional (全选填折叠)', async () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       currentConversationId: '',
       isMobile: false,
       inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: false }],
     })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
 
     render(<ChatWrapper />)
-    expect(screen.getByText('Test'))!.toBeInTheDocument()
+    // 全选填 → 折叠为「对话前请完善信息 ▾」,字段不渲染;展开后出现
+    expect(screen.getByText('share.chat.completeInfoBeforeChat')).toBeInTheDocument()
+    expect(screen.queryByText('Test')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: '' }))
+    expect(await screen.findByText('Test')).toBeInTheDocument()
   })
 
-  it('should show chatNode on mobile for new conversation only', () => {
+  it('should not render the in-flow inputs form for existing conversation (变量查看走 header)', () => {
+    vi.mocked(useChatWithHistoryContext).mockReturnValue({
+      ...defaultContextValue,
+      currentConversationId: '123',
+      isMobile: false,
+      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: false }],
+    })
+
+    render(<ChatWrapper />)
+    expect(screen.queryByText('share.chat.completeInfoBeforeChat')).not.toBeInTheDocument()
+    expect(screen.queryByText('Test')).not.toBeInTheDocument()
+  })
+
+  it('should show inputs form inside the welcome flow on mobile for new conversation only', async () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       currentConversationId: '',
       isMobile: true,
-      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: false }],
+      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: true }],
     })
+    vi.mocked(useChat).mockReturnValue({
+      ...defaultChatHookReturn,
+      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+    } as unknown as ChatHookReturn)
 
     const { rerender } = render(<ChatWrapper />)
-    expect(screen.getByText('Test'))!.toBeInTheDocument()
+    const fieldLabel = await screen.findByText('Test')
+    expect(screen.getByTestId('welcome-screen').contains(fieldLabel)).toBe(true)
 
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       currentConversationId: '123',
       isMobile: true,
-      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: false }],
+      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: true }],
     })
 
     rerender(<ChatWrapper />)
     expect(screen.queryByText('Test')).not.toBeInTheDocument()
   })
 
-  it('should not show welcome when responding', () => {
+  it('should leave welcome mode once the new conversation has visible messages', () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue({
       ...defaultContextValue,
       currentConversationId: '',
@@ -1116,52 +1336,26 @@ describe('ChatWrapper', () => {
 
     vi.mocked(useChat).mockReturnValue({
       ...defaultChatHookReturn,
-      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
+      chatList: [
+        { id: '1', isOpeningStatement: true, content: 'Welcome' },
+        { id: '2', content: 'User message' },
+      ],
       isResponding: true,
     } as unknown as ChatHookReturn)
 
     render(<ChatWrapper />)
-    const welcomeElement = screen.queryByText('Welcome')
-    if (welcomeElement) {
-      const welcomeContainer = welcomeElement.closest('.min-h-\\[50vh\\]')
-      expect(welcomeContainer).toBeNull()
-    } else {
-      expect(welcomeElement).toBeNull()
-    }
+    expect(screen.queryByTestId('welcome-screen')).not.toBeInTheDocument()
+    expect(screen.getByTestId('chat-footer')).toHaveClass('absolute', 'bottom-0')
   })
 
-  it('should not show welcome for existing conversation', () => {
+  it('should not show welcome screen for existing conversation', () => {
     vi.mocked(useChat).mockReturnValue({
       ...defaultChatHookReturn,
       chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
     } as unknown as ChatHookReturn)
 
     render(<ChatWrapper />)
-    const welcomeElement = screen.queryByText('Welcome')
-    if (welcomeElement) {
-      const welcomeContainer = welcomeElement.closest('.min-h-\\[50vh\\]')
-      expect(welcomeContainer).toBeNull()
-    }
-  })
-
-  it('should not show welcome when inputs are visible and not collapsed', () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '',
-      inputsForms: [{ variable: 'test', label: 'Test', type: 'text-input', required: false }],
-    })
-
-    vi.mocked(useChat).mockReturnValue({
-      ...defaultChatHookReturn,
-      chatList: [{ id: '1', isOpeningStatement: true, content: 'Welcome' }],
-    } as unknown as ChatHookReturn)
-
-    render(<ChatWrapper />)
-    const welcomeElement = screen.queryByText('Welcome')
-    if (welcomeElement) {
-      const welcomeInSpecialContainer = welcomeElement.closest('.min-h-\\[50vh\\]')
-      expect(welcomeInSpecialContainer).toBeNull()
-    }
+    expect(screen.queryByTestId('welcome-screen')).not.toBeInTheDocument()
   })
 
   it('should not render the answer icon inside the message flow (D3 去头像，身份由 header/欢迎屏承担)', () => {

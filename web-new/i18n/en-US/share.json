@@ -2,6 +2,7 @@
   "chat.chatFormTip": "Chat settings cannot be modified after the chat has started.",
   "chat.chatSettingsTitle": "New chat setup",
   "chat.collapse": "Collapse",
+  "chat.completeInfoBeforeChat": "Complete your info before chatting",
   "chat.conversationHistory": "Conversation history",
   "chat.deleteConversation.content": "Are you sure you want to delete this conversation?",
   "chat.deleteConversation.title": "Delete conversation",

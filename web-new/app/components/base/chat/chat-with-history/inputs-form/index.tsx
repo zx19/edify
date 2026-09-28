@@ -5,29 +5,31 @@ import InputsFormContent from '@/app/components/base/chat/chat-with-history/inpu
 import { useChatWithHistoryContext } from '../context'
 
 type Props = Readonly<{
-  collapsed: boolean
-  setCollapsed: (collapsed: boolean) => void
+  /** 初始展开：有必填字段时由调用方传 true（有必填默认展开 / 全选填折叠） */
+  defaultOpen?: boolean
 }>
 
 /**
- * 变量表单卡（chat 单元重写，mockup 类型1 欢迎屏）：
- * - 卡片：token 边框/底色/radius 14；标题行可折叠
+ * 变量表单卡（chat 单元重写，mockup 类型1 欢迎屏流内区块）：
+ * - 与欢迎屏同 720 列：全宽卡片（token 边框/底色/radius 14），标题行可折叠
+ * - 折叠语义：有必填默认展开 / 全选填折叠为「对话前请完善信息 ▾」（折叠状态组件内自治）
  * - 「开始聊天」accent 实心钮（吃壳层注入的 --accent；createTheme 直改色机制退役）
  */
-const InputsFormNode = ({ collapsed, setCollapsed }: Props) => {
+const InputsFormNode = ({ defaultOpen = false }: Props) => {
   const { t } = useTranslation()
   const { isMobile, currentConversationId, handleStartChat, allInputsHidden, inputsForms } =
     useChatWithHistoryContext()
+  const [collapsed, setCollapsed] = React.useState(!defaultOpen)
 
   if (allInputsHidden || inputsForms.length === 0) return null
 
   return (
-    <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
-      <div className="w-full max-w-2xl rounded-[14px] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+    <div className="mt-6 w-full text-left">
+      <div className="w-full rounded-[14px] border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
         <div className="flex items-center gap-2.5 px-4 py-3">
           <span aria-hidden className="i-ri-list-check size-4 text-[var(--text-3)]" />
           <div className="grow text-[13px] font-semibold text-[var(--text-1)]">
-            {t(($) => $['chat.chatSettingsTitle'], { ns: 'share' })}
+            {t(($) => $['chat.completeInfoBeforeChat'], { ns: 'share' })}
           </div>
           <button
             type="button"
