@@ -420,7 +420,7 @@ const ChatWrapper = () => {
         chatContainerInnerClassName={`mx-auto w-full ${isMobile && 'px-4'}`}
         chatFooterClassName={isWelcome ? undefined : 'pb-4'}
         chatFooterInnerClassName={
-          isWelcome ? 'w-full' : `mx-auto w-full max-w-[768px] ${isMobile ? 'px-2' : 'px-4'}`
+          isWelcome ? 'w-full' : `mx-auto w-full max-w-[720px] ${isMobile ? 'px-2' : 'px-4'}`
         }
         onSend={doSend}
         inputs={currentConversationId ? (currentConversationInputs as any) : newConversationInputs}
