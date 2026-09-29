@@ -57,7 +57,10 @@ export const resolveCookieRewriteLocalScopeKey = (
 }
 
 export const toScopedLocalCookieName = (cookieName: string, localScopeKey: string) =>
-  `${LOCAL_SCOPED_COOKIE_PREFIX}_${localScopeKey}_${toLocalCookieName(cookieName)}`
+  // 隔离名原样保留上游真实 cookie 名(含 __Host-/__Secure- 与否)——回译时无损奉还,
+  // 不依赖协议猜测前缀:https 子路径上游(api token.py:子路径不用 __Host-)发的是普通名,
+  // 回译也必须回普通名,否则上游读不到 → 401 死循环(2026-09-29 qa-xai 实证)
+  `${LOCAL_SCOPED_COOKIE_PREFIX}_${localScopeKey}_${cookieName}`
 
 const fromScopedLocalCookieName = (cookieName: string, localScopeKey: string) => {
   const scopedPrefix = `${LOCAL_SCOPED_COOKIE_PREFIX}_${localScopeKey}_`
@@ -108,10 +111,9 @@ export const rewriteCookieHeaderForUpstream = (
         : undefined
 
       if (scopedCookieName) {
-        const upstreamCookieName = useHostPrefix
-          ? toUpstreamCookieName(scopedCookieName, options)
-          : scopedCookieName
-        return `${upstreamCookieName}=${cookie.value}`
+        // 无损奉还原名:scopedCookieName 即上游真实 cookie 名(隔离名保留了前缀信息),
+        // 不再过 toUpstreamCookieName 的协议启发式——上游发什么名就还什么名
+        return `${scopedCookieName}=${cookie.value}`
       }
 
       if (

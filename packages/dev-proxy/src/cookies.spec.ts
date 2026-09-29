@@ -69,14 +69,34 @@ describe('dev proxy cookies', () => {
       },
     )
 
-    // Assert
+    // Assert:scoped 名保留上游原名,回译原样奉还——上游是普通名就回普通名(qa-xai https 子路径场景),
+    // 不再按协议加 __Host- 前缀(此前会回 __Host-access_token 致上游读不到 → 401)
+    expect(cookieHeader).toBe('access_token=active-token; theme=dark')
+  })
+
+  // Scenario: scoped cookies preserve the __Host- prefix for root-deployed HTTPS upstreams (round-trip).
+  it('should forward scoped cookies with their original __Host- prefix to HTTPS root upstreams', () => {
+    // Arrange
+    const scopedAccessTokenName = toScopedLocalCookieName('__Host-access_token', 'cloud')
+
+    // Act
+    const cookieHeader = rewriteCookieHeaderForUpstream(
+      `${scopedAccessTokenName}=active-token; theme=dark`,
+      {
+        hostPrefixCookies: ['access_token'],
+        localScopeKey: 'cloud',
+        useHostPrefix: true,
+      },
+    )
+
+    // Assert:__Host- 上游(根路径)原名带前缀,回译无损保留
     expect(cookieHeader).toBe('__Host-access_token=active-token; theme=dark')
   })
 
-  // Scenario: upstream auth set-cookie headers should be stored under scoped local names.
+  // Scenario: upstream auth set-cookie headers should be stored under scoped local names (原名含前缀).
   it('should rewrite upstream set-cookie headers into target-scoped local cookies', () => {
-    // Arrange
-    const scopedAccessTokenName = toScopedLocalCookieName('access_token', 'cloud')
+    // Arrange:__Host- 上游的隔离名保留其 __Host- 前缀(无损往返的基础)
+    const scopedAccessTokenName = toScopedLocalCookieName('__Host-access_token', 'cloud')
 
     // Act
     const cookies = rewriteSetCookieHeadersForLocal(

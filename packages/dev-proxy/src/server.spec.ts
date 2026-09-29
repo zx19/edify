@@ -246,17 +246,17 @@ describe('dev proxy server', () => {
       },
     })
 
-    // Assert
+    // Assert:请求侧隔离名(普通名上游场景)回译普通名;响应侧 __Host- 上游隔离名保留前缀
     const requestHeaders = fetchImpl.mock.calls[0]?.[1]?.headers
     if (!(requestHeaders instanceof Headers))
       throw new Error('Expected proxy request headers to be Headers')
 
     expect(requestHeaders.get('cookie')).toBe(
-      '__Host-access_token=current-access; __Host-csrf_token=current-csrf; theme=dark',
+      'access_token=current-access; csrf_token=current-csrf; theme=dark',
     )
     expect(requestHeaders.get('x-csrf-token')).toBe('current-csrf')
     expect(response.headers.getSetCookie()).toEqual([
-      `${accessTokenCookieName}=next; Path=/; SameSite=Lax`,
+      `${toScopedLocalCookieName('__Host-access_token', localScopeKey)}=next; Path=/; SameSite=Lax`,
     ])
   })
 
@@ -343,7 +343,6 @@ describe('dev proxy server', () => {
     }
     const localScopeKey = resolveCookieRewriteLocalScopeKey(cookieRewrite, new URL(upstreamOrigin))!
     const accessTokenCookieName = toScopedLocalCookieName('access_token', localScopeKey)
-    const refreshTokenCookieName = toScopedLocalCookieName('refresh_token', localScopeKey)
 
     const proxyServer = http.createServer()
     proxyServer.on(
@@ -405,10 +404,16 @@ describe('dev proxy server', () => {
       expect(response).not.toMatch(/X-Upstream-Hop:/i)
       expect(response).not.toMatch(/Keep-Alive:/i)
       expect(response).not.toMatch(/Proxy-Authenticate:/i)
-      expect(response).toContain(`Set-Cookie: ${accessTokenCookieName}=next; Path=/; SameSite=Lax`)
-      expect(response).toContain(`Set-Cookie: ${refreshTokenCookieName}=renewed; Path=/; HttpOnly`)
-      expect(response).not.toContain('__Host-access_token')
-      expect(response).not.toContain('__Secure-refresh_token')
+      // 响应侧:__Host-/__Secure- 上游的隔离名保留前缀(无损往返,2026-09-29 起为刻意设计);
+      // 真正要守的是 Domain/Secure/Partitioned 属性被剥掉、SameSite/Path 归一
+      expect(response).toContain(
+        `Set-Cookie: ${toScopedLocalCookieName('__Host-access_token', localScopeKey)}=next; Path=/; SameSite=Lax`,
+      )
+      expect(response).toContain(
+        `Set-Cookie: ${toScopedLocalCookieName('__Secure-refresh_token', localScopeKey)}=renewed; Path=/; HttpOnly`,
+      )
+      expect(response).not.toMatch(/Domain=/i)
+      expect(response).not.toMatch(/Partitioned/i)
       expect(upstreamRequest).toEqual({
         connection: 'Upgrade',
         cookie: 'access_token=secret',
