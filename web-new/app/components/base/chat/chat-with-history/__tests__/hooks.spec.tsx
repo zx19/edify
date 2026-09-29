@@ -19,6 +19,7 @@ import {
 import { shareQueryKeys } from '@/service/use-share'
 import { CONVERSATION_ID_INFO, TAB_CONVERSATION_ID_INFO } from '../../constants'
 import { useChatWithHistory } from '.././hooks'
+import { groupConversationsByTime } from '../drawer/utils'
 
 vi.mock('@/hooks/use-app-favicon', () => ({
   useAppFavicon: vi.fn(),
@@ -1747,6 +1748,38 @@ describe('useChatWithHistory', () => {
 
       // Assert
       expect(result!.current.conversationList[0]!.id).toBe('conversation-1')
+    })
+
+    it('should stamp the placeholder with created_at ≈ now so D2 grouping lands it in today', async () => {
+      // Arrange
+      mockFetchConversations.mockResolvedValue(
+        createConversationData({
+          data: [createConversationItem({ id: 'conversation-1', name: 'First' })],
+        }),
+      )
+      mockFetchChatList.mockResolvedValue({ data: [] })
+
+      const { result } = await renderWithClient(() => useChatWithHistory())
+
+      await waitFor(() => {
+        expect(result!.current.conversationList).toHaveLength(1)
+      })
+
+      // Act
+      const before = Math.floor(Date.now() / 1000)
+      act(() => {
+        result!.current.setShowNewConversationItemInList(true)
+      })
+      const after = Math.floor(Date.now() / 1000)
+
+      // Assert: 占位项带秒级 created_at(同后端 SimpleConversation)→ D2 分组落「今天」而非「更早」
+      const placeholder = result!.current.conversationList[0]!
+      expect(placeholder.id).toBe('')
+      expect(placeholder.created_at).toBeGreaterThanOrEqual(before)
+      expect(placeholder.created_at).toBeLessThanOrEqual(after)
+      const groups = groupConversationsByTime(result!.current.conversationList)
+      expect(groups.today.map((i) => i.id)).toContain('')
+      expect(groups.earlier.map((i) => i.id)).not.toContain('')
     })
   })
 

@@ -65,7 +65,14 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
   useEffect(() => {
     if (!open) return
     const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !showRename && !showConfirm) onClose()
+      if (e.key !== 'Escape' || showRename || showConfirm) return
+      // footer「关于」InfoModal 等组件外弹窗开着时 ESC 也让位（state 不可见，改 DOM 检测，
+      // 与壳层 ⌘K 让位同口径）：Base UI Dialog/AlertDialog popup 开态带 data-open；
+      // 抽屉自身 aside 无 data-open，不自匹配
+      const modalOpen = !!document.querySelector(
+        '[role="dialog"][data-open], [role="alertdialog"][data-open]',
+      )
+      if (!modalOpen) onClose()
     }
     window.addEventListener('keydown', handleKeydown)
     return () => window.removeEventListener('keydown', handleKeydown)

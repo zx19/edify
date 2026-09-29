@@ -416,7 +416,8 @@ const ChatWrapper = () => {
         chatList={messageList}
         isResponding={respondingState}
         centeredInput={isWelcome}
-        chatContainerInnerClassName={`mx-auto pt-6 w-full max-w-[768px] ${isMobile && 'px-4'}`}
+        // 宽度/顶距沿用 chat 核心(720/pt-7),wrapper 不再覆盖——避免 twMerge 漂移回 768/pt-6
+        chatContainerInnerClassName={`mx-auto w-full ${isMobile && 'px-4'}`}
         chatFooterClassName={isWelcome ? undefined : 'pb-4'}
         chatFooterInnerClassName={
           isWelcome ? 'w-full' : `mx-auto w-full max-w-[768px] ${isMobile ? 'px-2' : 'px-4'}`

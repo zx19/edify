@@ -473,6 +473,21 @@ describe('ConversationDrawer', () => {
       expect(await screen.findByText('Test App')).toBeInTheDocument()
     })
 
+    it('should leave drawer open when Escape is pressed with the about modal open', async () => {
+      const user = userEvent.setup()
+      render(<ConversationDrawer open onClose={onClose} />)
+
+      await user.click(screen.getByRole('button', { name: 'common.userProfile.about' }))
+      expect(await screen.findByText('Test App')).toBeInTheDocument()
+
+      // ESC 由「关于」弹窗自身消费（Base UI 关闭弹窗），抽屉不连带关闭
+      await user.keyboard('{Escape}')
+      expect(onClose).not.toHaveBeenCalled()
+      await waitFor(() => {
+        expect(screen.queryByText('Test App')).not.toBeInTheDocument()
+      })
+    })
+
     it('should show logout for non-public access mode and hide when installed app', () => {
       const { unmount } = render(<ConversationDrawer open onClose={onClose} />)
       expect(screen.getByRole('button', { name: 'common.userProfile.logout' })).toBeInTheDocument()

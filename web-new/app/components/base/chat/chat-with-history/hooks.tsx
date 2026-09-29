@@ -357,6 +357,8 @@ export const useChatWithHistory = (installedAppInfo?: InstalledAppResponse) => {
         name: t(($) => $['chat.newChatDefaultName'], { ns: 'share' }),
         inputs: {},
         introduction: '',
+        // 秒级 epoch(同后端 SimpleConversation):缺 created_at 会被 D2 分组落「更早」,补 now 使其落「今天」
+        created_at: Math.floor(Date.now() / 1000),
       })
     }
     return data
