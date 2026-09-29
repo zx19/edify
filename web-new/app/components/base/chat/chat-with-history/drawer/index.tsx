@@ -47,6 +47,7 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
     handleRenameConversation,
     handleDeleteConversation,
     isResponding,
+    isMobile,
   } = useChatWithHistoryContext()
   const [keyword, setKeyword] = useState('')
   const [showConfirm, setShowConfirm] = useState<ConversationItem | null>(null)
@@ -133,15 +134,17 @@ const ConversationDrawer = ({ open, onClose }: Props) => {
           open ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
       />
-      {/* 抽屉本体：overlay 300px，不推挤布局；移动端 85% 宽由 Task 8 处理。
+      {/* 抽屉本体：overlay 桌面 300px / 移动端 85%（mockup .phone .drawer：移动端去右边框），
+          不推挤布局；断点随 context isMobile（≤640，与壳层 header 切换同口径）。
           关态 inert：移出 tab 序/禁交互（translate 动画照常，浏览器 inert 天然保留可见性） */}
       <aside
         role="dialog"
         aria-label={t(($) => $['chat.conversationHistory'], { ns: 'share' })}
         inert={!open}
         className={cn(
-          'absolute inset-y-0 left-0 z-50 flex w-[300px] flex-col border-r border-[var(--border)]',
-          'bg-[var(--card)] shadow-[var(--shadow-md)] transition-transform duration-200 ease-out',
+          'absolute inset-y-0 left-0 z-50 flex flex-col bg-[var(--card)] shadow-[var(--shadow-md)]',
+          'transition-transform duration-200 ease-out',
+          isMobile ? 'w-[85%]' : 'w-[300px] border-r border-[var(--border)]',
           open ? 'translate-x-0' : '-translate-x-full',
         )}
       >

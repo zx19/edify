@@ -158,6 +158,29 @@ describe('ConversationDrawer', () => {
     })
   })
 
+  describe('Width per breakpoint (Task 8：桌面 300px / 移动端 85%，随 context isMobile)', () => {
+    it('should use 300px width with right border on desktop', () => {
+      render(<ConversationDrawer open onClose={onClose} />)
+      const drawer = screen.getByRole('dialog', { name: 'share.chat.conversationHistory' })
+      expect(drawer.className).toContain('w-[300px]')
+      expect(drawer.className).not.toContain('w-[85%]')
+      expect(drawer.className).toContain('border-r')
+    })
+
+    it('should use 85% width without right border on mobile（mockup：.phone .drawer 85% / border-right:0）', () => {
+      vi.mocked(useChatWithHistoryContext).mockReturnValue({
+        ...mockContextValue,
+        isMobile: true,
+      } as unknown as ChatWithHistoryContextValue)
+
+      render(<ConversationDrawer open onClose={onClose} />)
+      const drawer = screen.getByRole('dialog', { name: 'share.chat.conversationHistory' })
+      expect(drawer.className).toContain('w-[85%]')
+      expect(drawer.className).not.toContain('w-[300px]')
+      expect(drawer.className).not.toContain('border-r')
+    })
+  })
+
   describe('Close interactions', () => {
     it('should call onClose when mask is clicked', async () => {
       const user = userEvent.setup()

@@ -16,16 +16,23 @@ import AppIcon from '@/app/components/base/app-icon'
 import InputsFormContent from '@/app/components/base/chat/chat-with-history/inputs-form/content'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import { useChatWithHistoryContext } from './context'
-import MobileOperationDropdown from './header/mobile-operation-dropdown'
 import Operation from './header/operation'
-import Sidebar from './sidebar'
 
+/**
+ * 移动顶栏（chat 单元重写 Task 8，对照桌面 header 与 mockup 移动端帧，40px 极薄）：
+ * 左 = ☰ 抽屉入口（drawerEnabled 时，调 onOpenDrawer；legacy 全屏侧栏浮层路径已删除）；
+ * 中 = 应用标识（图标+名，弱化，欢迎态）或 会话标题▾ 操作下拉（会话态，二者互斥同 mockup 双帧）；
+ * 右 = 查看变量（有变量表单才显示，开全屏浮层）+ ↻重置（会话内）+ ＋新对话（恒在）——图标钮移动适配。
+ * D11：header 无 ⋯ 更多菜单（菜单唯一落点=抽屉底部）；变量设置全屏浮层保留不动（仅随壳层 token 继承）。
+ */
 type HeaderInMobileProps = Readonly<{
-  /** 打开会话抽屉（Task 3 透传签名；移动端 ☰ 改接抽屉归 Task 8） */
+  /** 打开会话抽屉（☰ 按钮触发） */
   onOpenDrawer?: () => void
+  /** 抽屉入口显隐（ui_config.layout.show_conversation_sidebar 门控） */
+  drawerEnabled?: boolean
 }>
 
-const HeaderInMobile: FC<HeaderInMobileProps> = () => {
+const HeaderInMobile: FC<HeaderInMobileProps> = ({ onOpenDrawer, drawerEnabled = false }) => {
   const {
     appData,
     currentConversationId,
@@ -38,6 +45,7 @@ const HeaderInMobile: FC<HeaderInMobileProps> = () => {
     handleRenameConversation,
     conversationRenaming,
     inputsForms,
+    isResponding,
   } = useChatWithHistoryContext()
   const { t } = useTranslation()
   const isPin = pinnedConversationList.some((item) => item.id === currentConversationId)
@@ -78,69 +86,77 @@ const HeaderInMobile: FC<HeaderInMobileProps> = () => {
     },
     [showRename, handleRenameConversation, handleCancelRename],
   )
-  const [showSidebar, setShowSidebar] = useState(false)
   const [showChatSettings, setShowChatSettings] = useState(false)
 
   return (
     <>
-      <div className="flex shrink-0 items-center gap-1 border-b border-[var(--border)] bg-[var(--bg)] px-3 py-2.5">
-        <IconButton
-          aria-label={t(($) => $['sidebar.expandSidebar'], { ns: 'layout' })}
-          size="lg"
-          className="shrink-0"
-          onClick={() => setShowSidebar(true)}
-        >
-          <div aria-hidden="true" className="i-ri-menu-line h-4.5 w-4.5" />
-        </IconButton>
-        <div className="flex grow items-center justify-center">
-          {!currentConversationId && (
-            <>
-              <AppIcon
-                className="mr-2"
-                size="tiny"
-                icon={appData?.site.icon}
-                iconType={appData?.site.icon_type}
-                imageUrl={appData?.site.icon_url}
-                background={appData?.site.icon_background}
-              />
-              <div className="truncate system-md-semibold text-text-secondary">
-                {appData?.site.title}
-              </div>
-            </>
+      <header className="flex h-10 shrink-0 items-center gap-1 bg-[var(--bg)] px-2.5">
+        {drawerEnabled && (
+          <IconButton
+            aria-label={t(($) => $['chat.conversationHistory'], { ns: 'share' })}
+            size="lg"
+            className="shrink-0"
+            onClick={onOpenDrawer}
+          >
+            <span aria-hidden className="i-ri-menu-line size-4" />
+          </IconButton>
+        )}
+        {/* 应用标识（欢迎态）与会话标题（会话态）互斥，同 mockup 移动端双帧 */}
+        {!currentConversationId && (
+          <div className="flex min-w-0 items-center gap-2 rounded-lg px-1.5 py-1">
+            <AppIcon
+              size="tiny"
+              icon={appData?.site.icon}
+              iconType={appData?.site.icon_type}
+              imageUrl={appData?.site.icon_url}
+              background={appData?.site.icon_background}
+            />
+            <span className="truncate text-[13px] font-semibold text-[var(--text-2)]">
+              {appData?.site.title}
+            </span>
+          </div>
+        )}
+        {currentConversationId && currentConversationItem && (
+          <Operation
+            title={currentConversationItem?.name || ''}
+            isPinned={!!isPin}
+            togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
+            isShowDelete
+            isShowRenameConversation
+            onRenameConversation={() => handleOperate('rename')}
+            onDelete={() => handleOperate('delete')}
+          />
+        )}
+        <div className="ml-auto flex shrink-0 items-center gap-0.5">
+          {inputsForms.length > 0 && (
+            <IconButton
+              aria-label={t(($) => $['chat.viewChatSettings'], { ns: 'share' })}
+              size="lg"
+              onClick={() => setShowChatSettings(true)}
+            >
+              <span aria-hidden className="i-ri-chat-settings-line size-4" />
+            </IconButton>
           )}
           {currentConversationId && (
-            <Operation
-              title={currentConversationItem?.name || ''}
-              isPinned={!!isPin}
-              togglePin={() => handleOperate(isPin ? 'unpin' : 'pin')}
-              isShowDelete
-              isShowRenameConversation
-              onRenameConversation={() => handleOperate('rename')}
-              onDelete={() => handleOperate('delete')}
-            />
+            <IconButton
+              aria-label={t(($) => $['chat.resetChat'], { ns: 'share' })}
+              size="lg"
+              onClick={handleNewConversation}
+            >
+              <span aria-hidden className="i-ri-reset-left-line size-4" />
+            </IconButton>
           )}
-        </div>
-        <MobileOperationDropdown
-          handleResetChat={handleNewConversation}
-          handleViewChatSettings={() => setShowChatSettings(true)}
-          hideViewChatSettings={inputsForms.length < 1}
-        />
-      </div>
-      {showSidebar && (
-        <div
-          className="fixed inset-0 z-50 flex bg-background-overlay p-1"
-          onClick={() => setShowSidebar(false)}
-          data-testid="mobile-sidebar-overlay"
-        >
-          <div
-            className="flex h-full w-[calc(100vw-40px)] rounded-xl border border-[var(--border)] bg-[var(--bg)] shadow-[var(--shadow-md)]"
-            onClick={(e) => e.stopPropagation()}
-            data-testid="sidebar-content"
+          <IconButton
+            aria-label={t(($) => $['chat.newChatTip'], { ns: 'share' })}
+            size="lg"
+            disabled={!currentConversationId || isResponding}
+            onClick={handleNewConversation}
           >
-            <Sidebar />
-          </div>
+            <span aria-hidden className="i-ri-add-line size-4" />
+          </IconButton>
         </div>
-      )}
+      </header>
+      {/* 变量设置全屏浮层：保留不动（仅随壳层 token 继承） */}
       {showChatSettings && (
         <div
           className="fixed inset-0 z-50 flex justify-end bg-background-overlay p-1"

@@ -1,575 +1,408 @@
 import type { i18n } from 'i18next'
-import type { ChatConfig } from '../../types'
 import type { ChatWithHistoryContextValue } from '../context'
-import type { AppData, AppMeta } from '@/models/share'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import type { AppData, ConversationItem } from '@/models/share'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import * as ReactI18next from 'react-i18next'
-import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
-import { renderWithConsoleQuery as render } from '@/test/console/query-data'
 import { withSelectorKey } from '@/test/i18n-mock'
 import { useChatWithHistoryContext } from '../context'
 import HeaderInMobile from '../header-in-mobile'
 
-vi.mock('@/hooks/use-breakpoints', () => ({
-  default: vi.fn(),
-  MediaType: {
-    mobile: 'mobile',
-    tablet: 'tablet',
-    pc: 'pc',
-  },
-}))
-
+// Mock context module
 vi.mock('../context', () => ({
   useChatWithHistoryContext: vi.fn(),
-  ChatWithHistoryContext: {
-    Provider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  },
 }))
 
-vi.mock('@/next/navigation', () => ({
-  useRouter: vi.fn(() => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-  })),
-  usePathname: vi.fn(() => '/'),
-  useSearchParams: vi.fn(() => new URLSearchParams()),
-  useParams: vi.fn(() => ({})),
+// 变量表单内容体：全屏浮层只断言开合，不断言表单内部
+vi.mock('@/app/components/base/chat/chat-with-history/inputs-form/content', () => ({
+  default: () => <div data-testid="inputs-form-content">InputsFormContent</div>,
 }))
-
-// Sidebar mock removed to use real component
 
 const mockAppData: AppData = {
   app_id: 'test-app',
   custom_config: null,
   site: {
     title: 'Test Chat',
-    chat_color_theme: 'blue',
+    icon_type: 'emoji',
+    icon: '🤖',
+    icon_background: '#fff',
+    icon_url: '',
   },
 }
-const defaultContextValue: ChatWithHistoryContextValue = {
+
+const mockConversation = (overrides: Partial<ConversationItem> = {}): ConversationItem =>
+  ({
+    id: 'conv-1',
+    name: 'Conv 1',
+    inputs: null,
+    introduction: '',
+    ...overrides,
+  }) as ConversationItem
+
+// 默认值不含 sidebarCollapseState/handleSidebarCollapse：壳层去侧栏后移动 header 不消费 collapse 语义
+const mockContextDefaults: ChatWithHistoryContextValue = {
   appData: mockAppData,
   currentConversationId: '',
   currentConversationItem: undefined,
   inputsForms: [],
+  pinnedConversationList: [],
   handlePinConversation: vi.fn(),
   handleUnpinConversation: vi.fn(),
   handleDeleteConversation: vi.fn(),
   handleRenameConversation: vi.fn(),
   handleNewConversation: vi.fn(),
-  handleNewConversationInputsChange: vi.fn(),
-  handleStartChat: vi.fn(),
-  handleChangeConversation: vi.fn(),
-  handleNewConversationCompleted: vi.fn(),
-  handleFeedback: vi.fn(),
-  sidebarCollapseState: false,
-  handleSidebarCollapse: vi.fn(),
-  pinnedConversationList: [],
-  conversationList: [],
-  isInstalledApp: false,
-  currentChatInstanceRef: {
-    current: { handleStop: vi.fn() },
-  } as ChatWithHistoryContextValue['currentChatInstanceRef'],
-  setIsResponding: vi.fn(),
-  setClearChatList: vi.fn(),
-  appParams: {
-    system_parameters: {
-      audio_file_size_limit: 10,
-      file_size_limit: 10,
-      image_file_size_limit: 10,
-      video_file_size_limit: 10,
-      workflow_file_upload_limit: 10,
-    },
-    more_like_this: { enabled: false },
-  } as ChatConfig,
-  appMeta: { tool_icons: {} } as AppMeta,
-  appPrevChatTree: [],
-  newConversationInputs: {},
-  newConversationInputsRef: { current: {} },
-  appChatListDataLoading: false,
-  chatShouldReloadKey: '',
-  isMobile: true,
-  currentConversationInputs: null,
-  setCurrentConversationInputs: vi.fn(),
-  allInputsHidden: false,
+  isResponding: false,
   conversationRenaming: false,
+} as unknown as ChatWithHistoryContextValue
+
+type HeaderInMobileProps = Readonly<{
+  onOpenDrawer?: () => void
+  drawerEnabled?: boolean
+}>
+
+const setup = (
+  overrides: Partial<ChatWithHistoryContextValue> = {},
+  props: HeaderInMobileProps = { drawerEnabled: true, onOpenDrawer: vi.fn() },
+) => {
+  vi.mocked(useChatWithHistoryContext).mockReturnValue({
+    ...mockContextDefaults,
+    ...overrides,
+  })
+  return render(<HeaderInMobile {...props} />)
 }
 
-describe('HeaderInMobile', () => {
+describe('HeaderInMobile（Task 8：移动端极薄 header，对照桌面 header 与 mockup 移动端帧）', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.mocked(useBreakpoints).mockReturnValue(MediaType.mobile)
-    vi.mocked(useChatWithHistoryContext).mockReturnValue(defaultContextValue)
   })
 
-  it('should render title when no conversation', () => {
-    render(<HeaderInMobile />)
-    expect(screen.getByText('Test Chat'))!.toBeInTheDocument()
-  })
-
-  it('should render conversation name when active', async () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
+  describe('Structure', () => {
+    it('should render a 40px banner header without bottom border（极薄，同桌面）', () => {
+      setup()
+      const header = screen.getByRole('banner')
+      expect(header).toHaveClass('h-10')
+      expect(header.className).not.toContain('border-b')
     })
 
-    render(<HeaderInMobile />)
-    expect(await screen.findByText('Conv 1'))!.toBeInTheDocument()
+    it('should render the drawer entry (☰) with conversation-history label when drawerEnabled', () => {
+      setup({}, { drawerEnabled: true, onOpenDrawer: vi.fn() })
+      expect(
+        screen.getByRole('button', { name: 'share.chat.conversationHistory' }),
+      ).toBeInTheDocument()
+    })
+
+    it('should hide the drawer entry when drawerEnabled is false', () => {
+      setup({}, { drawerEnabled: false, onOpenDrawer: vi.fn() })
+      expect(
+        screen.queryByRole('button', { name: 'share.chat.conversationHistory' }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('should render weakened app identity (icon + name in text-2) when no conversation', () => {
+      setup({ currentConversationId: '', currentConversationItem: undefined })
+      const titleEl = screen.getByText('Test Chat')
+      expect(titleEl).toHaveClass('font-semibold')
+      expect(titleEl).toHaveClass('text-[var(--text-2)]')
+    })
+
+    it('should render the conversation title dropdown instead of app identity inside a conversation', () => {
+      setup({
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConversation(),
+      })
+      expect(screen.getByText('Conv 1')).toBeInTheDocument()
+      // mockup 移动端帧：会话态只显示会话标题，不再显示应用名
+      expect(screen.queryByText('Test Chat')).not.toBeInTheDocument()
+    })
+
+    it('should never render the legacy expand-sidebar button', () => {
+      setup()
+      expect(
+        screen.queryByRole('button', { name: 'layout.sidebar.expandSidebar' }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('should not render a ⋯ more menu (D11：菜单唯一落点=抽屉底部)', () => {
+      setup({
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConversation(),
+        inputsForms: [{ variable: 'v', label: 'V', type: 'text', required: true }],
+      })
+      expect(
+        screen.queryByRole('button', { name: 'common.operation.more' }),
+      ).not.toBeInTheDocument()
+    })
   })
 
-  it('should open and close sidebar', async () => {
-    render(<HeaderInMobile />)
+  describe('Drawer entry (replaces legacy sidebar overlay)', () => {
+    it('should invoke onOpenDrawer when ☰ is clicked instead of opening a local overlay', async () => {
+      const onOpenDrawer = vi.fn()
+      setup({}, { drawerEnabled: true, onOpenDrawer })
 
-    // Open sidebar (menu button is the first action btn)
-    const menuButton = screen.getAllByRole('button')[0]
-    fireEvent.click(menuButton!)
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.conversationHistory' }))
+      expect(onOpenDrawer).toHaveBeenCalledTimes(1)
+      // legacy 全屏侧栏浮层已删除：不再有本地 overlay
+      expect(screen.queryByTestId('mobile-sidebar-overlay')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('sidebar-content')).not.toBeInTheDocument()
+    })
 
-    // HeaderInMobile renders MobileSidebar which renders Sidebar and overlay
-    // HeaderInMobile renders MobileSidebar which renders Sidebar and overlay
-    expect(await screen.findByTestId('mobile-sidebar-overlay'))!.toBeInTheDocument()
-    expect(screen.getByTestId('sidebar-content'))!.toBeInTheDocument()
-
-    // Close sidebar via overlay click
-    fireEvent.click(screen.getByTestId('mobile-sidebar-overlay'))
-    await waitFor(() => {
+    it('should never render the legacy sidebar overlay path', () => {
+      setup()
       expect(screen.queryByTestId('mobile-sidebar-overlay')).not.toBeInTheDocument()
     })
   })
 
-  it('should not close sidebar when clicking inside sidebar content', async () => {
-    render(<HeaderInMobile />)
-
-    // Open sidebar
-    const menuButton = screen.getAllByRole('button')[0]
-    fireEvent.click(menuButton!)
-
-    expect(await screen.findByTestId('mobile-sidebar-overlay'))!.toBeInTheDocument()
-
-    // Click inside sidebar content (should not close)
-    fireEvent.click(screen.getByTestId('sidebar-content'))
-
-    // Sidebar should still be visible
-    // Sidebar should still be visible
-    expect(screen.getByTestId('mobile-sidebar-overlay'))!.toBeInTheDocument()
-  })
-
-  it('should open and close chat settings', async () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      inputsForms: [{ variable: 'test', label: 'Test', type: 'text', required: true }],
+  describe('Right action group（对照桌面 header，图标钮移动适配）', () => {
+    it('should render view-chat-settings entry whenever inputs forms exist', () => {
+      setup({
+        inputsForms: [{ variable: 'v', label: 'V', type: 'text', required: true }],
+      })
+      expect(
+        screen.getByRole('button', { name: 'share.chat.viewChatSettings' }),
+      ).toBeInTheDocument()
     })
 
-    render(<HeaderInMobile />)
-
-    // Open dropdown (More button)
-    fireEvent.click(await screen.findByRole('button', { name: 'common.operation.more' }))
-
-    // Find and click "View Chat Settings"
-    await waitFor(() => {
-      expect(screen.getByText(/share\.chat\.viewChatSettings/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/share\.chat\.viewChatSettings/i))
-
-    // Check if chat settings overlay is open
-    await waitFor(() => {
-      expect(screen.getByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
+    it('should not render view-chat-settings entry when inputsForms is empty', () => {
+      setup({ inputsForms: [] })
+      expect(
+        screen.queryByRole('button', { name: 'share.chat.viewChatSettings' }),
+      ).not.toBeInTheDocument()
     })
 
-    // Close chat settings via overlay click
-    fireEvent.click(screen.getByTestId('mobile-chat-settings-overlay'))
-    await waitFor(() => {
-      expect(screen.queryByTestId('mobile-chat-settings-overlay')).not.toBeInTheDocument()
-    })
-  })
+    it('should render reset-chat only inside an existing conversation', () => {
+      const { unmount } = setup({
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConversation(),
+      })
+      expect(screen.getByRole('button', { name: 'share.chat.resetChat' })).toBeInTheDocument()
 
-  it('should not close chat settings when clicking inside settings content', async () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      inputsForms: [{ variable: 'test', label: 'Test', type: 'text', required: true }],
-    })
-
-    render(<HeaderInMobile />)
-
-    // Open dropdown and chat settings
-    fireEvent.click(await screen.findByRole('button', { name: 'common.operation.more' }))
-    await waitFor(() => {
-      expect(screen.getByText(/share\.chat\.viewChatSettings/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/share\.chat\.viewChatSettings/i))
-
-    await waitFor(() => {
-      expect(screen.getByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
+      unmount()
+      setup({ currentConversationId: '', currentConversationItem: undefined })
+      expect(screen.queryByRole('button', { name: 'share.chat.resetChat' })).not.toBeInTheDocument()
     })
 
-    // Click inside the settings panel (find the title)
-    const settingsTitle = screen.getByText(/share\.chat\.chatSettingsTitle/i)
-    fireEvent.click(settingsTitle)
-
-    // Settings should still be visible
-    // Settings should still be visible
-    expect(screen.getByTestId('mobile-chat-settings-overlay'))!.toBeInTheDocument()
-  })
-
-  it('should hide chat settings option when no input forms', async () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      inputsForms: [],
+    it('should always render the new-chat button', () => {
+      setup({ currentConversationId: '' }, { drawerEnabled: false })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeInTheDocument()
     })
 
-    render(<HeaderInMobile />)
-
-    // Open dropdown
-    fireEvent.click(await screen.findByRole('button', { name: 'common.operation.more' }))
-
-    // "View Chat Settings" should not be present
-    await waitFor(() => {
-      expect(screen.queryByText(/share\.chat\.viewChatSettings/i)).not.toBeInTheDocument()
-    })
-  })
-
-  it('should handle new conversation', async () => {
-    const handleNewConversation = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      handleNewConversation,
+    it('should disable new-chat when already in a new conversation', () => {
+      setup({ isResponding: false, currentConversationId: '' })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeDisabled()
     })
 
-    render(<HeaderInMobile />)
-
-    // Open dropdown
-    fireEvent.click(await screen.findByRole('button', { name: 'common.operation.more' }))
-
-    // Click "New Conversation" or "Reset Chat"
-    await waitFor(() => {
-      expect(screen.getByText(/share\.chat\.resetChat/i))!.toBeInTheDocument()
+    it('should disable new-chat while responding', () => {
+      setup({ isResponding: true, currentConversationId: 'conv-1' })
+      expect(screen.getByRole('button', { name: 'share.chat.newChatTip' })).toBeDisabled()
     })
-    fireEvent.click(screen.getByText(/share\.chat\.resetChat/i))
 
-    await waitFor(() => {
+    it('should handle new conversation via the reset button', async () => {
+      const handleNewConversation = vi.fn()
+      setup({
+        handleNewConversation,
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConversation(),
+      })
+
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.resetChat' }))
+      expect(handleNewConversation).toHaveBeenCalled()
+    })
+
+    it('should handle new conversation via the new-chat button', async () => {
+      const handleNewConversation = vi.fn()
+      setup({
+        handleNewConversation,
+        currentConversationId: 'conv-1',
+        currentConversationItem: mockConversation(),
+      })
+
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.newChatTip' }))
       expect(handleNewConversation).toHaveBeenCalled()
     })
   })
 
-  it('should handle pin conversation', async () => {
-    const handlePin = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handlePinConversation: handlePin,
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-
-    // Open dropdown for conversation
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.pin/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.pin/i))
-    expect(handlePin).toHaveBeenCalledWith('1')
-  })
-
-  it('should handle unpin conversation', async () => {
-    const handleUnpin = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleUnpinConversation: handleUnpin,
-      pinnedConversationList: [{ id: '1', name: 'Conv 1', inputs: null, introduction: '' }],
-    })
-
-    render(<HeaderInMobile />)
-
-    // Open dropdown for conversation
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.unpin/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.unpin/i))
-    expect(handleUnpin).toHaveBeenCalledWith('1')
-  })
-
-  it('should handle rename conversation', async () => {
-    const handleRename = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleRenameConversation: handleRename,
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.rename/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.rename/i))
-
-    // RenameModal should be visible
-    expect(await screen.findByRole('dialog')).toBeInTheDocument()
-    const input = screen.getByDisplayValue('Conv 1')
-    fireEvent.change(input, { target: { value: 'New Name' } })
-
-    const saveButton = screen.getByRole('button', { name: /common\.operation\.save/i })
-    fireEvent.click(saveButton)
-    expect(handleRename).toHaveBeenCalledWith('1', 'New Name', expect.any(Object))
-  })
-
-  it('should cancel rename conversation', async () => {
-    const handleRename = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleRenameConversation: handleRename,
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.rename/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.rename/i))
-
-    // RenameModal should be visible
-    expect(await screen.findByRole('dialog')).toBeInTheDocument()
-
-    // Click cancel button
-    const cancelButton = screen.getByRole('button', { name: /common\.operation\.cancel/i })
-    fireEvent.click(cancelButton)
-
-    // Modal should be closed
-    await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    })
-    expect(handleRename).not.toHaveBeenCalled()
-  })
-
-  it('should show loading state while renaming', async () => {
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleRenameConversation: vi.fn(),
-      conversationRenaming: true, // Loading state
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.rename/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.rename/i))
-
-    // RenameModal should be visible with loading state
-    expect(await screen.findByRole('dialog')).toBeInTheDocument()
-  })
-
-  it('should handle delete conversation', async () => {
-    const handleDelete = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleDeleteConversation: handleDelete,
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.delete/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.delete/i))
-
-    // Confirm modal
-    await waitFor(() => {
-      expect(screen.getAllByText(/share\.chat\.deleteConversation\.title/i)[0])!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByRole('button', { name: /common\.operation\.confirm/i }))
-    expect(handleDelete).toHaveBeenCalledWith('1', expect.any(Object))
-  })
-
-  it('should cancel delete conversation', async () => {
-    const handleDelete = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleDeleteConversation: handleDelete,
-      pinnedConversationList: [],
-    })
-
-    render(<HeaderInMobile />)
-    fireEvent.click(await screen.findByText('Conv 1'))
-
-    await waitFor(() => {
-      expect(screen.getByText(/explore\.sidebar\.action\.delete/i))!.toBeInTheDocument()
-    })
-    fireEvent.click(screen.getByText(/explore\.sidebar\.action\.delete/i))
-
-    // Confirm modal should be visible
-    await waitFor(() => {
-      expect(screen.getAllByText(/share\.chat\.deleteConversation\.title/i)[0])!.toBeInTheDocument()
-    })
-
-    // Click cancel
-    fireEvent.click(screen.getByRole('button', { name: /common\.operation\.cancel/i }))
-
-    // Modal should be closed
-    await waitFor(() => {
-      expect(screen.queryByText(/share\.chat\.deleteConversation\.title/i)).not.toBeInTheDocument()
-    })
-    expect(handleDelete).not.toHaveBeenCalled()
-  })
-
-  it('should render app icon and title correctly', () => {
-    const appDataWithIcon: AppData = {
-      app_id: 'test-app',
-      custom_config: null,
-      site: {
-        title: 'My App',
-        icon: 'emoji',
-        icon_type: 'emoji',
-        icon_url: '',
-        icon_background: '#FF0000',
-      },
+  describe('变量设置全屏浮层（保留不动）', () => {
+    const withForms = {
+      inputsForms: [{ variable: 'v', label: 'V', type: 'text', required: true }],
     }
 
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      appData: appDataWithIcon,
+    it('should open the full-screen chat settings overlay from the right action group', async () => {
+      setup(withForms)
+
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.viewChatSettings' }))
+      expect(await screen.findByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
     })
 
-    render(<HeaderInMobile />)
-    expect(screen.getByText('My App'))!.toBeInTheDocument()
+    it('should close the overlay via mask click and keep it open on inner click', async () => {
+      setup(withForms)
+
+      await userEvent.click(screen.getByRole('button', { name: 'share.chat.viewChatSettings' }))
+      expect(await screen.findByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
+
+      // 点浮层内部不收起
+      fireEvent.click(screen.getByText('share.chat.chatSettingsTitle'))
+      expect(screen.getByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
+
+      // 点蒙层收起
+      fireEvent.click(screen.getByTestId('mobile-chat-settings-overlay'))
+      await waitFor(() => {
+        expect(screen.queryByTestId('mobile-chat-settings-overlay')).not.toBeInTheDocument()
+      })
+    })
   })
 
-  it('should properly show and hide modals conditionally', async () => {
-    const handleRename = vi.fn()
-    const handleDelete = vi.fn()
-
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-      handleRenameConversation: handleRename,
-      handleDeleteConversation: handleDelete,
+  describe('Conversation operations（会话标题▾ 下拉）', () => {
+    const inConversation = {
+      currentConversationId: 'conv-1',
+      currentConversationItem: mockConversation(),
       pinnedConversationList: [],
+    }
+
+    it('should handle pin conversation', async () => {
+      const handlePinConversation = vi.fn()
+      setup({ ...inConversation, handlePinConversation })
+
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.pin'))
+      expect(handlePinConversation).toHaveBeenCalledWith('conv-1')
     })
 
-    render(<HeaderInMobile />)
-
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    // Initially no modals
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(screen.queryByText('share.chat.deleteConversation.title')).not.toBeInTheDocument()
-  })
-
-  it('should use empty string fallback for delete content translation', async () => {
-    const handleDelete = vi.fn()
-    const useTranslationSpy = vi.spyOn(ReactI18next, 'useTranslation')
-    useTranslationSpy.mockReturnValue({
-      t: withSelectorKey((key: string) => (key === 'chat.deleteConversation.content' ? '' : key)),
-      i18n: {} as unknown as i18n,
-      ready: true,
-      tReady: true,
-    } as unknown as ReturnType<typeof ReactI18next.useTranslation>)
-
-    try {
-      vi.mocked(useChatWithHistoryContext).mockReturnValue({
-        ...defaultContextValue,
-        currentConversationId: '1',
-        currentConversationItem: { id: '1', name: 'Conv 1', inputs: null, introduction: '' },
-        handleDeleteConversation: handleDelete,
-        pinnedConversationList: [],
+    it('should handle unpin conversation', async () => {
+      const handleUnpinConversation = vi.fn()
+      setup({
+        ...inConversation,
+        handleUnpinConversation,
+        pinnedConversationList: [mockConversation()],
       })
 
-      render(<HeaderInMobile />)
-      fireEvent.click(await screen.findByText('Conv 1'))
-      fireEvent.click(await screen.findByText(/sidebar\.action\.delete/i))
-
-      expect(
-        await screen.findByRole('button', {
-          name: /common\.operation\.confirm|operation\.confirm/i,
-        }),
-      )!.toBeInTheDocument()
-      fireEvent.click(
-        screen.getByRole('button', { name: /common\.operation\.confirm|operation\.confirm/i }),
-      )
-      expect(handleDelete).toHaveBeenCalledWith('1', expect.any(Object))
-    } finally {
-      useTranslationSpy.mockRestore()
-    }
-  })
-
-  it('should use empty string fallback for rename modal name', async () => {
-    const handleRename = vi.fn()
-    vi.mocked(useChatWithHistoryContext).mockReturnValue({
-      ...defaultContextValue,
-      currentConversationId: '1',
-      currentConversationItem: { id: '1', name: '', inputs: null, introduction: '' },
-      handleRenameConversation: handleRename,
-      pinnedConversationList: [],
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.unpin'))
+      expect(handleUnpinConversation).toHaveBeenCalledWith('conv-1')
     })
 
-    const { container } = render(<HeaderInMobile />)
-    const operationTrigger = container
-      .querySelector('.i-ri-arrow-down-s-line')
-      ?.closest('button') as HTMLElement
-    fireEvent.click(operationTrigger)
-    fireEvent.click(
-      await screen.findByText(/explore\.sidebar\.action\.rename|sidebar\.action\.rename/i),
-    )
+    it('should handle rename conversation flow', async () => {
+      const handleRenameConversation = vi.fn()
+      setup({ ...inConversation, handleRenameConversation })
 
-    const input = await screen.findByRole('textbox')
-    expect(input)!.toHaveValue('')
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.rename'))
 
-    fireEvent.change(input, { target: { value: 'Renamed from empty' } })
-    fireEvent.click(screen.getByRole('button', { name: /common\.operation\.save/i }))
-    expect(handleRename).toHaveBeenCalledWith('1', 'Renamed from empty', expect.any(Object))
+      const input = await screen.findByDisplayValue('Conv 1')
+      await userEvent.clear(input)
+      await userEvent.type(input, 'New Name')
+      await userEvent.click(screen.getByRole('button', { name: 'common.operation.save' }))
+
+      expect(handleRenameConversation).toHaveBeenCalledWith(
+        'conv-1',
+        'New Name',
+        expect.any(Object),
+      )
+    })
+
+    it('should cancel rename conversation', async () => {
+      const handleRenameConversation = vi.fn()
+      setup({ ...inConversation, handleRenameConversation })
+
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.rename'))
+
+      expect(await screen.findByRole('dialog')).toBeInTheDocument()
+      await userEvent.click(screen.getByRole('button', { name: 'common.operation.cancel' }))
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      })
+      expect(handleRenameConversation).not.toHaveBeenCalled()
+    })
+
+    it('should show loading state while renaming', async () => {
+      setup({ ...inConversation, conversationRenaming: true })
+
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.rename'))
+
+      expect(await screen.findByRole('dialog')).toBeInTheDocument()
+    })
+
+    it('should handle delete conversation flow', async () => {
+      const handleDeleteConversation = vi.fn()
+      setup({ ...inConversation, handleDeleteConversation })
+
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.delete'))
+
+      expect(await screen.findByText('share.chat.deleteConversation.title')).toBeInTheDocument()
+      await userEvent.click(screen.getByRole('button', { name: 'common.operation.confirm' }))
+      expect(handleDeleteConversation).toHaveBeenCalledWith('conv-1', expect.any(Object))
+    })
+
+    it('should cancel delete conversation', async () => {
+      const handleDeleteConversation = vi.fn()
+      setup({ ...inConversation, handleDeleteConversation })
+
+      await userEvent.click(screen.getByText('Conv 1'))
+      await userEvent.click(await screen.findByText('explore.sidebar.action.delete'))
+
+      expect(await screen.findByText('share.chat.deleteConversation.title')).toBeInTheDocument()
+      await userEvent.click(screen.getByRole('button', { name: 'common.operation.cancel' }))
+
+      await waitFor(() => {
+        expect(screen.queryByText('share.chat.deleteConversation.title')).not.toBeInTheDocument()
+      })
+      expect(handleDeleteConversation).not.toHaveBeenCalled()
+    })
+
+    it('should use empty string fallback for delete content translation', async () => {
+      const handleDeleteConversation = vi.fn()
+      const useTranslationSpy = vi.spyOn(ReactI18next, 'useTranslation')
+      useTranslationSpy.mockReturnValue({
+        t: withSelectorKey((key: string) => (key === 'chat.deleteConversation.content' ? '' : key)),
+        i18n: {} as unknown as i18n,
+        ready: true,
+        tReady: true,
+      } as unknown as ReturnType<typeof ReactI18next.useTranslation>)
+
+      try {
+        setup({ ...inConversation, handleDeleteConversation })
+
+        await userEvent.click(screen.getByText('Conv 1'))
+        // i18n spy 返回裸 key（无 ns 前缀），用前缀无关 regex 匹配
+        await userEvent.click(await screen.findByText(/sidebar\.action\.delete/i))
+
+        const confirm = await screen.findByRole('button', {
+          name: /common\.operation\.confirm|operation\.confirm/i,
+        })
+        await userEvent.click(confirm)
+        expect(handleDeleteConversation).toHaveBeenCalledWith('conv-1', expect.any(Object))
+      } finally {
+        useTranslationSpy.mockRestore()
+      }
+    })
+
+    it('should use empty string fallback for rename modal name', async () => {
+      const handleRenameConversation = vi.fn()
+      const { container } = setup({
+        ...inConversation,
+        currentConversationItem: mockConversation({ name: '' }),
+        handleRenameConversation,
+      })
+
+      // 空名会话：通过下拉箭头定位触发器
+      const trigger = container.querySelector('.i-ri-arrow-down-s-line')?.closest('button')
+      expect(trigger).not.toBeNull()
+      await userEvent.click(trigger as HTMLElement)
+      await userEvent.click(await screen.findByText('explore.sidebar.action.rename'))
+
+      const input = await screen.findByRole('textbox')
+      expect(input).toHaveValue('')
+
+      await userEvent.type(input, 'Renamed from empty')
+      await userEvent.click(screen.getByRole('button', { name: 'common.operation.save' }))
+      expect(handleRenameConversation).toHaveBeenCalledWith(
+        'conv-1',
+        'Renamed from empty',
+        expect.any(Object),
+      )
+    })
   })
 })

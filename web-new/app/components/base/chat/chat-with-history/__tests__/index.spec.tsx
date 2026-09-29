@@ -8,21 +8,21 @@ type HeaderProps = Readonly<{
 }>
 type HeaderInMobileProps = Readonly<{
   onOpenDrawer?: () => void
+  drawerEnabled?: boolean
 }>
 type DrawerProps = Readonly<{
   open: boolean
   onClose: () => void
 }>
 
-// 捕获子组件 props + 断言侧栏不再被壳层渲染
-const { captured, mediaMock, sidebarRenderMock } = vi.hoisted(() => ({
+// 捕获子组件 props（Sidebar 模块已随 Task 8 死代码摘除，壳层无需再断言其不渲染）
+const { captured, mediaMock } = vi.hoisted(() => ({
   captured: {
     headerProps: {} as HeaderProps,
     mobileHeaderProps: {} as HeaderInMobileProps,
     drawerProps: { open: false, onClose: () => {} } as DrawerProps,
   },
   mediaMock: { current: 'pc' as 'mobile' | 'tablet' | 'pc' },
-  sidebarRenderMock: vi.fn(),
 }))
 
 vi.mock('../hooks', () => ({
@@ -70,13 +70,6 @@ vi.mock('../drawer', () => ({
   },
 }))
 
-vi.mock('../sidebar', () => ({
-  default: (props: unknown) => {
-    sidebarRenderMock(props)
-    return <div data-testid="sidebar" />
-  },
-}))
-
 const baseSite = {
   title: 'Test App',
   icon_type: 'emoji',
@@ -114,9 +107,6 @@ describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉；Task 4：
       expect(screen.getByTestId('header')).toBeInTheDocument()
       expect(screen.getByTestId('chat-wrapper')).toBeInTheDocument()
       expect(screen.queryByTestId('header-in-mobile')).not.toBeInTheDocument()
-      // 侧栏列已删：Sidebar 不再被壳层渲染
-      expect(sidebarRenderMock).not.toHaveBeenCalled()
-      expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument()
       // 抽屉默认挂载、关态
       expect(screen.getByTestId('conversation-drawer')).toHaveAttribute('data-open', 'false')
     })
@@ -138,13 +128,14 @@ describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉；Task 4：
       expect(captured.headerProps.drawerEnabled).toBe(true)
     })
 
-    it('should render mobile header with onOpenDrawer when mobile', () => {
+    it('should render mobile header with onOpenDrawer and drawerEnabled when mobile', () => {
       mediaMock.current = 'mobile'
       render(<ChatWithHistory />)
 
       expect(screen.getByTestId('header-in-mobile')).toBeInTheDocument()
       expect(screen.queryByTestId('header')).not.toBeInTheDocument()
       expect(captured.mobileHeaderProps.onOpenDrawer).toBeInstanceOf(Function)
+      expect(captured.mobileHeaderProps.drawerEnabled).toBe(true)
     })
 
     it('should show loading instead of chat wrapper while chat list is loading', () => {
@@ -262,6 +253,14 @@ describe('ChatWithHistory 壳层（Task 3：去侧栏列，挂抽屉；Task 4：
 
       expect(screen.queryByTestId('conversation-drawer')).not.toBeInTheDocument()
       expect(captured.headerProps.drawerEnabled).toBe(false)
+    })
+
+    it('should flag drawerEnabled=false to the mobile header as well', () => {
+      mediaMock.current = 'mobile'
+      render(<ChatWithHistory />)
+
+      expect(screen.queryByTestId('conversation-drawer')).not.toBeInTheDocument()
+      expect(captured.mobileHeaderProps.drawerEnabled).toBe(false)
     })
 
     it('should not respond to ⌘K when the drawer is disabled', () => {

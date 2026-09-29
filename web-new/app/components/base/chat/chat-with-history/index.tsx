@@ -65,7 +65,7 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
       style={accentStyle}
     >
       {isMobile ? (
-        <HeaderInMobile onOpenDrawer={() => setDrawerOpen(true)} />
+        <HeaderInMobile onOpenDrawer={() => setDrawerOpen(true)} drawerEnabled={drawerEnabled} />
       ) : (
         <Header onOpenDrawer={() => setDrawerOpen(true)} drawerEnabled={drawerEnabled} />
       )}
