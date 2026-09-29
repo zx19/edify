@@ -87,12 +87,14 @@ describe('InputsFormNode', () => {
     // 折叠时表单内容不渲染
     expect(screen.queryByText('Test Label')).not.toBeInTheDocument()
 
-    const toggleBtn = screen.getByRole('button', { name: '' })
+    const toggleBtn = screen.getByRole('button', { name: 'share.chat.completeInfoBeforeChat' })
     expect(toggleBtn).toHaveAttribute('aria-expanded', 'false')
 
     await user.click(toggleBtn)
     expect(screen.getByText('Test Label')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '' })).toHaveAttribute('aria-expanded', 'true')
+    expect(
+      screen.getByRole('button', { name: 'share.chat.completeInfoBeforeChat' }),
+    ).toHaveAttribute('aria-expanded', 'true')
   })
 
   it('should expand by default when defaultOpen is true (有必填默认展开)', async () => {
@@ -106,10 +108,12 @@ describe('InputsFormNode', () => {
 
     expect(screen.getByText('share.chat.completeInfoBeforeChat')).toBeInTheDocument()
     expect(screen.getByText('Required Label')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '' })).toHaveAttribute('aria-expanded', 'true')
+    expect(
+      screen.getByRole('button', { name: 'share.chat.completeInfoBeforeChat' }),
+    ).toHaveAttribute('aria-expanded', 'true')
 
     // 展开态仍可手动折叠
-    await user.click(screen.getByRole('button', { name: '' }))
+    await user.click(screen.getByRole('button', { name: 'share.chat.completeInfoBeforeChat' }))
     expect(screen.queryByText('Required Label')).not.toBeInTheDocument()
   })
 

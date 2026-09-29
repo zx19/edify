@@ -620,10 +620,10 @@
   },
   "web-new/app/components/base/chat/chat-with-history/header-in-mobile.tsx": {
     "jsx-a11y/click-events-have-key-events": {
-      "count": 4
+      "count": 2
     },
     "jsx-a11y/no-static-element-interactions": {
-      "count": 4
+      "count": 2
     },
     "typescript/no-explicit-any": {
       "count": 2

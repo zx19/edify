@@ -628,23 +628,6 @@ describe('Chat', () => {
     })
   })
 
-  describe('Sidebar Collapse State', () => {
-    it('should schedule a resize via setTimeout when sidebarCollapseState becomes false', () => {
-      vi.useFakeTimers()
-      const { rerender } = renderChat({ sidebarCollapseState: true })
-      rerender(<Chat chatList={[]} sidebarCollapseState={false} />)
-      expect(() => vi.runAllTimers()).not.toThrow()
-      vi.useRealTimers()
-    })
-
-    it('should not schedule a resize when sidebarCollapseState stays true', () => {
-      vi.useFakeTimers()
-      renderChat({ sidebarCollapseState: true })
-      expect(() => vi.runAllTimers()).not.toThrow()
-      vi.useRealTimers()
-    })
-  })
-
   describe('Edge Cases', () => {
     it('should render no modals when both modal flags are false', () => {
       useAppStore.setState({
@@ -1085,39 +1068,6 @@ describe('Chat', () => {
 
       const answers = screen.getAllByTestId('answer-item')
       expect(answers).toHaveLength(2)
-    })
-  })
-
-  describe('Sidebar Collapse Multiple Transitions', () => {
-    it('should trigger resize when sidebarCollapseState transitions from true to false multiple times', () => {
-      vi.useFakeTimers()
-      const { rerender } = renderChat({ sidebarCollapseState: true })
-
-      rerender(<Chat chatList={[]} sidebarCollapseState={false} />)
-      vi.advanceTimersByTime(200)
-
-      rerender(<Chat chatList={[]} sidebarCollapseState={true} />)
-
-      rerender(<Chat chatList={[]} sidebarCollapseState={false} />)
-      vi.advanceTimersByTime(200)
-
-      expect(() => vi.runAllTimers()).not.toThrow()
-      vi.useRealTimers()
-    })
-
-    it('should not trigger resize when sidebarCollapseState stays at false', () => {
-      vi.useFakeTimers()
-      const { rerender } = renderChat({ sidebarCollapseState: false })
-
-      rerender(<Chat chatList={[]} sidebarCollapseState={false} />)
-
-      expect(() => vi.runAllTimers()).not.toThrow()
-      vi.useRealTimers()
-    })
-
-    it('should handle undefined sidebarCollapseState', () => {
-      renderChat({ sidebarCollapseState: undefined })
-      expect(screen.getByTestId('chat-root')).toBeInTheDocument()
     })
   })
 

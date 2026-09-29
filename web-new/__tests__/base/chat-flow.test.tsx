@@ -1,10 +1,10 @@
 import type { RefObject } from 'react'
 import type { ChatConfig } from '@/app/components/base/chat/types'
 import type { AppConversationData, AppData, AppMeta, ConversationItem } from '@/models/share'
-import { fireEvent, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import ChatWithHistory from '@/app/components/base/chat/chat-with-history'
-import { useChatWithHistoryContext } from '@/app/components/base/chat/chat-with-history/context'
 import { useChatWithHistory } from '@/app/components/base/chat/chat-with-history/hooks'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import useDocumentTitle from '@/hooks/use-document-title'
@@ -14,19 +14,10 @@ vi.mock('@/app/components/base/chat/chat-with-history/hooks', () => ({
   useChatWithHistory: vi.fn(),
 }))
 
-vi.mock('@/app/components/base/chat/chat-with-history/chat-wrapper', () => {
-  const ChatThemeProbe = () => {
-    const { theme } = useChatWithHistoryContext()
-
-    return (
-      <span aria-label="chat theme">
-        {theme?.primaryColor}:{String(theme?.chatColorThemeInverted)}
-      </span>
-    )
-  }
-
-  return { default: ChatThemeProbe }
-})
+// ChatWrapper 挂真实 Chat 渲染链（Markdown/语音/文件等），单测仅关注壳层结构—— stub 成占位
+vi.mock('@/app/components/base/chat/chat-with-history/chat-wrapper', () => ({
+  default: () => <div data-testid="chat-wrapper" />,
+}))
 
 vi.mock('@/hooks/use-breakpoints', () => ({
   default: vi.fn(),
@@ -106,8 +97,6 @@ const defaultHookReturn: HookReturn = {
   chatShouldReloadKey: 'test-reload-key',
   handleFeedback: vi.fn(),
   currentChatInstanceRef: { current: { handleStop: vi.fn() } },
-  sidebarCollapseState: false,
-  handleSidebarCollapse: vi.fn(),
   clearChatList: false,
   setClearChatList: vi.fn(),
   isResponding: false,
@@ -125,39 +114,34 @@ describe('Base Chat Flow', () => {
     vi.mocked(useChatWithHistory).mockReturnValue(defaultHookReturn)
   })
 
-  // Chat-with-history shell integration across layout, responsive shell, and theme setup.
+  // Chat-with-history shell integration across layout, responsive shell, and accent setup.
   describe('Chat With History Shell', () => {
-    it('updates the document title and expands the collapsed desktop sidebar on hover', () => {
+    it('sets the document title and opens the conversation drawer via the header entry', async () => {
+      const user = userEvent.setup()
       const { container } = render(<ChatWithHistory className="chat-history-shell" />)
 
       const titles = screen.getAllByText('Test Chat')
       expect(titles.length).toBeGreaterThan(0)
       expect(useDocumentTitle).toHaveBeenCalledWith('Test Chat')
-
-      vi.mocked(useChatWithHistory).mockReturnValue({
-        ...defaultHookReturn,
-        sidebarCollapseState: true,
-      })
-
-      const { container: collapsedContainer } = render(<ChatWithHistory />)
-      const hoverArea = collapsedContainer.querySelector('.absolute.top-0.z-20')
-
       expect(container.querySelector('.chat-history-shell')).toBeInTheDocument()
-      expect(hoverArea).toBeInTheDocument()
 
-      if (hoverArea) {
-        fireEvent.mouseEnter(hoverArea)
-        expect(hoverArea).toHaveClass('left-0')
+      // 旧侧栏壳（悬停浮出面板）已删除：壳层不再渲染 .absolute.top-0.z-20 浮层
+      expect(container.querySelector('.absolute.top-0.z-20')).not.toBeInTheDocument()
 
-        fireEvent.mouseLeave(hoverArea)
-        expect(hoverArea).toHaveClass('-left-62')
-      }
+      // 新结构：40px header 内 ☰ 唤出 overlay 抽屉（关态 -translate-x-full + inert）
+      const drawer = container.querySelector('aside[role="dialog"]') as HTMLElement
+      expect(drawer).toHaveClass('-translate-x-full')
+
+      await user.click(screen.getByRole('button', { name: 'share.chat.conversationHistory' }))
+      expect(drawer).toHaveClass('translate-x-0')
     })
 
-    it('renders a new theme when site configuration changes', () => {
-      const { rerender } = render(<ChatWithHistory />)
+    it('injects accent tokens on the shell root when chat_color_theme changes', () => {
+      const { container, rerender } = render(<ChatWithHistory />)
 
-      expect(screen.getByLabelText('chat theme')).toHaveTextContent('blue:false')
+      // chat_color_theme → 壳层根 inline --accent 三档（替代旧 createTheme/context.theme 机制）
+      const shell = container.querySelector('.webapp-theme') as HTMLElement
+      expect(shell.style.getPropertyValue('--accent')).toBe('blue')
 
       vi.mocked(useChatWithHistory).mockReturnValue({
         ...defaultHookReturn,
@@ -172,7 +156,7 @@ describe('Base Chat Flow', () => {
       })
       rerender(<ChatWithHistory />)
 
-      expect(screen.getByLabelText('chat theme')).toHaveTextContent('#654321:true')
+      expect(shell.style.getPropertyValue('--accent')).toBe('#654321')
     })
 
     it('falls back to the mobile loading shell when site metadata is unavailable', () => {
@@ -188,7 +172,12 @@ describe('Base Chat Flow', () => {
       expect(useDocumentTitle).toHaveBeenCalledWith('Chat')
       expect(screen.getByRole('status')).toBeInTheDocument()
       expect(container.querySelector('.mobile-chat-shell')).toBeInTheDocument()
-      expect(container.querySelector('.rounded-t-2xl')).toBeInTheDocument()
+      // 新移动壳：40px 极薄 header（banner）+ 抽屉入口；旧圆角浮层壳已删除
+      expect(screen.getByRole('banner')).toHaveClass('h-10')
+      expect(
+        screen.getByRole('button', { name: 'share.chat.conversationHistory' }),
+      ).toBeInTheDocument()
+      expect(container.querySelector('.rounded-t-2xl')).not.toBeInTheDocument()
       expect(container.querySelector('.rounded-2xl')).not.toBeInTheDocument()
     })
   })

@@ -37,15 +37,13 @@ const assignMetric = (
 
 const LayoutHarness = ({
   chatList,
-  sidebarCollapseState,
   attachRefs = true,
 }: {
   chatList: ChatItem[]
-  sidebarCollapseState?: boolean
   attachRefs?: boolean
 }) => {
   const { width, chatContainerRef, chatContainerInnerRef, chatFooterRef, chatFooterInnerRef } =
-    useChatLayout({ chatList, sidebarCollapseState })
+    useChatLayout({ chatList })
 
   return (
     <>
@@ -141,7 +139,6 @@ describe('useChatLayout', () => {
       render(
         <LayoutHarness
           chatList={[makeChatItem({ id: 'q1' }), makeChatItem({ id: 'a1', isAnswer: true })]}
-          sidebarCollapseState={false}
         />,
       )
 
@@ -252,13 +249,7 @@ describe('useChatLayout', () => {
     })
 
     it('should keep the hook stable when the DOM refs are not attached', () => {
-      render(
-        <LayoutHarness
-          chatList={[makeChatItem({ id: 'q1' })]}
-          sidebarCollapseState={true}
-          attachRefs={false}
-        />,
-      )
+      render(<LayoutHarness chatList={[makeChatItem({ id: 'q1' })]} attachRefs={false} />)
 
       act(() => {
         flushAnimationFrames()

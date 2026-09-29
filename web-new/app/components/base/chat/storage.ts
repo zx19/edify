@@ -11,12 +11,6 @@ const [useLastConversationIdInfo, _useLastConversationIdInfoValue, _useSetLastCo
 const [useTabConversationIdInfo, _useTabConversationIdInfoValue, _useSetTabConversationIdInfo] =
   createSessionStorageState<ConversationIdInfo>(TAB_CONVERSATION_ID_INFO, {})
 
-const [
-  useWebAppSidebarCollapseState,
-  _useWebAppSidebarCollapseStateValue,
-  _useSetWebAppSidebarCollapseState,
-] = createLocalStorageState<string>('webappSidebarCollapse', undefined, { raw: true })
-
 const getAppConversationIds = (conversationIdInfo: ConversationIdInfo | null, appId: string) => {
   const appConversationIds = conversationIdInfo?.[appId]
   return typeof appConversationIds === 'object' && appConversationIds !== null
@@ -137,4 +131,5 @@ const useConversationSelection = ({
   }
 }
 
-export { useConversationSelection, useWebAppSidebarCollapseState }
+// webappSidebarCollapse 键随抽屉化退役（T9）：overlay 抽屉不推挤布局，折叠态不再驱动任何呈现
+export { useConversationSelection }

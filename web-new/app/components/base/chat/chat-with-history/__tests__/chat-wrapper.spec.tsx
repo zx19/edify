@@ -116,8 +116,6 @@ const defaultContextValue: ChatWithHistoryContextValue = {
   setClearChatList: vi.fn(),
   appChatListDataLoading: false,
   conversationList: [],
-  sidebarCollapseState: false,
-  handleSidebarCollapse: vi.fn(),
   handlePinConversation: vi.fn(),
   handleUnpinConversation: vi.fn(),
   handleDeleteConversation: vi.fn(),
@@ -1284,7 +1282,7 @@ describe('ChatWrapper', () => {
     expect(screen.getByText('share.chat.completeInfoBeforeChat')).toBeInTheDocument()
     expect(screen.queryByText('Test')).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '' }))
+    fireEvent.click(screen.getByRole('button', { name: 'share.chat.completeInfoBeforeChat' }))
     expect(await screen.findByText('Test')).toBeInTheDocument()
   })
 

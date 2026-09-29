@@ -8,10 +8,7 @@ import { noop } from 'es-toolkit/function'
 import { produce } from 'immer'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  useConversationSelection,
-  useWebAppSidebarCollapseState,
-} from '@/app/components/base/chat/storage'
+import { useConversationSelection } from '@/app/components/base/chat/storage'
 import { getProcessedFilesFromResponse } from '@/app/components/base/file-uploader/utils'
 import { InputVarType } from '@/app/components/workflow/types'
 import { useWebAppStore } from '@/context/web-app-context'
@@ -176,15 +173,6 @@ export const useChatWithHistory = (installedAppInfo?: InstalledAppResponse) => {
     }
     setLocaleFromProps()
   }, [appData])
-  const [storedSidebarCollapseState, setStoredSidebarCollapseState] =
-    useWebAppSidebarCollapseState()
-  const sidebarCollapseState = storedSidebarCollapseState === 'collapsed'
-  const handleSidebarCollapse = useCallback(
-    (state: boolean) => {
-      if (appId) setStoredSidebarCollapseState(state ? 'collapsed' : 'expanded')
-    },
-    [appId, setStoredSidebarCollapseState],
-  )
   const { currentConversationId, handleConversationIdInfoChange } = useConversationSelection({
     appId,
     userId,
@@ -618,8 +606,6 @@ export const useChatWithHistory = (installedAppInfo?: InstalledAppResponse) => {
     chatShouldReloadKey,
     handleFeedback,
     currentChatInstanceRef,
-    sidebarCollapseState,
-    handleSidebarCollapse,
     clearChatList,
     setClearChatList,
     isResponding,

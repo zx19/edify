@@ -30,7 +30,7 @@ const mockAppData: AppData = {
   can_replace_logo: false,
 }
 
-// 默认值不再含 sidebarCollapseState/handleSidebarCollapse：壳层去侧栏后 header 不消费 collapse 语义
+// collapse 契约已随 T9 摘除（抽屉化后无布局驱动语义）：header 本就不消费，默认值同步不含
 const mockContextDefaults: ChatWithHistoryContextValue = {
   appData: mockAppData,
   currentConversationId: '',
@@ -96,9 +96,9 @@ describe('Header Component（Task 4：40px 极薄桌面 header）', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('should never render the legacy expand-sidebar button even when collapse state is true', () => {
-      // 壳层已无侧栏列：旧「展开侧栏」钮连同 collapse 逻辑一并删除
-      setup({ sidebarCollapseState: true } as Partial<ChatWithHistoryContextValue>)
+    it('should never render the legacy expand-sidebar button', () => {
+      // 壳层已无侧栏列：旧「展开侧栏」钮连同 collapse 逻辑一并删除（T9 契约已摘除）
+      setup()
       expect(
         screen.queryByRole('button', { name: 'layout.sidebar.expandSidebar' }),
       ).not.toBeInTheDocument()

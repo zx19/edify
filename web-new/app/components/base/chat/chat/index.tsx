@@ -80,7 +80,6 @@ export type ChatProps = {
   sendButtonLoading?: boolean
   footerNotice?: ReactNode
   footerNoticeTooltip?: ReactNode
-  sidebarCollapseState?: boolean
   hideAvatar?: boolean
   sendOnEnter?: boolean
   speechToTextTarget?: SpeechToTextTarget
@@ -142,7 +141,6 @@ const Chat: FC<ChatProps> = ({
   sendButtonLoading,
   footerNotice,
   footerNoticeTooltip,
-  sidebarCollapseState,
   hideAvatar,
   sendOnEnter,
   speechToTextTarget,
@@ -173,7 +171,6 @@ const Chat: FC<ChatProps> = ({
   const { width, chatContainerRef, chatContainerInnerRef, chatFooterRef, chatFooterInnerRef } =
     useChatLayout({
       chatList,
-      sidebarCollapseState,
       centeredInput,
     })
 

@@ -6,6 +6,7 @@
 export type WebAppUiConfig = {
   layout?: {
     show_conversation_sidebar?: boolean
+    /** D9 退役：抽屉定宽（桌面 300px/移动 85%），键接收不渲染——仅为兼容旧配置不报错而保留 */
     sidebar_width?: 'standard' | 'compact'
   }
   components?: {
@@ -24,6 +25,7 @@ export type WebAppUiConfig = {
 export type ResolvedWebAppUiConfig = {
   layout: {
     show_conversation_sidebar: boolean
+    /** D9 退役：解析落默认值为兼容旧配置，呈现层零消费（抽屉定宽） */
     sidebar_width: 'standard' | 'compact'
   }
   components: {
@@ -46,6 +48,7 @@ export function resolveUiConfig(site: UiConfigCarrier): ResolvedWebAppUiConfig {
   return {
     layout: {
       show_conversation_sidebar: ui?.layout?.show_conversation_sidebar ?? true,
+      // D9 退役：抽屉定宽，键接收不渲染（解析保留，呈现层零消费）
       sidebar_width: ui?.layout?.sidebar_width ?? 'standard',
     },
     components: {

@@ -33,6 +33,7 @@ const InputsFormNode = ({ defaultOpen = false }: Props) => {
           </div>
           <button
             type="button"
+            aria-label={t(($) => $['chat.completeInfoBeforeChat'], { ns: 'share' })}
             aria-expanded={!collapsed}
             className="grid size-6 place-items-center rounded-md text-[var(--text-3)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
             onClick={() => setCollapsed(!collapsed)}

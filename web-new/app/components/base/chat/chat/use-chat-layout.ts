@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 type UseChatLayoutOptions = {
   chatList: ChatItem[]
-  sidebarCollapseState?: boolean
   /**
    * 空态欢迎屏布局（chat 单元重写）：footer 在流内居中、不再 absolute 盖底——
    * 测量副作用（容器 paddingBottom、footer 宽度内联写入）整体停用,
@@ -21,11 +20,7 @@ const setStyleValue = (
   if (element.style[property] !== value) element.style[property] = value
 }
 
-export const useChatLayout = ({
-  chatList,
-  sidebarCollapseState,
-  centeredInput = false,
-}: UseChatLayoutOptions) => {
+export const useChatLayout = ({ chatList, centeredInput = false }: UseChatLayoutOptions) => {
   const [width, setWidth] = useState(0)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const chatContainerInnerRef = useRef<HTMLDivElement>(null)
@@ -198,12 +193,8 @@ export const useChatLayout = ({
     prevFirstMessageIdRef.current = firstMessageId
   }, [chatList])
 
-  useEffect(() => {
-    if (!sidebarCollapseState) {
-      const timer = setTimeout(handleWindowResize, 200)
-      return () => clearTimeout(timer)
-    }
-  }, [handleWindowResize, sidebarCollapseState])
+  // sidebarCollapseState 驱动的 resize 副作用已退役（T9）：抽屉为 overlay 不推挤布局，
+  // 折叠态不再存在；挂载/窗口 resize 路径已覆盖全部重测时机。
 
   return {
     width,

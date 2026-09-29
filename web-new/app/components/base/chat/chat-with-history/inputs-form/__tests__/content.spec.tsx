@@ -127,8 +127,6 @@ const createMockContext = (
     currentChatInstanceRef: { current: { handleStop: vi.fn() } } as React.RefObject<{
       handleStop: () => void
     }>,
-    sidebarCollapseState: false,
-    handleSidebarCollapse: vi.fn(),
     setClearChatList: vi.fn(),
     setIsResponding: vi.fn(),
     ...overrides,

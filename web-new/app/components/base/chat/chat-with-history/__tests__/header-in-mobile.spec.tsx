@@ -39,7 +39,7 @@ const mockConversation = (overrides: Partial<ConversationItem> = {}): Conversati
     ...overrides,
   }) as ConversationItem
 
-// 默认值不含 sidebarCollapseState/handleSidebarCollapse：壳层去侧栏后移动 header 不消费 collapse 语义
+// collapse 契约已随 T9 摘除（抽屉化后无布局驱动语义）：移动 header 本就不消费，默认值同步不含
 const mockContextDefaults: ChatWithHistoryContextValue = {
   appData: mockAppData,
   currentConversationId: '',

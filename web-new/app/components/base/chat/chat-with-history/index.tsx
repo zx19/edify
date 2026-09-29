@@ -25,8 +25,8 @@ type ChatWithHistoryProps = {
  * 单列 flex-col：header（桌面/移动二选一）+ 内容区（ChatWrapper / Loading）；
  * 抽屉（含蒙层）挂壳层根：抽屉顶=壳顶，蒙层覆盖 40px header（z-40/50 高于 header）。
  * ⌘K(Ctrl+K) 唤出抽屉；ui_config.layout.show_conversation_sidebar=false → 不渲染抽屉、不响应 ⌘K。
- * 契约注记：sidebarCollapseState/handleSidebarCollapse 在 context/hooks 暂留（chat-wrapper、
- * use-chat-layout 仍消费，Task 5/7 清理），壳层自本任务起不再消费。
+ * 契约注记：sidebarCollapseState/handleSidebarCollapse 已随 T9 摘除——overlay 抽屉不推挤布局，
+ * 折叠态无任何呈现消费（含 Chat/use-chat-layout 的 resize 副作用一并退役）。
  */
 const ChatWithHistory: FC<ChatWithHistoryProps> = ({ className }) => {
   const { appData, appChatListDataLoading, chatShouldReloadKey, isMobile } =
@@ -124,8 +124,6 @@ const ChatWithHistoryWrap: FC<ChatWithHistoryWrapProps> = ({
     appId,
     handleFeedback,
     currentChatInstanceRef,
-    sidebarCollapseState,
-    handleSidebarCollapse,
     clearChatList,
     setClearChatList,
     isResponding,
@@ -167,8 +165,6 @@ const ChatWithHistoryWrap: FC<ChatWithHistoryWrapProps> = ({
         appId,
         handleFeedback,
         currentChatInstanceRef,
-        sidebarCollapseState,
-        handleSidebarCollapse,
         clearChatList,
         setClearChatList,
         isResponding,

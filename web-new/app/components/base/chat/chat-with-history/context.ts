@@ -38,8 +38,6 @@ export type ChatWithHistoryContextValue = {
   handleFeedback: OnFeedback
   currentChatInstanceRef: RefObject<{ handleStop: () => void }>
   theme?: Theme
-  sidebarCollapseState?: boolean
-  handleSidebarCollapse: (state: boolean) => void
   clearChatList?: boolean
   setClearChatList: (state: boolean) => void
   isResponding?: boolean
@@ -78,8 +76,6 @@ export const ChatWithHistoryContext = createContext<ChatWithHistoryContextValue>
   isInstalledApp: false,
   handleFeedback: () => Promise.resolve(),
   currentChatInstanceRef: { current: { handleStop: noop } },
-  sidebarCollapseState: false,
-  handleSidebarCollapse: noop,
   clearChatList: false,
   setClearChatList: noop,
   isResponding: false,

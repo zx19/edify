@@ -152,7 +152,6 @@ describe('useChatWithHistory', () => {
     vi.clearAllMocks()
     localStorage.removeItem(CONVERSATION_ID_INFO)
     sessionStorage.removeItem(TAB_CONVERSATION_ID_INFO)
-    localStorage.removeItem('webappSidebarCollapse')
     mockStoreState.appInfo = {
       app_id: 'app-1',
       custom_config: null,
@@ -171,7 +170,6 @@ describe('useChatWithHistory', () => {
   afterEach(() => {
     localStorage.removeItem(CONVERSATION_ID_INFO)
     sessionStorage.removeItem(TAB_CONVERSATION_ID_INFO)
-    localStorage.removeItem('webappSidebarCollapse')
   })
 
   // Scenario: share query results populate conversation lists and trigger chat list fetch.
@@ -412,61 +410,6 @@ describe('useChatWithHistory', () => {
           tabConversationIdInfo['app-1']?.DEFAULT,
         ]).toContain('conversation-new')
       })
-    })
-  })
-
-  // Scenario: sidebar collapse state is toggled and persisted.
-  describe('Sidebar collapse', () => {
-    it('should update sidebarCollapseState and localStorage when collapsed', async () => {
-      // Arrange
-      mockFetchConversations.mockResolvedValue(createConversationData())
-      mockFetchChatList.mockResolvedValue({ data: [] })
-
-      const { result } = await renderWithClient(() => useChatWithHistory())
-
-      // Act
-      act(() => {
-        result!.current.handleSidebarCollapse(true)
-      })
-
-      // Assert
-      await waitFor(() => {
-        expect(result!.current.sidebarCollapseState).toBe(true)
-      })
-      expect(localStorage.getItem('webappSidebarCollapse')).toBe('collapsed')
-    })
-
-    it('should set expanded state in localStorage when not collapsed', async () => {
-      // Arrange
-      mockFetchConversations.mockResolvedValue(createConversationData())
-      mockFetchChatList.mockResolvedValue({ data: [] })
-
-      const { result } = await renderWithClient(() => useChatWithHistory())
-
-      // Act
-      act(() => {
-        result!.current.handleSidebarCollapse(false)
-      })
-
-      // Assert
-      await waitFor(() => {
-        expect(result!.current.sidebarCollapseState).toBe(false)
-      })
-      expect(localStorage.getItem('webappSidebarCollapse')).toBe('expanded')
-    })
-
-    it('should read initial collapse state from localStorage', async () => {
-      // Arrange
-      localStorage.setItem('webappSidebarCollapse', 'collapsed')
-      mockFetchConversations.mockResolvedValue(createConversationData())
-      mockFetchChatList.mockResolvedValue({ data: [] })
-
-      // Act
-      const { result } = await renderWithClient(() => useChatWithHistory())
-
-      // Assert
-      expect(result!.current.sidebarCollapseState).toBe(true)
-      localStorage.removeItem('webappSidebarCollapse')
     })
   })
 
@@ -1433,27 +1376,6 @@ describe('useChatWithHistory', () => {
 
       // Assert
       expect(result!.current.isResponding).toBe(true)
-    })
-  })
-
-  // Scenario: handleSidebarCollapse is a no-op when appId is not available.
-  describe('handleSidebarCollapse without appId', () => {
-    it('should not update state when appId is absent', async () => {
-      // Arrange
-      mockStoreState.appInfo = null // no app_id -> no appId
-      mockFetchConversations.mockResolvedValue(createConversationData())
-      mockFetchChatList.mockResolvedValue({ data: [] })
-
-      const { result } = await renderWithClient(() => useChatWithHistory())
-      const initialState = result!.current.sidebarCollapseState
-
-      // Act
-      act(() => {
-        result!.current.handleSidebarCollapse(true)
-      })
-
-      // Assert: state unchanged since appId is absent
-      expect(result!.current.sidebarCollapseState).toBe(initialState)
     })
   })
 

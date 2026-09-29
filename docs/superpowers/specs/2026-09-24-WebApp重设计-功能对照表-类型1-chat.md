@@ -124,3 +124,18 @@
 - [x] 交互序列变化均有落点登记（停止键变形、抽屉唤出、空态居中）
 - [x] dark 变体（工具条可切，token = tokens.css 定稿）
 - [x] ui_config 各开关态（工具条四开关实证降级形态）
+
+## 实现核销（2026-09-29，回炉 T1-T9）
+
+呈现层回炉 T1-T9 全部落地，各节实现状态：
+
+- **§1 侧栏→抽屉**：已实现。`chat-with-history/drawer/`（300px overlay + 蒙层 + ESC/蒙层关闭 + ⌘K/☰ 唤出 + 搜索前端过滤 + 置顶/今天/昨天/更早分组 + 底部平铺菜单 footer-menu）。旧侧栏实现已删除入台账：`sidebar/index.tsx`、`sidebar/more-menu.tsx`、`header/mobile-operation-dropdown.tsx` 及各自 spec（T8）；`sidebar/list|item|operation|rename-modal` 为抽屉复用件保留。`sidebarCollapseState`/`handleSidebarCollapse` 契约连同 `useWebAppSidebarCollapseState` 存储钩子在 T9 全链摘除（overlay 抽屉不推挤布局，折叠态零呈现消费）；`webappSidebarCollapse` localStorage 键退役不再写入。
+- **§2 桌面 Header**：已实现。40px 极薄 header（☰ 抽屉入口 + 应用标识/会话标题▾ 互斥 + 右部操作组），D11 无 ⋯ 更多菜单。
+- **§3 移动端**：已实现。HeaderInMobile 同构 40px（☰ + 标识/标题互斥 + 变量浮层/重置/新建），抽屉 85% 宽。
+- **§4 消息区**：已实现。720 居中列、去气泡（浅灰胶囊提问 + 无框回答）、去头像、hover 操作条收编性能行；tokens.css 双层变量段（`--chat-bubble-user-*`/`--chat-answer-*`）T9 核实零消费后删除。
+- **§5 输入区**：已实现。底部悬浮卡 + 空态流内居中（同实例条件类名切换，保草稿/焦点）；发送键流式变 ■；快捷键提示行移除。
+- **§6 开场白与变量表单**：已实现。欢迎屏空态居中 + 描述卡收编一行 + 变量表单必填展开/选填折叠（折叠钮带 aria-label）。「开始对话」文案沿用共享 key `share.chat.startChat`（与 chatbot 线一致；mockup「开始聊天」为标注非文案约束）。
+- **§7 全局行为**：已实现（标题/favicon/i18n/自动命名/匿名 passport 均保留原位）。
+- **ui_config 降级**：已实现。`show_conversation_sidebar` 门控抽屉入口+⌘K；`sidebar_width`（D9 退役）键接收不渲染（`models/ui-config.ts` 解析保留并注释）；`show_message_actions`/`show_citation`/`show_suggested_questions`/`brand.footer_text` 按表落地。
+
+闸门：chat 族单测 66 文件 1306 用例全绿 + `__tests__/base/chat-flow.test.tsx` 3 用例改写转绿；`pnpm type-check` 0 error。
