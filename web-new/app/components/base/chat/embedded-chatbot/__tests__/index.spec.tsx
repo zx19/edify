@@ -107,9 +107,9 @@ const createHookReturn = (
   }
 }
 
-/** 外壳根 = header 的父容器（accent 注入点） */
-const getShellRoot = (container: HTMLElement) =>
-  container.querySelector('div.flex.h-full.flex-col') as HTMLElement
+/** 壳层内层卡（webapp-theme 作用域 + accent 注入点） */
+const getShellCard = (container: HTMLElement) =>
+  container.querySelector('[data-testid="chatbot-shell-card"]') as HTMLElement
 
 describe('EmbeddedChatbot index', () => {
   beforeEach(() => {
@@ -137,11 +137,52 @@ describe('EmbeddedChatbot index', () => {
     })
   })
 
-  describe('Accent injection（chat_color_theme → --accent 族，替代 createTheme）', () => {
-    it('injects accent tokens on shell root when chat_color_theme set', () => {
+  describe('壳层形态（v2：--bg 纯色 + 移动端卡片复位）', () => {
+    it('内层卡自挂 webapp-theme 作用域且底色 var(--bg)', () => {
       const { container } = render(<EmbeddedChatbot />)
 
-      const style = getShellRoot(container).getAttribute('style') || ''
+      expect(getShellCard(container)).toHaveClass(
+        'webapp-theme',
+        'flex',
+        'h-full',
+        'flex-col',
+        'bg-[var(--bg)]',
+      )
+    })
+
+    it('桌面直连：无卡片包装（无 rounded-2xl/shadow），外层无衬底', () => {
+      vi.mocked(useBreakpoints).mockReturnValue(MediaType.pc)
+      const { container } = render(<EmbeddedChatbot />)
+
+      const card = getShellCard(container)
+      expect(card.className).not.toContain('rounded-2xl')
+      expect(card.className).not.toContain('shadow')
+      expect(card.parentElement).toHaveClass('h-full')
+      expect(card.parentElement!.className).not.toContain('p-2.5')
+    })
+
+    it('移动端直连：卡片 rounded-2xl + shadow-sm + overflow-hidden，外层 bg-soft + p-2.5', () => {
+      // beforeEach 默认 MediaType.mobile；jsdom window.self===window.top → 非 iframe
+      const { container } = render(<EmbeddedChatbot />)
+
+      const card = getShellCard(container)
+      expect(card).toHaveClass('overflow-hidden', 'rounded-2xl', 'shadow-[var(--shadow-sm)]')
+      expect(card.parentElement).toHaveClass('bg-[var(--bg-soft)]', 'p-2.5')
+    })
+
+    it('footer 品牌行为透明底（无 bg-soft）', () => {
+      render(<EmbeddedChatbot />)
+
+      const footer = screen.getByText('share.chat.poweredBy').parentElement as HTMLElement
+      expect(footer.className).not.toContain('bg-[')
+    })
+  })
+
+  describe('Accent injection（chat_color_theme → --accent 族，替代 createTheme）', () => {
+    it('injects accent tokens on shell card when chat_color_theme set', () => {
+      const { container } = render(<EmbeddedChatbot />)
+
+      const style = getShellCard(container).getAttribute('style') || ''
       expect(style).toContain('--accent: blue')
       expect(style).toContain('--accent-deep')
       expect(style).toContain('--accent-soft')
@@ -159,7 +200,7 @@ describe('EmbeddedChatbot index', () => {
         </>,
       )
 
-      const styles = [...container.querySelectorAll('div.flex.h-full.flex-col')].map(
+      const styles = [...container.querySelectorAll('[data-testid="chatbot-shell-card"]')].map(
         (el) => el.getAttribute('style') || '',
       )
       expect(styles).toHaveLength(2)
@@ -173,14 +214,14 @@ describe('EmbeddedChatbot index', () => {
       )
       const { container, rerender } = render(<EmbeddedChatbot />)
 
-      expect(getShellRoot(container).getAttribute('style')).toContain('--accent: #123456')
+      expect(getShellCard(container).getAttribute('style')).toContain('--accent: #123456')
 
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
         createHookReturn({ appData: createAppData('#654321') }),
       )
       rerender(<EmbeddedChatbot />)
 
-      expect(getShellRoot(container).getAttribute('style')).toContain('--accent: #654321')
+      expect(getShellCard(container).getAttribute('style')).toContain('--accent: #654321')
     })
 
     it('injects nothing when chat_color_theme absent', () => {
@@ -194,7 +235,7 @@ describe('EmbeddedChatbot index', () => {
       )
       const { container } = render(<EmbeddedChatbot />)
 
-      expect(getShellRoot(container).getAttribute('style')).toBeNull()
+      expect(getShellCard(container).getAttribute('style')).toBeNull()
     })
   })
 
