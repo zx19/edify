@@ -12,6 +12,10 @@ import ChatWrapper from '../chat-wrapper'
 import { useEmbeddedChatbotContext } from '../context'
 
 const mockTrackEvent = vi.hoisted(() => vi.fn())
+/** Chat 组件 props 捕获（T3：centeredInput/宽度覆盖/死 prop 断言用） */
+const chatPropsCapture = vi.hoisted(() => ({
+  current: undefined as Record<string, unknown> | undefined,
+}))
 
 vi.mock('@/app/components/base/amplitude/web-app-event', () => ({
   trackWebAppEvent: mockTrackEvent,
@@ -27,7 +31,11 @@ vi.mock('../../chat/hooks', () => ({
 
 vi.mock('../inputs-form', () => ({
   __esModule: true,
-  default: () => <div>inputs form</div>,
+  default: ({ defaultOpen }: { defaultOpen?: boolean }) => (
+    <div data-testid="inputs-form" data-default-open={String(!!defaultOpen)}>
+      inputs form
+    </div>
+  ),
 }))
 
 vi.mock('@/app/components/base/markdown', () => ({
@@ -36,23 +44,13 @@ vi.mock('@/app/components/base/markdown', () => ({
 
 vi.mock('../../chat', () => ({
   __esModule: true,
-  default: ({
-    chatNode,
-    chatList,
-    inputDisabled,
-    questionIcon,
-    answerIcon,
-    onSend,
-    onRegenerate,
-    switchSibling,
-    onHumanInputFormSubmit,
-    onStopResponding,
-  }: {
+  default: (props: {
     chatNode: React.ReactNode
     chatList: ChatItem[]
     inputDisabled: boolean
     questionIcon?: React.ReactNode
     answerIcon?: React.ReactNode
+    centeredInput?: boolean
     onSend: (message: string) => void
     onRegenerate: (
       chatItem: ChatItem,
@@ -64,50 +62,61 @@ vi.mock('../../chat', () => ({
       formData: { inputs: Record<string, HumanInputFieldValue>; action: string },
     ) => Promise<void>
     onStopResponding: () => void
-  }) => (
-    <div>
-      <div>{chatNode}</div>
-      {answerIcon}
-      {chatList.map((item) => (
-        <div key={item.id}>{item.content}</div>
-      ))}
-      <div>chat count: {chatList.length}</div>
-      {questionIcon}
-      <button onClick={() => onSend('hello world')}>send through chat</button>
-      <button
-        onClick={() =>
-          onRegenerate({
-            id: 'answer-1',
-            isAnswer: true,
-            content: 'answer',
-            parentMessageId: 'question-1',
-          })
-        }
-      >
-        regenerate answer
-      </button>
-      <button
-        onClick={() =>
-          onRegenerate(
-            { id: 'answer-1', isAnswer: true, content: 'answer', parentMessageId: 'question-1' },
-            { message: 'new query' },
-          )
-        }
-      >
-        regenerate edited
-      </button>
-      <button onClick={() => switchSibling('sibling-2')}>switch sibling</button>
-      <button disabled={inputDisabled}>send message</button>
-      <button onClick={onStopResponding}>stop responding</button>
-      <button
-        onClick={() =>
-          onHumanInputFormSubmit('form-token', { inputs: { answer: 'ok' }, action: 'approve' })
-        }
-      >
-        submit human input
-      </button>
-    </div>
-  ),
+  }) => {
+    chatPropsCapture.current = props as unknown as Record<string, unknown>
+    const {
+      chatNode,
+      chatList,
+      inputDisabled,
+      onSend,
+      onRegenerate,
+      switchSibling,
+      onHumanInputFormSubmit,
+      onStopResponding,
+    } = props
+    return (
+      <div>
+        <div>{chatNode}</div>
+        {chatList.map((item) => (
+          <div key={item.id}>{item.content}</div>
+        ))}
+        <div>chat count: {chatList.length}</div>
+        <button onClick={() => onSend('hello world')}>send through chat</button>
+        <button
+          onClick={() =>
+            onRegenerate({
+              id: 'answer-1',
+              isAnswer: true,
+              content: 'answer',
+              parentMessageId: 'question-1',
+            })
+          }
+        >
+          regenerate answer
+        </button>
+        <button
+          onClick={() =>
+            onRegenerate(
+              { id: 'answer-1', isAnswer: true, content: 'answer', parentMessageId: 'question-1' },
+              { message: 'new query' },
+            )
+          }
+        >
+          regenerate edited
+        </button>
+        <button onClick={() => switchSibling('sibling-2')}>switch sibling</button>
+        <button disabled={inputDisabled}>send message</button>
+        <button onClick={onStopResponding}>stop responding</button>
+        <button
+          onClick={() =>
+            onHumanInputFormSubmit('form-token', { inputs: { answer: 'ok' }, action: 'approve' })
+          }
+        >
+          submit human input
+        </button>
+      </div>
+    )
+  },
 }))
 
 vi.mock('@/service/share', async (importOriginal) => {
@@ -280,7 +289,8 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       )
     })
 
-    it('should hide or show welcome content based on chat state', () => {
+    it('v2 欢迎屏语义：空会话恒渲染欢迎屏（表单流内化），对话态不渲染', () => {
+      // 空会话 + 有表单：欢迎屏与表单同屏（旧语义=表单展开时欢迎屏隐藏，v2 表单流内化）
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
           inputsForms: [
@@ -305,10 +315,13 @@ describe('EmbeddedChatbot chat-wrapper', () => {
 
       render(<ChatWrapper />)
 
-      expect(screen.queryByText('Welcome to the app')).not.toBeInTheDocument()
-      expect(screen.getByText('inputs form')).toBeInTheDocument()
+      expect(screen.getByTestId('welcome-screen')).toBeInTheDocument()
+      expect(screen.getByText('Welcome to the app')).toBeInTheDocument()
+      expect(screen.getByTestId('inputs-form')).toBeInTheDocument()
+      expect(chatPropsCapture.current?.centeredInput).toBe(true)
 
       cleanup()
+      // 全隐藏表单：表单不渲染，欢迎屏仍在
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
           inputsForms: [],
@@ -330,48 +343,169 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       )
 
       render(<ChatWrapper />)
-      expect(screen.queryByText('inputs form')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('inputs-form')).not.toBeInTheDocument()
+      expect(screen.getByText('Fallback welcome')).toBeInTheDocument()
+
+      cleanup()
+      // 对话态：欢迎屏不渲染，输入区回底部 dock（centeredInput=false）
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({ currentConversationId: 'conv-1' }),
+      )
+      vi.mocked(useChat).mockReturnValue(
+        createUseChatReturn({
+          chatList: [
+            { id: 'q-1', isAnswer: false, content: 'hi' },
+            { id: 'a-1', isAnswer: true, content: 'hello', parentMessageId: 'q-1' },
+          ],
+        }),
+      )
+      render(<ChatWrapper />)
+      expect(screen.queryByTestId('welcome-screen')).not.toBeInTheDocument()
+      expect(chatPropsCapture.current?.centeredInput).toBe(false)
+    })
+  })
+
+  describe('v2 欢迎屏（chat 族同语言）', () => {
+    const welcomeChatList = [
+      {
+        id: 'opening-1',
+        isAnswer: true,
+        isOpeningStatement: true,
+        content: 'Welcome to the app',
+        suggestedQuestions: ['How does it work?'],
+      },
+    ] as ChatItem[]
+
+    it('welcome_subtitle 配置时渲染副标题，空配置不渲染', () => {
+      const baseAppData = createContextValue().appData!
+      const withSite = (siteOverrides: Record<string, unknown>) =>
+        ({
+          ...baseAppData,
+          site: { ...baseAppData.site, ...siteOverrides },
+        }) as typeof baseAppData
+
+      vi.mocked(useChat).mockReturnValue(createUseChatReturn({ chatList: welcomeChatList }))
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({
+          appData: withSite({ ui_config: { brand: { welcome_subtitle: 'Sub title here' } } }),
+        }),
+      )
+      render(<ChatWrapper />)
+      expect(screen.getByText('Sub title here')).toBeInTheDocument()
+
+      cleanup()
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(createContextValue())
+      render(<ChatWrapper />)
+      expect(screen.queryByText('Sub title here')).not.toBeInTheDocument()
+    })
+
+    it('应用描述收编为开场白下一行 line-clamp-1（独立描述卡退役）', () => {
+      const baseAppData = createContextValue().appData!
+      const withSite = (siteOverrides: Record<string, unknown>) =>
+        ({
+          ...baseAppData,
+          site: { ...baseAppData.site, ...siteOverrides },
+        }) as typeof baseAppData
+
+      vi.mocked(useChat).mockReturnValue(createUseChatReturn({ chatList: welcomeChatList }))
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({
+          appData: withSite({ description: 'Long description text' }),
+        }),
+      )
+      render(<ChatWrapper />)
+
+      const desc = screen.getByText('Long description text')
+      expect(desc).toHaveClass('line-clamp-1')
+      // 对话态不渲染描述
+      cleanup()
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({
+          currentConversationId: 'conv-1',
+          appData: withSite({ description: 'Long description text' }),
+        }),
+      )
+      vi.mocked(useChat).mockReturnValue(
+        createUseChatReturn({
+          chatList: [
+            { id: 'q-1', isAnswer: false, content: 'hi' },
+            { id: 'a-1', isAnswer: true, content: 'hello', parentMessageId: 'q-1' },
+          ],
+        }),
+      )
+      render(<ChatWrapper />)
+      expect(screen.queryByText('Long description text')).not.toBeInTheDocument()
+    })
+
+    it('建议问题点击直接发送', () => {
+      const handleSend = vi.fn()
+      vi.mocked(useChat).mockReturnValue(
+        createUseChatReturn({ chatList: welcomeChatList, handleSend }),
+      )
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(createContextValue())
+      render(<ChatWrapper />)
+
+      fireEvent.click(screen.getByText('How does it work?'))
+      expect(handleSend).toHaveBeenCalledWith(
+        '/chat-messages',
+        expect.objectContaining({ query: 'How does it work?' }),
+        expect.anything(),
+      )
+    })
+
+    it('show_suggested_questions=false 时欢迎屏不渲染建议问题（ui_config 门控，chat 族同）', () => {
+      vi.mocked(useChat).mockReturnValue(createUseChatReturn({ chatList: welcomeChatList }))
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({
+          appData: {
+            ...createContextValue().appData!,
+            site: {
+              ...createContextValue().appData!.site,
+              ui_config: { components: { show_suggested_questions: false } },
+            },
+          },
+        }),
+      )
+      render(<ChatWrapper />)
+
+      expect(screen.queryByText('How does it work?')).not.toBeInTheDocument()
+      // 开场白标题仍渲染
+      expect(screen.getByText('Welcome to the app')).toBeInTheDocument()
+    })
+
+    it('表单卡：有必填字段 defaultOpen=true / 全选填 defaultOpen=false', () => {
+      vi.mocked(useChat).mockReturnValue(createUseChatReturn({ chatList: welcomeChatList }))
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
+        createContextValue({
+          inputsForms: [
+            { variable: 'name', label: 'Name', required: true, type: InputVarType.textInput },
+          ],
+        }),
+      )
+      render(<ChatWrapper />)
+      expect(screen.getByTestId('inputs-form')).toHaveAttribute('data-default-open', 'true')
 
       cleanup()
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
-          appData: null,
-        }),
-      )
-      vi.mocked(useChat).mockReturnValue(
-        createUseChatReturn({
-          isResponding: false,
-          chatList: [
-            {
-              id: 'opening-3',
-              isAnswer: true,
-              isOpeningStatement: true,
-              content: 'Should be hidden',
-            },
+          inputsForms: [
+            { variable: 'note', label: 'Note', required: false, type: InputVarType.textInput },
           ],
         }),
       )
-
       render(<ChatWrapper />)
-      expect(screen.queryByText('Should be hidden')).not.toBeInTheDocument()
+      expect(screen.getByTestId('inputs-form')).toHaveAttribute('data-default-open', 'false')
+    })
 
-      cleanup()
+    it('720 列恢复：不再向 Chat 传 max-w-full 宽度覆盖（气泡窄宽自然退化）', () => {
+      vi.mocked(useChat).mockReturnValue(createUseChatReturn({ chatList: welcomeChatList }))
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(createContextValue())
-      vi.mocked(useChat).mockReturnValue(
-        createUseChatReturn({
-          isResponding: true,
-          chatList: [
-            {
-              id: 'opening-4',
-              isAnswer: true,
-              isOpeningStatement: true,
-              content: 'Should be hidden while responding',
-            },
-          ],
-        }),
-      )
       render(<ChatWrapper />)
-      expect(screen.queryByText('Should be hidden while responding')).not.toBeInTheDocument()
+
+      expect(chatPropsCapture.current?.chatContainerInnerClassName ?? '').not.toContain(
+        'max-w-full',
+      )
+      expect(chatPropsCapture.current?.chatFooterInnerClassName ?? '').not.toContain('max-w-full')
     })
   })
 
@@ -435,9 +569,14 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       expect(screen.getByRole('button', { name: 'send message' })).toBeDisabled()
     })
 
-    it('should show the user avatar fallback when avatar data is provided', () => {
+    it('去头像死 prop 摘除：answerIcon/questionIcon 不再传给 Chat（D3 核心已不渲染）', () => {
+      const baseAppData = createContextValue().appData!
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
+          appData: {
+            ...baseAppData,
+            site: { ...baseAppData.site, use_icon_as_answer_icon: true },
+          },
           initUserVariables: {
             avatar_url: 'https://example.com/avatar.png',
             name: 'Alice',
@@ -447,7 +586,8 @@ describe('EmbeddedChatbot chat-wrapper', () => {
 
       render(<ChatWrapper />)
 
-      expect(screen.getByText('A')).toBeInTheDocument()
+      expect(chatPropsCapture.current?.answerIcon).toBeUndefined()
+      expect(chatPropsCapture.current?.questionIcon).toBeUndefined()
     })
   })
 
@@ -627,29 +767,6 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       render(<ChatWrapper />)
       expect(screen.getByText('Simple Welcome')).toBeInTheDocument()
     })
-
-    it('should use icon as answer icon when enabled in site config', () => {
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
-        createContextValue({
-          appData: {
-            app_id: 'app-1',
-            can_replace_logo: true,
-            custom_config: { remove_webapp_brand: false, replace_webapp_logo: '' },
-            enable_site: true,
-            end_user_id: 'user-1',
-            site: {
-              title: 'Embedded App',
-              icon_type: 'emoji',
-              icon: 'bot',
-              icon_background: '#000000',
-              icon_url: '',
-              use_icon_as_answer_icon: true,
-            },
-          },
-        }),
-      )
-      render(<ChatWrapper />)
-    })
   })
 
   describe('Regeneration and config variants', () => {
@@ -689,7 +806,7 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       render(<ChatWrapper />)
     })
 
-    it('should handle mobile chatNode variants', () => {
+    it('should handle mobile chat wrapper render（isMobile 透传不炸）', () => {
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
           isMobile: true,
@@ -697,9 +814,10 @@ describe('EmbeddedChatbot chat-wrapper', () => {
         }),
       )
       render(<ChatWrapper />)
+      expect(screen.getByText('chat count: 0')).toBeInTheDocument()
     })
 
-    it('should initialize collapsed based on currentConversationId and isTryApp', () => {
+    it('try-app 形态渲染（isTryApp 透传）', () => {
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
         createContextValue({
           currentConversationId: 'conv-1',
@@ -707,6 +825,7 @@ describe('EmbeddedChatbot chat-wrapper', () => {
         }),
       )
       render(<ChatWrapper />)
+      expect(chatPropsCapture.current?.isTryApp).toBe(true)
     })
 
     it('should resume paused workflows when chat history is loaded', () => {
@@ -808,8 +927,7 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       render(<ChatWrapper />)
     })
 
-    it('should handle mobile view for welcome screens', () => {
-      // Complex welcome mobile
+    it('移动端欢迎屏同构渲染（max-sm 退化类由核心列携带）', () => {
       vi.mocked(useChat).mockReturnValue(
         createUseChatReturn({
           chatList: [
@@ -831,22 +949,10 @@ describe('EmbeddedChatbot chat-wrapper', () => {
       )
       render(<ChatWrapper />)
 
-      cleanup()
-      // Simple welcome mobile
-      vi.mocked(useChat).mockReturnValue(
-        createUseChatReturn({
-          chatList: [
-            { id: 'o-2', isAnswer: true, isOpeningStatement: true, content: 'Welcome' },
-          ] as ChatItem[],
-        }),
-      )
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue(
-        createContextValue({
-          isMobile: true,
-          currentConversationId: '',
-        }),
-      )
-      render(<ChatWrapper />)
+      expect(screen.getByTestId('welcome-screen')).toBeInTheDocument()
+      expect(screen.getByText('Q?')).toBeInTheDocument()
+      // 建议问题网格带 max-sm 单列退化类
+      expect(screen.getByText('Q?').parentElement).toHaveClass('max-sm:grid-cols-1')
     })
 
     it('should handle loop early returns in input validation', () => {
