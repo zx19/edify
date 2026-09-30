@@ -85,3 +85,24 @@
 - [x] dark 变体（工具条可切）
 - [x] accent 注入演示（chat_color_theme 三档换色）
 - [x] 双宿主形态（直连全屏 / 气泡窗 400px 退化 + 展开收起）
+
+## 实现核销（2026-09-30 回炉闭环）
+
+计划：`docs/superpowers/plans/2026-09-30-chatbot单元呈现层回炉.md`（行为变更 10 条/mockup 偏差 3 条登记在册）。
+
+| 节 | 落点 | 实现（commit） | 核销 |
+|---|---|---|---|
+| §1 路由与外壳 | `--bg` 纯色 + 移动卡片保留中性化（iframe 内不渲卡，宿主 embed.js 自带 chrome） | `b8a641f325` | ✅ |
+| §2 Header | 40px 极薄 + 右组（查看变量/重置/展开收起）+ powered-by 双落点（直连 header 小字/气泡移动 footer） | `9b2e82dbe5` | ✅ |
+| §3 iframe 协议 | 逐字保全（零逻辑改动；header spec 协议用例全绿 + 气泡窗走查实证 ready/config/expand-change） | — | ✅ |
+| §4 URL 参数契约 | 逐字保全（零改动） | — | ✅ |
+| §5 表单卡 | 欢迎屏流内「聊天设置」折叠条族卡 + accent CTA；会话中变量查/改统一走 header ViewFormDropdown | `f8eebc927b` | ✅ |
+| §6 欢迎屏与描述卡 | chat 族同语言（居中图标+开场白 h1+副标题+建议 2×2）+ 描述 line-clamp-1 收编 + 去头像死 prop 摘除 | `f8eebc927b` | ✅ |
+| §7 聊天核心 | chat 族复用携带（720 列恢复，窄宽自然退化） | `f8eebc927b` | ✅ |
+| §8-1 createTheme/CssTransform | webapp 面零消费核销；`theme/` 模块残留 = console overview/try-app 消费面（另立项清扫），context.theme 空转字段已摘 | 收口 commit | ✅（残留登记） |
+| §8-2 DifyLogo 末级品牌 | 「杏树林」链；`logo-embedded-chat-*` 零消费死码已删 | 收口 commit | ✅ |
+| §8-3 isDify() 分支 | v1 已删，核销 | — | ✅ |
+| §8-4 chat_color_theme_inverted | 已退役（字段接收不报错） | — | ✅ |
+| §8-5 渐变头/渐变底 | 中性 token（§1/§2 实现） | `b8a641f325`/`9b2e82dbe5` | ✅ |
+
+验证口径：chatbot 族 9 spec 文件全绿 + chat 核心 56 文件 1141 用例零改动回归绿 + tsc 0；QA 走查 21/21（桌面直连/移动 390/气泡窗 iframe 协议/dark）实证通过。

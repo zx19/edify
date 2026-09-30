@@ -2,7 +2,6 @@
 
 import type { RefObject } from 'react'
 import type { ChatConfig, ChatItem, OnFeedback } from '../types'
-import type { Theme } from './theme/theme'
 import type { AppConversationData, AppData, AppMeta, ConversationItem } from '@/models/share'
 import { noop } from 'es-toolkit/function'
 import { createContext, useContext } from 'use-context-selector'
@@ -35,7 +34,6 @@ export type EmbeddedChatbotContextValue = {
   disableFeedback?: boolean
   handleFeedback: OnFeedback
   currentChatInstanceRef: RefObject<{ handleStop: () => void }>
-  theme?: Theme
   clearChatList?: boolean
   setClearChatList: (state: boolean) => void
   isResponding?: boolean
