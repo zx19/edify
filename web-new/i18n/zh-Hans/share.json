@@ -20,7 +20,7 @@
   "chat.searchConversations": "搜索会话",
   "chat.startChat": "开始对话",
   "chat.unpinnedTitle": "对话列表",
-  "chat.viewChatSettings": "查看对话设置",
+  "chat.viewChatSettings": "查看变量",
   "common.appUnavailable": "应用不可用",
   "common.appUnknownError": "应用不可用",
   "generation.batchFailed.info": "{{num}} 次运行失败",

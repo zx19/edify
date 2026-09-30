@@ -42,6 +42,8 @@ const Chatbot = () => {
   // 气泡窗宿主（embed.js）自带卡片 chrome；卡片外壳仅移动端直连（与 header 内同源判断一致）
   const isIframe = isClient ? window.self !== window.top : false
   const isCardShell = isMobile && !isIframe
+  // v2 双落点：桌面直连品牌行在 header 右；气泡窗/移动在窗口或卡片底部
+  const brandInFooter = showBrand && (isMobile || isIframe)
 
   useDocumentTitle(site?.title || 'Chat')
 
@@ -61,7 +63,7 @@ const Chatbot = () => {
           {appChatListDataLoading && <Loading type="app" />}
           {!appChatListDataLoading && <ChatWrapper key={chatShouldReloadKey} />}
         </div>
-        {showBrand && (
+        {brandInFooter && (
           <div className="flex shrink-0 items-center justify-center gap-1 px-2 pt-1.5 pb-2 text-[11px] tracking-wide text-[var(--text-3)]">
             <span>{t(($) => $['chat.poweredBy'], { ns: 'share' })}</span>
             {uiConfig.brand.footer_text ? (

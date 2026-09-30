@@ -20,7 +20,7 @@
   "chat.searchConversations": "Search conversations",
   "chat.startChat": "Start Chat",
   "chat.unpinnedTitle": "Recent",
-  "chat.viewChatSettings": "View chat settings",
+  "chat.viewChatSettings": "View variables",
   "common.appUnavailable": "App is unavailable",
   "common.appUnknownError": "App is unavailable",
   "generation.batchFailed.info": "{{num}} failed executions",

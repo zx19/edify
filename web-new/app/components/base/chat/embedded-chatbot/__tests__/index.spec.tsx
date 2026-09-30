@@ -239,7 +239,7 @@ describe('EmbeddedChatbot index', () => {
     })
   })
 
-  describe('Powered by branding（底部一行，双端统一）', () => {
+  describe('Powered by branding（v2 双落点：footer=移动/气泡，header=桌面直连）', () => {
     it('shows ui_config.brand.footer_text when configured', () => {
       vi.mocked(useEmbeddedChatbot).mockReturnValue(
         createHookReturn({
@@ -306,13 +306,14 @@ describe('EmbeddedChatbot index', () => {
       expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
     })
 
-    it('should ALSO show powered by on desktop（双端统一拍板，不再是移动端专属）', () => {
+    it('桌面直连不渲染 footer 品牌行（品牌移位 header，见 header spec）', () => {
       vi.mocked(useBreakpoints).mockReturnValue(MediaType.pc)
       vi.mocked(useEmbeddedChatbot).mockReturnValue(createHookReturn())
 
       render(<EmbeddedChatbot />)
 
-      expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
+      // header 已被 mock,只核 footer 缺席
+      expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
       expect(screen.getByText('chat header')).toBeInTheDocument()
     })
   })

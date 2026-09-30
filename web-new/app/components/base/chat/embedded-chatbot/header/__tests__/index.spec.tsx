@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import type { EmbeddedChatbotContextValue } from '../../context'
 import type { AppData } from '@/models/share'
-import { act, screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderWithConsoleQuery } from '@/test/console/query-data'
 import { useEmbeddedChatbotContext } from '../../context'
@@ -14,7 +14,9 @@ vi.mock('../../context', () => ({
 }))
 
 vi.mock('@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown', () => ({
-  default: () => <div data-testid="view-form-dropdown" />,
+  default: vi.fn(({ variant }: { variant?: string }) => (
+    <div data-testid="view-form-dropdown" data-variant={variant ?? 'icon'} />
+  )),
 }))
 
 describe('EmbeddedChatbot Header', () => {
@@ -75,23 +77,95 @@ describe('EmbeddedChatbot Header', () => {
     })
   }
 
-  describe('Rendering（白底中性头，双端同构）', () => {
-    it('should render app icon and site title from context', () => {
+  describe('Rendering（40px 极薄中性头；directFull=!iframe&&!mobile 双形态）', () => {
+    it('should render app icon and site title from context（弱化 text-2）', () => {
       render(<Header />)
 
-      expect(screen.getByText('Test Site')).toBeInTheDocument()
+      const title = screen.getByText('Test Site')
+      expect(title).toBeInTheDocument()
+      expect(title).toHaveClass('text-[13px]', 'font-semibold', 'text-[var(--text-2)]')
     })
 
-    it('should NOT render powered-by in header（已移至外壳底部一行）', () => {
+    it('桌面直连：h-10 + px-3 + 无 border-b（界面退后）', () => {
+      render(<Header />)
+
+      const header = screen.getByRole('banner')
+      expect(header).toHaveClass('h-10', 'px-3')
+      expect(header.className).not.toContain('border-b')
+    })
+
+    it('移动端：header 带 border-b（卡片内分隔）', () => {
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
+        ...defaultContext,
+        isMobile: true,
+      } as EmbeddedChatbotContextValue)
+      render(<Header />)
+
+      expect(screen.getByRole('banner')).toHaveClass('border-b', 'border-[var(--border)]')
+    })
+
+    it('iframe 气泡窗：header 带 border-b（宿主卡片内分隔）', () => {
+      setupIframe()
+      render(<Header />)
+
+      expect(screen.getByRole('banner')).toHaveClass('border-b', 'border-[var(--border)]')
+    })
+
+    it('桌面直连：powered-by 小字在 header 右（沿用旧轨落点，末级默认杏树林）', () => {
+      render(<Header />)
+
+      const header = screen.getByRole('banner')
+      expect(within(header).getByText('share.chat.poweredBy')).toBeInTheDocument()
+      expect(within(header).getByText('杏树林')).toBeInTheDocument()
+    })
+
+    it('移动端：header 无 powered-by（落外壳 footer）', () => {
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
+        ...defaultContext,
+        isMobile: true,
+      } as EmbeddedChatbotContextValue)
       render(<Header />)
 
       expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
     })
 
-    it('should render reset button when allowResetChat is true and conversation exists', () => {
+    it('iframe 气泡窗：header 无 powered-by（落气泡底部）', () => {
+      setupIframe()
+      render(<Header />)
+
+      expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
+    })
+
+    it('remove_webapp_brand=true：桌面直连 header 也无 powered-by', () => {
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
+        ...defaultContext,
+        appData: {
+          ...defaultAppData,
+          custom_config: { remove_webapp_brand: true, replace_webapp_logo: '' },
+        },
+      } as EmbeddedChatbotContextValue)
+      render(<Header />)
+
+      expect(screen.queryByText('share.chat.poweredBy')).not.toBeInTheDocument()
+    })
+
+    it('桌面直连：重置对话为文字钮（icon+文案）', () => {
       render(<Header allowResetChat={true} />)
 
-      expect(screen.getByRole('button', { name: 'share.chat.resetChat' })).toBeInTheDocument()
+      const btn = screen.getByRole('button', { name: 'share.chat.resetChat' })
+      expect(btn).toHaveClass('h-7')
+      expect(btn.textContent).toContain('share.chat.resetChat')
+    })
+
+    it('移动端：重置对话为 icon-only 钮', () => {
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
+        ...defaultContext,
+        isMobile: true,
+      } as EmbeddedChatbotContextValue)
+      render(<Header allowResetChat={true} />)
+
+      const btn = screen.getByRole('button', { name: 'share.chat.resetChat' })
+      expect(btn.textContent).toBe('')
     })
 
     it('should call onCreateNewChat when reset button is clicked', async () => {
@@ -114,7 +188,13 @@ describe('EmbeddedChatbot Header', () => {
       expect(screen.queryByRole('button', { name: 'share.chat.resetChat' })).not.toBeInTheDocument()
     })
 
-    it('should render ViewFormDropdown when conditions are met', () => {
+    it('should NOT render reset button when allowResetChat is false（URL 锁 conversation_id）', () => {
+      render(<Header allowResetChat={false} />)
+
+      expect(screen.queryByRole('button', { name: 'share.chat.resetChat' })).not.toBeInTheDocument()
+    })
+
+    it('should render ViewFormDropdown when conditions are met（桌面直连传 text 形态）', () => {
       vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
         ...defaultContext,
         inputsForms: [{ id: '1' }],
@@ -123,7 +203,22 @@ describe('EmbeddedChatbot Header', () => {
 
       render(<Header />)
 
-      expect(screen.getByTestId('view-form-dropdown')).toBeInTheDocument()
+      const dropdown = screen.getByTestId('view-form-dropdown')
+      expect(dropdown).toBeInTheDocument()
+      expect(dropdown).toHaveAttribute('data-variant', 'text')
+    })
+
+    it('移动端 ViewFormDropdown 传 icon 形态', () => {
+      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
+        ...defaultContext,
+        isMobile: true,
+        inputsForms: [{ id: '1' }],
+        allInputsHidden: false,
+      } as EmbeddedChatbotContextValue)
+
+      render(<Header />)
+
+      expect(screen.getByTestId('view-form-dropdown')).toHaveAttribute('data-variant', 'icon')
     })
 
     it('should NOT render ViewFormDropdown when inputs are hidden', () => {

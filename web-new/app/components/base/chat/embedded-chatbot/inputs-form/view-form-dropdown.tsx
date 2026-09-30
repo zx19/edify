@@ -4,23 +4,39 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import InputsFormContent from '@/app/components/base/chat/embedded-chatbot/inputs-form/content'
 
+type Props = Readonly<{
+  /** 触发器形态：icon（气泡窗/移动，默认）| text（桌面直连，mockup v2 形态一文字钮） */
+  variant?: 'icon' | 'text'
+}>
+
+/** 与 header 桌面直连文字钮同款（各自持有，防循环依赖） */
+const textBtnClass =
+  'flex h-7 items-center gap-1.5 rounded-lg px-2 text-[12.5px] font-medium text-[var(--text-2)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]'
+
 /**
- * 查看会话变量下拉。chatbot 单元重写：iconColor prop（createTheme 着色通道）随机制退役移除；
- * 浮层卡片双层：base = Dify 等效，[.webapp-theme_&] = 新视觉 token。
+ * 查看会话变量下拉（可编辑，会话中变量查/改唯一入口——对照表 §2/§5）。
+ * iconColor prop（createTheme 着色通道）随机制退役移除。
  */
-const ViewFormDropdown = () => {
+const ViewFormDropdown = ({ variant = 'icon' }: Props) => {
   const { t } = useTranslation()
   return (
     <Popover>
       <PopoverTrigger
         render={
-          <IconButton
-            aria-label={t(($) => $['chat.viewChatSettings'], { ns: 'share' })}
-            size="lg"
-            className="data-popup-open:bg-state-base-hover"
-          >
-            <span aria-hidden className="i-ri-chat-settings-line size-4 shrink-0" />
-          </IconButton>
+          variant === 'text' ? (
+            <button type="button" className={textBtnClass}>
+              <span aria-hidden className="i-ri-chat-settings-line size-3.5 shrink-0" />
+              {t(($) => $['chat.viewChatSettings'], { ns: 'share' })}
+            </button>
+          ) : (
+            <IconButton
+              aria-label={t(($) => $['chat.viewChatSettings'], { ns: 'share' })}
+              size="lg"
+              className="data-popup-open:bg-state-base-hover"
+            >
+              <span aria-hidden className="i-ri-chat-settings-line size-4 shrink-0" />
+            </IconButton>
+          )
         }
       />
       <PopoverContent
