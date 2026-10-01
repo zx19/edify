@@ -2977,11 +2977,6 @@
       "count": 1
     }
   },
-  "web-new/app/components/share/text-generation/no-data/index.tsx": {
-    "typescript/no-empty-object-type": {
-      "count": 1
-    }
-  },
   "web-new/app/components/share/text-generation/result/__tests__/index.spec.tsx": {
     "no-restricted-imports": {
       "count": 1
@@ -3029,14 +3024,6 @@
     },
     "typescript/no-explicit-any": {
       "count": 3
-    }
-  },
-  "web-new/app/components/share/text-generation/text-generation-result-panel.tsx": {
-    "jsx-a11y/click-events-have-key-events": {
-      "count": 1
-    },
-    "jsx-a11y/no-static-element-interactions": {
-      "count": 1
     }
   },
   "web-new/app/components/share/text-generation/types.ts": {

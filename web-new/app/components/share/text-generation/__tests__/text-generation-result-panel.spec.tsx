@@ -1,26 +1,17 @@
 import type { PromptConfig } from '@/models/debug'
 import type { SiteInfo } from '@/models/share'
 import type { VisionSettings } from '@/types/app'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { AppSourceType } from '@/service/share'
 import { Resolution, TransferMethod } from '@/types/app'
 import TextGenerationResultPanel from '../text-generation-result-panel'
-import { TaskStatus } from '../types'
 
 const resPropsSpy = vi.fn()
-const resDownloadPropsSpy = vi.fn()
 
 vi.mock('@/app/components/share/text-generation/result', () => ({
   default: (props: Record<string, unknown>) => {
     resPropsSpy(props)
     return <div data-testid={`res-${String(props.taskId ?? 'single')}`} />
-  },
-}))
-
-vi.mock('@/app/components/share/text-generation/run-batch/res-download', () => ({
-  default: (props: Record<string, unknown>) => {
-    resDownloadPropsSpy(props)
-    return <div data-testid="res-download-mock" />
   },
 }))
 
@@ -43,55 +34,36 @@ const visionConfig: VisionSettings = {
   transfer_methods: [TransferMethod.local_file],
 }
 
-const batchTasks = [
-  {
-    id: 1,
-    status: TaskStatus.completed,
-    params: { inputs: { name: 'Alpha' } },
-  }!,
-  {
-    id: 2,
-    status: TaskStatus.failed,
-    params: { inputs: { name: 'Beta' } },
-  }!,
-]
-
 const baseProps = {
-  allFailedTaskList: [],
-  allSuccessTaskList: [],
-  allTaskList: batchTasks,
   appId: 'app-123',
   appSourceType: AppSourceType.webApp,
   completionFiles: [],
-  controlRetry: 88,
+  controlRetry: 0,
   controlSend: 77,
   controlStopResponding: 66,
-  exportRes: [{ Name: 'Alpha', 'share.generation.completionResult': 'Done' }!],
   handleCompleted: vi.fn(),
-  handleRetryAllFailedTask: vi.fn(),
   handleSaveMessage: vi.fn(async () => {}),
   inputs: { name: 'Alice' },
-  isCallBatchAPI: false,
   isPC: true,
-  isShowResultPanel: true,
   isWorkflow: false,
   moreLikeThisEnabled: true,
-  noPendingTask: true,
-  onHideResultPanel: vi.fn(),
   onRunControlChange: vi.fn(),
   onRunStart: vi.fn(),
-  onShowResultPanel: vi.fn(),
   promptConfig,
-  resultExisted: true,
-  showTaskList: batchTasks,
   siteInfo,
   textToSpeechEnabled: true,
   visionConfig,
 }
 
-describe('TextGenerationResultPanel', () => {
+describe('TextGenerationResultPanel（v2：run 视图右列 pane，批量支路迁出/移动抽屉拆除）', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('结果列标题行（生成结果）', () => {
+    render(<TextGenerationResultPanel {...baseProps} />)
+
+    expect(screen.getByText('share.generation.completionResult')).toBeInTheDocument()
   })
 
   it('should render a single result in run-once mode and pass non-batch props', () => {
@@ -109,92 +81,15 @@ describe('TextGenerationResultPanel', () => {
         inputs: { name: 'Alice' },
         isCallBatchAPI: false,
         moreLikeThisEnabled: true,
-        taskId: undefined,
       }),
     )
-    expect(screen.queryByTestId('res-download-mock')).not.toBeInTheDocument()
   })
 
-  it('should render batch results, download entry, loading area, and retry banner', () => {
-    const handleRetryAllFailedTask = vi.fn()
+  it('移动端流内渲染（无抽屉：无 fixed overlay / 无 drag handle）', () => {
+    const { container } = render(<TextGenerationResultPanel {...baseProps} isPC={false} />)
 
-    render(
-      <TextGenerationResultPanel
-        {...baseProps}
-        allFailedTaskList={[batchTasks[1]!]}
-        allSuccessTaskList={[batchTasks[0]!]}
-        isCallBatchAPI
-        noPendingTask={false}
-        handleRetryAllFailedTask={handleRetryAllFailedTask}
-      />,
-    )
-
-    expect(screen.getByTestId('res-1'))!.toBeInTheDocument()
-    expect(screen.getByTestId('res-2'))!.toBeInTheDocument()
-    expect(resPropsSpy).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        inputs: { name: 'Alpha' },
-        isError: false,
-        controlRetry: 0,
-        taskId: 1,
-        onRunControlChange: undefined,
-      }),
-    )
-    expect(resPropsSpy).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        inputs: { name: 'Beta' },
-        isError: true,
-        controlRetry: 88,
-        taskId: 2,
-      }),
-    )
-    expect(screen.getByText('share.generation.executions:{"num":2}'))!.toBeInTheDocument()
-    expect(screen.getByTestId('res-download-mock'))!.toBeInTheDocument()
-    expect(resDownloadPropsSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        isMobile: false,
-        values: baseProps.exportRes,
-      }),
-    )
-    expect(screen.getByText('share.generation.batchFailed.info:{"num":1}'))!.toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: 'share.generation.batchFailed.retry' }),
-    )!.toBeInTheDocument()
-    expect(screen.getByRole('status', { name: 'appApi.loading' }))!.toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', { name: 'share.generation.batchFailed.retry' }))
-    expect(handleRetryAllFailedTask).toHaveBeenCalledTimes(1)
-  })
-
-  it('should toggle mobile result panel handle between show and hide actions', () => {
-    const onHideResultPanel = vi.fn()
-    const onShowResultPanel = vi.fn()
-    const { rerender } = render(
-      <TextGenerationResultPanel
-        {...baseProps}
-        isPC={false}
-        isShowResultPanel={true}
-        onHideResultPanel={onHideResultPanel}
-        onShowResultPanel={onShowResultPanel}
-      />,
-    )
-
-    fireEvent.click(document.querySelector('.cursor-grab') as HTMLElement)
-    expect(onHideResultPanel).toHaveBeenCalledTimes(1)
-
-    rerender(
-      <TextGenerationResultPanel
-        {...baseProps}
-        isPC={false}
-        isShowResultPanel={false}
-        onHideResultPanel={onHideResultPanel}
-        onShowResultPanel={onShowResultPanel}
-      />,
-    )
-
-    fireEvent.click(document.querySelector('.cursor-grab') as HTMLElement)
-    expect(onShowResultPanel).toHaveBeenCalledTimes(1)
+    expect(container.querySelector('.fixed')).toBeNull()
+    expect(container.querySelector('.cursor-grab')).toBeNull()
+    expect(screen.getByTestId('res-single')).toBeInTheDocument()
   })
 })
