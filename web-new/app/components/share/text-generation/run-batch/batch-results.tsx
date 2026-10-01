@@ -109,13 +109,40 @@ const BatchResults: FC<BatchResultsProps> = (props) => {
 
   return (
     <div className="mt-6">
-      <div className="flex items-center justify-between pt-2 pb-2">
-        <div className="text-[12.5px] font-bold tracking-wide text-[var(--text-2)] uppercase">
-          {t(($) => $['generation.executions'], { ns: 'share', num: allTaskList.length })}
-        </div>
+      <div className="mb-3 text-[13px] font-semibold text-[var(--text-2)]">
+        {t(($) => $['generation.batchResultTitle'], { ns: 'share' })}
+      </div>
+      {/* 头卡（mockup .batch-head）：计数 + 重试失败 + 下载结果；旧执行数头与绝对定位重试条退役 */}
+      <div className="flex items-center gap-2.5 rounded-[10px] border border-[var(--border)] bg-[var(--card)] px-3.5 py-2.5 text-[12.5px] text-[var(--text-2)]">
+        <span>
+          {t(($) => $['generation.batchTotal'], { ns: 'share', num: allTaskList.length })}
+        </span>
+        <span className="font-semibold text-[var(--success)]">
+          ✓{' '}
+          {t(($) => $['generation.batchSuccess'], { ns: 'share', num: allSuccessTaskList.length })}
+        </span>
+        {allFailedTaskList.length > 0 && (
+          <span className="font-semibold text-[var(--danger)]">
+            ✗{' '}
+            {t(($) => $['generation.batchFailedCount'], {
+              ns: 'share',
+              num: allFailedTaskList.length,
+            })}
+          </span>
+        )}
+        <span className="grow" />
+        {allFailedTaskList.length > 0 && (
+          <button
+            type="button"
+            className="inline-flex h-[26px] items-center rounded-[7px] px-2.5 text-[12px] font-medium text-[var(--text-3)] transition-colors hover:bg-[var(--bg-soft)] hover:text-[var(--text-1)]"
+            onClick={handleRetryAllFailedTask}
+          >
+            {t(($) => $['generation.retryFailed'], { ns: 'share' })}
+          </button>
+        )}
         {allSuccessTaskList.length > 0 && <ResDownload isMobile={!isPC} values={exportRes} />}
       </div>
-      <div className="flex flex-col">
+      <div className="mt-3 flex flex-col gap-3">
         {showTaskList.map((task) => renderResult(task))}
         {!noPendingTask && (
           <div className="mt-4">
@@ -123,25 +150,6 @@ const BatchResults: FC<BatchResultsProps> = (props) => {
           </div>
         )}
       </div>
-      {allFailedTaskList.length > 0 && (
-        <div className="mt-3 flex items-center gap-2 rounded-xl border border-[var(--danger)] bg-[var(--danger-soft)] p-3 shadow-[var(--shadow-md)]">
-          <span aria-hidden className="i-ri-error-warning-fill size-4 text-[var(--danger)]" />
-          <div className="text-[12.5px] font-medium text-[var(--danger)]">
-            {t(($) => $['generation.batchFailed.info'], {
-              ns: 'share',
-              num: allFailedTaskList.length,
-            })}
-          </div>
-          <div className="h-3.5 w-px bg-[var(--danger)] opacity-30"></div>
-          <button
-            type="button"
-            className="inline cursor-pointer border-none bg-transparent p-0 text-left text-[11.5px] font-bold tracking-wide text-[var(--danger)] uppercase focus-visible:ring-1 focus-visible:ring-[var(--danger)] focus-visible:outline-hidden"
-            onClick={handleRetryAllFailedTask}
-          >
-            {t(($) => $['generation.batchFailed.retry'], { ns: 'share' })}
-          </button>
-        </div>
-      )}
     </div>
   )
 }

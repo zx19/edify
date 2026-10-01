@@ -122,7 +122,7 @@ describe('BatchResults（批量结果区，720 单列内）', () => {
     )
   })
 
-  it('执行数头 + 下载入口 + 失败重试条 + 未完成 Loading', () => {
+  it('头卡：计数（共/成功/失败）+ 重试失败 + 下载结果 + 任务列表 + 未完成 Loading', () => {
     const handleRetryAllFailedTask = vi.fn()
 
     render(
@@ -135,16 +135,34 @@ describe('BatchResults（批量结果区，720 单列内）', () => {
       />,
     )
 
-    expect(screen.getByText('share.generation.executions:{"num":2}')).toBeInTheDocument()
-    expect(screen.getByTestId('res-download-mock')).toBeInTheDocument()
-    expect(resDownloadPropsSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ isMobile: false, values: baseProps.exportRes }),
-    )
-    expect(screen.getByText('share.generation.batchFailed.info:{"num":1}')).toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', { name: 'share.generation.batchFailed.retry' }))
+    // 结果区标题 + 头卡计数
+    expect(screen.getByText('share.generation.batchResultTitle')).toBeInTheDocument()
+    expect(screen.getByText('share.generation.batchTotal:{"num":2}')).toBeInTheDocument()
+    expect(screen.getByText(/batchSuccess:\{"num":1\}/)).toBeInTheDocument()
+    expect(screen.getByText(/batchFailedCount:\{"num":1\}/)).toBeInTheDocument()
+    // 旧执行数头退役
+    expect(screen.queryByText(/generation\.executions/)).not.toBeInTheDocument()
+    // 重试失败入卡 + 下载入口
+    fireEvent.click(screen.getByRole('button', { name: 'share.generation.retryFailed' }))
     expect(handleRetryAllFailedTask).toHaveBeenCalledTimes(1)
-
+    expect(screen.getByTestId('res-download-mock')).toBeInTheDocument()
+    // 任务列表 + 未完成 Loading
+    expect(screen.getByTestId('res-1')).toBeInTheDocument()
     expect(screen.getByRole('status', { name: 'appApi.loading' })).toBeInTheDocument()
+  })
+
+  it('无失败：不出失败计数与重试钮', () => {
+    render(<BatchResults {...baseProps} allSuccessTaskList={[batchTasks[0]!]} />)
+
+    expect(screen.queryByText(/batchFailedCount/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /retryFailed/ })).not.toBeInTheDocument()
+    expect(screen.getByTestId('res-download-mock')).toBeInTheDocument()
+  })
+
+  it('无成功：不出下载入口', () => {
+    render(<BatchResults {...baseProps} allFailedTaskList={[batchTasks[1]!]} />)
+
+    expect(screen.queryByTestId('res-download-mock')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'share.generation.retryFailed' })).toBeInTheDocument()
   })
 })
