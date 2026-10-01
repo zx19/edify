@@ -15,6 +15,7 @@ import { useStore as useAppStore } from '@/app/components/app/store'
 import { useChatContext } from '@/app/components/base/chat/chat/context'
 import Loading from '@/app/components/base/loading'
 import { Markdown } from '@/app/components/base/markdown'
+import { resolveUiConfig } from '@/models/ui-config'
 import { useParams } from '@/next/navigation'
 import { fetchTextGenerationMessage } from '@/service/debug'
 import {
@@ -271,32 +272,34 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                   {content?.length} {t(($) => $['unit.char'], { ns: 'common' })}
                 </span>
               )}
-              {/* action buttons */}
-              <div className="absolute right-2 bottom-1 flex items-center">
-                <GenerationActionGroups
-                  appSourceType={appSourceType}
-                  content={content}
-                  currentTab={currentTab}
-                  depth={depth}
-                  feedback={feedback}
-                  hideLogAction={hideLogAction}
-                  isError={isError}
-                  isInWebApp={isInWebApp}
-                  isResponding={isResponding}
-                  isShowTextToSpeech={isShowTextToSpeech}
-                  isWorkflow={isWorkflow}
-                  messageId={messageId}
-                  moreLikeThis={moreLikeThis}
-                  onFeedback={onFeedback}
-                  onMoreLikeThis={handleMoreLikeThis}
-                  onOpenLogModal={handleOpenLogModal}
-                  onRetry={onRetry}
-                  onSave={onSave}
-                  supportFeedback={supportFeedback}
-                  voice={config?.text_to_speech?.voice}
-                  workflowProcessData={workflowProcessData}
-                />
-              </div>
+              {/* action buttons（ui_config.components.show_message_actions 门控；siteInfo=null 的 console 面默认 true 零影响） */}
+              {resolveUiConfig(siteInfo).components.show_message_actions && (
+                <div className="absolute right-2 bottom-1 flex items-center">
+                  <GenerationActionGroups
+                    appSourceType={appSourceType}
+                    content={content}
+                    currentTab={currentTab}
+                    depth={depth}
+                    feedback={feedback}
+                    hideLogAction={hideLogAction}
+                    isError={isError}
+                    isInWebApp={isInWebApp}
+                    isResponding={isResponding}
+                    isShowTextToSpeech={isShowTextToSpeech}
+                    isWorkflow={isWorkflow}
+                    messageId={messageId}
+                    moreLikeThis={moreLikeThis}
+                    onFeedback={onFeedback}
+                    onMoreLikeThis={handleMoreLikeThis}
+                    onOpenLogModal={handleOpenLogModal}
+                    onRetry={onRetry}
+                    onSave={onSave}
+                    supportFeedback={supportFeedback}
+                    voice={config?.text_to_speech?.voice}
+                    workflowProcessData={workflowProcessData}
+                  />
+                </div>
+              )}
             </div>
             {/* more like this elements */}
             {!isTop && (

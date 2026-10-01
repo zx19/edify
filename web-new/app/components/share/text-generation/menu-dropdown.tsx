@@ -2,6 +2,7 @@
 import type { DropdownMenuContentProps } from '@xsl/lomva-ui/dropdown-menu'
 import type { FC } from 'react'
 import type { SiteInfo } from '@/models/share'
+import { cn } from '@xsl/lomva-ui/cn'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +12,10 @@ import {
   DropdownMenuTrigger,
 } from '@xsl/lomva-ui/dropdown-menu'
 import { IconButton } from '@xsl/lomva-ui/icon-button'
+import { useTheme } from 'next-themes'
 import * as React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ThemeSwitcher from '@/app/components/base/theme-switcher'
 import { useWebAppStore } from '@/context/web-app-context'
 import { AccessMode } from '@/models/access-control'
 import { usePathname, useRouter } from '@/next/navigation'
@@ -29,11 +30,23 @@ type Props = Readonly<
   }
 >
 
+/**
+ * text-gen 族 ⋯ 菜单（header 右唯一菜单落点，对照表 §3）：
+ * 主题三态文字 segment（footer-menu 同款 var token；ThemeSwitcher icon 版退役出本族）
+ * + 隐私政策（site 配置才显示）+ 关于（描述已并入弹窗）+ 退出登录（条件显隐沿用）
+ */
 const MenuDropdown: FC<Props> = ({ data, placement, hideLogout }) => {
   const webAppAccessMode = useWebAppStore((s) => s.webAppAccessMode)
   const router = useRouter()
   const pathname = usePathname()
   const { t } = useTranslation()
+  const { theme, setTheme } = useTheme()
+
+  const themeOptions = [
+    { value: 'system', label: t(($) => $['theme.auto'], { ns: 'common' }) },
+    { value: 'light', label: t(($) => $['theme.light'], { ns: 'common' }) },
+    { value: 'dark', label: t(($) => $['theme.dark'], { ns: 'common' }) },
+  ] as const
 
   const handleLogout = async () => {
     await webAppLogout(resolveWebAppAddress())
@@ -66,10 +79,27 @@ const MenuDropdown: FC<Props> = ({ data, placement, hideLogout }) => {
           sideOffset={4}
           className="w-[200px]"
         >
-          <div className="px-3 py-1.5 text-[13px] text-[var(--text-2)]">
-            <div className="flex items-center gap-2">
-              <div className="grow">{t(($) => $['theme.theme'], { ns: 'common' })}</div>
-              <ThemeSwitcher />
+          <div className="px-2 py-1.5">
+            <div
+              role="group"
+              aria-label={t(($) => $['theme.theme'], { ns: 'common' })}
+              className="flex rounded-lg bg-[var(--bg-soft)] p-0.5"
+            >
+              {themeOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-pressed={theme === option.value}
+                  onClick={() => setTheme(option.value)}
+                  className={cn(
+                    'h-[26px] flex-1 rounded-md text-xs font-medium text-[var(--text-3)] transition-colors',
+                    theme === option.value &&
+                      'bg-[var(--card)] font-semibold text-[var(--text-1)] shadow-[var(--shadow-xs)]',
+                  )}
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
           </div>
           <DropdownMenuSeparator className="my-0" />

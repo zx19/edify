@@ -52,6 +52,11 @@ vi.mock('@/service/webapp-auth', () => ({
   webAppLogout: (...args: unknown[]) => mockWebAppLogout(...args),
 }))
 
+const setThemeMock = vi.hoisted(() => vi.fn())
+vi.mock('next-themes', () => ({
+  useTheme: () => ({ theme: 'light', setTheme: setThemeMock }),
+}))
+
 vi.mock('@/service/webapp-address', () => ({
   resolveWebAppAddress: () => webAppAddress,
 }))
@@ -82,7 +87,7 @@ describe('MenuDropdown', () => {
     it('should not show dropdown content initially', () => {
       render(<MenuDropdown data={baseSiteInfo} />)
 
-      expect(screen.queryByText('common.theme.theme')).not.toBeInTheDocument()
+      expect(screen.queryByRole('group', { name: 'common.theme.theme' })).not.toBeInTheDocument()
     })
 
     it('should show dropdown content when clicked', async () => {
@@ -92,8 +97,27 @@ describe('MenuDropdown', () => {
       fireEvent.click(triggerButton)
 
       await waitFor(() => {
-        expect(screen.getByText('common.theme.theme')).toBeInTheDocument()
+        expect(screen.getByRole('group', { name: 'common.theme.theme' })).toBeInTheDocument()
       })
+    })
+
+    it('主题三态文字段：跟随系统/浅色/深色，点击调 setTheme，当前项 aria-pressed', async () => {
+      render(<MenuDropdown data={baseSiteInfo} />)
+
+      fireEvent.click(screen.getByRole('button'))
+
+      await waitFor(() => {
+        expect(screen.getByRole('group', { name: 'common.theme.theme' })).toBeInTheDocument()
+      })
+      const systemBtn = screen.getByRole('button', { name: 'common.theme.auto' })
+      const lightBtn = screen.getByRole('button', { name: 'common.theme.light' })
+      const darkBtn = screen.getByRole('button', { name: 'common.theme.dark' })
+      // mock theme='light'
+      expect(lightBtn).toHaveAttribute('aria-pressed', 'true')
+      expect(systemBtn).toHaveAttribute('aria-pressed', 'false')
+
+      fireEvent.click(darkBtn)
+      expect(setThemeMock).toHaveBeenCalledWith('dark')
     })
 
     it('should show About option in dropdown', async () => {
@@ -248,12 +272,12 @@ describe('MenuDropdown', () => {
 
       fireEvent.click(triggerButton)
       await waitFor(() => {
-        expect(screen.getByText('common.theme.theme')).toBeInTheDocument()
+        expect(screen.getByRole('group', { name: 'common.theme.theme' })).toBeInTheDocument()
       })
 
       fireEvent.click(triggerButton)
       await waitFor(() => {
-        expect(screen.queryByText('common.theme.theme')).not.toBeInTheDocument()
+        expect(screen.queryByRole('group', { name: 'common.theme.theme' })).not.toBeInTheDocument()
       })
     })
   })

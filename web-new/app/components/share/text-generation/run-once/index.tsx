@@ -298,7 +298,8 @@ const RunOnce: FC<IRunOnceProps> = ({
               </div>
             </div>
           )}
-          <div className="mt-6 mb-3 flex items-center justify-between gap-2">
+          {/* 操作条：桌面 sticky 沉底（表单列独立滚动内）；<900px/移动静态（mockup 移动帧 position:static） */}
+          <div className="mt-6 mb-3 flex items-center justify-between gap-2 @[900px]:sticky @[900px]:bottom-0 @[900px]:mb-0 @[900px]:bg-[var(--bg)] @[900px]:py-2.5">
             <Button onClick={onClear} disabled={false}>
               <span className="text-[13px]">
                 {t(($) => $['operation.clear'], { ns: 'common' })}

@@ -342,4 +342,52 @@ describe('GenerationItem', () => {
     )
     expect(mockFetchMoreLikeThis).not.toHaveBeenCalled()
   })
+
+  it('show_message_actions=false 时结果项操作行整行不渲染（ui_config 降级行补落地）', () => {
+    render(
+      <GenerationItem
+        appSourceType={AppSourceType.webApp}
+        content="hello world"
+        isError={false}
+        isInWebApp
+        isShowTextToSpeech={false}
+        messageId="msg-1"
+        moreLikeThis
+        onRetry={vi.fn()}
+        siteInfo={
+          {
+            title: 'App',
+            icon: '',
+            icon_type: 'emoji',
+            ui_config: { components: { show_message_actions: false } },
+          } as any
+        }
+        supportFeedback
+      />,
+    )
+
+    expect(screen.getByText('markdown:hello world')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /(?:^|\.)operation\.(?:agree|copy)(?=$|:)/ }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('console 面 siteInfo=null 时操作行默认渲染（门控零影响）', () => {
+    render(
+      <GenerationItem
+        appSourceType={AppSourceType.webApp}
+        content="hello world"
+        isError={false}
+        isInWebApp
+        isShowTextToSpeech={false}
+        messageId="msg-1"
+        onRetry={vi.fn()}
+        siteInfo={null}
+      />,
+    )
+
+    expect(
+      screen.getByRole('button', { name: /(?:^|\.)operation\.copy(?=$|:)/ }),
+    ).toBeInTheDocument()
+  })
 })
