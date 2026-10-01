@@ -41,9 +41,9 @@ export type BatchResultsProps = {
 }
 
 /**
- * 批量结果区（批量视图 720 单列内，对照表 §5）。
- * T2 自 text-generation-result-panel 批量支路机械迁入（执行数头/逐项 Res/失败重试条）；
- * 重试条由绝对定位浮条改流内（壳层已无抽屉/遮罩）。头卡化在 T3。
+ * 批量结果区（批量视图 720 单列内，对照表 §5）：
+ * 批量结果标题 + 头卡（共 N 条/成功/失败计数 + 重试失败 + 下载结果）+ 逐项 Res + 未完成 Loading。
+ * 自旧 text-generation-result-panel 批量支路迁出；执行数头与绝对定位重试浮条退役。
  */
 const BatchResults: FC<BatchResultsProps> = (props) => {
   const {

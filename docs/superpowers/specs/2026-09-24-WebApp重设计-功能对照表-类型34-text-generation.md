@@ -105,3 +105,20 @@
 - [x] dark 变体（工具条可切）
 - [x] ui_config / 条件项（批量 tab/工作流步骤/消息操作/vision 四开关实证）
 - [x] 双列断点退化（<900px 单列）+ 移动端单列
+
+## 实现核销（2026-10-02 回炉闭环）
+
+计划：`docs/superpowers/plans/2026-10-01-textgen族呈现层回炉.md`（行为变更 12 条登记在册）。
+
+| 节 | 落点 | 实现（commit） | 核销 |
+|---|---|---|---|
+| §1 路由与外壳 | 三路由 + installed-app 不变；运行一次双列（360/自适应、独立滚动、容器查询 <900px 退化）；移动单列 | `78c2dfd1a5` | ✅ |
+| §2 侧栏拆解 | header（app 信息+⋯）+ segment（D8，role=tablist+方向键循环）+ 描述卡并入关于（弹窗本就有）+ 品牌沉壳底；sidebar 文件删除 | `78c2dfd1a5` | ✅ |
+| §3 更多菜单 | ⋯ 菜单原位迁 header；主题区 = 文字三态 segment（`ThemeSwitcher` 退役出本族） | `344514688b` | ✅ |
+| §4 运行一次 | 表单 8 型/清空/运行/Enter 全不动；操作条桌面 sticky 沉底；运行中变形语义不动 | `344514688b` | ✅ |
+| §5 批量运行 | 单列 720 = CSV 区 + 批量结果（头卡：共 N 条/成功/失败/重试失败/下载）；执行数头与绝对定位重试条退役 | `61d1b38868` | ✅ |
+| §6 结果面板 | run pane 化（结果头行+Res）；移动抽屉+drag handle 拆除（D10）；bg 纯色；空态虚线框（`generation.noData` 改值）；inline 停止钮 run 视图本就不渲染（`hideInlineStopButton` 现状） | `344514688b`/`78c2dfd1a5` | ✅ |
+| §7 全局行为 | toast/门禁/dark 不动 | — | ✅ |
+| ui_config 降级表 | show_batch_tab segment 显隐+URL 兜底（现状保留）；show_message_actions 结果项操作行门控**补落地**（item 内消费，console 面 null 默认 true 零影响）；show_citation 无渲染对象 | `344514688b` | ✅ |
+
+验证口径：族 20 spec 文件 133 用例全绿 + text-generate/explore 回归绿（合计 333）+ tsc 0；QA 走查（`/workflow/iX3uigRobO2K7MXE`）桌面双列/空态虚线框/真跑全链（过程卡+结果/详情+操作行）/dark/窄窗 800 单列退化/移动 390 无抽屉流内/⋯菜单主题段 全过。运行钮变形竞态未实机捕获（QA 工作流 <1.5s 完成），机制代码未动由 spec 锁定。completion 型差异行（已保存/保存/再来一条）spec 锁定；实机待 QA 应用（清单遗留 #4 仍开）。
