@@ -42,58 +42,63 @@ const apps = [
 const mockAppDetailQuery = vi.hoisted(() => vi.fn())
 const mockUseAppWorkflow = vi.hoisted(() => vi.fn())
 
-vi.mock('@/service/client', () => ({
-  consoleQuery: {
-    apps: {
-      get: {
-        infiniteOptions: ({
-          input,
-          getNextPageParam,
-          initialPageParam,
-          placeholderData,
-        }: {
-          input: (pageParam: number) => { query: { name?: string } }
-          getNextPageParam: (lastPage: { has_more: boolean; page: number }) => number | undefined
-          initialPageParam: number
-          placeholderData: unknown
-        }) => ({
-          queryKey: ['apps', input(1).query],
-          queryFn: ({ pageParam = initialPageParam }: { pageParam?: number }) => {
-            const query = input(Number(pageParam)).query
-            const keyword = query.name?.toLowerCase() ?? ''
-            const filteredApps = keyword
-              ? apps.filter((app) => app.name.toLowerCase().includes(keyword))
-              : apps
-
-            return {
-              data: filteredApps,
-              has_more: false,
-              page: Number(pageParam),
-            }
-          },
-          getNextPageParam,
-          initialPageParam,
-          placeholderData,
-        }),
-      },
-      byAppId: {
+// 3a webapp-client 经 service/share 传递链在模块期调用 getBaseURL——mock 须保留真模块全量导出
+vi.mock('@/service/client', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    ...actual,
+    consoleQuery: {
+      apps: {
         get: {
-          queryOptions: ({ input }: { input: unknown }) => {
-            const appId =
-              typeof input === 'object' && input && 'params' in input
-                ? (input.params as { app_id: string }).app_id
-                : undefined
-            return {
-              queryKey: ['apps', appId],
-              queryFn: () => mockAppDetailQuery(appId),
-              enabled: !!appId,
-            }
+          infiniteOptions: ({
+            input,
+            getNextPageParam,
+            initialPageParam,
+            placeholderData,
+          }: {
+            input: (pageParam: number) => { query: { name?: string } }
+            getNextPageParam: (lastPage: { has_more: boolean; page: number }) => number | undefined
+            initialPageParam: number
+            placeholderData: unknown
+          }) => ({
+            queryKey: ['apps', input(1).query],
+            queryFn: ({ pageParam = initialPageParam }: { pageParam?: number }) => {
+              const query = input(Number(pageParam)).query
+              const keyword = query.name?.toLowerCase() ?? ''
+              const filteredApps = keyword
+                ? apps.filter((app) => app.name.toLowerCase().includes(keyword))
+                : apps
+
+              return {
+                data: filteredApps,
+                has_more: false,
+                page: Number(pageParam),
+              }
+            },
+            getNextPageParam,
+            initialPageParam,
+            placeholderData,
+          }),
+        },
+        byAppId: {
+          get: {
+            queryOptions: ({ input }: { input: unknown }) => {
+              const appId =
+                typeof input === 'object' && input && 'params' in input
+                  ? (input.params as { app_id: string }).app_id
+                  : undefined
+              return {
+                queryKey: ['apps', appId],
+                queryFn: () => mockAppDetailQuery(appId),
+                enabled: !!appId,
+              }
+            },
           },
         },
       },
     },
-  },
-}))
+  }
+})
 
 vi.mock('@/service/use-common', () => ({
   useFileUploadConfig: () => ({

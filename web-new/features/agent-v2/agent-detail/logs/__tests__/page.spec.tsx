@@ -47,48 +47,54 @@ vi.mock('@/hooks/use-timestamp', () => ({
   }),
 }))
 
-vi.mock('@/service/client', () => ({
-  consoleQuery: {
-    systemFeatures: {
-      get: {
-        queryKey: () => ['console', 'systemFeatures', 'get'],
-        queryOptions: (options?: Record<string, unknown>) => ({
-          queryKey: ['console', 'systemFeatures', 'get'],
-          queryFn: () => new Promise(() => {}),
-          ...options,
-        }),
+vi.mock('@/service/client', async (importOriginal) => {
+  // 3a webapp-client 经传递链在模块期调用 getBaseURL——仅补该导出；
+  // 其余导出维持字面量 mock 语义（全量 spread 会让未列出的 oRPC 工厂变真而行为漂移）
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    getBaseURL: actual.getBaseURL,
+    consoleQuery: {
+      systemFeatures: {
+        get: {
+          queryKey: () => ['console', 'systemFeatures', 'get'],
+          queryOptions: (options?: Record<string, unknown>) => ({
+            queryKey: ['console', 'systemFeatures', 'get'],
+            queryFn: () => new Promise(() => {}),
+            ...options,
+          }),
+        },
       },
-    },
-    agent: {
-      byAgentId: {
-        feedbacks: {
-          post: {
-            mutationOptions: mocks.feedbackMutationOptions,
+      agent: {
+        byAgentId: {
+          feedbacks: {
+            post: {
+              mutationOptions: mocks.feedbackMutationOptions,
+            },
           },
-        },
-        logSources: {
-          get: {
-            queryOptions: mocks.logSourcesQueryOptions,
+          logSources: {
+            get: {
+              queryOptions: mocks.logSourcesQueryOptions,
+            },
           },
-        },
-        logs: {
-          get: {
-            key: () => ['agent-logs'],
-            queryOptions: mocks.logsQueryOptions,
-          },
-          byConversationId: {
-            messages: {
-              get: {
-                key: () => ['agent-log-messages'],
-                queryOptions: mocks.messagesQueryOptions,
+          logs: {
+            get: {
+              key: () => ['agent-logs'],
+              queryOptions: mocks.logsQueryOptions,
+            },
+            byConversationId: {
+              messages: {
+                get: {
+                  key: () => ['agent-log-messages'],
+                  queryOptions: mocks.messagesQueryOptions,
+                },
               },
             },
           },
         },
       },
     },
-  },
-}))
+  }
+})
 
 const emptyLogsResponse: AgentLogListResponse = {
   data: [],

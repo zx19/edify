@@ -201,98 +201,103 @@ vi.mock('@/utils/download', () => ({
   downloadBlob: mocks.downloadBlob,
 }))
 
-vi.mock('@/service/client', () => ({
-  consoleClient: {
-    workspaces: {
-      current: {
-        skills: {
-          bySkillId: {
-            get: mocks.skillDetailGetFn,
+vi.mock('@/service/client', async (importOriginal) => {
+  // 3a webapp-client 经传递链在模块期调用 getBaseURL——mock 保留真模块全量导出
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    ...actual,
+    consoleClient: {
+      workspaces: {
+        current: {
+          skills: {
+            bySkillId: {
+              get: mocks.skillDetailGetFn,
+            },
           },
         },
       },
     },
-  },
-  consoleQuery: {
-    workspaces: {
-      current: {
-        agents: {
-          byAgentId: {
-            skills: {
-              get: {
-                key: mocks.agentSkillBindingsKey,
-              },
-            },
-          },
-        },
-        skills: {
-          get: {
-            key: mocks.skillListKey,
-          },
-          tags: {
-            get: {
-              key: mocks.skillTagsKey,
-              queryOptions: mocks.skillTagsQueryOptions,
-            },
-          },
-          bySkillId: {
-            delete: {
-              mutationOptions: () => ({ mutationFn: mocks.deleteSkillMutationFn }),
-            },
-            duplicate: {
-              post: {
-                mutationOptions: () => ({ mutationFn: mocks.duplicateSkillMutationFn }),
-              },
-            },
-            get: {
-              key: mocks.skillDetailKey,
-              queryOptions: mocks.skillDetailQueryOptions,
-            },
-            patch: {
-              mutationOptions: () => ({ mutationFn: mocks.skillMetadataMutationFn }),
-            },
-            publish: {
-              post: {
-                mutationOptions: (options?: unknown) => {
-                  mocks.publishSkillMutationOptions(options)
-                  return { mutationFn: mocks.publishSkillMutationFn }
+    consoleQuery: {
+      workspaces: {
+        current: {
+          agents: {
+            byAgentId: {
+              skills: {
+                get: {
+                  key: mocks.agentSkillBindingsKey,
                 },
               },
             },
-            references: {
+          },
+          skills: {
+            get: {
+              key: mocks.skillListKey,
+            },
+            tags: {
               get: {
-                queryOptions: mocks.skillReferencesQueryOptions,
+                key: mocks.skillTagsKey,
+                queryOptions: mocks.skillTagsQueryOptions,
               },
             },
-            restore: {
-              post: {
-                mutationOptions: () => ({ mutationFn: mocks.restoreSkillMutationFn }),
+            bySkillId: {
+              delete: {
+                mutationOptions: () => ({ mutationFn: mocks.deleteSkillMutationFn }),
               },
-            },
-            files: {
-              check: {
+              duplicate: {
                 post: {
-                  mutationOptions: () => ({ mutationFn: mocks.checkDraftFilesMutationFn }),
+                  mutationOptions: () => ({ mutationFn: mocks.duplicateSkillMutationFn }),
                 },
+              },
+              get: {
+                key: mocks.skillDetailKey,
+                queryOptions: mocks.skillDetailQueryOptions,
               },
               patch: {
-                mutationOptions: () => ({ mutationFn: mocks.saveDraftFileMutationFn }),
+                mutationOptions: () => ({ mutationFn: mocks.skillMetadataMutationFn }),
               },
-            },
-            versions: {
-              get: {
-                key: mocks.skillVersionsKey,
-                queryOptions: mocks.skillVersionsQueryOptions,
+              publish: {
+                post: {
+                  mutationOptions: (options?: unknown) => {
+                    mocks.publishSkillMutationOptions(options)
+                    return { mutationFn: mocks.publishSkillMutationFn }
+                  },
+                },
               },
-              byVersionId: {
+              references: {
                 get: {
-                  queryOptions: mocks.skillVersionDetailQueryOptions,
+                  queryOptions: mocks.skillReferencesQueryOptions,
+                },
+              },
+              restore: {
+                post: {
+                  mutationOptions: () => ({ mutationFn: mocks.restoreSkillMutationFn }),
+                },
+              },
+              files: {
+                check: {
+                  post: {
+                    mutationOptions: () => ({ mutationFn: mocks.checkDraftFilesMutationFn }),
+                  },
                 },
                 patch: {
-                  mutationOptions: () => ({ mutationFn: mocks.versionPatchMutationFn }),
+                  mutationOptions: () => ({ mutationFn: mocks.saveDraftFileMutationFn }),
                 },
-                delete: {
-                  mutationOptions: () => ({ mutationFn: mocks.versionDeleteMutationFn }),
+              },
+              versions: {
+                get: {
+                  key: mocks.skillVersionsKey,
+                  queryOptions: mocks.skillVersionsQueryOptions,
+                },
+                byVersionId: {
+                  get: {
+                    queryOptions: mocks.skillVersionDetailQueryOptions,
+                  },
+                  patch: {
+                    mutationOptions: () => ({ mutationFn: mocks.versionPatchMutationFn }),
+                  },
+                  delete: {
+                    mutationOptions: () => ({ mutationFn: mocks.versionDeleteMutationFn }),
+                  },
                 },
               },
             },
@@ -300,8 +305,8 @@ vi.mock('@/service/client', () => ({
         },
       },
     },
-  },
-}))
+  }
+})
 
 vi.mock('../permissions', () => ({
   useSkillPermissions: () => ({ canDelete: true, canEdit: true, canPublish: true }),

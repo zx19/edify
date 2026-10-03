@@ -73,47 +73,24 @@ vi.mock('@/service/use-common', () => ({
   useFileUploadConfig: () => ({ data: mocks.fileUploadConfig }),
 }))
 
-vi.mock('@/service/client', () => ({
-  consoleQuery: {
-    systemFeatures: {
-      get: {
-        queryKey: () => ['console', 'systemFeatures', 'get'],
-        queryOptions: (options?: Record<string, unknown>) => ({
-          queryKey: ['console', 'systemFeatures', 'get'],
-          queryFn: () => new Promise(() => {}),
-          ...options,
-        }),
-      },
-    },
-    agent: {
-      byAgentId: {
-        config: {
-          files: {
-            post: {
-              mutationOptions: () => ({ mutationFn: mocks.commitFileMutationFn }),
-            },
-            byName: {
-              delete: {
-                mutationOptions: () => ({ mutationFn: mocks.deleteFileMutationFn }),
-              },
-              preview: {
-                get: {
-                  queryOptions: mocks.previewQueryOptions,
-                },
-              },
-              download: {
-                get: {
-                  queryOptions: mocks.downloadQueryOptions,
-                },
-              },
-            },
-          },
+vi.mock('@/service/client', async (importOriginal) => {
+  // 3a webapp-client 经传递链在模块期调用 getBaseURL——mock 保留真模块全量导出
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    ...actual,
+    consoleQuery: {
+      systemFeatures: {
+        get: {
+          queryKey: () => ['console', 'systemFeatures', 'get'],
+          queryOptions: (options?: Record<string, unknown>) => ({
+            queryKey: ['console', 'systemFeatures', 'get'],
+            queryFn: () => new Promise(() => {}),
+            ...options,
+          }),
         },
       },
-    },
-    apps: {
-      byAppId: {
-        agent: {
+      agent: {
+        byAgentId: {
           config: {
             files: {
               post: {
@@ -138,16 +115,44 @@ vi.mock('@/service/client', () => ({
           },
         },
       },
-    },
-    files: {
-      upload: {
-        post: {
-          mutationOptions: () => ({ mutationFn: mocks.uploadFileMutationFn }),
+      apps: {
+        byAppId: {
+          agent: {
+            config: {
+              files: {
+                post: {
+                  mutationOptions: () => ({ mutationFn: mocks.commitFileMutationFn }),
+                },
+                byName: {
+                  delete: {
+                    mutationOptions: () => ({ mutationFn: mocks.deleteFileMutationFn }),
+                  },
+                  preview: {
+                    get: {
+                      queryOptions: mocks.previewQueryOptions,
+                    },
+                  },
+                  download: {
+                    get: {
+                      queryOptions: mocks.downloadQueryOptions,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      files: {
+        upload: {
+          post: {
+            mutationOptions: () => ({ mutationFn: mocks.uploadFileMutationFn }),
+          },
         },
       },
     },
-  },
-}))
+  }
+})
 
 function ConfigSnapshotProbe() {
   const draft = useAtomValue(agentComposerDraftAtom)

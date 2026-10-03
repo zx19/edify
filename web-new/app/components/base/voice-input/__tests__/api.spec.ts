@@ -10,24 +10,29 @@ vi.mock('@/service/share', async (importOriginal) => {
   }
 })
 
-vi.mock('@/service/client', () => ({
-  consoleClient: {
-    apps: {
-      byAppId: {
-        audioToText: {
-          post: vi.fn(),
+// 3a webapp-client 经 service/share 传递链在模块期调用 getBaseURL——mock 须保留真模块全量导出
+vi.mock('@/service/client', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    ...actual,
+    consoleClient: {
+      apps: {
+        byAppId: {
+          audioToText: {
+            post: vi.fn(),
+          },
+        },
+      },
+      agent: {
+        byAgentId: {
+          audioToText: {
+            post: vi.fn(),
+          },
         },
       },
     },
-    agent: {
-      byAgentId: {
-        audioToText: {
-          post: vi.fn(),
-        },
-      },
-    },
-  },
-}))
+  }
+})
 
 describe('transcribeAudio', () => {
   beforeEach(() => {

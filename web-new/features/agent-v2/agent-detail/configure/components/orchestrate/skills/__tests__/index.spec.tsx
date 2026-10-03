@@ -120,61 +120,24 @@ vi.mock('@/context/provider-context', () => ({
     selector(mocks.providerContext),
 }))
 
-vi.mock('@/service/client', () => ({
-  consoleQuery: {
-    tags: {
-      get: {
-        queryOptions: mocks.workspaceSkillTagsQueryOptions,
-      },
-    },
-    agent: {
-      byAgentId: {
-        composer: {
-          get: {
-            key: vi.fn((_options: unknown): unknown[] => ['agent-composer']),
-          },
-        },
-        config: {
-          skills: {
-            upload: {
-              post: {
-                mutationOptions: () => ({ mutationFn: mocks.uploadSkillMutationFn }),
-              },
-            },
-            byName: {
-              delete: {
-                mutationOptions: () => ({ mutationFn: mocks.deleteSkillMutationFn }),
-              },
-              download: {
-                get: {
-                  queryOptions: mocks.skillDownloadQueryOptions,
-                },
-              },
-              inspect: {
-                get: {
-                  queryOptions: mocks.inspectQueryOptions,
-                },
-              },
-              files: {
-                preview: {
-                  get: {
-                    queryOptions: mocks.previewQueryOptions,
-                  },
-                },
-                download: {
-                  get: {
-                    queryOptions: mocks.downloadQueryOptions,
-                  },
-                },
-              },
-            },
-          },
+vi.mock('@/service/client', async (importOriginal) => {
+  // 3a webapp-client 经传递链在模块期调用 getBaseURL——mock 保留真模块全量导出
+  const actual = await importOriginal<typeof import('@/service/client')>()
+  return {
+    ...actual,
+    consoleQuery: {
+      tags: {
+        get: {
+          queryOptions: mocks.workspaceSkillTagsQueryOptions,
         },
       },
-    },
-    apps: {
-      byAppId: {
-        agent: {
+      agent: {
+        byAgentId: {
+          composer: {
+            get: {
+              key: vi.fn((_options: unknown): unknown[] => ['agent-composer']),
+            },
+          },
           config: {
             skills: {
               upload: {
@@ -213,32 +176,76 @@ vi.mock('@/service/client', () => ({
           },
         },
       },
-    },
-    workspaces: {
-      current: {
-        agents: {
-          byAgentId: {
-            skills: {
-              get: {
-                key: mocks.agentSkillBindingsKey,
-                queryOptions: mocks.agentSkillBindingsQueryOptions,
-              },
-              put: {
-                mutationOptions: () => ({ mutationFn: mocks.replaceAgentSkillBindingsMutationFn }),
+      apps: {
+        byAppId: {
+          agent: {
+            config: {
+              skills: {
+                upload: {
+                  post: {
+                    mutationOptions: () => ({ mutationFn: mocks.uploadSkillMutationFn }),
+                  },
+                },
+                byName: {
+                  delete: {
+                    mutationOptions: () => ({ mutationFn: mocks.deleteSkillMutationFn }),
+                  },
+                  download: {
+                    get: {
+                      queryOptions: mocks.skillDownloadQueryOptions,
+                    },
+                  },
+                  inspect: {
+                    get: {
+                      queryOptions: mocks.inspectQueryOptions,
+                    },
+                  },
+                  files: {
+                    preview: {
+                      get: {
+                        queryOptions: mocks.previewQueryOptions,
+                      },
+                    },
+                    download: {
+                      get: {
+                        queryOptions: mocks.downloadQueryOptions,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
         },
-        skills: {
-          get: {
-            queryOptions: mocks.workspaceSkillsQueryOptions,
-            infiniteOptions: mocks.workspaceSkillsInfiniteOptions,
+      },
+      workspaces: {
+        current: {
+          agents: {
+            byAgentId: {
+              skills: {
+                get: {
+                  key: mocks.agentSkillBindingsKey,
+                  queryOptions: mocks.agentSkillBindingsQueryOptions,
+                },
+                put: {
+                  mutationOptions: () => ({
+                    mutationFn: mocks.replaceAgentSkillBindingsMutationFn,
+                  }),
+                },
+              },
+            },
+          },
+          skills: {
+            get: {
+              queryOptions: mocks.workspaceSkillsQueryOptions,
+              infiniteOptions: mocks.workspaceSkillsInfiniteOptions,
+            },
           },
         },
       },
     },
-  },
-}))
+  }
+})
 
 async function openUploadSkillDialog(user: ReturnType<typeof userEvent.setup>) {
   await user.click(

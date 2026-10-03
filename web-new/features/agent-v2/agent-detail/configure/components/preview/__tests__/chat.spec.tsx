@@ -226,11 +226,14 @@ vi.mock('@/app/components/header/account-setting/model-provider-page/hooks', () 
   }),
 }))
 
-vi.mock('@/service/client', async () => {
+vi.mock('@/service/client', async (importOriginal) => {
+  // 3a webapp-client 经传递链在模块期调用 getBaseURL——mock 保留真模块全量导出
+  const actual = await importOriginal<typeof import('@/service/client')>()
   const { skipToken } = await import('@tanstack/react-query')
   const getChatMessagesQueryKey = (input: unknown) => ['agent-chat-conversation-messages', input]
 
   return {
+    ...actual,
     consoleClient: {
       agent: {
         byAgentId: {
