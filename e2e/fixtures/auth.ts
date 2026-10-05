@@ -102,6 +102,19 @@ const loginAdmin = async (client: ReturnType<typeof createConsoleClient>, deadli
   )
 }
 
+// install 瘦身后首账号无空间：login 预检放行无空间管理员，install 模式下
+// 登录后须由系统管理员端点补建首空间（create_owner_tenant 会将其置为 current tenant）。
+const createInitialWorkspace = async (
+  client: ReturnType<typeof createConsoleClient>,
+  deadline: number,
+) => {
+  console.warn('[e2e] auth bootstrap: creating initial workspace (post-install)')
+  await client.admin.workspaces.post(
+    { body: { name: 'E2E Workspace', owner_email: adminCredentials.email } },
+    { context: { timeoutMs: getRemainingTimeout(deadline) } },
+  )
+}
+
 export const ensureAuthenticatedState = async (browser: Browser, configuredBaseURL?: string) => {
   const baseURL = resolveBaseURL(configuredBaseURL)
   const deadline = Date.now() + AUTH_FLOW_TIMEOUT_MS
@@ -117,6 +130,7 @@ export const ensureAuthenticatedState = async (browser: Browser, configuredBaseU
   try {
     const { mode, usedInitPassword } = await ensureAdminAccount(client, deadline)
     await loginAdmin(client, deadline)
+    if (mode === 'install') await createInitialWorkspace(client, deadline)
 
     await context.storageState({ path: authStatePath })
 
