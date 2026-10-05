@@ -1638,11 +1638,10 @@ class TestRegisterService:
                         ip_address="192.168.1.1",
                         session=service_session,
                     )
-                    mock_create_tenant.assert_called_once_with(
-                        account=mock_account,
-                        is_setup=True,
-                        session=service_session,
-                    )
+                    # install 瘦身：setup 不再建空间，首账号直接落创始人管理员标记
+                    mock_create_tenant.assert_not_called()
+                    assert mock_account.is_system_admin is True
+                    assert mock_account.system_admin_source == "install"
                     mock_report_install.assert_called_once_with(session=service_session)
 
         with sqlite_session_factory() as assertion_session:
@@ -1664,7 +1663,6 @@ class TestRegisterService:
 
         with (
             patch("services.account_service.AccountService.create_account", return_value=mock_account),
-            patch("services.account_service.TenantService.create_owner_tenant_if_not_exist"),
             patch(
                 "services.account_service.CommunityTelemetryService.report_install",
                 side_effect=RuntimeError("telemetry unavailable"),
@@ -1695,11 +1693,11 @@ class TestRegisterService:
         mock_external_service_dependencies["billing_service"].is_email_in_freeze.return_value = False
 
         with patch(
-            "services.account_service.TenantService.create_owner_tenant_if_not_exist",
-            side_effect=RuntimeError("tenant creation failed"),
+            "services.account_service.naive_utc_now",
+            side_effect=RuntimeError("post-create step failed"),
         ):
             with sqlite_session_factory() as service_session:
-                with pytest.raises(ValueError, match="Setup failed: tenant creation failed"):
+                with pytest.raises(ValueError, match="Setup failed: post-create step failed"):
                     RegisterService.setup(
                         "admin@example.com",
                         "Admin User",

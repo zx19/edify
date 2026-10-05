@@ -82,6 +82,7 @@ from services.errors.account import (
 )
 from services.errors.workspace import WorkSpaceNotAllowedCreateError, WorkspacesLimitExceededError
 from services.feature_service import FeatureService
+from services.system_admin_service import is_system_admin
 from services.turnstile_service import (
     EMAIL_CODE_VERIFY_ACTION,
     TurnstileChallengeRejectedError,
@@ -199,7 +200,7 @@ class LoginApi(Resource):
             _log_console_login_failure(email=normalized_email, reason=LoginFailureReason.INVALID_CREDENTIALS)
             raise AuthenticationFailedError() from exc
         tenants = TenantService.get_join_tenants(account, session=db.session())
-        if len(tenants) == 0:
+        if len(tenants) == 0 and not is_system_admin(account):
             if (
                 FeatureService.is_workspace_creation_allowed()
                 and not FeatureService.get_license().workspaces.is_available()

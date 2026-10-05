@@ -81,6 +81,7 @@ from services.errors.account import (
 from services.errors.workspace import WorkSpaceNotAllowedCreateError, WorkspacesLimitExceededError
 from services.feature_service import FeatureService
 from services.plugin.plugin_auto_upgrade_service import PluginAutoUpgradeService
+from services.system_admin_service import is_system_admin
 from services.telemetry_service import CommunityTelemetryService
 from tasks.mail_change_mail_task import (
     send_change_mail_completed_notification_task,
@@ -374,6 +375,9 @@ class AccountService:
             if available_tenant_join is None:
                 if current_tenant_join is not None:
                     session.commit()
+                # 系统管理员允许无空间登录（落 /admin；普通接口仍依赖 current_tenant，前端隔离）
+                if is_system_admin(account):
+                    return account
                 return None
 
             account.set_tenant_id_with_session(available_tenant_join.tenant_id, session=session)
@@ -1951,8 +1955,8 @@ class RegisterService:
             )
 
             account.initialized_at = naive_utc_now()
-
-            TenantService.create_owner_tenant_if_not_exist(account=account, is_setup=True, session=session)
+            account.is_system_admin = True
+            account.system_admin_source = "install"
 
             dify_setup = DifySetup(version=dify_config.project.version, instance_id=str(uuid.uuid4()))
             session.add(dify_setup)
