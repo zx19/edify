@@ -28,6 +28,8 @@ class AccountResponse(_AccountAvatarResponseMixin):
     name: str
     email: str
     is_password_set: bool
+    is_system_admin: bool = False
+    system_admin_source: str | None = None
     interface_language: str | None = None
     interface_theme: str | None = None
     timezone: str | None = None

@@ -5,6 +5,7 @@ from http import HTTPStatus
 from typing import Annotated, Literal
 
 from flask import request
+from flask_login import current_user
 from flask_restx import Resource
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from pydantic.json_schema import SkipJsonSchema
@@ -54,7 +55,8 @@ from fields.member_fields import AccountResponse
 from libs.helper import EmailStr, dump_response, extract_remote_ip, timezone, to_timestamp
 from machinery.context import RequestContext
 from services import account_errors
-from services.entities.account_entities import AccountProfileChanges
+from services.entities.account_entities import AccountProfileChanges, AccountSnapshot
+from services.system_admin_service import get_system_admin_source, is_system_admin
 
 
 class AccountInitPayload(BaseModel):
@@ -279,12 +281,25 @@ register_response_schema_models(
 )
 
 
+def _dump_profile_response(account: AccountSnapshot) -> dict[str, object]:
+    """Dump the profile payload and enrich it with the caller's system-admin flags.
+
+    The profile service returns an ``AccountSnapshot`` without admin attributes,
+    so the union of the persisted flag and the env list is resolved here from
+    the authenticated session user.
+    """
+    data = dump_response(AccountResponse, account)
+    data["is_system_admin"] = is_system_admin(current_user)
+    data["system_admin_source"] = get_system_admin_source(current_user)
+    return data
+
+
 def _update_account_profile(request_context: RequestContext, changes: AccountProfileChanges) -> dict[str, object]:
     try:
         account = application_services().accounts.profile.update(request_context, changes)
     except account_errors.AccountNotFoundError as error:
         raise AccountNotFound() from error
-    return dump_response(AccountResponse, account)
+    return _dump_profile_response(account)
 
 
 @console_ns.route("/account/init")
@@ -318,17 +333,17 @@ class AccountInitApi(Resource):
 @console_ns.route("/account/profile")
 class AccountProfileApi(Resource):
     @console_ns.response(HTTPStatus.OK, "Success", console_ns.models[AccountResponse.__name__])
-    @console_account_admission(require_valid_enterprise_license=True)
+    @console_account_admission(require_valid_enterprise_license=True, require_tenant=False)
     def get(self, request_context: RequestContext):
         try:
             account = application_services().accounts.profile.get(request_context)
         except account_errors.AccountNotFoundError as error:
             raise AccountNotFound() from error
-        return dump_response(AccountResponse, account)
+        return _dump_profile_response(account)
 
     @console_ns.expect(console_ns.models[AccountProfilePatchPayload.__name__])
     @console_ns.response(HTTPStatus.OK, "Success", console_ns.models[AccountResponse.__name__])
-    @console_account_admission()
+    @console_account_admission(require_tenant=False)
     @model_validate(AccountProfilePatchPayload)
     def patch(self, args: AccountProfilePatchPayload, request_context: RequestContext):
         return _update_account_profile(request_context, args.to_changes())

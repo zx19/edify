@@ -203,6 +203,7 @@ class TestAccountProfileApi:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(profile=profile)),
             ),
+            patch("controllers.console.workspace.account.current_user", user),
         ):
             result = method(api, request_context)
 
@@ -250,6 +251,7 @@ class TestAccountUpdateApis:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(profile=profile)),
             ),
+            patch("controllers.console.workspace.account.current_user", user),
         ):
             result = method(api, request_context)
 
@@ -313,6 +315,7 @@ class TestAccountProfilePatchApi:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(profile=profile)),
             ),
+            patch("controllers.console.workspace.account.current_user", user),
         ):
             result = method(api, args, request_context)
 
@@ -342,6 +345,7 @@ class TestAccountProfilePatchApi:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(profile=profile)),
             ),
+            patch("controllers.console.workspace.account.current_user", user),
         ):
             result = method(api, args, request_context)
 
