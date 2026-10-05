@@ -28,9 +28,11 @@ export const zAccountResponse = z.object({
   interface_language: z.string().nullish(),
   interface_theme: z.string().nullish(),
   is_password_set: z.boolean(),
+  is_system_admin: z.boolean().optional().default(false),
   last_login_at: z.int().nullish(),
   last_login_ip: z.string().nullish(),
   name: z.string(),
+  system_admin_source: z.string().nullish(),
   timezone: z.string().nullish(),
 })
 
@@ -237,9 +239,11 @@ export const zAccountResponseWritable = z.object({
   interface_language: z.string().nullish(),
   interface_theme: z.string().nullish(),
   is_password_set: z.boolean(),
+  is_system_admin: z.boolean().optional().default(false),
   last_login_at: z.int().nullish(),
   last_login_ip: z.string().nullish(),
   name: z.string(),
+  system_admin_source: z.string().nullish(),
   timezone: z.string().nullish(),
 })
 

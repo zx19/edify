@@ -21,9 +21,11 @@ export type AccountResponse = {
   interface_language?: string | null
   interface_theme?: string | null
   is_password_set: boolean
+  is_system_admin?: boolean
   last_login_at?: number | null
   last_login_ip?: string | null
   name: string
+  system_admin_source?: string | null
   timezone?: string | null
 }
 
@@ -156,9 +158,11 @@ export type AccountResponseWritable = {
   interface_language?: string | null
   interface_theme?: string | null
   is_password_set: boolean
+  is_system_admin?: boolean
   last_login_at?: number | null
   last_login_ip?: string | null
   name: string
+  system_admin_source?: string | null
   timezone?: string | null
 }
 
