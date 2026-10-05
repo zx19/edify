@@ -1,7 +1,7 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
-from werkzeug.exceptions import Forbidden
+from werkzeug.exceptions import Forbidden, Unauthorized
 
 from controllers.console.admin import founder_admin_required, system_admin_required
 
@@ -21,7 +21,7 @@ def test_allows_system_admin():
         patch("controllers.console.admin.current_user") as cu,
         patch("controllers.console.admin.is_system_admin", return_value=True),
     ):
-        cu.return_value = MagicMock(is_authenticated=True)
+        cu.is_authenticated = True
         assert _view() == "ok"
 
 
@@ -30,8 +30,15 @@ def test_rejects_non_admin():
         patch("controllers.console.admin.current_user") as cu,
         patch("controllers.console.admin.is_system_admin", return_value=False),
     ):
-        cu.return_value = MagicMock(is_authenticated=True)
+        cu.is_authenticated = True
         with pytest.raises(Forbidden):
+            _view()
+
+
+def test_rejects_unauthenticated():
+    with patch("controllers.console.admin.current_user") as cu:
+        cu.is_authenticated = False
+        with pytest.raises(Unauthorized):
             _view()
 
 
@@ -40,7 +47,7 @@ def test_founder_required_allows_founder():
         patch("controllers.console.admin.current_user") as cu,
         patch("controllers.console.admin.is_founder_admin", return_value=True),
     ):
-        cu.return_value = MagicMock(is_authenticated=True)
+        cu.is_authenticated = True
         assert _founder_view() == "ok"
 
 
@@ -49,6 +56,13 @@ def test_founder_required_rejects_ordinary_admin():
         patch("controllers.console.admin.current_user") as cu,
         patch("controllers.console.admin.is_founder_admin", return_value=False),
     ):
-        cu.return_value = MagicMock(is_authenticated=True)
+        cu.is_authenticated = True
         with pytest.raises(Forbidden):
+            _founder_view()
+
+
+def test_founder_required_rejects_unauthenticated():
+    with patch("controllers.console.admin.current_user") as cu:
+        cu.is_authenticated = False
+        with pytest.raises(Unauthorized):
             _founder_view()
