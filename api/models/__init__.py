@@ -8,6 +8,7 @@ from .account import (
     TenantAccountRole,
     TenantStatus,
 )
+from .admin_audit import AdminAuditLog
 from .agent import (
     Agent,
     AgentConfigDraft,
@@ -159,6 +160,7 @@ __all__ = [
     "AccountStatus",
     "AccountStepByStepTourState",
     "AccountTrialAppRecord",
+    "AdminAuditLog",
     "Agent",
     "AgentConfigDraft",
     "AgentConfigDraftType",
