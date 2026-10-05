@@ -755,6 +755,18 @@ class InnerAPIConfig(BaseSettings):
         default=None,
     )
 
+    inner_SYSTEM_ADMIN_EMAILS: str = Field(
+        description=(
+            "系统管理员邮箱名单（逗号分隔），与 accounts.is_system_admin 取并集；env 来源为普通级、控制台不可撤"
+        ),
+        validation_alias=AliasChoices("SYSTEM_ADMIN_EMAILS"),
+        default="",
+    )
+
+    @computed_field
+    def SYSTEM_ADMIN_EMAILS(self) -> list[str]:
+        return [e.strip() for e in self.inner_SYSTEM_ADMIN_EMAILS.split(",") if e.strip()]
+
 
 class LoggingConfig(BaseSettings):
     """

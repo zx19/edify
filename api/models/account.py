@@ -114,6 +114,10 @@ class Account(UserMixin, TypeBase):
     status: Mapped[AccountStatus] = mapped_column(
         EnumText(AccountStatus, length=16), server_default=sa.text("'active'"), default=AccountStatus.ACTIVE
     )
+    is_system_admin: Mapped[bool] = mapped_column(
+        sa.Boolean, nullable=False, server_default=sa.text("false"), default=False
+    )
+    system_admin_source: Mapped[str | None] = mapped_column(String(16), nullable=True, default=None)
     initialized_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.current_timestamp(), nullable=False, init=False
