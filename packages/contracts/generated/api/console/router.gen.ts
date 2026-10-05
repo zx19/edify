@@ -3,6 +3,7 @@
 import { contract as enterpriseContract } from '../../enterprise/orpc.gen'
 import { account } from './account/orpc.gen'
 import { activate } from './activate/orpc.gen'
+import { admin } from './admin/orpc.gen'
 import { agent } from './agent/orpc.gen'
 import { allWorkspaces } from './all-workspaces/orpc.gen'
 import { apiBasedExtension } from './api-based-extension/orpc.gen'
@@ -58,6 +59,7 @@ import { workspaces } from './workspaces/orpc.gen'
 const communityContract = {
   account,
   activate,
+  admin,
   agent,
   allWorkspaces,
   apiBasedExtension,

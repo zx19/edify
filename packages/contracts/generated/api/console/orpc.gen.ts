@@ -3,6 +3,7 @@
 export const contractLoaders = {
   account: () => import('./account/orpc.gen').then(({ account }) => ({ account })),
   activate: () => import('./activate/orpc.gen').then(({ activate }) => ({ activate })),
+  admin: () => import('./admin/orpc.gen').then(({ admin }) => ({ admin })),
   agent: () => import('./agent/orpc.gen').then(({ agent }) => ({ agent })),
   allWorkspaces: () =>
     import('./all-workspaces/orpc.gen').then(({ allWorkspaces }) => ({ allWorkspaces })),
