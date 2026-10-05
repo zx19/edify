@@ -1,6 +1,6 @@
 """系统管理操作审计查询（/console/api/admin/audit-logs）。"""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from http import HTTPStatus
 
 from flask_restx import Resource
@@ -60,6 +60,11 @@ register_schema_models(
 )
 
 
+def _epoch_to_naive_utc(value: int) -> datetime:
+    """epoch 秒 → 朴素 UTC（created_at 为 DB 时区朴素时间戳，部署态为 UTC）。"""
+    return datetime.fromtimestamp(value, tz=UTC).replace(tzinfo=None)
+
+
 @console_ns.route("/admin/audit-logs")
 class AuditLogListApi(Resource):
     @console_ns.doc(params=query_params_from_model(AdminAuditLogQuery))
@@ -77,9 +82,9 @@ class AuditLogListApi(Resource):
         if args.workspace_id:
             stmt = stmt.where(AdminAuditLog.workspace_id == args.workspace_id)
         if args.start is not None:
-            stmt = stmt.where(AdminAuditLog.created_at >= datetime.fromtimestamp(args.start))
+            stmt = stmt.where(AdminAuditLog.created_at >= _epoch_to_naive_utc(args.start))
         if args.end is not None:
-            stmt = stmt.where(AdminAuditLog.created_at <= datetime.fromtimestamp(args.end))
+            stmt = stmt.where(AdminAuditLog.created_at <= _epoch_to_naive_utc(args.end))
 
         page = paginate_query(stmt, session=session, page=args.page, per_page=args.limit)
         data = [AdminAuditLogItemResponse.model_validate(log, from_attributes=True) for log in page.items]

@@ -35,6 +35,10 @@ class TestGuards:
         with _non_admin(), pytest.raises(Forbidden):
             workspaces_mod.WorkspaceListApi().get()
 
+    def test_create_rejects_unauthenticated(self):
+        with _unauthenticated(), pytest.raises(Unauthorized):
+            workspaces_mod.WorkspaceListApi().post()
+
     def test_create_rejects_non_admin(self):
         with _non_admin(), pytest.raises(Forbidden):
             workspaces_mod.WorkspaceListApi().post()
@@ -113,7 +117,7 @@ class TestCreateWorkspace:
         mock_mail.delay.assert_called_once()
         detail = mock_audit.call_args.kwargs["detail"]
         assert detail["owner_pending"] is True
-        assert detail["email_sent"] is True
+        assert detail["invite_mail_dispatched"] is True
 
     def test_invite_mail_failure_non_blocking(self):
         pending_owner = MagicMock(status=AccountStatus.PENDING, email="new@x.com", interface_language=None)
@@ -136,7 +140,7 @@ class TestCreateWorkspace:
 
         assert status == 201
         assert body["invite_url"] == "/activate?token=tok-2"
-        assert mock_audit.call_args.kwargs["detail"]["email_sent"] is False
+        assert mock_audit.call_args.kwargs["detail"]["invite_mail_dispatched"] is False
 
 
 class TestArchiveIdempotency:

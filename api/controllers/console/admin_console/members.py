@@ -106,22 +106,30 @@ class WorkspaceMemberListApi(Resource):
             raise NotFound("Workspace not found.")
         args = query_params_from_request(AdminMemberListQuery)
 
+        # paginate_query 内部走 session.scalars()，只能接单实体 select；
+        # 账号信息按页批量取，避免 N+1
         stmt = (
-            select(TenantAccountJoin, Account)
-            .join(Account, Account.id == TenantAccountJoin.account_id)
+            select(TenantAccountJoin)
             .where(TenantAccountJoin.tenant_id == tenant_id)
             .order_by(TenantAccountJoin.created_at.asc())
         )
         page = paginate_query(stmt, session=session, page=args.page, per_page=args.limit)
+        account_ids = [join.account_id for join in page.items]
+        accounts = (
+            {a.id: a for a in session.scalars(select(Account).where(Account.id.in_(account_ids))).all()}
+            if account_ids
+            else {}
+        )
         data = [
             AdminMemberItemResponse(
-                account_id=account.id,
-                name=account.name,
-                email=account.email,
+                account_id=join.account_id,
+                name=accounts[join.account_id].name,
+                email=accounts[join.account_id].email,
                 role=str(join.role),
                 created_at=join.created_at,
             )
-            for join, account in page.items
+            for join in page.items
+            if join.account_id in accounts
         ]
         return AdminMemberListResponse(
             data=data, has_more=page.has_next, limit=args.limit, page=args.page, total=page.total
@@ -142,7 +150,7 @@ class MemberAggregateListApi(Resource):
             select(Account)
             .join(TenantAccountJoin, TenantAccountJoin.account_id == Account.id)
             .distinct()
-            .order_by(Account.created_at.desc())
+            .order_by(Account.created_at.desc(), Account.id)
         )
         if args.keyword:
             acct_stmt = acct_stmt.where(

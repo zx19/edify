@@ -7,6 +7,7 @@
 import logging
 from datetime import datetime
 from http import HTTPStatus
+from typing import Literal
 
 from flask_login import current_user
 from flask_restx import Resource
@@ -32,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 class AdminWorkspaceListQuery(BaseModel):
     keyword: str | None = None
-    status: str | None = Field(default=None, description="normal | archive")
+    status: Literal["normal", "archive"] | None = None
     page: int = Field(default=1, ge=1, le=99999)
     limit: int = Field(default=20, ge=1, le=100)
 
@@ -176,7 +177,7 @@ class WorkspaceListApi(Resource):
         )
 
         invite_url: str | None = None
-        email_sent = False
+        invite_mail_dispatched = False
         if owner_pending:
             token = RegisterService.generate_invite_token(
                 tenant, owner, role=TenantAccountRole.OWNER.value, requires_setup=True
@@ -190,7 +191,7 @@ class WorkspaceListApi(Resource):
                     inviter_name=current_user.name,
                     workspace_name=tenant.name,
                 )
-                email_sent = True
+                invite_mail_dispatched = True
             except Exception:
                 # SMTP 失败不阻塞创建（PRD US-4 AC3 同口径）：邀请链接照常下发
                 logger.exception("Failed to send workspace owner invite mail to %s", owner.email)
@@ -205,7 +206,7 @@ class WorkspaceListApi(Resource):
                 "name": tenant.name,
                 "owner_email": owner.email,
                 "owner_pending": owner_pending,
-                "email_sent": email_sent,
+                "invite_mail_dispatched": invite_mail_dispatched,
             },
             session=session,
         )
@@ -234,7 +235,7 @@ def _set_workspace_status(
             detail={"name": tenant.name},
             session=session,
         )
-    return {"result": "success", "status": str(target)}
+    return dump_response(AdminWorkspaceActionResponse, {"result": "success", "status": str(target)})
 
 
 @console_ns.route("/admin/workspaces/<string:tenant_id>/archive")
