@@ -456,6 +456,7 @@ class TestAccountPasswordApi:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(password=password)),
             ),
+            patch("controllers.console.workspace.account.current_user", user),
         ):
             result = method(api, request_context)
 
