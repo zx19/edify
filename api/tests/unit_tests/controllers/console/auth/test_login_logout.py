@@ -518,6 +518,45 @@ class TestLoginApi:
                 login_api.post()
 
     @patch("controllers.console.wraps.db")
+    @patch("controllers.console.auth.login.AccountService.reset_login_error_rate_limit")
+    @patch("controllers.console.auth.login.AccountService.login")
+    @patch("controllers.console.auth.login.is_system_admin")
+    @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
+    @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
+    @patch("controllers.console.auth.login.AccountService.authenticate")
+    @patch("controllers.console.auth.login.TenantService.get_join_tenants")
+    def test_login_succeeds_for_system_admin_without_workspace(
+        self,
+        mock_get_tenants: MagicMock,
+        mock_authenticate: MagicMock,
+        mock_get_invitation: MagicMock,
+        mock_is_rate_limit: MagicMock,
+        mock_is_system_admin: MagicMock,
+        mock_login: MagicMock,
+        mock_reset_limit: MagicMock,
+        mock_db: MagicMock,
+        app: Flask,
+        mock_account: MagicMock,
+    ):
+        """无空间系统管理员登录放行（PRD US-1 AC2）：预检跳过 fail 分支，正常签发 token。"""
+        mock_is_rate_limit.return_value = False
+        mock_get_invitation.return_value = None
+        mock_authenticate.return_value = mock_account
+        mock_get_tenants.return_value = []  # 无空间
+        mock_is_system_admin.return_value = True
+        mock_login.return_value = MagicMock(
+            access_token="access", refresh_token="refresh", csrf_token="csrf"
+        )
+
+        with app.test_request_context(
+            "/login", method="POST", json={"email": "ops@example.com", "password": encode_password("ValidPass123!")}
+        ):
+            response = LoginApi().post()
+
+        mock_login.assert_called_once()
+        assert response.status_code == 200
+
+    @patch("controllers.console.wraps.db")
     @patch("controllers.console.auth.login.AccountService.is_login_error_rate_limit")
     @patch("controllers.console.auth.login.RegisterService.get_invitation_with_case_fallback")
     def test_login_invitation_email_mismatch(self, mock_get_invitation, mock_is_rate_limit, mock_db, app: Flask):

@@ -24,6 +24,7 @@ def _non_admin():
         "controllers.console.admin",
         current_user=MagicMock(is_authenticated=True),
         is_system_admin=MagicMock(return_value=False),
+        check_csrf_token=MagicMock(),
     )
 
 

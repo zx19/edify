@@ -124,13 +124,14 @@ def _send_grant_notification(account: Account) -> bool:
 
 def _send_invite_mail(account: Account, invite_url: str) -> bool:
     full_url = f"{dify_config.CONSOLE_WEB_URL}{invite_url}"
-    body = '<p>You have been invited as system administrator. Activate: <a href="{{invite_url}}">{{invite_url}}</a></p>'
+    # URL 直接内联进 body：MAIL_TEMPLATING_MODE=disabled 时模板原样发送，占位符不会被替换
+    body = f'<p>You have been invited as system administrator. Activate: <a href="{full_url}">{full_url}</a></p>'
     try:
         send_inner_email_task.delay(
             to=[account.email],
             subject="You have been invited as system administrator",
             body=body,
-            substitutions={"invite_url": full_url},
+            substitutions={},
         )
         return True
     except Exception:

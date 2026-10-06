@@ -6,7 +6,7 @@ from flask_login import current_user
 from werkzeug.exceptions import Forbidden, Unauthorized
 
 from configs import dify_config
-from libs.token import extract_access_token
+from libs.token import check_csrf_token, extract_access_token
 from services.system_admin_service import is_founder_admin, is_system_admin
 
 
@@ -31,12 +31,14 @@ def system_admin_required[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     """系统管理员（人）会话校验。与机器通道 admin_required（ADMIN_API_KEY）并存。
 
     注意：不得改用 current_account_with_tenant()——系统管理员可能无空间。
+    CSRF 校验与全库 login_required 同层（最高权限写端点不可只剩 SameSite 兜底）。
     """
 
     @wraps(view)
     def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
         if not current_user.is_authenticated:
             raise Unauthorized("Login required.")
+        check_csrf_token(request, current_user.id)
         if not is_system_admin(current_user):
             raise Forbidden("System admin only.")
         return view(*args, **kwargs)
@@ -51,6 +53,7 @@ def founder_admin_required[**P, R](view: Callable[P, R]) -> Callable[P, R]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
         if not current_user.is_authenticated:
             raise Unauthorized("Login required.")
+        check_csrf_token(request, current_user.id)
         if not is_founder_admin(current_user):
             raise Forbidden("Founder admin only.")
         return view(*args, **kwargs)

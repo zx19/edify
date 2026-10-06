@@ -377,6 +377,8 @@ class AccountService:
                     session.commit()
                 # 系统管理员允许无空间登录（落 /admin；普通接口仍依赖 current_tenant，前端隔离）
                 if is_system_admin(account):
+                    # 唯一空间已归档时 current_tenant 已在上面被设为归档租户，不带入管理会话
+                    account._current_tenant = None
                     return account
                 return None
 
