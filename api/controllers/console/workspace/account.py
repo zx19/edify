@@ -469,7 +469,7 @@ class AccountPasswordApi(Resource):
         except account_errors.AccountNotFoundError as error:
             raise AccountNotFound() from error
 
-        return dump_response(AccountResponse, account)
+        return _dump_profile_response(account)
 
 
 @console_ns.route("/account/integrates")
@@ -691,7 +691,7 @@ class ChangeEmailResetApi(Resource):
         except account_errors.AccountNotFoundError:
             raise AccountNotFound() from None
 
-        return dump_response(AccountResponse, updated_account)
+        return _dump_profile_response(updated_account)
 
 
 @console_ns.route("/account/change-email/check-email-unique")
