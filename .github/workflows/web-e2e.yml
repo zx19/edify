@@ -7,6 +7,13 @@ on:
         description: Run only the prepared and external runtime suite instead of the core suites.
         required: true
         type: boolean
+  workflow_dispatch:
+    inputs:
+      run-external-runtime:
+        description: Run only the prepared and external runtime suite instead of the core suites.
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
