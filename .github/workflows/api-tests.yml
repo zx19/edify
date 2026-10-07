@@ -3,9 +3,9 @@ name: Run Pytest
 on:
   workflow_call:
     secrets:
+      CODECOV_TOKEN:
+        required: false
   workflow_dispatch:
-    CODECOV_TOKEN:
-      required: false
 
 permissions:
   contents: read
