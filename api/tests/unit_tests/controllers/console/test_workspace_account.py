@@ -296,6 +296,7 @@ class TestChangeEmailControllers:
                 "controllers.console.workspace.account.application_services",
                 return_value=SimpleNamespace(accounts=SimpleNamespace(change_email=change_email)),
             ),
+            patch("controllers.console.workspace.account.current_user", updated_account),
         ):
             api = ChangeEmailResetApi()
             response = inspect.unwrap(api.post)(api, context)

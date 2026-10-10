@@ -71,13 +71,16 @@ def test_setup_endpoint_persists_bootstrap_state_and_rejects_repeat(
     db_session_with_containers.expire_all()
     assert db_session_with_containers.scalar(select(func.count()).select_from(DifySetup)) == 1
     assert db_session_with_containers.scalar(select(func.count()).select_from(Account)) == 1
-    assert db_session_with_containers.scalar(select(func.count()).select_from(Tenant)) == 1
-    assert db_session_with_containers.scalar(select(func.count()).select_from(TenantAccountJoin)) == 1
+    # install 瘦身（PRD US-1）：只建创始人账号，不建空间
+    assert db_session_with_containers.scalar(select(func.count()).select_from(Tenant)) == 0
+    assert db_session_with_containers.scalar(select(func.count()).select_from(TenantAccountJoin)) == 0
 
     account = db_session_with_containers.scalar(select(Account))
     assert account is not None
     assert account.email == "admin@example.com"
     assert account.last_login_ip == "203.0.113.7"
+    assert account.is_system_admin is True
+    assert account.system_admin_source == "install"
 
 
 def test_concurrent_setup_requests_create_only_one_bootstrap_identity(
@@ -155,5 +158,6 @@ def test_concurrent_setup_requests_create_only_one_bootstrap_identity(
     db_session_with_containers.expire_all()
     assert db_session_with_containers.scalar(select(func.count()).select_from(DifySetup)) == 1
     assert db_session_with_containers.scalar(select(func.count()).select_from(Account)) == 1
-    assert db_session_with_containers.scalar(select(func.count()).select_from(Tenant)) == 1
-    assert db_session_with_containers.scalar(select(func.count()).select_from(TenantAccountJoin)) == 1
+    # install 瘦身（PRD US-1）：只建创始人账号，不建空间
+    assert db_session_with_containers.scalar(select(func.count()).select_from(Tenant)) == 0
+    assert db_session_with_containers.scalar(select(func.count()).select_from(TenantAccountJoin)) == 0

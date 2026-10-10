@@ -1799,12 +1799,13 @@ class TestTenantService:
         # Create owner tenant
         TenantService.create_owner_tenant_if_not_exist(account, name=workspace_name, session=db_session_with_containers)
 
-        # Verify tenant was created and linked
+        # install 瘦身（PRD US-1）：setup 不建空间，首账号即创始人管理员
         from models.account import TenantAccountJoin
 
         tenant_join = db_session_with_containers.query(TenantAccountJoin).filter_by(account_id=account.id).first()
-        assert tenant_join is not None
-        assert tenant_join.role == "owner"
+        assert tenant_join is None
+        assert account.is_system_admin is True
+        assert account.system_admin_source == "install"
         assert account.current_tenant is not None
         assert account.current_tenant.name == workspace_name
 
@@ -2516,7 +2517,8 @@ class TestRegisterService:
             assert len(token) > 0
             mock_send_mail.delay.assert_called_once()
 
-        # Existing active accounts must accept the invite before becoming workspace members.
+        # 无空间账号在邀请时即恢复成员关系（08-31 起）：否则其登录/会话装载会被
+        # workspace-less 拦截，邀请永远无法兑现；邀请内角色在激活时生效。
         from models.account import TenantAccountJoin
 
         tenant_join = (
@@ -2524,7 +2526,8 @@ class TestRegisterService:
             .filter_by(tenant_id=tenant.id, account_id=existing_account.id)
             .first()
         )
-        assert tenant_join is None
+        assert tenant_join is not None
+        assert tenant_join.role == "normal"  # RBAC 关闭时 join 行先落 normal，邀请角色激活时生效
 
         invitation = RegisterService.get_invitation_if_token_valid(
             None, None, token, session=db_session_with_containers
