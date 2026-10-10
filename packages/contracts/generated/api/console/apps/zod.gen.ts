@@ -328,7 +328,7 @@ export const zModelConfigRequest = z.object({
   agent_mode: z.record(z.string(), z.unknown()).nullish(),
   configs: z.record(z.string(), z.unknown()).nullish(),
   dataset_configs: z.record(z.string(), z.unknown()).nullish(),
-  model: z.string().nullish(),
+  model: z.record(z.string(), z.unknown()).nullish(),
   more_like_this: z.record(z.string(), z.unknown()).nullish(),
   opening_statement: z.string().nullish(),
   provider: z.string().nullish(),

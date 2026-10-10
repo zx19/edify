@@ -33,7 +33,10 @@ from services.app_model_config_service import AppModelConfigService
 
 class ModelConfigRequest(BaseModel):
     provider: str | None = Field(default=None, description="Model provider")
-    model: str | None = Field(default=None, description="Model name")
+    model: dict[str, Any] | None = Field(
+        default=None,
+        description="Model configuration object (provider, name, mode, completion_params)",
+    )
     configs: dict[str, Any] | None = Field(
         default=None,
         description="Model configuration parameters",

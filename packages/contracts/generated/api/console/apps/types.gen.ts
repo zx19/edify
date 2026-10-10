@@ -547,7 +547,9 @@ export type ModelConfigRequest = {
   dataset_configs?: {
     [key: string]: unknown
   } | null
-  model?: string | null
+  model?: {
+    [key: string]: unknown
+  } | null
   more_like_this?: {
     [key: string]: unknown
   } | null
