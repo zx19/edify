@@ -509,7 +509,18 @@ export const resetState = async () => {
   console.log('Removing persisted middleware data...')
   await Promise.all(
     middlewareDataPaths.map(async (targetPath) => {
-      await rm(targetPath, { force: true, recursive: true })
+      try {
+        await rm(targetPath, { force: true, recursive: true })
+      } catch (error) {
+        // 数据卷由容器内 root 写出，runner 用户删不掉（EACCES）——Linux CI 上 sudo 兜底
+        const isEacces = error instanceof Error && /EACCES|permission denied/i.test(error.message)
+        if (!isEacces || process.platform !== 'linux' || !process.env.CI) throw error
+        await runCommandOrThrow({
+          command: 'sudo',
+          args: ['rm', '-rf', '--', targetPath],
+          cwd: dockerDir,
+        })
+      }
       await mkdir(targetPath, { recursive: true })
     }),
   )
