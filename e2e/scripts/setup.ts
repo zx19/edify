@@ -1,7 +1,9 @@
 import { createHash } from 'node:crypto'
 import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { startLlmStubServer } from '../support/llm-stub'
 import { waitForUrl } from '../support/process'
+import { llmStubPort } from '../test-env'
 import {
   apiDir,
   apiEnvExampleFile,
@@ -437,6 +439,20 @@ export const startShellctlSandbox = async () => {
   })
 }
 
+export const startLlmStub = async () => {
+  if (await isTcpPortReachable(apiLoopbackHost, llmStubPort)) {
+    const listenerDescription = await getTcpPortListenerDescription(llmStubPort)
+    const listenerMessage = listenerDescription ? `\n\nPort listener:\n${listenerDescription}` : ''
+
+    throw new Error(
+      `Cannot start the E2E LLM stub because ${apiLoopbackHost}:${llmStubPort} is already in use.${listenerMessage}`,
+    )
+  }
+
+  await startLlmStubServer({ host: apiBindHost, port: llmStubPort })
+  console.log(`LLM stub is listening on ${apiBindHost}:${llmStubPort}.`)
+}
+
 export const startCelery = async ({ queues = 'workflow_based_app_execution' } = {}) => {
   const env = await getApiEnvironment()
 
@@ -569,7 +585,7 @@ export const startMiddleware = async () => {
 
 const printUsage = () => {
   console.log(
-    'Usage: tsx ./scripts/setup.ts <reset|middleware-up|middleware-down|shellctl-sandbox|agent-backend|api|celery [--queues queues]|web>',
+    'Usage: tsx ./scripts/setup.ts <reset|middleware-up|middleware-down|shellctl-sandbox|agent-backend|api|llm-stub|celery [--queues queues]|web>',
   )
 }
 
@@ -587,6 +603,9 @@ const main = async () => {
       return
     case 'celery':
       await startCelery({ queues })
+      return
+    case 'llm-stub':
+      await startLlmStub()
       return
     case 'middleware-down':
       await stopMiddleware()

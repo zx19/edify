@@ -17,6 +17,10 @@ export const resolveE2EBrowser = (value: string | undefined): E2EBrowser => {
 export const baseURL = process.env.E2E_BASE_URL || defaultBaseURL
 export const apiURL = process.env.E2E_API_URL || defaultApiURL
 
+export const defaultLlmStubPort = 5199
+export const llmStubPort = Number(process.env.E2E_LLM_STUB_PORT || defaultLlmStubPort)
+export const llmStubBaseURL = `http://127.0.0.1:${llmStubPort}`
+
 export const cucumberHeadless = process.env.CUCUMBER_HEADLESS !== '0'
 export const cucumberSlowMo = Number(process.env.E2E_SLOW_MO || 0)
 export const e2eBrowser = resolveE2EBrowser(process.env.E2E_BROWSER)

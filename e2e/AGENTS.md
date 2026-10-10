@@ -26,6 +26,8 @@ The runner reuses `web/.next/BUILD_ID` when present. Set `E2E_FORCE_WEB_BUILD=1`
 
 - `scripts/setup.ts` owns reset, middleware, backend, and frontend startup.
 - `scripts/run-cucumber.ts` is the only E2E runtime orchestrator. It owns service lifetime, optional seed execution, Cucumber invocation, and teardown.
+- `support/llm-stub.ts` owns the deterministic OpenAI-compatible echo stub (`GET /health`, `POST /v1/chat/completions` in SSE and non-streaming form). run-cucumber starts it as a managed process on `E2E_LLM_STUB_PORT` (default 5199) before the API server and stops it during teardown.
+- `support/api/model-providers.ts` owns idempotent seeding of the OpenAI-API-compatible provider that points the plugin daemon at the stub (`E2E_LLM_STUB_INTERNAL_URL`, default `http://host.docker.internal:<port>/v1` because the daemon runs in Docker). It bootstraps the marketplace plugin, upserts the model credential, and selects the workspace default LLM; journey fixtures call it before publishing apps that must answer messages.
 - `scripts/seed-runner.ts` owns fixture creation and verification against an already-running runtime; it never starts services.
 - `support/web-server.ts` owns frontend reuse, readiness, and shutdown.
 - `features/support/hooks.ts` owns shared auth bootstrap, scenario lifecycle, and diagnostics.
@@ -41,7 +43,7 @@ An uninitialized instance is installed and authenticated lazily; an initialized 
 - Default scenarios use shared authenticated storage state. `@unauthenticated` creates a clean context; `@authenticated` is an intent and selection tag only.
 - `@axe` identifies standalone automated WCAG scans and is excluded from the default functional suite and normal CI commands. `@wcag-a` and `@wcag-aa` qualify the independent level-specific scans, and commands selecting either level must also select `@axe`. Page selectors use `@wcag-page-<slug>` and are attached to the matching Examples blocks under `features/accessibility/`. The accessibility workflow is an opt-in manual audit rather than a regression gate. The PR author should run the AA/all path before merge when changing the audit workflow, page matrix, or readiness contracts.
 - `@prepared` requires the prepared fixtures; the post-merge seed profile includes them.
-- `@external-model` and `@external-tool` identify scenarios that call real external runtimes. Deterministic commands exclude these tags; external commands are opt-in.
+- `@external-model` and `@external-tool` identify scenarios that call real external runtimes. Deterministic commands exclude these tags; external commands are opt-in. Deterministic scenarios that need a model answer seed the local LLM stub through `support/api/model-providers.ts` instead of using `@external-model`.
 - `@microphone` uses the checked-in fake audio fixture and an isolated Chromium context.
 - `@browser-smoke` runs focused keyboard and navigation coverage in Chromium and WebKit CI lanes.
 - `@skip` temporarily excludes a scenario from every runner profile. Remove it as soon as the covered product behavior is available again; do not use it for permanent or environment-dependent suppression.

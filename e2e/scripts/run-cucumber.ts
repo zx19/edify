@@ -5,7 +5,7 @@ import { runCleanupTasks } from '../support/cleanup'
 import { assertCucumberScenariosStarted } from '../support/cucumber-messages'
 import { startLoggedProcess, stopManagedProcess, waitForUrl } from '../support/process'
 import { startWebServer, stopWebServer } from '../support/web-server'
-import { apiURL, baseURL, reuseExistingWebServer } from '../test-env'
+import { apiURL, baseURL, llmStubBaseURL, reuseExistingWebServer } from '../test-env'
 import { e2eDir, isMainModule, runCommand } from './common'
 import { parseRunOptions, shouldStartManagedAgentBackend } from './run-options'
 import { runSeed } from './seed-runner'
@@ -81,6 +81,7 @@ const main = async () => {
   let apiProcess: ManagedProcess | undefined
   let celeryProcess: ManagedProcess | undefined
   let difyAgentProcess: ManagedProcess | undefined
+  let llmStubProcess: ManagedProcess | undefined
   let middlewareStarted = false
   let shellctlProcess: ManagedProcess | undefined
 
@@ -93,6 +94,7 @@ const main = async () => {
           { label: 'Stop celery worker', run: () => stopManagedProcess(celeryProcess) },
           { label: 'Stop API server', run: () => stopManagedProcess(apiProcess) },
           { label: 'Stop agent backend', run: () => stopManagedProcess(difyAgentProcess) },
+          { label: 'Stop LLM stub', run: () => stopManagedProcess(llmStubProcess) },
           { label: 'Stop shellctl sandbox', run: () => stopManagedProcess(shellctlProcess) },
           ...(middlewareStarted ? [{ label: 'Stop middleware', run: stopMiddleware }] : []),
         ])
@@ -128,6 +130,19 @@ const main = async () => {
 
     if (!seedOnly) await rm(cucumberReportDir, { force: true, recursive: true })
     await mkdir(logDir, { recursive: true })
+
+    llmStubProcess = await startLoggedProcess({
+      command: 'npx',
+      args: ['tsx', './scripts/setup.ts', 'llm-stub'],
+      cwd: e2eDir,
+      label: 'llm stub',
+      logFilePath: path.join(logDir, 'cucumber-llm-stub.log'),
+    })
+    await waitForManagedProcess({
+      errorMessage: 'LLM stub did not become ready.',
+      managedProcess: llmStubProcess,
+      url: `${llmStubBaseURL}/health`,
+    })
 
     if (startAgentBackendForRun) {
       shellctlProcess = await startLoggedProcess({
