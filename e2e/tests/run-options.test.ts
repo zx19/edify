@@ -4,6 +4,7 @@ import { parseRunOptions, shouldStartManagedAgentBackend } from '../scripts/run-
 describe('E2E run options', () => {
   it('forwards Cucumber arguments without requesting seed data', () => {
     expect(parseRunOptions(['--tags', '@smoke'])).toEqual({
+      dual: false,
       forwardArgs: ['--tags', '@smoke'],
       full: false,
       headed: false,
@@ -39,6 +40,31 @@ describe('E2E run options', () => {
     )
     expect(() => parseRunOptions(['--dry-run', '--profile', 'prepared'])).toThrow(
       '--dry-run requires --seed-only.',
+    )
+  })
+
+  it('parses --dual for two-pass track comparison runs', () => {
+    expect(parseRunOptions(['--dual', '--', '--tags', '@smoke'])).toEqual({
+      dual: true,
+      forwardArgs: ['--tags', '@smoke'],
+      full: false,
+      headed: false,
+      seed: undefined,
+      seedOnly: false,
+    })
+  })
+
+  it('seeds each dual pass when a profile is provided', () => {
+    expect(parseRunOptions(['--dual', '--profile', 'post-merge'])).toMatchObject({
+      dual: true,
+      seed: { profile: 'post-merge' },
+      seedOnly: false,
+    })
+  })
+
+  it('rejects --dual with --seed-only', () => {
+    expect(() => parseRunOptions(['--dual', '--seed-only'])).toThrow(
+      '--dual cannot be combined with --seed-only.',
     )
   })
 })

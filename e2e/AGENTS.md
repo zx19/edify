@@ -11,6 +11,7 @@ Run commands from the repository root. Install dependencies and browsers once wi
 - Standalone automated WCAG Level AA scan: `pnpm -C e2e e2e:accessibility:aa`
 - One-page automated WCAG scan: `pnpm -C e2e exec tsx ./scripts/run-cucumber.ts --full -- --tags "@axe and @wcag-a and @wcag-page-studio"` (replace the level and page tag as needed)
 - Reset, initialize, and run deterministic scenarios: `pnpm -C e2e e2e:full`
+- Dual-track comparison (old `web/` :3000 then new `web-new/` :3001, scenario-verdict diff): `pnpm -C e2e e2e:dual`
 - Prepare and run scenarios backed by shared fixtures: `E2E_START_AGENT_BACKEND=1 pnpm -C e2e e2e:prepared`
 - Tagged subset: `pnpm -C e2e e2e -- --tags @smoke`
 - Headed debugging: `pnpm -C e2e e2e:headed -- --tags @smoke`
@@ -20,12 +21,16 @@ Run commands from the repository root. Install dependencies and browsers once wi
 - Middleware lifecycle: `pnpm -C e2e e2e:middleware:up` and `pnpm -C e2e e2e:middleware:down`
 - Scoped static checks: `vp check e2e`
 
-The runner reuses `web/.next/BUILD_ID` when present. Set `E2E_FORCE_WEB_BUILD=1` to force a frontend rebuild. Use `E2E_BROWSER=webkit` for focused cross-browser runs and `E2E_SLOW_MO=500` with a headed command for local action debugging.
+The runner reuses `web/.next/BUILD_ID` (or `web-new/.next/BUILD_ID` on the new track) when present. Set `E2E_FORCE_WEB_BUILD=1` to force a frontend rebuild. Use `E2E_BROWSER=webkit` for focused cross-browser runs and `E2E_SLOW_MO=500` with a headed command for local action debugging.
+
+`E2E_WEB_TRACK=old|new` selects the frontend track (`E2E_TRACK` is a deprecated alias): `old` serves `web/` on :3000 and is the default; `new` serves `web-new/` on :3001. `E2E_BASE_URL` always wins when set explicitly; never combine it with `--dual`, which manages per-track base URLs itself.
 
 ## Runtime Ownership
 
-- `scripts/setup.ts` owns reset, middleware, backend, and frontend startup.
-- `scripts/run-cucumber.ts` is the only E2E runtime orchestrator. It owns service lifetime, optional seed execution, Cucumber invocation, and teardown.
+- `scripts/setup.ts` owns reset, middleware, backend, and frontend startup, including track-aware frontend build and serve (build-stamp caching applies per track).
+- `scripts/run-cucumber.ts` is the only E2E runtime orchestrator. It owns service lifetime, optional seed execution, Cucumber invocation, and teardown. `--dual` runs two serial passes (old track, then new track, each after reset and optional seed), preserves `cucumber-report-<track>/`, and writes the scenario-verdict contract diff to `reports/e2e-dual-diff.json`; the run fails when either pass fails or any scenario verdict diverges.
+- `support/track.ts` owns track resolution and the track-aware selector entry (`trackSelector(oldSelector, newSelector)`) for step definitions.
+- `support/dual-diff.ts` owns the dual-track diff report model; `support/cucumber-messages.ts` owns reducing Cucumber Messages reports to per-scenario verdicts keyed by `uri::name` (occurrence-suffixed for repeated names).
 - `support/llm-stub.ts` owns the deterministic OpenAI-compatible echo stub (`GET /health`, `POST /v1/chat/completions` in SSE and non-streaming form). run-cucumber starts it as a managed process on `E2E_LLM_STUB_PORT` (default 5199) before the API server and stops it during teardown.
 - `support/api/model-providers.ts` owns idempotent seeding of the OpenAI-API-compatible provider that points the plugin daemon at the stub (`E2E_LLM_STUB_INTERNAL_URL`, default `http://host.docker.internal:<port>/v1` because the daemon runs in Docker). It bootstraps the marketplace plugin, upserts the model credential, and selects the workspace default LLM; journey fixtures call it before publishing apps that must answer messages.
 - `scripts/seed-runner.ts` owns fixture creation and verification against an already-running runtime; it never starts services.

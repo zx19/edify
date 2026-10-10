@@ -36,11 +36,13 @@ export const difyAgentDir = path.join(rootDir, 'dify-agent')
 export const difyAgentRuntimeDir = path.join(rootDir, 'dify-agent-runtime')
 export const dockerDir = path.join(rootDir, 'docker')
 export const webDir = path.join(rootDir, 'web')
+export const webNewDir = path.join(rootDir, 'web-new')
 
 export const middlewareComposeFile = path.join(dockerDir, 'docker-compose.middleware.yaml')
 export const middlewareEnvFile = path.join(dockerDir, 'middleware.env')
 export const middlewareEnvExampleFile = path.join(dockerDir, 'envs', 'middleware.env.example')
 export const webEnvLocalFile = path.join(webDir, '.env.local')
+export const webNewEnvLocalFile = path.join(webNewDir, '.env.local')
 export const webEnvExampleFile = path.join(webDir, '.env.example')
 export const apiEnvExampleFile = path.join(apiDir, 'tests', 'integration_tests', '.env.example')
 export const e2eWebEnvOverrides = {
@@ -191,8 +193,8 @@ export const ensureLineInFile = async (filePath: string, line: string) => {
   await writeFile(filePath, `${normalizedContent}${line}\n`, 'utf8')
 }
 
-export const getWebEnvLocalHash = async () => {
-  const fileContent = await readFile(webEnvLocalFile, 'utf8').catch(() => '')
+export const getWebEnvLocalHash = async (envLocalFile: string = webEnvLocalFile) => {
+  const fileContent = await readFile(envLocalFile, 'utf8').catch(() => '')
   return createHash('sha256')
     .update(
       JSON.stringify({

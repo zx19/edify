@@ -101,6 +101,8 @@ export const validateE2eEnv = () =>
       E2E_STABLE_MODEL_NAME: process.env.E2E_STABLE_MODEL_NAME,
       E2E_STABLE_MODEL_PROVIDER: process.env.E2E_STABLE_MODEL_PROVIDER,
       E2E_STABLE_MODEL_TYPE: process.env.E2E_STABLE_MODEL_TYPE,
+      E2E_TRACK: process.env.E2E_TRACK,
+      E2E_WEB_TRACK: process.env.E2E_WEB_TRACK,
     },
     server: {
       CUCUMBER_HEADLESS: booleanString.optional(),
@@ -134,5 +136,7 @@ export const validateE2eEnv = () =>
       E2E_STABLE_MODEL_NAME: z.string().min(1).optional(),
       E2E_STABLE_MODEL_PROVIDER: z.string().min(1).optional(),
       E2E_STABLE_MODEL_TYPE: z.string().min(1).optional(),
+      E2E_TRACK: z.enum(['old', 'new']).optional(),
+      E2E_WEB_TRACK: z.enum(['old', 'new']).optional(),
     },
   })

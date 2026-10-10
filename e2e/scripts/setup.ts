@@ -3,6 +3,7 @@ import { access, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { startLlmStubServer } from '../support/llm-stub'
 import { waitForUrl } from '../support/process'
+import { currentWebTrack, selectForTrack } from '../support/track'
 import { llmStubPort } from '../test-env'
 import {
   apiDir,
@@ -28,11 +29,21 @@ import {
   runForegroundProcess,
   waitForCondition,
   webDir,
+  webEnvLocalFile,
+  webNewDir,
+  webNewEnvLocalFile,
 } from './common'
 import './env-register'
 
-const buildIdPath = path.join(webDir, '.next', 'BUILD_ID')
-const webBuildStampPath = path.join(webDir, '.next', 'e2e-web-build.sha256')
+// The web track selects which frontend this process builds and serves: the old
+// track serves web/ on :3000, the new track serves web-new/ on :3001. Both
+// tracks point at the same API backend.
+const webTrack = currentWebTrack()
+const activeWebDir = selectForTrack(webTrack, webDir, webNewDir)
+const activeWebEnvLocalFile = selectForTrack(webTrack, webEnvLocalFile, webNewEnvLocalFile)
+const activeWebPort = selectForTrack(webTrack, 3000, 3001)
+const buildIdPath = path.join(activeWebDir, '.next', 'BUILD_ID')
+const webBuildStampPath = path.join(activeWebDir, '.next', 'e2e-web-build.sha256')
 const apiLoopbackHost = '127.0.0.1'
 const apiBindHost = '0.0.0.0'
 const apiPort = 5001
@@ -201,7 +212,7 @@ const webBuildSourcePaths = [
   'pnpm-lock.yaml',
   'pnpm-workspace.yaml',
   'packages',
-  'web',
+  selectForTrack(webTrack, 'web', 'web-new'),
 ]
 
 const getWebBuildSourceHash = async () => {
@@ -245,7 +256,7 @@ const getWebBuildSourceHash = async () => {
 }
 
 export const ensureWebBuild = async () => {
-  const envHash = await getWebEnvLocalHash()
+  const envHash = await getWebEnvLocalHash(activeWebEnvLocalFile)
   const sourceHash = await getWebBuildSourceHash()
   const buildStamp = createHash('sha256')
     .update(envHash)
@@ -260,7 +271,7 @@ export const ensureWebBuild = async () => {
     await runCommandOrThrow({
       command: 'pnpm',
       args: ['run', 'build'],
-      cwd: webDir,
+      cwd: activeWebDir,
       env: buildEnv,
     })
     await writeFile(webBuildStampPath, `${buildStamp}\n`, 'utf8')
@@ -278,7 +289,7 @@ export const ensureWebBuild = async () => {
     ])
 
     if (buildExists && previousBuildStamp === buildStamp) {
-      console.log('Reusing existing web build artifact.')
+      console.log(`Reusing existing web build artifact (${webTrack} track).`)
       return
     }
   } catch {
@@ -288,7 +299,7 @@ export const ensureWebBuild = async () => {
   await runCommandOrThrow({
     command: 'pnpm',
     args: ['run', 'build'],
-    cwd: webDir,
+    cwd: activeWebDir,
     env: buildEnv,
   })
   await writeFile(webBuildStampPath, `${buildStamp}\n`, 'utf8')
@@ -300,11 +311,11 @@ export const startWeb = async () => {
   await runForegroundProcess({
     command: 'pnpm',
     args: ['run', 'start'],
-    cwd: webDir,
+    cwd: activeWebDir,
     env: {
       ...e2eWebEnvOverrides,
       HOSTNAME: '127.0.0.1',
-      PORT: '3000',
+      PORT: String(activeWebPort),
     },
   })
 }
@@ -585,7 +596,8 @@ export const startMiddleware = async () => {
 
 const printUsage = () => {
   console.log(
-    'Usage: tsx ./scripts/setup.ts <reset|middleware-up|middleware-down|shellctl-sandbox|agent-backend|api|llm-stub|celery [--queues queues]|web>',
+    'Usage: tsx ./scripts/setup.ts <reset|middleware-up|middleware-down|shellctl-sandbox|agent-backend|api|llm-stub|celery [--queues queues]|web>\n' +
+      'The web command serves the track selected by E2E_WEB_TRACK: old (web/, :3000, default) or new (web-new/, :3001).',
   )
 }
 

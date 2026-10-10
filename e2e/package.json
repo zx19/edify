@@ -7,6 +7,7 @@
     "e2e:accessibility": "pnpm run e2e:accessibility:aa",
     "e2e:accessibility:a": "tsx ./scripts/run-cucumber.ts --full -- --tags \"@axe and @wcag-a\"",
     "e2e:accessibility:aa": "tsx ./scripts/run-cucumber.ts --full -- --tags \"@axe and @wcag-aa\"",
+    "e2e:dual": "tsx ./scripts/run-cucumber.ts --dual",
     "e2e:external": "tsx ./scripts/run-external-runtime.ts",
     "e2e:external:prepare": "tsx ./scripts/run-cucumber.ts --seed-only --profile external-runtime",
     "e2e:full": "tsx ./scripts/run-cucumber.ts --full",

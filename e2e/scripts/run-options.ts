@@ -1,6 +1,7 @@
 import type { SeedOptions } from './seed-runner'
 
 export type RunOptions = {
+  dual: boolean
   forwardArgs: string[]
   full: boolean
   headed: boolean
@@ -18,6 +19,7 @@ const readOptionValue = (argv: string[], index: number, option: string) => {
 export const parseRunOptions = (argv: string[]): RunOptions => {
   let allowBlocked = false
   let dryRun = false
+  let dual = false
   let full = false
   let headed = false
   let pack = 'agent-v2'
@@ -31,6 +33,11 @@ export const parseRunOptions = (argv: string[]): RunOptions => {
     if (arg === '--') {
       forwardArgs.push(...argv.slice(index + 1))
       break
+    }
+
+    if (arg === '--dual') {
+      dual = true
+      continue
     }
 
     if (arg === '--full') {
@@ -89,8 +96,10 @@ export const parseRunOptions = (argv: string[]): RunOptions => {
   if (!shouldSeed && (allowBlocked || dryRun || pack !== 'agent-v2'))
     throw new Error('Seed options require --seed-only or --profile.')
   if (dryRun && !seedOnly) throw new Error('--dry-run requires --seed-only.')
+  if (dual && seedOnly) throw new Error('--dual cannot be combined with --seed-only.')
 
   return {
+    dual,
     forwardArgs,
     full,
     headed,

@@ -6,6 +6,7 @@ type WebServerStartOptions = {
   command: string
   args?: string[]
   cwd: string
+  env?: NodeJS.ProcessEnv
   logFilePath: string
   reuseExistingServer: boolean
   timeoutMs: number
@@ -28,6 +29,7 @@ export const startWebServer = async ({
   command,
   args = [],
   cwd,
+  env,
   logFilePath,
   reuseExistingServer,
   timeoutMs,
@@ -40,6 +42,7 @@ export const startWebServer = async ({
     command,
     args,
     cwd,
+    env,
     label: 'web server',
     logFilePath,
   })
