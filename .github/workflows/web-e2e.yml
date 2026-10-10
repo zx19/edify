@@ -7,11 +7,21 @@ on:
         description: Run only the prepared and external runtime suite instead of the core suites.
         required: true
         type: boolean
+      dual:
+        description: Run the dual-track serial suite (old track :3000 then new track :3001) via e2e:dual.
+        required: false
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       run-external-runtime:
         description: Run only the prepared and external runtime suite instead of the core suites.
         required: true
+        type: boolean
+        default: false
+      dual:
+        description: Run the dual-track serial suite (old track :3000 then new track :3001) via e2e:dual.
+        required: false
         type: boolean
         default: false
 
@@ -66,7 +76,7 @@ jobs:
         run: vp run e2e:install:ci:chromium
 
       - name: Run isolated source-api and built-web Cucumber E2E tests
-        if: ${{ !inputs.run-external-runtime }}
+        if: ${{ !inputs.run-external-runtime && !inputs.dual }}
         working-directory: ./e2e
         env:
           E2E_ADMIN_EMAIL: e2e-admin@example.com
@@ -75,6 +85,17 @@ jobs:
           E2E_FORCE_WEB_BUILD: '1'
           E2E_INIT_PASSWORD: E2eInit12345
         run: vp run e2e:full
+
+      - name: Run dual-track serial Cucumber E2E tests (old :3000 then new :3001)
+        if: ${{ !inputs.run-external-runtime && inputs.dual }}
+        working-directory: ./e2e
+        env:
+          E2E_ADMIN_EMAIL: e2e-admin@example.com
+          E2E_ADMIN_NAME: E2E Admin
+          E2E_ADMIN_PASSWORD: E2eAdmin12345
+          E2E_FORCE_WEB_BUILD: '1'
+          E2E_INIT_PASSWORD: E2eInit12345
+        run: vp run e2e:dual
 
       - name: Preserve Chromium E2E report and logs
         if: ${{ !cancelled() && !inputs.run-external-runtime }}
