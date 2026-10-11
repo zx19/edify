@@ -24,8 +24,11 @@ const pathExists = async (path) => {
   }
 }
 
+// pnpm monorepo 下 Next standalone 会按包相对仓库根的路径镜像输出
+// （web/ → .next/standalone/web，web-new/ → .next/standalone/web-new），
+// 因此按当前包目录名动态推导，兼容非 monorepo 布局。
 const STANDALONE_ROOT_CANDIDATES = [
-  path.join('.next', 'standalone', 'web'),
+  path.join('.next', 'standalone', path.basename(process.cwd())),
   path.join('.next', 'standalone'),
 ]
 

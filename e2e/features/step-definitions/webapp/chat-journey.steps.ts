@@ -21,6 +21,14 @@ const conversationHistoryName = 'Conversation history'
 const getComposer = (world: DifyWorld) =>
   world.getPage().getByTestId('chat-footer').getByRole('textbox')
 
+// chat-answer-container：新轨是 data-testid（冻结契约），旧轨只是 CSS class
+// （web/app/components/base/chat/chat/answer/index.tsx 的 className）——按轨取 locator。
+const getAnswerContainers = (world: DifyWorld) =>
+  trackSelector(
+    () => world.getPage().locator('.chat-answer-container'),
+    () => world.getPage().getByTestId('chat-answer-container'),
+  )()
+
 Given(
   'a chat app with an opening statement is shared via the stub model',
   { timeout: 120_000 },
@@ -76,10 +84,9 @@ Then('the chat welcome screen shows the opening statement', async function (this
     // answer bubble and the left sidebar owns conversation management. A fresh
     // (or freshly reset) session shows no user question yet.
     async () => {
-      await expect(page.getByTestId('chat-answer-container').first()).toContainText(
-        chatJourneyOpeningStatement,
-        { timeout: 15_000 },
-      )
+      await expect(getAnswerContainers(this).first()).toContainText(chatJourneyOpeningStatement, {
+        timeout: 15_000,
+      })
       await expect(page.getByTestId('question-content')).toHaveCount(0)
       await expect(page.getByRole('button', { name: newChatButtonName })).toBeVisible()
     },
@@ -113,7 +120,7 @@ Then(
     await expect(page.getByTestId('question-content').last()).toContainText(message, {
       timeout: 15_000,
     })
-    await expect(page.getByTestId('chat-answer-container').last()).toContainText(expectedEcho, {
+    await expect(getAnswerContainers(this).last()).toContainText(expectedEcho, {
       timeout: 30_000,
     })
   },
