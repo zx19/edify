@@ -15,6 +15,17 @@ export function getAppSiteURL({ mode, site }: AppDetailWithSite): string {
 }
 
 /**
+ * Chat apps also serve the embed-shaped shell at /chatbot/<token> against the
+ * same site token (iframe embeds use this route; direct opens are supported).
+ */
+export function getAppChatbotURL({ site }: AppDetailWithSite): string {
+  if (!site?.app_base_url || !site.access_token)
+    throw new Error('App detail does not include a Web App URL.')
+
+  return `${site.app_base_url}/chatbot/${site.access_token}`
+}
+
+/**
  * Rewrites a backend-issued Web App URL onto the active track origin. The
  * backend derives `site.app_base_url` from `APP_WEB_URL` (the old-track
  * frontend), so dual-track runs must re-root the URL: the old track serves

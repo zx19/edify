@@ -41,6 +41,12 @@ class ModelConfigRequest(BaseModel):
         default=None,
         description="Model configuration parameters",
     )
+    pre_prompt: str | None = Field(default=None, description="Prompt template for simple prompt mode")
+    prompt_type: str | None = Field(default=None, description="Prompt mode (simple or advanced)")
+    user_input_form: list[dict[str, Any]] | None = Field(
+        default=None,
+        description="User input form variables (text-input, paragraph, number, select, ...)",
+    )
     opening_statement: str | None = Field(default=None, description="Opening statement")
     suggested_questions: list[str] | None = Field(default=None, description="Suggested questions")
     more_like_this: dict[str, Any] | None = Field(

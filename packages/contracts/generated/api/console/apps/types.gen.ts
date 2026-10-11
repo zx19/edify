@@ -554,6 +554,8 @@ export type ModelConfigRequest = {
     [key: string]: unknown
   } | null
   opening_statement?: string | null
+  pre_prompt?: string | null
+  prompt_type?: string | null
   provider?: string | null
   retrieval_model?: {
     [key: string]: unknown
@@ -566,6 +568,9 @@ export type ModelConfigRequest = {
     [key: string]: unknown
   } | null
   tools?: Array<{
+    [key: string]: unknown
+  }> | null
+  user_input_form?: Array<{
     [key: string]: unknown
   }> | null
 }

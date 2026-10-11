@@ -1,6 +1,6 @@
 import type { AppDetailWithSite } from '@dify/contracts/api/console/apps/types.gen'
 import { describe, expect, it } from 'vite-plus/test'
-import { getAppSiteURL, toTrackWebAppURL } from '../support/api/web-apps'
+import { getAppChatbotURL, getAppSiteURL, toTrackWebAppURL } from '../support/api/web-apps'
 
 const appDetail = (
   mode: AppDetailWithSite['mode'],
@@ -45,6 +45,26 @@ describe('getAppSiteURL', () => {
         }),
       ),
     ).toThrow('Unsupported Web App mode: channel')
+  })
+})
+
+describe('getAppChatbotURL', () => {
+  it('serves the chatbot route against the site token', () => {
+    const detail = appDetail('chat', {
+      app_base_url: 'http://localhost:3000',
+      access_token: 'token123',
+    })
+
+    expect(getAppChatbotURL(detail)).toBe('http://localhost:3000/chatbot/token123')
+  })
+
+  it('rejects app details without a site URL', () => {
+    expect(() => getAppChatbotURL(appDetail('chat'))).toThrow(
+      'App detail does not include a Web App URL.',
+    )
+    expect(() =>
+      getAppChatbotURL(appDetail('chat', { app_base_url: '', access_token: 'token123' })),
+    ).toThrow('App detail does not include a Web App URL.')
   })
 })
 

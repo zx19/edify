@@ -331,12 +331,15 @@ export const zModelConfigRequest = z.object({
   model: z.record(z.string(), z.unknown()).nullish(),
   more_like_this: z.record(z.string(), z.unknown()).nullish(),
   opening_statement: z.string().nullish(),
+  pre_prompt: z.string().nullish(),
+  prompt_type: z.string().nullish(),
   provider: z.string().nullish(),
   retrieval_model: z.record(z.string(), z.unknown()).nullish(),
   speech_to_text: z.record(z.string(), z.unknown()).nullish(),
   suggested_questions: z.array(z.string()).nullish(),
   text_to_speech: z.record(z.string(), z.unknown()).nullish(),
   tools: z.array(z.record(z.string(), z.unknown())).nullish(),
+  user_input_form: z.array(z.record(z.string(), z.unknown())).nullish(),
 })
 
 /**
