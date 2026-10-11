@@ -96,8 +96,14 @@ const getApiEnvironment = async (): Promise<Record<string, string>> => {
   const agentBackendBaseUrl = getAgentBackendBaseUrl()
   const marketplaceApiUrl = process.env.E2E_MARKETPLACE_API_URL?.trim()
 
+  // 后端生成的 webapp/console URL 必须指向当前轨的前端——否则新轨遍中所有
+  // site URL 仍指 :3000（未起服），webapp 场景集体失败（双轨三跑实证）
+  const webOrigin = `http://127.0.0.1:${activeWebPort}`
+
   return {
     ...envFromExample,
+    APP_WEB_URL: webOrigin,
+    CONSOLE_WEB_URL: webOrigin,
     ...(agentBackendBaseUrl ? { AGENT_BACKEND_BASE_URL: agentBackendBaseUrl } : {}),
     ...(marketplaceApiUrl ? { MARKETPLACE_API_URL: marketplaceApiUrl } : {}),
     FLASK_APP: 'app.py',
