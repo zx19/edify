@@ -2,7 +2,7 @@ import type { CollectedScenarioResult } from '../support/cucumber-messages'
 import type { ManagedProcess } from '../support/process'
 import type { E2EWebTrack } from '../support/track'
 import type { SeedOptions } from './seed-runner'
-import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { runCleanupTasks } from '../support/cleanup'
 import {
@@ -102,6 +102,30 @@ type StackRunResult = {
  * its own pass with per-track logs and a preserved `cucumber-report-<track>`
  * directory; the single-pass path keeps the historical report layout.
  */
+type FrozenTrace = { file: string; scenarios: { feature: string; name: string }[] }
+
+/** 读取 baselines/ 下最新的 e2e-trace-*.json（冻结起点证据），无则返回 null。 */
+const readLatestE2eTrace = async (): Promise<FrozenTrace | null> => {
+  const baselinesDir = path.join(rootDir, 'baselines')
+  let files: string[]
+  try {
+    files = await readdir(baselinesDir)
+  } catch {
+    return null
+  }
+  const traceFiles = files.filter((f) => /^e2e-trace-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort()
+  const latest = traceFiles.at(-1)
+  if (!latest) return null
+  const parsed = JSON.parse(await readFile(path.join(baselinesDir, latest), 'utf8')) as Omit<
+    FrozenTrace,
+    'file'
+  > & {
+    scenarios?: { feature: string; name: string }[]
+  }
+  if (!Array.isArray(parsed.scenarios)) return null
+  return { file: `baselines/${latest}`, scenarios: parsed.scenarios }
+}
+
 const runStackOnce = async ({
   forwardArgs,
   full,
@@ -240,6 +264,8 @@ const runStackOnce = async ({
         ...(seed ? ['--queues', seedCeleryQueues] : []),
       ],
       cwd: e2eDir,
+      // 与 api 子进程同因：celery 的 getApiEnvironment 按轨推导 APP_WEB_URL
+      env: track ? { E2E_WEB_TRACK: track } : undefined,
       label: 'celery worker',
       logFilePath: path.join(logDir, `cucumber-celery${logSuffix}.log`),
     })
@@ -404,6 +430,30 @@ const runDual = async ({
     console.error('[dual] Tracks are aligned but at least one pass has failing scenarios.')
     process.exitCode = 1
     return
+  }
+
+  // 冻结防缩容：场景两轨对称消失（tag 改动/误摘）会产出 "全对齐 diff=0" 假绿——
+  // 与最新冻结 trace 的键集对照，漂移即失败（M2 终审 Important #3）
+  const baseline = await readLatestE2eTrace()
+  if (baseline) {
+    // 形态归一：diff 键带 features/ 前缀与 outline #n 序号后缀（实证于 run 38200579501 工件），
+    // trace 的 feature 字段无前缀无后缀
+    const normalizeKey = (key: string) => key.replace(/^features\//, '').replace(/#\d+$/, '')
+    const baselineKeys = new Set(baseline.scenarios.map((sc) => `${sc.feature}::${sc.name}`))
+    const currentKeys = new Set(report.scenarios.map((sc) => normalizeKey(sc.key)))
+    const missing = [...baselineKeys].filter((k) => !currentKeys.has(k))
+    const added = [...currentKeys].filter((k) => !baselineKeys.has(k))
+    if (missing.length > 0 || added.length > 0) {
+      console.error(
+        `[dual] Scenario set drift vs frozen baseline (${baseline.file}):\n` +
+          `  missing: ${missing.length ? missing.join(', ') : '(none)'}\n` +
+          `  added: ${added.length ? added.join(', ') : '(none)'}\n` +
+          '  新增旅程请先评审并入 trace；删减走 matrix 登记通道。',
+      )
+      process.exitCode = 1
+      return
+    }
+    console.log(`[dual] Scenario set matches frozen baseline (${baselineKeys.size} scenarios).`)
   }
 
   console.log('[dual] Both tracks are green with zero contract diff.')

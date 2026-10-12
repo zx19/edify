@@ -21,13 +21,11 @@ const conversationHistoryName = 'Conversation history'
 const getComposer = (world: DifyWorld) =>
   world.getPage().getByTestId('chat-footer').getByRole('textbox')
 
-// chat-answer-container：新轨是 data-testid（冻结契约），旧轨只是 CSS class
-// （web/app/components/base/chat/chat/answer/index.tsx 的 className）——按轨取 locator。
+// chat-answer-container 两轨均有 data-testid（旧轨 answer/index.tsx 同时带 class）。
+// 注意：欢迎态旧轨开场白渲染在 welcome 块而非 answer 气泡（chat-wrapper welcome 分支），
+// 所以欢迎屏断言不能用本 locator——发送后有真实气泡才可用。
 const getAnswerContainers = (world: DifyWorld) =>
-  trackSelector(
-    () => world.getPage().locator('.chat-answer-container'),
-    () => world.getPage().getByTestId('chat-answer-container'),
-  )()
+  world.getPage().getByTestId('chat-answer-container')
 
 Given(
   'a chat app with an opening statement is shared via the stub model',

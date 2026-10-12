@@ -1,8 +1,8 @@
 {
-  "$comment": "chat 单元（类型1 /chat）data-testid 冻结清单——选择器契约（v2 §5.2 业务组件契约层）。重写时这些 testid 不可删改；新增允许。e2eReferenced = e2e/ 直接引用（强约束）。",
+  "$comment": "chat 单元（类型1 /chat）data-testid 冻结清单——选择器契约（v2 §5.2 业务组件契约层）。重写时这些 testid 不可删改；新增允许。2026-10-12 回登：welcome-screen 为 M2 chat 旅程新轨欢迎屏锚点（新增项入列）。e2eReferenced = e2e/ 直接引用（强约束）。",
   "generatedAt": "2026-09-15",
   "source": "web-new/app/components/base/chat/** + web-new/app/(shareLayout)/** 的 data-testid 全量 + e2e/ getByTestId 引用并集",
-  "e2eReferenced": ["chat-answer-container"],
+  "e2eReferenced": ["chat-answer-container", "chat-footer", "question-content", "welcome-screen"],
   "testids": [
     "action-container",
     "active-indicator",
@@ -121,6 +121,7 @@
     "update-single-file",
     "view-form-dropdown",
     "view-form-dropdown-content",
+    "welcome-screen",
     "workflow-process-item"
   ],
   "count": 118,

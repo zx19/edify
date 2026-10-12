@@ -87,6 +87,7 @@ jobs:
               - '.github/actions/setup-web/**'
             web:
               - 'web/**'
+              - 'web-new/**'
               - 'packages/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -101,6 +102,7 @@ jobs:
               - 'api/uv.lock'
               - 'e2e/**'
               - 'web/**'
+              - 'web-new/**'
               - 'packages/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
