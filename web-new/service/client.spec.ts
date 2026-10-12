@@ -647,6 +647,7 @@ describe('consoleQuery account profile mutation defaults', () => {
         email: 'test@example.com',
         avatar_url: null,
         is_password_set: true,
+        is_system_admin: false,
         timezone: 'Pacific/Midway',
       },
       { body: { timezone: 'Pacific/Midway' } },
