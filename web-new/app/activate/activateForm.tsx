@@ -1,4 +1,5 @@
 'use client'
+import { useQuery } from '@tanstack/react-query'
 import { buttonVariants } from '@xsl/lomva-ui/button'
 import { cn } from '@xsl/lomva-ui/cn'
 import { useEffect } from 'react'
@@ -6,7 +7,9 @@ import { useTranslation } from 'react-i18next'
 import Loading from '@/app/components/base/loading'
 import useDocumentTitle from '@/hooks/use-document-title'
 import { useRouter, useSearchParams } from '@/next/navigation'
+import { consoleQuery } from '@/service/client'
 import { useInvitationCheck } from '@/service/use-common'
+import { AdminActivationForm } from './admin-activation-form'
 
 const ActivateForm = () => {
   const router = useRouter()
@@ -16,25 +19,36 @@ const ActivateForm = () => {
   const email = searchParams.get('email')
   const token = searchParams.get('token')
 
-  const checkParams = {
-    url: '/activate/check',
-    params: {
-      ...(workspaceID && { workspace_id: workspaceID }),
-      ...(email && { email }),
-      token,
-    },
-  }
+  // 第一跳:成员邀请命名空间(member_invite:token),含空间 owner PENDING 邀请
   const { data: checkRes } = useInvitationCheck(
     {
-      ...checkParams.params,
+      ...(workspaceID && { workspace_id: workspaceID }),
+      ...(email && { email }),
       token: token || undefined,
     },
     true,
   )
+
+  // 第二跳:系统管理员邀请命名空间(admin_invite:token)——成员 check 判无效才补试
+  const adminCheckEnabled = checkRes?.is_valid === false && !!token
+  const { data: adminCheckRes, isError: adminCheckError } = useQuery(
+    consoleQuery.admin.activation.check.get.queryOptions({
+      input: { query: { token: token ?? '' } },
+      enabled: adminCheckEnabled,
+    }),
+  )
+
+  const showAdminForm = adminCheckEnabled && adminCheckRes?.is_valid === true
+  const showInvalid =
+    checkRes?.is_valid === false &&
+    (!adminCheckEnabled || adminCheckRes?.is_valid === false || adminCheckError)
+
   useDocumentTitle(
-    checkRes?.is_valid === false
+    showInvalid
       ? t(($) => $.invalid, { ns: 'login' })
-      : t(($) => $.setYourAccount, { ns: 'login' }),
+      : showAdminForm
+        ? t(($) => $.activate.title, { ns: 'admin' })
+        : t(($) => $.setYourAccount, { ns: 'login' }),
   )
 
   useEffect(() => {
@@ -53,7 +67,8 @@ const ActivateForm = () => {
       className={cn('flex w-full grow flex-col items-center justify-center', 'px-6', 'md:px-27')}
     >
       {!checkRes && <Loading />}
-      {checkRes && !checkRes.is_valid && (
+      {showAdminForm && token && <AdminActivationForm token={token} email={adminCheckRes?.email} />}
+      {showInvalid && (
         <div className="flex flex-col md:w-100">
           <div className="mx-auto w-full">
             <div className="mb-3 flex h-20 w-20 items-center justify-center rounded-[20px] border border-divider-regular bg-components-option-card-option-bg p-5 text-[40px] font-bold shadow-lg">
