@@ -17,12 +17,31 @@ jobs:
     runs-on: depot-ubuntu-24.04
     outputs:
       external-e2e-changed: ${{ steps.changes.outputs.external_e2e }}
+      web-e2e-dual-changed: ${{ steps.changes.outputs.web_e2e_dual }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: changes
         with:
           filters: |
+            # 双轨（M2 冻结口径）：webapp 双轨涉及面——两轨前端 + e2e harness + 后端 + 契约。
+            # 对齐 main-ci 的 e2e 过滤，另补 web-new/（新轨）与 baselines/*-unit-testids.json（新轨选择器消费）。
+            web_e2e_dual:
+              - 'api/**'
+              - 'e2e/**'
+              - 'web/**'
+              - 'web-new/**'
+              - 'packages/**'
+              - 'baselines/*-unit-testids.json'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - '.nvmrc'
+              - 'docker/docker-compose.middleware.yaml'
+              - 'docker/envs/middleware.env.example'
+              - '.github/workflows/web-e2e.yml'
+              - '.github/workflows/post-merge.yml'
+              - '.github/actions/setup-web/**'
             external_e2e:
               - 'e2e/features/agent-v2/**'
               - 'e2e/features/step-definitions/agent-v2/**'
@@ -91,4 +110,16 @@ jobs:
     uses: ./.github/workflows/web-e2e.yml
     with:
       run-external-runtime: true
+    secrets: inherit
+
+  # M2 冻结转正：push 链默认双轨（旧轨 :3000 + 新轨 :3001 串行 + 契约 diff = 0 门禁）。
+  # 与 external-e2e 互斥拆开——web-e2e.yml 中 dual 仅在非 external 分支生效。
+  web-e2e-dual:
+    name: Web Full-Stack E2E (dual-track)
+    needs: check-changes
+    if: needs.check-changes.outputs.web-e2e-dual-changed == 'true'
+    uses: ./.github/workflows/web-e2e.yml
+    with:
+      run-external-runtime: false
+      dual: true
     secrets: inherit

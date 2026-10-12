@@ -298,6 +298,10 @@ const runStackOnce = async ({
         const preservedReportDir = path.join(e2eDir, `cucumber-report-${track}`)
         await rm(preservedReportDir, { force: true, recursive: true })
         await rename(cucumberReportDir, preservedReportDir).catch(() => undefined)
+        // 日志也按轨保全——下一遍 resetState 会清空 .logs（CI 工件一度只剩 new 轨日志）
+        const preservedLogDir = path.join(e2eDir, `.logs-${track}`)
+        await rm(preservedLogDir, { force: true, recursive: true })
+        await rename(logDir, preservedLogDir).catch(() => undefined)
       }
     }
 

@@ -77,8 +77,11 @@ const e2eStatePaths = [
   path.join(e2eDir, '.logs-non-external'),
   path.join(e2eDir, '.logs-webkit'),
   path.join(e2eDir, 'playwright-report'),
+  path.join(e2eDir, 'reports'),
   path.join(e2eDir, 'seed-report'),
   path.join(e2eDir, 'test-results'),
+  // 注意：cucumber-report-<track> 与 .logs-<track> 不入此列——双轨第二遍的 resetState
+  // 会清此处列出的路径，而按轨保全目录必须跨遍存活（由 run-cucumber 在写前自行 rm）。
 ]
 
 const composeArgs = [

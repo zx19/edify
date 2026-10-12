@@ -181,6 +181,9 @@ jobs:
             e2e/cucumber-report
             e2e/cucumber-report-non-external
             e2e/cucumber-report-webkit
+            e2e/cucumber-report-old
+            e2e/cucumber-report-new
+            e2e/reports
           retention-days: 7
 
       - name: Upload E2E logs
@@ -192,6 +195,8 @@ jobs:
             e2e/.logs/*.log
             e2e/.logs-non-external/*.log
             e2e/.logs-webkit/*.log
+            e2e/.logs-old/*.log
+            e2e/.logs-new/*.log
           include-hidden-files: true
           retention-days: 7
 
