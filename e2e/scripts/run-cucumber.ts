@@ -216,7 +216,12 @@ const runStackOnce = async ({
       command: 'npx',
       args: ['tsx', './scripts/setup.ts', 'api'],
       cwd: e2eDir,
-      env: startAgentBackendForRun ? { E2E_START_AGENT_BACKEND: '1' } : undefined,
+      // 双轨：api 子进程也要拿到轨标——setup.ts 按轨推导 APP_WEB_URL/CONSOLE_WEB_URL，
+      // 否则新轨遍的 site URL 仍指 :3000（四跑 4 diff 根因）
+      env: {
+        ...(startAgentBackendForRun ? { E2E_START_AGENT_BACKEND: '1' } : {}),
+        ...(track ? { E2E_WEB_TRACK: track } : {}),
+      },
       label: 'api server',
       logFilePath: path.join(logDir, `cucumber-api${logSuffix}.log`),
     })

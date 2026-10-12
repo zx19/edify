@@ -80,13 +80,12 @@ Then('the chat welcome screen shows the opening statement', async function (this
   await expect(getComposer(this)).toBeVisible({ timeout: 15_000 })
 
   await trackSelector(
-    // Old track: Dify original — the opening statement renders as the first
-    // answer bubble and the left sidebar owns conversation management. A fresh
-    // (or freshly reset) session shows no user question yet.
+    // Old track: Dify original — the opening statement renders in the dedicated
+    // welcome block（chat-wrapper.tsx welcome 分支的 Markdown，无 testid、非
+    // answer 气泡——四跑实证 .chat-answer-container 命不中），用唯一文案断言。
+    // 左侧栏持有会话管理；新会话无任何用户提问。
     async () => {
-      await expect(getAnswerContainers(this).first()).toContainText(chatJourneyOpeningStatement, {
-        timeout: 15_000,
-      })
+      await expect(page.getByText(chatJourneyOpeningStatement)).toBeVisible({ timeout: 15_000 })
       await expect(page.getByTestId('question-content')).toHaveCount(0)
       await expect(page.getByRole('button', { name: newChatButtonName })).toBeVisible()
     },
@@ -162,14 +161,13 @@ When('the visitor starts a new conversation', async function (this: DifyWorld) {
     async () => {
       await page.getByRole('button', { name: newChatButtonName }).click()
     },
-    // New track: the drawer CTA. Re-opening the drawer is a no-op when the
-    // history step already opened it; picking the CTA also closes the drawer.
+    // New track: the drawer CTA. 抽屉可能已被上一步（会话历史）打开——此时 header
+    // ☰ 被抽屉蒙层盖住点不动（四跑实证 click 超时），开态则直点 CTA。
     async () => {
-      await page.getByRole('button', { name: conversationHistoryName }).click()
-      await page
-        .getByRole('dialog', { name: conversationHistoryName })
-        .getByRole('button', { name: newChatButtonName })
-        .click()
+      const drawer = page.getByRole('dialog', { name: conversationHistoryName })
+      if (!(await drawer.isVisible().catch(() => false)))
+        await page.getByRole('button', { name: conversationHistoryName }).click()
+      await drawer.getByRole('button', { name: newChatButtonName }).click()
     },
   )()
 })
