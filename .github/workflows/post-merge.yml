@@ -14,10 +14,9 @@ concurrency:
 jobs:
   check-changes:
     name: Check Changed Files
-    # GitHub 托管 runner——depot-ubuntu-24.04 在此链路上无可用 runner（历史 run 全部 queued 挂死）
+    # GitHub 托管 runner——ubuntu-24.04 在此链路上无可用 runner（历史 run 全部 queued 挂死）
     runs-on: ubuntu-24.04
     outputs:
-      external-e2e-changed: ${{ steps.changes.outputs.external_e2e }}
       web-e2e-dual-changed: ${{ steps.changes.outputs.web_e2e_dual }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -43,76 +42,10 @@ jobs:
               - '.github/workflows/web-e2e.yml'
               - '.github/workflows/post-merge.yml'
               - '.github/actions/setup-web/**'
-            external_e2e:
-              - 'e2e/features/agent-v2/**'
-              - 'e2e/features/step-definitions/agent-v2/**'
-              - 'e2e/features/step-definitions/common/**'
-              - 'e2e/features/support/**'
-              - 'e2e/fixtures/auth.ts'
-              - 'e2e/fixtures/test-materials/**'
-              - 'e2e/scripts/**'
-              - 'e2e/support/**'
-              - 'e2e/cucumber.config.ts'
-              - 'e2e/package.json'
-              - 'e2e/test-env.ts'
-              - 'e2e/tsconfig.json'
-              - 'e2e/tsx-register.js'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
-              - '.nvmrc'
-              - '.github/workflows/post-merge.yml'
-              - '.github/workflows/web-e2e.yml'
-              - '.github/actions/setup-web/**'
-              - 'docker/docker-compose.middleware.yaml'
-              - 'docker/envs/middleware.env.example'
-              - 'dify-agent/**'
-              - 'dify-agent-runtime/**'
-              - 'api/pyproject.toml'
-              - 'api/uv.lock'
-              - 'api/tests/integration_tests/.env.example'
-              - 'api/clients/agent_backend/**'
-              - 'api/core/app/apps/agent_app/**'
-              - 'api/core/workflow/nodes/agent_v2/**'
-              - 'api/controllers/console/agent/**'
-              - 'api/services/agent/**'
-              - 'api/core/plugin/**'
-              - 'api/services/plugin/**'
-              - 'api/core/tools/**'
-              - 'api/services/tools/**'
-              - 'packages/contracts/package.json'
-              - 'packages/contracts/generated/api/console/agent/**'
-              - 'packages/contracts/generated/api/console/apps/**'
-              - 'packages/contracts/generated/api/console/datasets/**'
-              - 'packages/contracts/generated/api/console/orpc.gen.ts'
-              - 'packages/contracts/generated/api/console/workspaces/**'
-              - 'packages/contracts/generated/api/service/**'
-              - 'web/features/agent-v2/**'
-              - 'web/app/(commonLayout)/agents/**'
-              - 'web/app/(commonLayout)/@detailSidebar/agents/**'
-              - 'web/app/(commonLayout)/roster/**'
-              - 'web/app/components/base/chat/chat/**'
-              - 'web/app/components/base/voice-input/**'
-              - 'web/app/components/workflow/nodes/agent-v2/**'
-              - 'web/i18n/en-US/agent-v-2.json'
-              - 'web/i18n/en-US/common.json'
-              - 'web/service/base.ts'
-              - 'web/service/client.ts'
-              - 'web/service/console-link.ts'
-              - 'web/service/console-openapi-url.ts'
-              - 'web/service/console-router-loader.ts'
-              - 'web/service/share.ts'
-              - 'web/package.json'
-              - 'pnpm-workspace.yaml'
 
-  external-e2e:
-    name: External Runtime E2E
-    needs: check-changes
-    if: needs.check-changes.outputs.external-e2e-changed == 'true'
-    uses: ./.github/workflows/web-e2e.yml
-    with:
-      run-external-runtime: true
-    secrets: inherit
-
+  # External Runtime E2E 已摘除（2026-10-12）：无 OpenAI 账号，E2E_MODEL_PROVIDER_CREDENTIALS_JSON
+  # secret 缺位致整链常红。恢复 = 仓管配 secret 后还原本段（见 git 历史）+ check-changes
+  # 的 external_e2e 过滤与 outputs 行。
   # M2 冻结转正：push 链默认双轨（旧轨 :3000 + 新轨 :3001 串行 + 契约 diff = 0 门禁）。
   # 与 external-e2e 互斥拆开——web-e2e.yml 中 dual 仅在非 external 分支生效。
   web-e2e-dual:

@@ -21,7 +21,7 @@ jobs:
   python-style:
     name: Python Style
     if: ${{ !inputs.skip-checks }}
-    runs-on: depot-ubuntu-24.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -86,7 +86,7 @@ jobs:
   web-style:
     name: Web Style
     if: ${{ !inputs.skip-checks }}
-    runs-on: depot-ubuntu-24.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ./web
@@ -146,7 +146,7 @@ jobs:
   ts-common-style:
     name: TS Common
     if: ${{ !inputs.skip-checks }}
-    runs-on: depot-ubuntu-24.04-4
+    runs-on: ubuntu-24.04
     permissions:
       checks: write
       pull-requests: read
@@ -192,7 +192,7 @@ jobs:
   superlinter:
     name: SuperLinter
     if: ${{ !inputs.skip-checks }}
-    runs-on: depot-ubuntu-24.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code

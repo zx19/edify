@@ -35,32 +35,32 @@ jobs:
         include:
           - service_name: 'api-amd64'
             platform: linux/amd64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}'
             file: 'api/Dockerfile'
           - service_name: 'api-arm64'
             platform: linux/arm64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}'
             file: 'api/Dockerfile'
           - service_name: 'web-amd64'
             platform: linux/amd64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}'
             file: 'web/Dockerfile'
           - service_name: 'web-arm64'
             platform: linux/arm64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}'
             file: 'web/Dockerfile'
           - service_name: 'local-sandbox-amd64'
             platform: linux/amd64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}:dify-agent-runtime'
             file: 'docker/Dockerfile'
           - service_name: 'local-sandbox-arm64'
             platform: linux/arm64
-            runs_on: depot-ubuntu-24.04-4
+            runs_on: ubuntu-24.04
             context: '{{defaultContext}}:dify-agent-runtime'
             file: 'docker/Dockerfile'
     steps:

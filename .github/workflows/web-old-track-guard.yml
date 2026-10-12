@@ -14,7 +14,7 @@ permissions:
 jobs:
   web-readonly:
     name: web/ 旧轨只读守卫
-    runs-on: depot-ubuntu-24.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Check changed files
