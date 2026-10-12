@@ -1,3 +1,4 @@
+import type admin from '../i18n/en-US/admin.json'
 import type agentV2 from '../i18n/en-US/agent-v-2.json'
 import type appAnnotation from '../i18n/en-US/app-annotation.json'
 import type appApi from '../i18n/en-US/app-api.json'
@@ -38,6 +39,7 @@ import type workflow from '../i18n/en-US/workflow.json'
 import { kebabCase } from 'string-ts'
 
 type RawResources = {
+  admin: typeof admin
   app: typeof app
   appAnnotation: typeof appAnnotation
   appApi: typeof appApi
@@ -144,6 +146,7 @@ export type Resources = RawResources & PluralBaseResources
 export const defaultNS = 'app' as const
 
 export const namespaces = [
+  'admin',
   'app',
   'appAnnotation',
   'appApi',
