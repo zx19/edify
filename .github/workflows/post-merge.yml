@@ -14,7 +14,8 @@ concurrency:
 jobs:
   check-changes:
     name: Check Changed Files
-    runs-on: depot-ubuntu-24.04
+    # GitHub 托管 runner——depot-ubuntu-24.04 在此链路上无可用 runner（历史 run 全部 queued 挂死）
+    runs-on: ubuntu-24.04
     outputs:
       external-e2e-changed: ${{ steps.changes.outputs.external_e2e }}
       web-e2e-dual-changed: ${{ steps.changes.outputs.web_e2e_dual }}
