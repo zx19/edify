@@ -1,0 +1,507 @@
+{
+  "version": 1,
+  "milestone": "M2 e2e 基线冻结",
+  "purpose": "前端重写双轨冻结点证据（v2 计划 §7 M2）：双轨契约 diff = 0 判定规则 + 当下功能全集双轨全绿起点。场景清单为活清单，增删走 matrix 登记随里程碑重冻。",
+  "generatedAt": "2026-10-12T03:27:18Z",
+  "commit": "818e589f3f5380539a238dda63642fe5615c9448",
+  "command": "pnpm -C e2e e2e:dual",
+  "ciRun": {
+    "id": 38196951018,
+    "url": "https://github.com/zx19/edify/actions/runs/38196951018",
+    "workflow": "Web Full-Stack E2E",
+    "trigger": "workflow_dispatch (dual=true)",
+    "headBranch": "main",
+    "headSha": "818e589f3f5380539a238dda63642fe5615c9448",
+    "conclusion": "success",
+    "startedAt": "2026-10-12T02:44:10Z",
+    "completedAt": "2026-10-12T03:05:27Z"
+  },
+  "tracks": {
+    "old": {
+      "baseURL": "http://127.0.0.1:3000",
+      "web": "web/",
+      "exitCode": 0,
+      "scenarios": {
+        "total": 60,
+        "passed": 60
+      },
+      "steps": {
+        "total": 686,
+        "passed": 686
+      }
+    },
+    "new": {
+      "baseURL": "http://127.0.0.1:3001",
+      "web": "web-new/",
+      "exitCode": 0,
+      "scenarios": {
+        "total": 60,
+        "passed": 60
+      },
+      "steps": {
+        "total": 686,
+        "passed": 686
+      }
+    }
+  },
+  "contractDiff": {
+    "total": 60,
+    "aligned": 60,
+    "diff": 0,
+    "missingInOld": 0,
+    "missingInNew": 0,
+    "evidence": "CI 日志 [dual] 60/60 scenarios aligned, 0 diff(s)；e2e/reports/e2e-dual-diff.json 未入该 run 工件（上传路径本次任务补齐，后续 run 可回溯）"
+  },
+  "webkitSmoke": {
+    "scenarios": {
+      "total": 4,
+      "passed": 4
+    },
+    "steps": {
+      "total": 32,
+      "passed": 32
+    },
+    "scenariosList": [
+      "Closing the account menu restores focus to its trigger",
+      "Closing the create app menu restores focus to its trigger",
+      "Sign in by following the form tab order",
+      "Skip repeated navigation and move focus to the main content"
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "A visitor chats with a shared chat app and starts a new conversation",
+      "feature": "webapp/chat-journey.feature",
+      "tags": ["@core", "@unauthenticated", "@webapp"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "A visitor completes the required chat settings and chats with a shared chatbot app",
+      "feature": "webapp/chatbot-journey.feature",
+      "tags": ["@core", "@unauthenticated", "@webapp"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "A visitor runs a shared text-generation app once and sees the streamed result",
+      "feature": "webapp/completion-journey.feature",
+      "tags": ["@core", "@unauthenticated", "@webapp"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Access a shared workflow app without authentication",
+      "feature": "apps/share-app.feature",
+      "tags": ["@apps", "@core", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Access Point keeps unpublished Agent v2 access unavailable",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Advanced Settings exposes supported configuration entries",
+      "feature": "agent-v2/advanced-settings.feature",
+      "tags": ["@advanced-settings", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Backend service API access can be disabled and restored from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@backend-api-access", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Backend service API endpoint can be copied",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@backend-api-access", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Backend service API keys are managed without exposing existing secrets",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@backend-api-access", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Backend service API Reference opens from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@backend-api-access", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Build chat is blocked until a model is configured",
+      "feature": "agent-v2/build-draft.feature",
+      "tags": ["@agent-v2", "@authenticated", "@build", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Closing the account menu restores focus to its trigger",
+      "feature": "accessibility/keyboard-navigation.feature",
+      "tags": ["@accessibility", "@authenticated", "@browser-smoke", "@keyboard"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Closing the create app menu restores focus to its trigger",
+      "feature": "accessibility/keyboard-navigation.feature",
+      "tags": ["@accessibility", "@authenticated", "@browser-smoke", "@keyboard"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Concurrent Agent v2 edits converge to one clear saved draft after refresh",
+      "feature": "agent-v2/configure-persistence.feature",
+      "tags": ["@agent-v2", "@authenticated", "@configure-persistence", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new Agent app and redirect to the configuration page",
+      "feature": "apps/create-agent-app.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new blank app and redirect to the editor",
+      "feature": "apps/create-app.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new Chatbot app and redirect to the configuration page",
+      "feature": "apps/create-chatbot-app.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new Chatflow app and redirect to the workflow editor",
+      "feature": "apps/create-chatflow-app.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new Text Generator app and redirect to the configuration page",
+      "feature": "apps/create-text-generator-app.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create a new Workflow app and redirect to the workflow editor",
+      "feature": "apps/create-workflow-app.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Create an Agent from the Agent Roster",
+      "feature": "agent-v2/roster-create.feature",
+      "tags": ["@agent-create", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Delete an existing app from the apps console",
+      "feature": "apps/delete-app.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Deleted environment variables are removed after refresh",
+      "feature": "agent-v2/advanced-settings.feature",
+      "tags": ["@advanced-settings", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Disable and restore a published workflow Web App",
+      "feature": "apps/web-app-service.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Discarding a Build draft does not apply supported configuration changes",
+      "feature": "agent-v2/build-draft.feature",
+      "tags": ["@agent-v2", "@authenticated", "@build", "@core", "@skill-fixture"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Discarding a Build draft keeps the original Agent configuration",
+      "feature": "agent-v2/build-draft.feature",
+      "tags": ["@agent-v2", "@authenticated", "@build", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Dropping multiple Agent v2 files at once is rejected",
+      "feature": "agent-v2/files.feature",
+      "tags": ["@agent-v2", "@authenticated", "@core", "@files", "@files-limits"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Duplicate an existing app and open the copy in the editor",
+      "feature": "apps/duplicate-app.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Export the DSL file for an existing app",
+      "feature": "apps/export-app.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Ignore an external redirect target after signing in",
+      "feature": "auth/redirect-security.feature",
+      "tags": ["@auth", "@redirect-security", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Ignore an external redirect target for an authenticated user",
+      "feature": "auth/redirect-security.feature",
+      "tags": ["@auth", "@authenticated", "@redirect-security"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Invalid environment imports report skipped lines and keep existing variables",
+      "feature": "agent-v2/advanced-settings.feature",
+      "tags": ["@advanced-settings", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Leaving Configure immediately after editing preserves prompt changes",
+      "feature": "agent-v2/configure-persistence.feature",
+      "tags": ["@agent-v2", "@authenticated", "@configure-persistence", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Open the configure page for an Agent v2 test agent",
+      "feature": "agent-v2/configure-entry.feature",
+      "tags": ["@agent-v2", "@authenticated", "@infra"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Open the default console entry with the shared authenticated state",
+      "feature": "smoke/authenticated-entry.feature",
+      "tags": ["@authenticated", "@smoke"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Opening a chatbot app navigates to the configuration page",
+      "feature": "apps/app-detail-navigation.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Opening a workflow app navigates to the workflow editor",
+      "feature": "apps/app-detail-navigation.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Pending Build draft remains protected after leaving Configure",
+      "feature": "agent-v2/build-draft.feature",
+      "tags": ["@agent-v2", "@authenticated", "@build", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Plain environment variables are saved and restored",
+      "feature": "agent-v2/advanced-settings.feature",
+      "tags": ["@advanced-settings", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Publish a workflow app for the first time",
+      "feature": "apps/publish-app.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Publish is blocked until a model is configured",
+      "feature": "agent-v2/publish.feature",
+      "tags": ["@agent-v2", "@authenticated", "@core", "@publish"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Published Web app can be launched from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": [
+        "@access-point",
+        "@agent-v2",
+        "@authenticated",
+        "@core",
+        "@published-web-app",
+        "@web-app-access"
+      ],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Redirect back to sign-in when reopening the apps console after signing out",
+      "feature": "auth/sign-out.feature",
+      "tags": ["@auth", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Redirect to the sign-in page when opening the default console entry without logging in",
+      "feature": "smoke/unauthenticated-entry.feature",
+      "tags": ["@smoke", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Refresh the console session during server-side navigation",
+      "feature": "auth/session-refresh.feature",
+      "tags": ["@auth", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Run a minimal workflow app",
+      "feature": "apps/workflow-run.feature",
+      "tags": ["@apps", "@authenticated", "@core", "@mode-matrix"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Run a shared workflow app without authentication",
+      "feature": "apps/share-app.feature",
+      "tags": ["@apps", "@core", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Sign in by following the form tab order",
+      "feature": "accessibility/keyboard-navigation.feature",
+      "tags": ["@accessibility", "@browser-smoke", "@keyboard", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Sign in with valid credentials and reach the console home",
+      "feature": "auth/sign-in.feature",
+      "tags": ["@auth", "@core", "@smoke", "@unauthenticated"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Skip repeated navigation and move focus to the main content",
+      "feature": "accessibility/keyboard-navigation.feature",
+      "tags": ["@accessibility", "@authenticated", "@browser-smoke", "@keyboard"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Switch a Completion app to Workflow Orchestrate",
+      "feature": "apps/switch-app-mode.feature",
+      "tags": ["@apps", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Uploading a small file keeps it in the Agent configuration",
+      "feature": "agent-v2/files.feature",
+      "tags": ["@agent-v2", "@authenticated", "@core", "@files"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Uploading a special-name file keeps the filename readable",
+      "feature": "agent-v2/files.feature",
+      "tags": ["@agent-v2", "@authenticated", "@core", "@files"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Uploading an empty file keeps a zero-byte file in the Agent configuration",
+      "feature": "agent-v2/files.feature",
+      "tags": ["@agent-v2", "@authenticated", "@core", "@files"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Valid environment imports are saved and restored",
+      "feature": "agent-v2/advanced-settings.feature",
+      "tags": ["@advanced-settings", "@agent-v2", "@authenticated", "@core"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Web app access can be disabled and restored from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": [
+        "@access-point",
+        "@agent-v2",
+        "@authenticated",
+        "@core",
+        "@published-web-app",
+        "@web-app-access"
+      ],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Web app access URL can be copied without changing orchestration",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@core", "@web-app-access"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Web app customization opens from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@core", "@web-app-access"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Web app Embedded configuration opens from Access Point",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@core", "@web-app-access"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    },
+    {
+      "name": "Web app settings open from Access Point without changing orchestration",
+      "feature": "agent-v2/access-point.feature",
+      "tags": ["@access-point", "@agent-v2", "@authenticated", "@core", "@web-app-access"],
+      "oldTrack": "passed",
+      "newTrack": "passed"
+    }
+  ]
+}
