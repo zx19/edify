@@ -178,6 +178,17 @@ export function MainNavMenuContent({ onLogout }: MainNavMenuContentProps) {
             trailing={<ExternalLinkIndicator />}
           />
         </DropdownMenuLinkItem>
+        {userProfile?.is_system_admin && (
+          <DropdownMenuLinkItem
+            className="mx-0 h-8 justify-between gap-1 px-3 py-1"
+            render={<Link href="/admin" />}
+          >
+            <MenuItemContent
+              iconClassName="i-ri-shield-keyhole-line"
+              label={t(($) => $.entry.systemAdmin, { ns: 'admin' })}
+            />
+          </DropdownMenuLinkItem>
+        )}
         <DropdownMenuItem
           className="mx-0 h-8 gap-1 px-3 py-1"
           onClick={() => setSettingsDestination('preferences')}

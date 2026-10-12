@@ -171,4 +171,32 @@ describe('AccountDropdown', () => {
       expect(mockPush).toHaveBeenCalledWith('/signin')
     })
   })
+
+  it('hides the system admin entry for non-admin users', async () => {
+    const user = userEvent.setup()
+    renderAccountDropdown()
+
+    await user.click(screen.getByRole('button', { name: 'common.account.account' }))
+    expect(await screen.findByText('current@example.com')).toBeInTheDocument()
+    expect(screen.queryByText('admin.entry.systemAdmin')).not.toBeInTheDocument()
+  })
+
+  it('shows the system admin entry linking to /admin for system administrators', async () => {
+    const user = userEvent.setup()
+    const queryClient = createAccountProfileQueryClient({ ...userProfile, is_system_admin: true })
+    renderWithConsoleQuery(
+      <AccountDropdown
+        trigger={({ ariaLabel }) => (
+          <button type="button" aria-label={ariaLabel}>
+            Current account
+          </button>
+        )}
+      />,
+      { queryClient },
+    )
+
+    await user.click(screen.getByRole('button', { name: 'common.account.account' }))
+    const entry = await screen.findByText('admin.entry.systemAdmin')
+    expect(entry.closest('a')).toHaveAttribute('href', '/admin')
+  })
 })

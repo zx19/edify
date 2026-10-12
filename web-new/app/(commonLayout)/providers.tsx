@@ -3,6 +3,7 @@ import { OAuthRegistrationAnalytics } from '@/app/components/oauth-registration-
 import { EventEmitterContextProvider } from '@/context/event-emitter-provider'
 import { ModalContextProvider } from '@/context/modal-context-provider'
 import { ProviderContextProvider } from '@/context/provider-context-provider'
+import { AdminLandingRedirect } from './admin-landing-redirect'
 import { ExternalServiceSync } from './external-service-sync'
 import { CommonLayoutHydrationBoundary } from './hydration-boundary'
 
@@ -22,7 +23,10 @@ export function ConsoleContextProviders({ children }: { children: ReactNode }) {
   return (
     <EventEmitterContextProvider>
       <ProviderContextProvider>
-        <ModalContextProvider>{children}</ModalContextProvider>
+        <ModalContextProvider>
+          <AdminLandingRedirect />
+          {children}
+        </ModalContextProvider>
       </ProviderContextProvider>
     </EventEmitterContextProvider>
   )
