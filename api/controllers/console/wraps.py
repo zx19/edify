@@ -8,7 +8,7 @@ from typing import Any, Concatenate, Protocol, cast, overload
 from flask import abort, request
 from pydantic import BaseModel, ValidationError
 from sqlalchemy import select
-from werkzeug.exceptions import Forbidden, UnprocessableEntity
+from werkzeug.exceptions import Forbidden, Unauthorized, UnprocessableEntity
 
 from configs import dify_config
 from controllers.common.wraps import (
@@ -22,7 +22,7 @@ from enums import CloudPlan, DeploymentEdition
 from extensions.ext_database import db
 from extensions.ext_redis import redis_client
 from libs.encryption import FieldEncryption
-from libs.login import current_account_with_tenant
+from libs.login import current_account_with_tenant, current_account_with_tenant_optional
 from models import Account
 from models.account import AccountStatus
 from models.dataset import RateLimitLog
@@ -119,6 +119,28 @@ def account_initialization_required[R](view: Callable[..., R]) -> Callable[..., 
         # check account initialization
         current_user, _ = current_account_with_tenant()
         if current_user.status == AccountStatus.UNINITIALIZED:
+            raise AccountNotInitializedError()
+
+        return view(*args, **kwargs)
+
+    return decorated
+
+
+def account_initialization_required_allow_no_tenant[R](view: Callable[..., R]) -> Callable[..., R]:
+    """account_initialization_required 的无空间变体:仅 console_account_admission(require_tenant=False) 使用。
+
+    无空间系统管理员(未加入任何空间)也需要过初始化状态检查,但
+    current_account_with_tenant() 会对 current_tenant_id 硬断言——此处换用
+    optional 解析器,只查状态、不查租户;租户约束仍由 admission 的
+    require_tenant=True 分支在 inject_request_context 里承担。
+    """
+
+    @wraps(view)
+    def decorated(*args: Any, **kwargs: Any) -> R:
+        account, _ = current_account_with_tenant_optional()
+        if account is None:
+            raise Unauthorized("Login required.")
+        if account.status == AccountStatus.UNINITIALIZED:
             raise AccountNotInitializedError()
 
         return view(*args, **kwargs)

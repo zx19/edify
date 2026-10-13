@@ -11,10 +11,11 @@ from werkzeug.exceptions import Unauthorized
 
 from controllers.console import flask_admission
 from controllers.console.workspace.account import AccountProfileApi, AccountProfilePatchPayload
+from controllers.console.workspace.error import AccountNotInitializedError
 from core.rbac import RBACPermission, RBACResourceScope
 from machinery.context import RequestContext
 from machinery.errors import AdmissionConfigurationError
-from models.account import TenantAccountRole
+from models.account import AccountStatus, TenantAccountRole
 from services.entities.account_entities import AccountSnapshot
 
 
@@ -123,6 +124,11 @@ class TestRequireTenantAdmission:
             patch("controllers.console.flask_admission.setup_required", side_effect=lambda view: view),
             patch("controllers.console.flask_admission.login_required", side_effect=lambda view: view),
             patch("controllers.console.flask_admission.account_initialization_required", side_effect=lambda view: view),
+            # 无空间 init 变体经 wraps 模块解析 optional(真链,不打桩)
+            patch(
+                "controllers.console.wraps.current_account_with_tenant_optional",
+                return_value=(account, None),
+            ),
             patch(
                 "controllers.console.flask_admission.current_account_with_tenant",
                 side_effect=AssertionError("tenant required"),
@@ -156,6 +162,11 @@ class TestRequireTenantAdmission:
             patch("controllers.console.flask_admission.setup_required", side_effect=lambda view: view),
             patch("controllers.console.flask_admission.login_required", side_effect=lambda view: view),
             patch("controllers.console.flask_admission.account_initialization_required", side_effect=lambda view: view),
+            # 无空间 init 变体经 wraps 模块解析 optional(真链,不打桩)
+            patch(
+                "controllers.console.wraps.current_account_with_tenant_optional",
+                return_value=(None, None),
+            ),
             patch(
                 "controllers.console.flask_admission.current_account_with_tenant_optional",
                 return_value=(None, None),
@@ -184,3 +195,73 @@ class TestRequireTenantAdmission:
                 rbac_resource_scope=RBACResourceScope.WORKSPACE,
                 rbac_permission=RBACPermission.CREDENTIAL_CREATE,
             )
+
+
+class TestRequireTenantFalseRealInitCheck:
+    """回归:QA 实测无空间管理员 profile 500(2026-10-13)——admission 链里的
+    account_initialization_required 走 current_account_with_tenant() 硬断言租户,
+    与 require_tenant=False 语义矛盾。修复后 init 检查换无空间变体,本组用例
+    不打桩 init 检查,锁真链。"""
+
+    def test_no_tenant_active_account_admitted_and_strict_resolver_untouched(self):
+        account = MagicMock()
+        account.id = "account-1"
+        account.status = AccountStatus.ACTIVE
+        strict_resolver = MagicMock(side_effect=AssertionError("tenant required"))
+
+        with (
+            patch("controllers.console.flask_admission.setup_required", side_effect=lambda view: view),
+            patch("controllers.console.flask_admission.login_required", side_effect=lambda view: view),
+            patch(
+                "controllers.console.wraps.current_account_with_tenant_optional",
+                return_value=(account, None),
+            ),
+            patch(
+                "controllers.console.flask_admission.current_account_with_tenant_optional",
+                return_value=(account, None),
+            ),
+            patch("controllers.console.wraps.current_account_with_tenant", strict_resolver),
+            patch("controllers.console.flask_admission.current_account_with_tenant", strict_resolver),
+            patch("controllers.console.flask_admission.get_request_id", return_value="request-1"),
+            patch("controllers.console.flask_admission.get_trace_id", return_value="trace-1"),
+        ):
+
+            class Handler:
+                @flask_admission.console_account_admission(require_tenant=False)
+                def get(self, request_context: RequestContext):
+                    return request_context
+
+            with Flask(__name__).test_request_context():
+                result = Handler().get()
+
+        assert result.active_workspace_id is None
+        strict_resolver.assert_not_called()
+
+    def test_no_tenant_uninitialized_account_still_rejected(self):
+        account = MagicMock()
+        account.id = "account-1"
+        account.status = AccountStatus.UNINITIALIZED
+
+        with (
+            patch("controllers.console.flask_admission.setup_required", side_effect=lambda view: view),
+            patch("controllers.console.flask_admission.login_required", side_effect=lambda view: view),
+            patch(
+                "controllers.console.wraps.current_account_with_tenant_optional",
+                return_value=(account, None),
+            ),
+            patch(
+                "controllers.console.flask_admission.current_account_with_tenant_optional",
+                return_value=(account, None),
+            ),
+            patch("controllers.console.flask_admission.get_request_id", return_value="request-1"),
+            patch("controllers.console.flask_admission.get_trace_id", return_value="trace-1"),
+        ):
+
+            class Handler:
+                @flask_admission.console_account_admission(require_tenant=False)
+                def get(self, request_context: RequestContext):
+                    return request_context
+
+            with Flask(__name__).test_request_context(), pytest.raises(AccountNotInitializedError):
+                Handler().get()
+

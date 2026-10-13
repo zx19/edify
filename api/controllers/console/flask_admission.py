@@ -11,6 +11,7 @@ from configs import dify_config
 from controllers.common.wraps import enforce_rbac_access
 from controllers.console.wraps import (
     account_initialization_required,
+    account_initialization_required_allow_no_tenant,
     enable_change_email,
     enterprise_license_required,
     setup_required,
@@ -98,7 +99,12 @@ def console_account_admission[T, **P, R](
         if require_valid_enterprise_license:
             admitted = enterprise_license_required(admitted)
         if require_initialized:
-            admitted = account_initialization_required(admitted)
+            # require_tenant=False(无空间系统管理员)时不能用带租户硬断言的版本,
+            # 换无空间变体只查初始化状态;租户约束仍由 require_tenant=True 分支承担
+            if require_tenant:
+                admitted = account_initialization_required(admitted)
+            else:
+                admitted = account_initialization_required_allow_no_tenant(admitted)
         admitted = login_required(admitted)
         admitted = setup_required(admitted)
 
