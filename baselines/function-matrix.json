@@ -18,7 +18,8 @@
   },
   "notes": [
     "计划头部实测基线「路由 140」含 web/app/components/main-nav/layout.tsx——该文件位于非路由目录（app/components/），App Router 下不产生路由；本矩阵按语义计 139（106 page + 33 路由 layout）",
-    "⚠️ scripts/build-function-matrix.mjs 是种子期生成器——回填期运行会整表覆盖手工行（09-22 实证踩踏过一次，已恢复）。回填期禁止再跑，或先改造为合并模式"
+    "⚠️ scripts/build-function-matrix.mjs 是种子期生成器——回填期运行会整表覆盖手工行（09-22 实证踩踏过一次，已恢复）。回填期禁止再跑，或先改造为合并模式",
+    "「角色与权限/权限集」tab 一期降级(一期不迁移,3b/M7 登记):RBAC_ENABLED=false 时由 account-setting/index.tsx 的 isRbacEnabled 门控隐藏 + 直达 fallback 至成员 tab;permissions-page/access-rules-page 代码保留但不进菜单,二期 RBAC 本地化另议。"
   ],
   "rows": [
     {
