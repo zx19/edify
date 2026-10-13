@@ -7,6 +7,7 @@ namespace: qa-ai-lomva
 resources:
   - ../subpath
   - ingress.yaml
+  - web-new.yaml
 
 configMapGenerator:
   - name: lomva-config
@@ -18,6 +19,20 @@ configMapGenerator:
     behavior: merge
     envs:
       - config/web-public.env
+  # 新轨并存轨（/lomva-new）web 配置差异键（仅 NEXT_PUBLIC_BASE_PATH），
+  # 经 web-new.yaml 双源 envFrom 叠加在 lomva-web-config 之上（后者覆盖前者同 key）。
+  # 注意：generator env 文件受 kustomize 安全限制不能引用 overlay 目录外（../../base 不行）
+  - name: lomva-web-new-config
+    envs:
+      - config/web-new-public.env
+  # qa 在 subpath 之上再 replace 一次 nginx 配置：加入 /lomva-new 路由
+  #（replace 会替换整个 ConfigMap，三文件须全量，nginx.conf/proxy.conf 为相同副本）
+  - name: lomva-nginx-config
+    behavior: replace
+    files:
+      - nginx.conf=config/nginx/nginx.conf
+      - proxy.conf=config/nginx/proxy.conf
+      - default.conf=config/nginx/default.conf
 
 secretGenerator:
   - name: lomva-secret
@@ -64,3 +79,6 @@ images:
   - name: langgenius/dify-agent-local-sandbox
     newName: z123x/lomva-agent-local-sandbox
     newTag: 1.17.0-edify-3
+  # 新轨并存轨镜像（build-web-new job 构建，basePath=/lomva-new 构建期固化）
+  - name: z123x/lomva-web-new
+    newTag: 1.17.0-edify-6

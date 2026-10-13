@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lomva-web-new
+  labels:
+    app: web-new
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-new
+  template:
+    metadata:
+      labels:
+        app: web-new
+    spec:
+      containers:
+        - name: web
+          image: z123x/lomva-web-new
+          # 双源 envFrom：后者覆盖前者同 key（k8s envFrom 语义）——lomva-web-new-config
+          # 只放 NEXT_PUBLIC_BASE_PATH 一个差异键，其余全量继承 lomva-web-config（DRY）
+          envFrom:
+            - configMapRef:
+                name: lomva-web-config
+            - configMapRef:
+                name: lomva-web-new-config
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /lomva-new/
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-new
+spec:
+  selector:
+    app: web-new
+  ports:
+    - port: 3000
+      targetPort: 3000

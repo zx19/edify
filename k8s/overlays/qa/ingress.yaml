@@ -8,8 +8,8 @@ metadata:
     # 大文件上传（默认上限 15MB）需要放大 controller 的 body 限制
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
     # LLM SSE 流式响应可能长时间无新字节，放大读写超时避免被截断
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
 spec:
   ingressClassName: nginx-ingress
   rules:
@@ -20,6 +20,14 @@ spec:
           # path 不带尾斜杠：部分 controller 对 Prefix + 尾斜杠告警；Prefix 同样覆盖 /lomva 与 /lomva/...
           # 协作 WebSocket 走 /lomva/socket.io/（web 端 path 带 basePath），不再占用根路径 /socket.io
           - path: /lomva
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+          # 新轨并存轨（web-new）：同 host 合并进共享 CLB，由 nginx 分流到 web-new Service
+          - path: /lomva-new
             pathType: Prefix
             backend:
               service:

@@ -41,7 +41,9 @@
 ### 3.2 k8s(仅 `k8s/overlays/qa/`,base/subpath/prod 不动)
 
 1. **`web-new.yaml`**(新文件):Deployment `lomva-web-new`(image `z123x/lomva-web-new`,envFrom `lomva-web-config` + 新增 `lomva-web-new-config`)+ Service `web-new:80→3000`;readinessProbe 探 `/lomva-new/`(沿用 subpath 探针口径)
-2. **`config/web-new-public.env`**(新文件,仅放差异键:`CONSOLE_API_URL`/`APP_API_URL` 指 `/lomva`、`NEXT_PUBLIC_BASE_PATH=/lomva-new`、`NEXT_PUBLIC_SOCKET_URL=wss://qa-xai.xingshulin.com`);configMapGenerator 新建 `lomva-web-new-config`,envs 依序 `[../../base/config/web-config.env, config/web-public.env, config/web-new-public.env]`(后者覆盖前者,全量键齐全)
+2. **`config/web-new-public.env`**(新文件,仅 1 个差异键 `NEXT_PUBLIC_BASE_PATH=/lomva-new`);configMapGenerator 新建 `lomva-web-new-config`(create)。Deployment 用**双源 envFrom**(`lomva-web-config` 在前、`lomva-web-new-config` 在后,k8s envFrom 语义后者覆盖前者同 key)——全量键继承旧轨 web 配置,DRY。
+   - 实施期修正(2026-10-13):kustomize generator 的 env 文件受安全限制**不能引用 overlay 目录外**(`../../base/...` 报 security 错),故放弃「base+qa+新轨三文件合并」原案,改双源 envFrom。
+   - **`CONSOLE_API_URL`/`APP_API_URL` 刻意维持继承旧轨的 `/lomva` 值**(§2 cookie 结论),不写进差异键文件
 3. **nginx**:`config/nginx/` 三文件副本入 qa overlay,default.conf 在 `/lomva/` 规则前加:
    ```nginx
    location /lomva-new/socket.io/ { proxy_pass http://api-websocket:5001/socket.io/; ... }
