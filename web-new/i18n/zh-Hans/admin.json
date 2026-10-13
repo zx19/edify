@@ -58,6 +58,18 @@
     "actionAdminRevoke": "撤销管理员",
     "actionAdminTransfer": "转让创始人"
   },
+  "members": {
+    "searchPlaceholder": "搜索姓名/邮箱",
+    "filterWorkspace": "空间",
+    "filterWorkspaceAll": "全部空间",
+    "colName": "姓名",
+    "colEmail": "邮箱",
+    "colWorkspaces": "所属空间",
+    "expand": "展开",
+    "collapse": "收起",
+    "joinedAt": "加入时间",
+    "empty": "暂无成员"
+  },
   "activate": {
     "title": "激活系统管理员账号",
     "nameLabel": "姓名",

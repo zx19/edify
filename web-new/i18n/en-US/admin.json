@@ -62,6 +62,18 @@
     "actionAdminRevoke": "Revoke admin",
     "actionAdminTransfer": "Transfer founder"
   },
+  "members": {
+    "searchPlaceholder": "Search name/email",
+    "filterWorkspace": "Workspace",
+    "filterWorkspaceAll": "All workspaces",
+    "colName": "Name",
+    "colEmail": "Email",
+    "colWorkspaces": "Workspaces",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "joinedAt": "Joined at",
+    "empty": "No members yet"
+  },
   "activate": {
     "title": "Activate system admin account",
     "nameLabel": "Name",
