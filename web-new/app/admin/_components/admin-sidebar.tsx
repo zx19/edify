@@ -30,6 +30,8 @@ export function AdminSidebar() {
   }
 
   const workspacesActive = pathname.startsWith('/admin/workspaces')
+  const membersActive = pathname.startsWith('/admin/members')
+  const adminsActive = pathname.startsWith('/admin/admins')
   const auditActive = pathname.startsWith('/admin/audit-logs')
 
   return (
@@ -44,6 +46,20 @@ export function AdminSidebar() {
           className={navLinkClassName(workspacesActive)}
         >
           {t(($) => $.nav.workspaces, { ns: 'admin' })}
+        </Link>
+        <Link
+          href="/admin/members"
+          aria-current={membersActive ? 'page' : undefined}
+          className={navLinkClassName(membersActive)}
+        >
+          {t(($) => $.nav.members, { ns: 'admin' })}
+        </Link>
+        <Link
+          href="/admin/admins"
+          aria-current={adminsActive ? 'page' : undefined}
+          className={navLinkClassName(adminsActive)}
+        >
+          {t(($) => $.nav.admins, { ns: 'admin' })}
         </Link>
         <Link
           href="/admin/audit-logs"

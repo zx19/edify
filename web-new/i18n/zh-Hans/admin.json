@@ -1,5 +1,11 @@
 {
-  "nav": { "title": "系统管理", "workspaces": "工作空间", "auditLogs": "审计日志" },
+  "nav": {
+    "title": "系统管理",
+    "workspaces": "工作空间",
+    "members": "成员",
+    "admins": "系统管理员",
+    "auditLogs": "审计日志"
+  },
   "guard": {
     "forbiddenTitle": "无权访问",
     "forbiddenDesc": "系统管理控制台仅对系统管理员开放。",

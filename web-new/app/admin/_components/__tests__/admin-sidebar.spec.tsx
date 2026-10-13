@@ -11,6 +11,8 @@ vi.mock('react-i18next', async () => {
   return createReactI18nextMock({
     'admin.nav.title': 'System Administration',
     'admin.nav.workspaces': 'Workspaces',
+    'admin.nav.members': 'Members',
+    'admin.nav.admins': 'System Admins',
     'admin.nav.auditLogs': 'Audit Logs',
     'common.userProfile.logout': 'Log out',
   })
@@ -51,15 +53,21 @@ vi.mock('@/service/use-common', async (importOriginal) => {
 describe('AdminSidebar', () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it('renders two first-level nav items and highlights the current route', () => {
+  it('renders four first-level nav items and highlights the current route', () => {
     renderWithConsoleQuery(<AdminSidebar />, {
       accountProfile: { is_system_admin: true, name: 'Root Admin', email: 'root@example.com' },
     })
     const workspaces = screen.getByRole('link', { name: 'Workspaces' })
+    const members = screen.getByRole('link', { name: 'Members' })
+    const admins = screen.getByRole('link', { name: 'System Admins' })
     const auditLogs = screen.getByRole('link', { name: 'Audit Logs' })
     expect(workspaces).toHaveAttribute('href', '/admin/workspaces')
+    expect(members).toHaveAttribute('href', '/admin/members')
+    expect(admins).toHaveAttribute('href', '/admin/admins')
     expect(auditLogs).toHaveAttribute('href', '/admin/audit-logs')
     expect(workspaces).toHaveAttribute('aria-current', 'page')
+    expect(members).not.toHaveAttribute('aria-current')
+    expect(admins).not.toHaveAttribute('aria-current')
     expect(auditLogs).not.toHaveAttribute('aria-current')
   })
 

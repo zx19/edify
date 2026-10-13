@@ -2,6 +2,8 @@
   "nav": {
     "title": "System Administration",
     "workspaces": "Workspaces",
+    "members": "Members",
+    "admins": "System Admins",
     "auditLogs": "Audit Logs"
   },
   "guard": {
