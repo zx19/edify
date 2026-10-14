@@ -110,6 +110,10 @@ export default function AdminAuditLogsPage() {
             setAction(value as 'all' | ActionValue)
             setPage(1)
           }}
+          items={[
+            { value: 'all', label: t(($) => $.audit.filterActionAll, { ns: 'admin' }) },
+            ...ACTION_VALUES.map((value) => ({ value, label: actionLabel(value) })),
+          ]}
         >
           <SelectTrigger
             aria-label={t(($) => $.audit.filterAction, { ns: 'admin' })}
@@ -135,6 +139,10 @@ export default function AdminAuditLogsPage() {
             setWorkspaceId(value ?? 'all')
             setPage(1)
           }}
+          items={[
+            { value: 'all', label: t(($) => $.audit.filterWorkspaceAll, { ns: 'admin' }) },
+            ...(workspacesData?.data ?? []).map((ws) => ({ value: ws.id, label: ws.name })),
+          ]}
         >
           <SelectTrigger
             aria-label={t(($) => $.audit.filterWorkspace, { ns: 'admin' })}

@@ -162,6 +162,10 @@ export default function AdminMembersPage() {
             setWorkspaceId(value ?? 'all')
             setPage(1)
           }}
+          items={[
+            { value: 'all', label: t(($) => $.members.filterWorkspaceAll, { ns: 'admin' }) },
+            ...(workspacesData?.data ?? []).map((ws) => ({ value: ws.id, label: ws.name })),
+          ]}
         >
           <SelectTrigger
             aria-label={t(($) => $.members.filterWorkspace, { ns: 'admin' })}

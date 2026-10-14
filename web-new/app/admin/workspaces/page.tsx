@@ -68,6 +68,11 @@ export default function AdminWorkspacesPage() {
             setStatus(value as 'all' | 'normal' | 'archive')
             setPage(1)
           }}
+          items={[
+            { value: 'all', label: t(($) => $.workspaces.statusAll, { ns: 'admin' }) },
+            { value: 'normal', label: t(($) => $.workspaces.statusNormal, { ns: 'admin' }) },
+            { value: 'archive', label: t(($) => $.workspaces.statusArchive, { ns: 'admin' }) },
+          ]}
         >
           <SelectTrigger
             aria-label={t(($) => $.workspaces.statusAll, { ns: 'admin' })}

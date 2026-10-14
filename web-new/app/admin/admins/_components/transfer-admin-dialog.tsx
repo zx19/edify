@@ -63,7 +63,14 @@ export function TransferAdminDialog({ open, onOpenChange, candidates }: Transfer
     >
       <div className="flex flex-col gap-1.5 text-sm text-text-secondary">
         <span>{t(($) => $.admins.transferTargetLabel, { ns: 'admin' })}</span>
-        <Select value={targetId} onValueChange={(value) => setTargetId(value ?? '')}>
+        <Select
+          value={targetId}
+          onValueChange={(value) => setTargetId(value ?? '')}
+          items={candidates.map((admin) => ({
+            value: admin.id,
+            label: `${admin.name} (${admin.email})`,
+          }))}
+        >
           <SelectTrigger
             aria-label={t(($) => $.admins.transferTargetLabel, { ns: 'admin' })}
             className="w-full"
