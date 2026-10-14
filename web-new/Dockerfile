@@ -5,7 +5,7 @@ LABEL maintainer="takatost@gmail.com"
 # if you located in China, you can use aliyun mirror to speed up
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-# if you located in China, you can use taobao registry to speed up
+# if you are using taobao registry to speed up
 # RUN npm config set registry https://registry.npmmirror.com
 
 RUN apk add --no-cache tzdata
@@ -23,6 +23,7 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
 COPY web/package.json /app/web/
+COPY web-new/package.json /app/web-new/
 COPY e2e/package.json /app/e2e/
 COPY sdks/nodejs-client/package.json /app/sdks/nodejs-client/
 COPY packages /app/packages
@@ -37,18 +38,18 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 FROM base AS builder
 WORKDIR /app
 COPY --from=packages /app/ .
-# 只 COPY web 构建实际需要的路径（web/ + 本地 workspace 包 + 根配置），
-# 收窄 COPY 层并减少 mode=max 的缓存导出量；api/、e2e/、docker/ 等不进入此层
+# 只 COPY web-new 构建实际需要的路径（web-new/ + 本地 workspace 包 + 根配置），
+# 收窄 COPY 层并减少 mode=max 的缓存导出量；api/、e2e/、web/ 等不进入此层
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages ./packages
-COPY web ./web
+COPY web-new ./web-new
 
-WORKDIR /app/web
+WORKDIR /app/web-new
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV pnpm_config_verify_deps_before_run=false
 # SKIP_VINEXT=true 时跳过 vinext 构建（部署默认不走 vinext，见 entrypoint.sh 的
 # EXPERIMENTAL_ENABLE_VINEXT），可省约 80s；mkdir 保底让 production 阶段的
-# COPY web/dist/standalone 不因源缺失失败
+# COPY web-new/dist/standalone 不因源缺失失败
 ARG SKIP_VINEXT=false
 RUN pnpm build && \
     if [ "$SKIP_VINEXT" = "true" ]; then mkdir -p dist/standalone; else pnpm build:vinext; fi
@@ -82,12 +83,13 @@ RUN addgroup -S -g ${dify_uid} dify && \
 
 WORKDIR /app
 
-COPY --from=builder --chown=dify:dify /app/web/public ./targets/next/web/public
-COPY --from=builder --chown=dify:dify /app/web/.next/standalone ./targets/next/
-COPY --from=builder --chown=dify:dify /app/web/.next/static ./targets/next/web/.next/static
-COPY --from=builder --chown=dify:dify /app/web/dist/standalone ./targets/vinext
+# monorepo standalone 产物目录按仓根相对路径组织：web-new/.next/standalone 内含 web-new/server.js
+COPY --from=builder --chown=dify:dify /app/web-new/public ./targets/next/web-new/public
+COPY --from=builder --chown=dify:dify /app/web-new/.next/standalone ./targets/next/
+COPY --from=builder --chown=dify:dify /app/web-new/.next/static ./targets/next/web-new/.next/static
+COPY --from=builder --chown=dify:dify /app/web-new/dist/standalone ./targets/vinext
 
-COPY --chown=dify:dify --chmod=755 web/docker/entrypoint.sh ./entrypoint.sh
+COPY --chown=dify:dify --chmod=755 web-new/docker/entrypoint.sh ./entrypoint.sh
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}

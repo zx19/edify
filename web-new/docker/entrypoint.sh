@@ -55,4 +55,4 @@ if [ "${EXPERIMENTAL_ENABLE_VINEXT:-}" = "true" ]; then
   exec node /app/targets/vinext/server.js
 fi
 
-exec node /app/targets/next/web/server.js
+exec node /app/targets/next/web-new/server.js

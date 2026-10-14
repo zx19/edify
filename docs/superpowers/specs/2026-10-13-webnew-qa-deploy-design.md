@@ -3,6 +3,8 @@
 2026-10-13 | 状态:已拍板(用户两问后确认;路径形态 K 已拍板) | 前置:M4/M4b/3b 已合 main,QA 后端 edify-5
 
 > **修正记录(2026-10-13 实施期实证)**:初稿路径形态为并列子路径 `/lomva-new`,首部署实测登录后 profile 401 全链崩——后端 cookie `Path=/lomva` 按**路径段**匹配,`/lomva-new` 的 `-` 不是 `/`,`document.cookie` 在新轨页面读不到 `csrf_token`,`X-CSRF-Token` 头发空(本后端 GET 也强制校验)。已拍板改 **K 案:新轨挪进 `/lomva/v2`**——被 `Path=/lomva` 天然覆盖,零后端改动,ingress 零新增。备选(后端双写 csrf cookie / csrf 改 Path=/)均有隔离或一致性代价,弃。
+>
+> **修正记录 2(2026-10-14 首部署实证)**:`web-new/Dockerfile` 与 `web/Dockerfile` 逐字节相同(M0 脚手架拷贝后未适配),edify-6/7 镜像内容是**旧轨**(/admin 404,产物无 admin 目录)。已重写为真构建 web-new(packages 阶段补 web-new manifest、builder COPY web-new、产物/静态资源/探针路径全改 web-new、entrypoint 指 `targets/next/web-new/server.js`)。**edify-6/7 作废,有效镜像自 1.17.0-edify-8 起**。教训:新镜像首部署必须先 `kubectl exec` 验产物内容(ls .next/server/app 有无目标路由)再进浏览器验收。
 
 ## 1. 目标 / 边界 / 成功标准
 
