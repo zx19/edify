@@ -79,6 +79,7 @@ images:
   - name: langgenius/dify-agent-local-sandbox
     newName: z123x/lomva-agent-local-sandbox
     newTag: 1.17.0-edify-3
-  # 新轨并存轨镜像（build-web-new job 构建，basePath=/lomva-new 构建期固化）
+  # 新轨并存轨镜像（build-web-new job 构建，basePath=/lomva/v2 构建期固化；
+  # 必须在 /lomva 内——cookie Path=/lomva 按路径段匹配，见 config/web-new-public.env 注释）
   - name: z123x/lomva-web-new
-    newTag: 1.17.0-edify-6
+    newTag: 1.17.0-edify-7

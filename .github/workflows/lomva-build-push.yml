@@ -97,9 +97,10 @@ jobs:
           cache-from: type=gha,scope=lomva-web
           cache-to: type=gha,mode=max,scope=lomva-web
 
-  # 新轨(web-new)并存轨镜像:basePath 在 inputs.base_path 基础上加 -new 后缀
-  # (QA:/lomva → /lomva-new)。生产整切时本 job 需参数化 basePath,
-  # 见 docs/superpowers/specs/2026-10-13-webnew-qa-deploy-design.md §4-4
+  # 新轨(web-new)并存轨镜像:basePath = inputs.base_path + /v2(QA:/lomva → /lomva/v2)。
+  # 必须落在 /lomva 内:后端 cookie Path=/lomva 按路径段匹配,/lomva-new 这类并列路径
+  # 页面上 document.cookie 读不到 csrf_token → 全链 401(2026-10-13 实测,设计 §2)。
+  # 生产整切时本 job 需参数化 basePath,见设计 §4-4。
   build-web-new:
     runs-on: ubuntu-latest
     permissions:
@@ -123,7 +124,7 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_PREFIX }}-web-new:${{ inputs.tag }}
           build-args: |
-            NEXT_PUBLIC_BASE_PATH=${{ inputs.base_path }}-new
+            NEXT_PUBLIC_BASE_PATH=${{ inputs.base_path }}/v2
             SKIP_VINEXT=true
           cache-from: type=gha,scope=lomva-web-new
           cache-to: type=gha,mode=max,scope=lomva-web-new

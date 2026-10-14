@@ -28,7 +28,7 @@ spec:
             - containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /lomva-new/
+              path: /lomva/v2/
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 10

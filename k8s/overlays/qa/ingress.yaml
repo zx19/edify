@@ -26,11 +26,3 @@ spec:
                 name: nginx
                 port:
                   number: 80
-          # 新轨并存轨（web-new）：同 host 合并进共享 CLB，由 nginx 分流到 web-new Service
-          - path: /lomva-new
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  number: 80
