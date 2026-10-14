@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow 编辑器 · 第二轮设计稿(配置面板/变量选择器/调试)</title>
+<style>
+  /* 设计语言与第一轮同源:白+黑+橙(#FF8C00) */
+  :root {
+    --bg: #FFFFFF; --bg-soft: #F7F7F8; --canvas: #FAFAFB;
+    --panel: #FFFFFF; --border: #E8E8EA; --border-strong: #D9D9DC;
+    --text-1: #0A0A0B; --text-2: #3D3D42; --text-3: #8A8A93;
+    --accent: #FF8C00; --accent-soft: #FFF3E0; --accent-deep: #E67A00;
+    --danger: #E5484D; --danger-soft: #FDECEC;
+    --success: #12A150; --success-soft: #E9F9EF;
+    --violet-pill-bg: #F4F3FF; --violet-pill-fg: #6938EF;
+    --amber-pill-bg: #FFF6E8; --amber-pill-fg: #B76400;
+    --blue-pill-bg: #EFF6FF; --blue-pill-fg: #175CD3;
+    --radius-card: 14px; --radius-btn: 9px; --radius-pill: 999px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .10);
+    --font: "Inter", "SF Pro Text", -apple-system, "PingFang SC", "system-ui", sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:var(--bg-soft); color:var(--text-1); font-size:14px; }
+
+  .review-bar { position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:8px; padding:10px 16px; background:#fff; border-bottom:1px solid var(--border); }
+  .review-bar .title { font-weight:600; margin-right:12px; }
+  .review-tab { border:1px solid var(--border); background:#fff; color:var(--text-2); border-radius:var(--radius-pill); padding:6px 14px; cursor:pointer; font-size:13px; }
+  .review-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .legend { margin-left:auto; font-size:12px; color:var(--text-3); }
+  .legend b { color:var(--accent-deep); }
+  .view { display:none; } .view.active { display:block; }
+
+  /* 舞台:画布底 + 面板浮层(本轮主角是面板,画布只作背景) */
+  .stage { position:relative; height:calc(100vh - 50px); background:var(--canvas);
+    background-image: radial-gradient(circle, #D9D9DC 1px, transparent 1px); background-size: 18px 18px; overflow:hidden; }
+  .ghost-node { position:absolute; background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-xs); opacity:.75; }
+
+  /* ===== 配置面板 ===== */
+  .panel { position:absolute; top:12px; right:12px; bottom:12px; width:400px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-md); display:flex; flex-direction:column; overflow:hidden; }
+  .panel.wide { width:360px; }
+  .p-head { display:flex; align-items:center; gap:8px; padding:12px 14px; border-bottom:1px solid var(--border); }
+  .p-head .p-ic { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; font-size:14px; }
+  .p-head .p-title { font-weight:600; font-size:14px; }
+  .p-head .icon-btn { margin-left:auto; }
+  .p-tabs { display:flex; gap:0; padding:0 14px; border-bottom:1px solid var(--border); }
+  .p-tab { padding:9px 2px; margin-right:18px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--text-3); cursor:pointer; border-bottom:2px solid transparent; }
+  .p-tab.on { color:var(--text-1); border-bottom-color:var(--accent); }
+  .p-body { flex:1; overflow:auto; padding:14px; display:flex; flex-direction:column; gap:14px; }
+  .sec-label { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--text-2); text-transform:uppercase; }
+  .sec-label .opt { margin-left:auto; color:var(--text-3); font-weight:400; text-transform:none; letter-spacing:0; }
+  .field-card { background:var(--bg-soft); border-radius:10px; padding:9px 10px; display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-2); }
+  .field-card code { font-family:var(--mono); font-size:11px; }
+  .prompt-box { background:var(--bg-soft); border-radius:10px; padding:10px; font-family:var(--mono); font-size:12px; color:var(--text-2); min-height:88px; }
+  .prompt-box .toolbar { display:flex; gap:4px; margin:-2px -2px 8px; }
+  .chip-var { display:inline-block; background:var(--blue-pill-bg); color:var(--blue-pill-fg); border-radius:6px; padding:0 5px; font-family:var(--mono); font-size:11px; }
+  .switch { width:30px; height:18px; border-radius:999px; background:#E4E4E7; position:relative; }
+  .switch.on { background:var(--accent); }
+  .switch::after { content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:var(--shadow-xs); }
+  .switch.on::after { left:14px; }
+  .row-between { display:flex; align-items:center; justify-content:space-between; }
+  .add-btn { border:1px dashed var(--border-strong); background:transparent; color:var(--text-3); border-radius:10px; padding:8px; width:100%; font-size:12.5px; cursor:pointer; }
+  .add-btn:hover { color:var(--accent-deep); border-color:var(--accent); }
+
+  /* ===== 变量选择器(覆盖在面板上) ===== */
+  .var-pop { position:absolute; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-md); width:330px; overflow:hidden; }
+  .var-pop .search { margin:10px; padding:7px 10px; border:1px solid var(--border); border-radius:9px; color:var(--text-3); font-size:12.5px; }
+  .var-group { padding:4px 10px 8px; }
+  .var-group .g-title { font-size:11px; font-weight:600; color:var(--text-3); padding:4px 2px; display:flex; align-items:center; gap:6px; }
+  .var-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; font-size:12.5px; color:var(--text-2); cursor:pointer; }
+  .var-item:hover { background:var(--accent-soft); }
+  .var-item .ty { margin-left:auto; font-size:10.5px; color:var(--text-3); font-family:var(--mono); }
+
+  /* ===== Test Run 调试面板 ===== */
+  .tr-input { display:flex; flex-direction:column; gap:10px; }
+  .tr-field label { display:block; font-size:12px; color:var(--text-2); margin-bottom:5px; }
+  .tr-field .in { background:var(--bg-soft); border-radius:9px; padding:8px 10px; color:var(--text-3); font-size:12.5px; }
+  .start-run { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:10px; font-size:13.5px; font-weight:600; cursor:pointer; }
+  .start-run:hover { background:var(--accent-deep); }
+  .run-status { display:flex; align-items:center; gap:8px; font-size:12.5px; }
+  .run-status.ok { color:var(--success); }
+  .kv { display:flex; flex-direction:column; gap:8px; }
+  .kv-row { display:flex; gap:8px; font-size:12.5px; }
+  .kv-row .k { width:110px; color:var(--text-3); flex-shrink:0; }
+  .kv-row .v { color:var(--text-1); font-family:var(--mono); font-size:12px; word-break:break-all; }
+  .trace-node { border:1px solid var(--border); border-radius:10px; padding:8px 10px; display:flex; align-items:center; gap:8px; font-size:12.5px; }
+  .trace-node .st { width:16px; height:16px; border-radius:50%; display:grid; place-items:center; font-size:10px; }
+  .trace-node .st.ok { background:var(--success-soft); color:var(--success); }
+  .trace-node .meta { margin-left:auto; font-size:11px; color:var(--text-3); font-family:var(--mono); }
+  .raw-fold { margin-top:6px; border:1px dashed var(--border-strong); border-radius:10px; padding:7px 10px; font-size:12px; color:var(--text-3); cursor:pointer; }
+  .raw-fold:hover { color:var(--accent-deep); border-color:var(--accent); }
+
+  .notes { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:14px 16px 20px; background:var(--bg-soft); border-top:1px solid var(--border); }
+  .note-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); padding:12px 14px; }
+  .note-card h4 { font-size:13px; margin-bottom:8px; }
+  .note-card ul { padding-left:18px; font-size:12.5px; color:var(--text-2); display:flex; flex-direction:column; gap:5px; }
+  .note-card.change h4 { color:var(--accent-deep); }
+  .tag { font-size:10px; border-radius:var(--radius-pill); padding:0 6px; margin-left:6px; }
+  .tag.keep { background:var(--bg-soft); color:var(--text-3); }
+  .tag.change { background:var(--accent-soft); color:var(--accent-deep); }
+  .icon-btn { width:28px; height:28px; display:inline-grid; place-items:center; border-radius:8px; border:1px solid transparent; color:var(--text-2); cursor:pointer; background:transparent; }
+  .icon-btn:hover { background:var(--bg-soft); }
+</style>
+</head>
+<body>
+
+<div class="review-bar">
+  <span class="title">Workflow 编辑器 · 第二轮(配置面板 / 变量选择器 / 调试)</span>
+  <button class="review-tab active" data-view="v1">视图 1 · 配置面板(LLM)</button>
+  <button class="review-tab" data-view="v2">视图 2 · 变量选择器</button>
+  <button class="review-tab" data-view="v3">视图 3 · Test Run 双栏 + 调试四 tab</button>
+  <span class="legend">只看 <b>改动</b> 栏</span>
+</div>
+
+<!-- ============ 视图 1:配置面板(LLM) ============ -->
+<div class="view active" id="v1">
+  <div class="stage">
+    <div class="ghost-node" style="left:120px;top:200px;width:224px;height:110px"></div>
+    <div class="ghost-node" style="left:420px;top:200px;width:224px;height:84px;border-color:var(--accent);box-shadow:0 0 0 2px rgb(255 140 0 / .25)"></div>
+
+    <div class="panel">
+      <div class="p-head">
+        <div class="p-ic" style="background:var(--violet-pill-bg);color:var(--violet-pill-fg)">◈</div>
+        <div class="p-title">LLM</div>
+        <button class="icon-btn" title="运行此节点" style="margin-left:auto">▶</button>
+        <button class="icon-btn" title="文档">▤</button>
+        <button class="icon-btn" title="更多">⋯</button>
+        <button class="icon-btn" title="关闭">✕</button>
+      </div>
+      <div class="p-tabs">
+        <div class="p-tab on">SETTINGS</div>
+        <div class="p-tab">LAST RUN</div>
+      </div>
+      <div class="p-body">
+        <div>
+          <div class="sec-label">MODEL <span style="color:var(--danger)">*</span><span class="opt">参数</span></div>
+          <div class="field-card" style="margin-top:8px"><code>◈</code> deepseek-v4-flash <span style="margin-left:auto;font-size:10px;border-radius:999px;background:var(--blue-pill-bg);color:var(--blue-pill-fg);padding:1px 7px">CHAT</span></div>
+        </div>
+        <div>
+          <div class="sec-label">CONTEXT <span class="opt">?</span></div>
+          <div class="field-card" style="margin-top:8px;color:var(--text-3)"><code>{x}</code> 设置变量</div>
+        </div>
+        <div>
+          <div class="sec-label">SYSTEM <span class="opt">✨ Jinja {x} ⧉ ⤢</span></div>
+          <div class="prompt-box" style="margin-top:8px">
+            <div class="toolbar"></div>
+            你是一个助手,请回答 <span class="chip-var">{x} 用户输入.var1</span> 相关的问题……
+          </div>
+          <button class="add-btn" style="margin-top:8px">+ 添加消息</button>
+        </div>
+        <div class="row-between"><div class="sec-label">VISION <span class="opt">?</span></div><div class="switch"></div></div>
+        <div class="row-between"><div class="sec-label">ENABLE REASONING TAG SEPARATION <span class="opt">?</span></div><div class="switch"></div></div>
+        <div class="row-between"><div class="sec-label">OUTPUT VARIABLES ▸</div><span class="opt">STRUCTURED <span class="switch" style="vertical-align:middle"></span></span></div>
+        <div class="row-between"><div class="sec-label">RETRY ON FAILURE</div><div class="switch"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>面板骨架:标题行(运行此节点/文档/更多/关闭)+ SETTINGS / LAST RUN 双 tab + 段落流</li>
+        <li>LLM 段落集:MODEL / CONTEXT / SYSTEM(消息列表)/ VISION / REASONING TAG / OUTPUT VARIABLES / RETRY</li>
+        <li>prompt 编辑器内联变量 chip({x} 蓝 chip)、✨ 生成、Jinja、复制、展开</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动<span class="tag change">change</span></h4>
+      <ul>
+        <li>面板由直角抽屉改圆角浮卡(12px 边距浮于画布上),与全局浮件语言一致</li>
+        <li>tab 下划线 蓝→橙;字段行统一浅灰底卡(与节点字段行同语言)</li>
+        <li>switch 打开色 蓝→橙;「添加消息」虚线 add-btn(与全局 add 口径一致)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 视图 2:变量选择器 ============ -->
+<div class="view" id="v2">
+  <div class="stage">
+    <div class="ghost-node" style="left:120px;top:200px;width:224px;height:110px"></div>
+    <div class="ghost-node" style="left:420px;top:200px;width:224px;height:84px"></div>
+
+    <div class="panel" style="right:370px">
+      <div class="p-head">
+        <div class="p-ic" style="background:var(--violet-pill-bg);color:var(--violet-pill-fg)">◈</div>
+        <div class="p-title">LLM</div>
+        <button class="icon-btn" style="margin-left:auto">✕</button>
+      </div>
+      <div class="p-body">
+        <div>
+          <div class="sec-label">CONTEXT <span class="opt">?</span></div>
+          <div class="field-card" style="margin-top:8px;color:var(--accent-deep);border:1px solid var(--accent)"><code>{x}</code> 设置变量…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="var-pop" style="right:24px;top:170px">
+      <div class="search">🔍 搜索变量</div>
+      <div class="var-group">
+        <div class="g-title">⌨ 用户输入</div>
+        <div class="var-item"><code>{x}</code> var1 <span class="ty">String</span></div>
+        <div class="var-item"><code>{x}</code> var2 <span class="ty">String</span></div>
+        <div class="var-item"><code>{x}</code> files <span class="ty">Array[File]</span></div>
+      </div>
+      <div class="var-group">
+        <div class="g-title">⚙ SYSTEM</div>
+        <div class="var-item"><code>⊠</code> sys.user_id <span class="ty">String</span></div>
+        <div class="var-item"><code>⊠</code> sys.app_id <span class="ty">String</span></div>
+        <div class="var-item"><code>⊠</code> sys.workflow_id <span class="ty">String</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>按来源节点分组(上游节点 / SYSTEM),搜索过滤,类型右置 mono 标注</li>
+        <li>从字段级「设置变量」入口唤起,覆盖在面板上方</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动<span class="tag change">change</span></h4>
+      <ul>
+        <li>hover 高亮 浅蓝→浅橙(accent-soft)</li>
+        <li>组头补来源节点 icon,圆角与浮件语言统一</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 视图 3:Test Run 双栏 + 调试四 tab ============ -->
+<div class="view" id="v3">
+  <div class="stage">
+    <div class="ghost-node" style="left:60px;top:200px;width:200px;height:100px"></div>
+
+    <!-- 配置面板(让位变窄) -->
+    <div class="panel wide" style="right:396px">
+      <div class="p-head">
+        <div class="p-ic" style="background:var(--violet-pill-bg);color:var(--violet-pill-fg)">◈</div>
+        <div class="p-title">LLM</div>
+        <button class="icon-btn" style="margin-left:auto">✕</button>
+      </div>
+      <div class="p-body">
+        <div class="sec-label">MODEL <span style="color:var(--danger)">*</span></div>
+        <div class="field-card"><code>◈</code> deepseek-v4-flash</div>
+        <div class="sec-label">SYSTEM</div>
+        <div class="prompt-box">你是一个助手……</div>
+      </div>
+    </div>
+
+    <!-- Test Run 面板 -->
+    <div class="panel" style="right:12px;width:372px">
+      <div class="p-head">
+        <div class="p-title">Test Run</div>
+        <span class="run-status ok" style="margin-left:8px">● 上次成功 2.1s</span>
+        <button class="icon-btn" style="margin-left:auto">✕</button>
+      </div>
+      <div class="p-tabs">
+        <div class="p-tab">INPUT</div>
+        <div class="p-tab on">RESULT</div>
+        <div class="p-tab">DETAIL</div>
+        <div class="p-tab">TRACING</div>
+      </div>
+      <div class="p-body">
+        <!-- RESULT:结构化结果;DETAIL/TRACING 见批注说明,不在此视图全画 -->
+        <div class="sec-label">输出</div>
+        <div class="prompt-box" style="min-height:60px">Did you mean to send a message? Let me know…</div>
+        <div class="sec-label">节点执行</div>
+        <div class="trace-node"><span class="st ok">✓</span> 用户输入 <span class="meta">0.0s</span></div>
+        <div class="trace-node"><span class="st ok">✓</span> LLM <span class="meta">1.8s · 214 tokens</span></div>
+        <div class="trace-node"><span class="st ok">✓</span> 输出 <span class="meta">0.0s</span></div>
+        <div class="raw-fold">▸ 原始数据(节点输入/输出 JSON)——默认折叠,作者需要时再展开</div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>Test Run 与配置面板双栏并行(配置让位变窄);INPUT/RESULT/DETAIL/TRACING 四 tab</li>
+        <li>INPUT=变量表单+Start Run 主钮;作者调试场景保留技术信息可得性(与 webapp 终端用户场景区分)</li>
+        <li>RESULT 含节点执行序列(状态/耗时/tokens)</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动<span class="tag change">change</span></h4>
+      <ul>
+        <li>Start Run 蓝→橙;tab 下划线橙</li>
+        <li><b>DETAIL/TRACING 内容设计(应用 JSON OUTPUT 教训)</b>:默认呈现结构化键值/执行序列;原始 JSON 收进「原始数据」折叠区,主动点开才见——技术信息可及但不默认砸脸</li>
+        <li>面板头部补上次运行状态点(成功绿/失败红+耗时),免切 LAST RUN 页自查</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.review-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.review-tab').forEach(b => b.classList.remove('active'))
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'))
+      btn.classList.add('active')
+      document.getElementById(btn.dataset.view).classList.add('active')
+    })
+  })
+</script>
+</body>
+</html>
