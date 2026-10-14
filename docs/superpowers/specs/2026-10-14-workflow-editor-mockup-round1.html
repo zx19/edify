@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow 编辑器 · 第一轮设计稿(画布壳+节点+边)</title>
+<style>
+  /* ===== 设计语言：白+黑+橙（#FF8C00 选中/强调），token 与工作台/管理台同源 ===== */
+  :root {
+    --bg: #FFFFFF;
+    --bg-soft: #F7F7F8;
+    --canvas: #FAFAFB;         /* 画布底：旧轨为浅灰 #F5F5F6，新轨再浅半度 */
+    --panel: #FFFFFF;
+    --border: #E8E8EA;
+    --border-strong: #D9D9DC;
+    --text-1: #0A0A0B;
+    --text-2: #3D3D42;
+    --text-3: #8A8A93;
+    --accent: #FF8C00;
+    --accent-soft: #FFF3E0;
+    --accent-deep: #E67A00;
+    --danger: #E5484D;
+    --success: #12A150;
+    --success-soft: #E9F9EF;
+    --violet-pill-bg: #F4F3FF;
+    --violet-pill-fg: #6938EF;
+    --amber-pill-bg: #FFF6E8;
+    --amber-pill-fg: #B76400;
+    --blue-pill-bg: #EFF6FF;
+    --blue-pill-fg: #175CD3;
+    --radius-card: 14px;
+    --radius-btn: 9px;
+    --radius-pill: 999px;
+    --shadow-xs: 0 1px 2px rgb(10 10 11 / .04);
+    --shadow-md: 0 10px 34px rgb(10 10 11 / .10);
+    --font: "Inter", "SF Pro Text", -apple-system, "PingFang SC", "system-ui", sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:var(--bg-soft); color:var(--text-1); font-size:14px; }
+
+  /* ===== 评审导航 ===== */
+  .review-bar { position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:8px; padding:10px 16px; background:#fff; border-bottom:1px solid var(--border); }
+  .review-bar .title { font-weight:600; margin-right:12px; }
+  .review-tab { border:1px solid var(--border); background:#fff; color:var(--text-2); border-radius:var(--radius-pill); padding:6px 14px; cursor:pointer; font-size:13px; }
+  .review-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .review-tab:hover:not(.active) { border-color:var(--border-strong); }
+  .legend { margin-left:auto; font-size:12px; color:var(--text-3); }
+  .legend b { color:var(--accent-deep); }
+
+  .view { display:none; }
+  .view.active { display:block; }
+
+  /* ===== 编辑器骨架（详情全屏：无全局侧栏，应用内侧栏 + 顶栏 + 画布） ===== */
+  .editor { display:grid; grid-template-columns:228px 1fr; grid-template-rows:44px 1fr; height:calc(100vh - 50px); }
+  .app-side { grid-row:1/3; background:#fff; border-right:1px solid var(--border); padding:10px 12px; display:flex; flex-direction:column; gap:2px; }
+  .app-side .back { display:flex; align-items:center; gap:6px; color:var(--text-2); font-size:13px; padding:6px 8px; border-radius:8px; }
+  .app-side .back:hover { background:var(--bg-soft); }
+  .app-side .app-id { display:flex; align-items:center; gap:8px; padding:8px; margin:4px 0 8px; }
+  .app-side .app-id .ic { width:32px; height:32px; border-radius:8px; background:var(--accent-soft); display:grid; place-items:center; font-size:16px; }
+  .app-side .app-id .nm { font-weight:600; font-size:13px; }
+  .app-side .app-id .tp { font-size:10px; color:var(--text-3); letter-spacing:.04em; }
+  .app-side .nav-item { display:flex; align-items:center; gap:8px; padding:7px 8px; border-radius:8px; color:var(--text-2); font-size:13px; }
+  .app-side .nav-item.on { background:var(--accent-soft); color:var(--accent-deep); font-weight:600; }
+  .app-side .acct { margin-top:auto; display:flex; align-items:center; gap:8px; padding:8px; color:var(--text-2); font-size:13px; }
+  .app-side .acct .av { width:24px; height:24px; border-radius:50%; background:#111; color:#fff; display:grid; place-items:center; font-size:11px; }
+
+  .topbar { display:flex; align-items:center; gap:10px; padding:0 14px; background:#fff; border-bottom:1px solid var(--border); font-size:12.5px; color:var(--text-3); }
+  .topbar .sp { flex:1; }
+  .btn { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); background:#fff; color:var(--text-2); border-radius:var(--radius-btn); padding:6px 12px; font-size:13px; cursor:pointer; }
+  .btn:hover { border-color:var(--border-strong); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .btn.primary:hover { background:var(--accent-deep); }
+  .icon-btn { width:30px; height:30px; display:grid; place-items:center; border-radius:8px; border:1px solid transparent; color:var(--text-2); cursor:pointer; background:transparent; }
+  .icon-btn:hover { background:var(--bg-soft); }
+
+  /* ===== 画布 ===== */
+  .canvas-wrap { position:relative; background:var(--canvas); overflow:hidden;
+    background-image: radial-gradient(circle, #D9D9DC 1px, transparent 1px);
+    background-size: 18px 18px; }
+  .tool-rail { position:absolute; left:14px; top:50%; transform:translateY(-50%); background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-xs); padding:6px; display:flex; flex-direction:column; gap:2px; }
+  .tool-rail .icon-btn.on { background:var(--accent-soft); color:var(--accent-deep); }
+  .canvas-bl { position:absolute; left:14px; bottom:14px; display:flex; gap:6px; }
+  .canvas-bc { position:absolute; left:50%; bottom:14px; transform:translateX(-50%); }
+  .canvas-br { position:absolute; right:14px; bottom:14px; display:flex; align-items:flex-end; gap:10px; }
+  .float-card { background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-xs); }
+  .zoom { display:flex; align-items:center; gap:2px; padding:4px 8px; font-size:12.5px; color:var(--text-2); }
+  .minimap { width:140px; height:88px; position:relative; overflow:hidden; }
+  .minimap .mm-node { position:absolute; background:#D9D9DC; border-radius:2px; }
+  .minimap .mm-view { position:absolute; border:1.5px solid var(--accent); border-radius:3px; background:rgb(255 140 0 / .06); }
+
+  /* ===== 节点卡片（新视觉核心） ===== */
+  .node { position:absolute; width:224px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-xs); }
+  .node:hover { border-color:var(--border-strong); }
+  .node.selected { border-color:var(--accent); box-shadow:0 0 0 2px rgb(255 140 0 / .25); }
+  .node .n-head { display:flex; align-items:center; gap:8px; padding:10px 12px; }
+  .node .n-ic { width:24px; height:24px; border-radius:7px; display:grid; place-items:center; font-size:13px; }
+  .node .n-title { font-weight:600; font-size:13px; }
+  .node .n-more { margin-left:auto; color:var(--text-3); cursor:pointer; }
+  .node .n-body { padding:0 12px 10px; display:flex; flex-direction:column; gap:6px; }
+  .node .n-field { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-2); background:var(--bg-soft); border-radius:7px; padding:5px 8px; }
+  .node .n-field code { font-family:var(--mono); font-size:11px; }
+  .node .n-field .req { margin-left:auto; font-size:10px; color:var(--text-3); text-transform:uppercase; letter-spacing:.04em; }
+  .node .n-port { position:absolute; right:-5px; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background:#fff; border:2px solid var(--text-3); }
+  .node .n-port:hover { border-color:var(--accent); }
+  .node .n-port-in { left:-5px; right:auto; }
+  .pill { font-size:10px; border-radius:var(--radius-pill); padding:1px 7px; font-weight:600; letter-spacing:.03em; }
+  .pill.violet { background:var(--violet-pill-bg); color:var(--violet-pill-fg); }
+  .pill.amber { background:var(--amber-pill-bg); color:var(--amber-pill-fg); }
+  .pill.blue { background:var(--blue-pill-bg); color:var(--blue-pill-fg); }
+  .node .n-run { position:absolute; top:-9px; right:10px; width:18px; height:18px; border-radius:50%; display:grid; place-items:center; font-size:10px; }
+  .node .n-run.ok { background:var(--success-soft); color:var(--success); border:1px solid #B9EBC9; }
+
+  /* ===== 边 ===== */
+  svg.edges { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .edge-path { stroke:#C9C9CE; stroke-width:1.5; fill:none; pointer-events:stroke; }
+  .edge-path.selected { stroke:var(--accent); stroke-width:2; }
+  .edge-add { pointer-events:auto; cursor:pointer; }
+
+  /* ===== 照抄/改动批注 ===== */
+  .notes { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:14px 16px 20px; background:var(--bg-soft); border-top:1px solid var(--border); }
+  .note-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); padding:12px 14px; }
+  .note-card h4 { font-size:13px; margin-bottom:8px; }
+  .note-card ul { padding-left:18px; font-size:12.5px; color:var(--text-2); display:flex; flex-direction:column; gap:5px; }
+  .note-card.keep h4 { color:var(--text-2); }
+  .note-card.change h4 { color:var(--accent-deep); }
+  .note-card .tag { font-size:10px; border-radius:var(--radius-pill); padding:0 6px; margin-left:6px; }
+  .tag.keep { background:var(--bg-soft); color:var(--text-3); }
+  .tag.change { background:var(--accent-soft); color:var(--accent-deep); }
+</style>
+</head>
+<body>
+
+<div class="review-bar">
+  <span class="title">Workflow 编辑器 · 第一轮(画布壳 + 节点 + 边)</span>
+  <button class="review-tab active" data-view="v1">视图 1 · 空画布(壳)</button>
+  <button class="review-tab" data-view="v2">视图 2 · 有节点态</button>
+  <button class="review-tab" data-view="v3">视图 3 · 选中与连线态</button>
+  <span class="legend">评审口径:每视图底部 <b>照抄/改动</b> 两栏,只看改动栏即可</span>
+</div>
+
+<!-- ============ 视图 1:空画布(壳) ============ -->
+<div class="view active" id="v1">
+  <div class="editor">
+    <aside class="app-side">
+      <div class="back">‹ 返回</div>
+      <div class="app-id">
+        <div class="ic">🤖</div>
+        <div><div class="nm">测试1</div><div class="tp">WORKFLOW</div></div>
+      </div>
+      <div class="nav-item on">▦ 编排</div>
+      <div class="nav-item">⎇ 访问点</div>
+      <div class="nav-item">☰ 日志</div>
+      <div class="nav-item">◔ 监测</div>
+      <div class="acct"><div class="av">张</div>张玺</div>
+    </aside>
+    <div class="topbar">
+      <span>已自动保存 17:13</span><span>·</span><span>已发布 22 天前</span>
+      <span class="sp"></span>
+      <button class="btn">▶ 测试运行</button>
+      <button class="btn primary">发布 ▾</button>
+    </div>
+    <div class="canvas-wrap">
+      <div class="tool-rail">
+        <button class="icon-btn on" title="添加节点">⊕</button>
+        <button class="icon-btn" title="选择">➤</button>
+        <button class="icon-btn" title="拖动画布">✋</button>
+        <button class="icon-btn" title="便签">▭</button>
+        <button class="icon-btn" title="排布">▦</button>
+        <button class="icon-btn" title="更多">⋯</button>
+      </div>
+      <div class="canvas-bl float-card" style="display:flex;padding:4px;">
+        <button class="icon-btn" title="撤销">↩</button>
+        <button class="icon-btn" title="重做">↪</button>
+        <button class="icon-btn" title="历史">🕘</button>
+      </div>
+      <div class="canvas-bc"><button class="btn" style="box-shadow:var(--shadow-xs)">VARIABLE INSPECT</button></div>
+      <div class="canvas-br">
+        <div class="float-card zoom"><button class="icon-btn">−</button><span>67%</span><button class="icon-btn">＋</button></div>
+        <div class="float-card minimap">
+          <div class="mm-node" style="left:20px;top:30px;width:26px;height:12px"></div>
+          <div class="mm-node" style="left:60px;top:30px;width:26px;height:12px"></div>
+          <div class="mm-node" style="left:96px;top:30px;width:26px;height:12px"></div>
+          <div class="mm-view" style="left:10px;top:14px;width:120px;height:56px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA(结构/功能不变)<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>骨架三区:应用内侧栏 / 顶栏 / 画布(详情全屏,无全局侧栏——沿用 09-04 决策)</li>
+        <li>左工具轨:加节点/选择/拖画布/便签/排布/更多;底部:撤销重做历史 + VARIABLE INSPECT + 缩放 + minimap</li>
+        <li>顶栏:自动保存与发布时间、测试运行、发布(下拉)</li>
+        <li>点阵网格、画布可平移缩放(React Flow 既有行为)</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动(视觉换新语言)<span class="tag change">change</span></h4>
+      <ul>
+        <li>画布底再浅半度(#FAFAFB),点阵更细更淡——画布退为「纸」,不抢节点</li>
+        <li>发布主钮 蓝→橙(全站唯一主色);测试运行降级为次钮</li>
+        <li>工具轨/缩放/minimap 统一白卡+细边+圆角 12,与全局浮件语言一致</li>
+        <li>「VARIABLE INSPECT」入口由旧轨底部黑条改为主白卡次钮</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 视图 2:有节点态 ============ -->
+<div class="view" id="v2">
+  <div class="editor">
+    <aside class="app-side">
+      <div class="back">‹ 返回</div>
+      <div class="app-id">
+        <div class="ic">🤖</div>
+        <div><div class="nm">测试1</div><div class="tp">WORKFLOW</div></div>
+      </div>
+      <div class="nav-item on">▦ 编排</div>
+      <div class="nav-item">⎇ 访问点</div>
+      <div class="nav-item">☰ 日志</div>
+      <div class="nav-item">◔ 监测</div>
+      <div class="acct"><div class="av">张</div>张玺</div>
+    </aside>
+    <div class="topbar">
+      <span>已自动保存 17:13</span><span>·</span><span>已发布 22 天前</span>
+      <span class="sp"></span>
+      <button class="btn">▶ 测试运行</button>
+      <button class="btn primary">发布 ▾</button>
+    </div>
+    <div class="canvas-wrap">
+      <svg class="edges">
+        <path class="edge-path" d="M 354 200 C 394 200, 390 182, 430 182" />
+        <path class="edge-path" d="M 654 182 C 694 182, 690 182, 730 182" />
+      </svg>
+      <!-- 节点:用户输入(start) -->
+      <div class="node" style="left:130px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--blue-pill-bg);color:var(--blue-pill-fg)">⌨</div>
+          <div class="n-title">用户输入</div>
+          <span class="pill blue">START</span>
+          <div class="n-more">⋯</div>
+          <div class="n-port"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>{x}</code> var1 <span class="req">required</span></div>
+          <div class="n-field"><code>{x}</code> var2 <span class="req">required</span></div>
+        </div>
+      </div>
+      <!-- 节点:LLM -->
+      <div class="node" style="left:430px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--violet-pill-bg);color:var(--violet-pill-fg)">◈</div>
+          <div class="n-title">LLM</div>
+          <div class="n-more">⋯</div>
+          <div class="n-port n-port-in"></div>
+          <div class="n-port"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>◈</code> deepseek-v3 <span class="req">模型</span></div>
+        </div>
+      </div>
+      <!-- 节点:输出 -->
+      <div class="node" style="left:730px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--amber-pill-bg);color:var(--amber-pill-fg)">⤴</div>
+          <div class="n-title">输出</div>
+          <div class="n-more">⋯</div>
+          <div class="n-port n-port-in"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>{ }</code> result <span class="req">string</span></div>
+        </div>
+      </div>
+      <div class="tool-rail">
+        <button class="icon-btn on">⊕</button>
+        <button class="icon-btn">➤</button>
+        <button class="icon-btn">✋</button>
+        <button class="icon-btn">▭</button>
+        <button class="icon-btn">▦</button>
+        <button class="icon-btn">⋯</button>
+      </div>
+      <div class="canvas-br">
+        <div class="float-card zoom"><button class="icon-btn">−</button><span>67%</span><button class="icon-btn">＋</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>节点卡片解剖:头部(类型 icon + 标题 + ⋯)+ 字段行列表;左入右出连接点</li>
+        <li>类型色板保留(START 蓝 / LLM 紫 / 输出 橙黄)——类型识别靠色,不发明新映射</li>
+        <li>字段行:变量徽记 + 名 + required/类型</li>
+        <li>边 = 贝塞尔细线(1.5px 灰)</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动<span class="tag change">change</span></h4>
+      <ul>
+        <li>节点圆角 8→14、边框更淡、投影更轻——卡片更「纸感」,与详情页卡片语言一致</li>
+        <li>类型 icon chip 方形圆角统一 7px,尺寸统一 24(旧轨各类型大小不一)</li>
+        <li>字段行由无边改浅灰底行(#F7F7F8)——扫读字段分区更清晰</li>
+        <li>连接点:实心蓝点→描边圆点,hover 变橙(可交互暗示)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 视图 3:选中与连线态 ============ -->
+<div class="view" id="v3">
+  <div class="editor">
+    <aside class="app-side">
+      <div class="back">‹ 返回</div>
+      <div class="app-id">
+        <div class="ic">🤖</div>
+        <div><div class="nm">测试1</div><div class="tp">WORKFLOW</div></div>
+      </div>
+      <div class="nav-item on">▦ 编排</div>
+      <div class="nav-item">⎇ 访问点</div>
+      <div class="nav-item">☰ 日志</div>
+      <div class="nav-item">◔ 监测</div>
+      <div class="acct"><div class="av">张</div>张玺</div>
+    </aside>
+    <div class="topbar">
+      <span>已自动保存 17:13</span><span>·</span><span>已发布 22 天前</span>
+      <span class="sp"></span>
+      <button class="btn">▶ 测试运行</button>
+      <button class="btn primary">发布 ▾</button>
+    </div>
+    <div class="canvas-wrap">
+      <svg class="edges">
+        <path class="edge-path selected" d="M 354 200 C 394 200, 390 182, 430 182" />
+        <path class="edge-path" d="M 654 182 C 694 182, 690 182, 730 182" />
+        <!-- 边中点加号(hover 出现) -->
+        <g class="edge-add">
+          <circle cx="392" cy="191" r="9" fill="#fff" stroke="#FF8C00" stroke-width="1.5"/>
+          <text x="392" y="195" text-anchor="middle" font-size="12" fill="#E67A00">+</text>
+        </g>
+      </svg>
+      <div class="node selected" style="left:130px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--blue-pill-bg);color:var(--blue-pill-fg)">⌨</div>
+          <div class="n-title">用户输入</div>
+          <span class="pill blue">START</span>
+          <div class="n-more">⋯</div>
+          <div class="n-port"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>{x}</code> var1 <span class="req">required</span></div>
+          <div class="n-field"><code>{x}</code> var2 <span class="req">required</span></div>
+        </div>
+      </div>
+      <div class="node" style="left:430px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--violet-pill-bg);color:var(--violet-pill-fg)">◈</div>
+          <div class="n-title">LLM</div>
+          <div class="n-run ok">✓</div>
+          <div class="n-more">⋯</div>
+          <div class="n-port n-port-in"></div>
+          <div class="n-port"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>◈</code> deepseek-v3 <span class="req">模型</span></div>
+        </div>
+      </div>
+      <div class="node" style="left:730px;top:140px;">
+        <div class="n-head">
+          <div class="n-ic" style="background:var(--amber-pill-bg);color:var(--amber-pill-fg)">⤴</div>
+          <div class="n-title">输出</div>
+          <div class="n-more">⋯</div>
+          <div class="n-port n-port-in"></div>
+        </div>
+        <div class="n-body">
+          <div class="n-field"><code>{ }</code> result <span class="req">string</span></div>
+        </div>
+      </div>
+      <div class="tool-rail">
+        <button class="icon-btn on">⊕</button>
+        <button class="icon-btn">➤</button>
+        <button class="icon-btn">✋</button>
+        <button class="icon-btn">▭</button>
+        <button class="icon-btn">▦</button>
+        <button class="icon-btn">⋯</button>
+      </div>
+      <div class="canvas-br">
+        <div class="float-card zoom"><button class="icon-btn">−</button><span>67%</span><button class="icon-btn">＋</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="note-card keep"><h4>照抄 QA<span class="tag keep">keep</span></h4>
+      <ul>
+        <li>选中节点 = 描边高亮 + 可开配置面板(第二轮);边可点选、可选中删除</li>
+        <li>边中点 hover 出「+」(在该处插入节点)——交互照抄,仅换色</li>
+        <li>节点右上运行成功徽记(✓ 绿点,上次运行态)</li>
+      </ul>
+    </div>
+    <div class="note-card change"><h4>改动<span class="tag change">change</span></h4>
+      <ul>
+        <li>选中环 蓝→橙(2px 25% 透明橙光),与全站选中语言一致</li>
+        <li>选中边 蓝→橙;边加号钮 灰→白底橙边橙字</li>
+        <li>运行成功徽记由旧轨实心绿点改浅绿底描边小章(与状态徽标语言一致)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.review-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.review-tab').forEach(b => b.classList.remove('active'))
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'))
+      btn.classList.add('active')
+      document.getElementById(btn.dataset.view).classList.add('active')
+    })
+  })
+</script>
+</body>
+</html>
