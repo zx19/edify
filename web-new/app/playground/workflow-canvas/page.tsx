@@ -12,8 +12,8 @@ import ReactFlow, {
   ReactFlowProvider,
   useReactFlow,
 } from 'reactflow'
+import { EditorNodeCard } from '@/app/components/workflow-editor/node-card'
 import { SpikeEdge } from './_components/spike-edge'
-import { SpikeNode } from './_components/spike-node'
 import 'reactflow/dist/style.css'
 
 /**
@@ -23,7 +23,7 @@ import 'reactflow/dist/style.css'
  * 此为内部 playground,不进任何生产导航;落地时本页由真编辑器替换。
  */
 
-const nodeTypes = { spike: SpikeNode }
+const nodeTypes = { spike: EditorNodeCard }
 const edgeTypes = { spike: SpikeEdge }
 
 const initialNodes: Node[] = [
@@ -32,10 +32,8 @@ const initialNodes: Node[] = [
     type: 'spike',
     position: { x: 80, y: 120 },
     data: {
+      type: 'start',
       title: '用户输入',
-      icon: '⌨',
-      iconBg: '#EFF6FF',
-      iconFg: '#175CD3',
       badge: 'START',
       fields: [
         { name: 'var1', meta: 'required' },
@@ -48,10 +46,8 @@ const initialNodes: Node[] = [
     type: 'spike',
     position: { x: 380, y: 120 },
     data: {
+      type: 'llm',
       title: 'LLM',
-      icon: '◈',
-      iconBg: '#F4F3FF',
-      iconFg: '#6938EF',
       fields: [{ name: 'deepseek-v3', meta: '模型' }],
     },
   },
@@ -60,10 +56,8 @@ const initialNodes: Node[] = [
     type: 'spike',
     position: { x: 680, y: 120 },
     data: {
+      type: 'answer',
       title: '输出',
-      icon: '⤴',
-      iconBg: '#FFF6E8',
-      iconFg: '#B76400',
       fields: [{ name: 'result', meta: 'string' }],
     },
   },
@@ -115,7 +109,7 @@ function Canvas() {
   }, [])
 
   return (
-    <div className="relative h-screen w-full bg-[#FAFAFB]">
+    <div className="relative h-[70vh] w-full bg-[#FAFAFB]">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -151,10 +145,64 @@ function Canvas() {
   )
 }
 
-export default function WorkflowCanvasSpikePage() {
+const GALLERY_TYPES = [
+  'start',
+  'llm',
+  'answer',
+  'end',
+  'code',
+  'if-else',
+  'http',
+  'knowledge',
+] as const
+const GALLERY_STATUS = ['default', 'running', 'succeeded', 'failed', 'exception'] as const
+
+function NodeGallery() {
   return (
     <ReactFlowProvider>
-      <Canvas />
+      <div className="flex flex-col gap-4 border-t border-[#E8E8EA] bg-white p-6">
+        <div className="text-sm font-semibold text-[#0A0A0B]">节点卡片画廊(C2):类型 × 状态</div>
+        {GALLERY_STATUS.map((status) => (
+          <div key={status} className="flex items-start gap-4">
+            <div className="w-24 pt-2 text-xs tracking-wide text-[#8A8A93] uppercase">{status}</div>
+            <div className="flex flex-wrap gap-3">
+              {GALLERY_TYPES.map((type) => (
+                <div key={`${status}-${type}`} className="relative">
+                  <EditorNodeCard
+                    id={`${status}-${type}`}
+                    type="spike"
+                    zIndex={0}
+                    isConnectable
+                    xPos={0}
+                    yPos={0}
+                    dragging={false}
+                    data={{
+                      type,
+                      title: type === 'start' ? '用户输入' : type,
+                      badge: type === 'start' ? 'START' : undefined,
+                      fields: [{ name: 'demo', meta: 'string' }],
+                      status: status === 'default' ? undefined : status,
+                      statusLabel: status,
+                    }}
+                    selected={false}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </ReactFlowProvider>
+  )
+}
+
+export default function WorkflowCanvasSpikePage() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <ReactFlowProvider>
+        <Canvas />
+      </ReactFlowProvider>
+      <NodeGallery />
+    </div>
   )
 }
