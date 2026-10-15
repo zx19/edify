@@ -12,8 +12,9 @@ import ReactFlow, {
   ReactFlowProvider,
   useReactFlow,
 } from 'reactflow'
+import { EditorConnectionLine, EditorEdge } from '@/app/components/workflow-editor/edge'
+import { isValidEditorConnection } from '@/app/components/workflow-editor/edge/is-valid-connection'
 import { EditorNodeCard } from '@/app/components/workflow-editor/node-card'
-import { SpikeEdge } from './_components/spike-edge'
 import 'reactflow/dist/style.css'
 
 /**
@@ -24,7 +25,7 @@ import 'reactflow/dist/style.css'
  */
 
 const nodeTypes = { spike: EditorNodeCard }
-const edgeTypes = { spike: SpikeEdge }
+const edgeTypes = { spike: EditorEdge }
 
 const initialNodes: Node[] = [
   {
@@ -108,16 +109,63 @@ function Canvas() {
     setEdges((es) => addEdge({ ...conn, type: 'spike' }, es))
   }, [])
 
+  // C3:中点插入手术——删本边、插入节点、接两条新边
+  const [insertTarget, setInsertTarget] = useState<string | null>(null)
+  const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number; edgeId: string } | null>(null)
+
+  const handleInsert = useCallback(
+    (nodeType: 'llm' | 'code' | 'if-else') => {
+      const edgeId = insertTarget
+      if (!edgeId) return
+      setInsertTarget(null)
+      setEdges((es) => {
+        const edge = es.find((e) => e.id === edgeId)
+        if (!edge) return es
+        const newId = `ins-${Date.now()}`
+        setNodes((ns) => {
+          const src = ns.find((n) => n.id === edge.source)
+          const tgt = ns.find((n) => n.id === edge.target)
+          const midX = ((src?.position.x ?? 0) + (tgt?.position.x ?? 300)) / 2
+          const midY = ((src?.position.y ?? 0) + (tgt?.position.y ?? 0)) / 2
+          return [
+            ...ns,
+            {
+              id: newId,
+              type: 'spike',
+              position: { x: midX, y: midY + 120 },
+              data: { type: nodeType, title: nodeType, fields: [] },
+            },
+          ]
+        })
+        return [
+          ...es.filter((e) => e.id !== edgeId),
+          { id: `${edgeId}-a`, source: edge.source, target: newId, type: 'spike' },
+          { id: `${edgeId}-b`, source: newId, target: edge.target, type: 'spike' },
+        ]
+      })
+    },
+    [insertTarget],
+  )
+
+  const onEdgeContextMenu = useCallback((e: React.MouseEvent, edge: Edge) => {
+    e.preventDefault()
+    setCtxMenu({ x: e.clientX, y: e.clientY, edgeId: edge.id })
+  }, [])
+
   return (
     <div className="relative h-[70vh] w-full bg-[#FAFAFB]">
       <ReactFlow
         nodes={nodes}
-        edges={edges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        edges={edges.map((e) => ({ ...e, data: { ...e.data, onInsertEdge: setInsertTarget } }))}
+        connectionLineComponent={EditorConnectionLine}
+        isValidConnection={(conn) => isValidEditorConnection(conn, edges)}
+        onEdgeContextMenu={onEdgeContextMenu}
+        onPaneClick={() => setCtxMenu(null)}
         fitView
         proOptions={{ hideAttribution: false }}
       >
@@ -141,6 +189,45 @@ function Canvas() {
         ))}
       </div>
       <ZoomControl />
+      {insertTarget && (
+        <div className="absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl border border-[#E8E8EA] bg-white p-2 shadow-md">
+          <span className="px-1 text-xs text-[#8A8A93]">插入节点:</span>
+          {(['llm', 'code', 'if-else'] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              className="rounded-lg border border-[#E8E8EA] px-2.5 py-1 text-xs hover:border-[#FF8C00] hover:text-[#E67A00]"
+              onClick={() => handleInsert(t)}
+            >
+              {t}
+            </button>
+          ))}
+          <button
+            type="button"
+            className="rounded-lg px-2 py-1 text-xs text-[#8A8A93]"
+            onClick={() => setInsertTarget(null)}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      {ctxMenu && (
+        <div
+          className="fixed z-50 rounded-xl border border-[#E8E8EA] bg-white p-1 shadow-md"
+          style={{ left: ctxMenu.x, top: ctxMenu.y }}
+        >
+          <button
+            type="button"
+            className="rounded-lg px-3 py-1.5 text-xs text-[#E5484D] hover:bg-[#FDECEC]"
+            onClick={() => {
+              setEdges((es) => es.filter((e) => e.id !== ctxMenu.edgeId))
+              setCtxMenu(null)
+            }}
+          >
+            删除边
+          </button>
+        </div>
+      )}
     </div>
   )
 }
