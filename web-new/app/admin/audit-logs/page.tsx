@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@xsl/lomva-ui/select'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@xsl/lomva-ui/table'
 import { useDebounce } from 'ahooks'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -208,69 +209,54 @@ export default function AdminAuditLogsPage() {
         </div>
       )}
       {!isPending && rows.length > 0 && (
-        <div className="min-h-0 overflow-auto rounded-xl border border-divider-subtle">
-          <table className="w-full table-fixed text-left system-sm-regular text-text-secondary">
-            <thead className="sticky top-0 bg-components-panel-bg system-xs-semibold-uppercase text-text-tertiary">
-              <tr className="border-b border-divider-regular">
-                <th className="w-44 px-6 py-2" scope="col">
-                  {t(($) => $.audit.colTime, { ns: 'admin' })}
-                </th>
-                <th className="w-52 px-3 py-2" scope="col">
-                  {t(($) => $.audit.colActor, { ns: 'admin' })}
-                </th>
-                <th className="w-36 px-3 py-2" scope="col">
-                  {t(($) => $.audit.colAction, { ns: 'admin' })}
-                </th>
-                <th className="px-3 py-2" scope="col">
-                  {t(($) => $.audit.colTarget, { ns: 'admin' })}
-                </th>
-                <th className="w-56 px-6 py-2" scope="col">
-                  {t(($) => $.audit.colDetail, { ns: 'admin' })}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((log) => {
-                const admin = actorMap.get(log.actor_account_id)
-                const targetName = log.workspace_id ? workspaceMap.get(log.workspace_id) : undefined
-                return (
-                  <tr
-                    className="border-b border-divider-regular align-top last:border-b-0"
-                    key={log.id}
-                  >
-                    <td className="truncate px-6 py-2">
-                      {log.created_at
-                        ? formatTime(Number(log.created_at), 'YYYY-MM-DD HH:mm')
-                        : '—'}
-                    </td>
-                    <td className="truncate px-3 py-2">
-                      {admin ? (
-                        <span className="flex flex-col">
-                          <span className="truncate text-text-primary">{admin.name}</span>
-                          <span className="truncate text-xs text-text-tertiary">{admin.email}</span>
-                        </span>
-                      ) : (
-                        <span className="font-mono text-xs">
-                          {log.actor_account_id.slice(0, 12)}
-                        </span>
-                      )}
-                    </td>
-                    <td className="truncate px-3 py-2">{actionLabel(log.action)}</td>
-                    <td className="truncate px-3 py-2">
-                      {targetName ??
-                        (log.target_id
-                          ? `${log.target_type ?? ''}:${log.target_id.slice(0, 12)}`
-                          : '—')}
-                    </td>
-                    <td className="px-6 py-2">
-                      <AuditDetailCell detail={log.detail} />
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader sticky>
+            <TableRow>
+              <TableHead className="w-44 px-6">
+                {t(($) => $.audit.colTime, { ns: 'admin' })}
+              </TableHead>
+              <TableHead className="w-52">{t(($) => $.audit.colActor, { ns: 'admin' })}</TableHead>
+              <TableHead className="w-36">{t(($) => $.audit.colAction, { ns: 'admin' })}</TableHead>
+              <TableHead>{t(($) => $.audit.colTarget, { ns: 'admin' })}</TableHead>
+              <TableHead className="w-56 px-6">
+                {t(($) => $.audit.colDetail, { ns: 'admin' })}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((log) => {
+              const admin = actorMap.get(log.actor_account_id)
+              const targetName = log.workspace_id ? workspaceMap.get(log.workspace_id) : undefined
+              return (
+                <TableRow className="align-top" key={log.id}>
+                  <TableCell className="truncate px-6">
+                    {log.created_at ? formatTime(Number(log.created_at), 'YYYY-MM-DD HH:mm') : '—'}
+                  </TableCell>
+                  <TableCell className="truncate">
+                    {admin ? (
+                      <span className="flex flex-col">
+                        <span className="truncate text-text-primary">{admin.name}</span>
+                        <span className="truncate text-xs text-text-tertiary">{admin.email}</span>
+                      </span>
+                    ) : (
+                      <span className="font-mono text-xs">{log.actor_account_id.slice(0, 12)}</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="truncate">{actionLabel(log.action)}</TableCell>
+                  <TableCell className="truncate">
+                    {targetName ??
+                      (log.target_id
+                        ? `${log.target_type ?? ''}:${log.target_id.slice(0, 12)}`
+                        : '—')}
+                  </TableCell>
+                  <TableCell className="px-6">
+                    <AuditDetailCell detail={log.detail} />
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
       )}
 
       {total > PAGE_SIZE && (

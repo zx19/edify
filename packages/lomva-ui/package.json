@@ -5,11 +5,6 @@
   "description": "杏树林新原语包（前端重写产出）——视觉默认值对齐现行主题，新视觉经 @xsl/lomva-tokens 作用域类覆盖",
   "type": "module",
   "exports": {
-    "./styles.css": "./src/styles/styles.css",
-    "./cn": {
-      "types": "./src/cn.ts",
-      "import": "./src/cn.ts"
-    },
     "./alert-dialog": {
       "types": "./src/alert-dialog/index.tsx",
       "import": "./src/alert-dialog/index.tsx"
@@ -26,14 +21,6 @@
       "types": "./src/button/index.tsx",
       "import": "./src/button/index.tsx"
     },
-    "./icon-button": {
-      "types": "./src/icon-button/index.tsx",
-      "import": "./src/icon-button/index.tsx"
-    },
-    "./toggle": {
-      "types": "./src/toggle/index.tsx",
-      "import": "./src/toggle/index.tsx"
-    },
     "./checkbox": {
       "types": "./src/checkbox/index.tsx",
       "import": "./src/checkbox/index.tsx"
@@ -42,13 +29,17 @@
       "types": "./src/checkbox-group/index.tsx",
       "import": "./src/checkbox-group/index.tsx"
     },
-    "./combobox": {
-      "types": "./src/combobox/index.tsx",
-      "import": "./src/combobox/index.tsx"
+    "./cn": {
+      "types": "./src/cn.ts",
+      "import": "./src/cn.ts"
     },
     "./collapsible": {
       "types": "./src/collapsible/index.tsx",
       "import": "./src/collapsible/index.tsx"
+    },
+    "./combobox": {
+      "types": "./src/combobox/index.tsx",
+      "import": "./src/combobox/index.tsx"
     },
     "./context-menu": {
       "types": "./src/context-menu/index.tsx",
@@ -82,6 +73,10 @@
       "types": "./src/form/index.tsx",
       "import": "./src/form/index.tsx"
     },
+    "./icon-button": {
+      "types": "./src/icon-button/index.tsx",
+      "import": "./src/icon-button/index.tsx"
+    },
     "./input": {
       "types": "./src/input/index.tsx",
       "import": "./src/input/index.tsx"
@@ -98,10 +93,6 @@
       "types": "./src/meter/index.tsx",
       "import": "./src/meter/index.tsx"
     },
-    "./progress": {
-      "types": "./src/progress/index.tsx",
-      "import": "./src/progress/index.tsx"
-    },
     "./number-field": {
       "types": "./src/number-field/index.tsx",
       "import": "./src/number-field/index.tsx"
@@ -109,10 +100,6 @@
     "./pagination": {
       "types": "./src/pagination/index.tsx",
       "import": "./src/pagination/index.tsx"
-    },
-    "./radio-group": {
-      "types": "./src/radio-group/index.tsx",
-      "import": "./src/radio-group/index.tsx"
     },
     "./popover": {
       "types": "./src/popover/index.tsx",
@@ -122,29 +109,42 @@
       "types": "./src/preview-card/index.tsx",
       "import": "./src/preview-card/index.tsx"
     },
+    "./progress": {
+      "types": "./src/progress/index.tsx",
+      "import": "./src/progress/index.tsx"
+    },
+    "./radio-group": {
+      "types": "./src/radio-group/index.tsx",
+      "import": "./src/radio-group/index.tsx"
+    },
     "./scroll-area": {
       "types": "./src/scroll-area/index.tsx",
       "import": "./src/scroll-area/index.tsx"
+    },
+    "./segmented-control": {
+      "types": "./src/segmented-control/index.tsx",
+      "import": "./src/segmented-control/index.tsx"
     },
     "./select": {
       "types": "./src/select/index.tsx",
       "import": "./src/select/index.tsx"
     },
-    "./status-dot": {
-      "types": "./src/status-dot/index.tsx",
-      "import": "./src/status-dot/index.tsx"
-    },
     "./slider": {
       "types": "./src/slider/index.tsx",
       "import": "./src/slider/index.tsx"
     },
+    "./status-dot": {
+      "types": "./src/status-dot/index.tsx",
+      "import": "./src/status-dot/index.tsx"
+    },
+    "./styles.css": "./src/styles/styles.css",
     "./switch": {
       "types": "./src/switch/index.tsx",
       "import": "./src/switch/index.tsx"
     },
-    "./segmented-control": {
-      "types": "./src/segmented-control/index.tsx",
-      "import": "./src/segmented-control/index.tsx"
+    "./table": {
+      "types": "./src/table/index.tsx",
+      "import": "./src/table/index.tsx"
     },
     "./tabs": {
       "types": "./src/tabs/index.tsx",
@@ -157,6 +157,10 @@
     "./toast": {
       "types": "./src/toast/index.tsx",
       "import": "./src/toast/index.tsx"
+    },
+    "./toggle": {
+      "types": "./src/toggle/index.tsx",
+      "import": "./src/toggle/index.tsx"
     },
     "./tooltip": {
       "types": "./src/tooltip/index.tsx",

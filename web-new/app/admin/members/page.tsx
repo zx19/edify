@@ -2,8 +2,6 @@
 
 import type { AdminMemberAggregateItemResponse } from '@dify/contracts/api/console/admin/types.gen'
 import { useQuery } from '@tanstack/react-query'
-import { cn } from '@xsl/lomva-ui/cn'
-import { IconButton } from '@xsl/lomva-ui/icon-button'
 import { Pagination } from '@xsl/lomva-ui/pagination'
 import {
   Select,
@@ -13,6 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@xsl/lomva-ui/select'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableExpandableRow,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@xsl/lomva-ui/table'
 import { useDebounce } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -53,66 +60,39 @@ function MembershipBadges({
 function MemberRow({ member }: { member: AdminMemberAggregateItemResponse }) {
   const { t } = useTranslation()
   const { formatTime } = useTimestamp()
-  const [expanded, setExpanded] = useState(false)
 
   return (
-    <>
-      <tr className="border-b border-divider-regular" key={`${member.account_id}-main`}>
-        <td className="w-10 px-3 py-2">
-          <IconButton
-            size="sm"
-            variant="ghost"
-            aria-label={t(expanded ? ($) => $.members.collapse : ($) => $.members.expand, {
-              ns: 'admin',
-            })}
-            aria-expanded={expanded}
-            onClick={() => setExpanded((v) => !v)}
-          >
-            <span
-              aria-hidden
-              className={cn(
-                'size-4',
-                expanded ? 'i-ri-arrow-down-s-line' : 'i-ri-arrow-right-s-line',
-              )}
-            />
-          </IconButton>
-        </td>
-        <td className="truncate px-3 py-2 font-medium text-text-primary">{member.name}</td>
-        <td className="truncate px-3 py-2">{member.email}</td>
-        <td className="px-3 py-2">
-          <MembershipBadges memberships={member.memberships} />
-        </td>
-      </tr>
-      {expanded && (
-        <tr
-          className="border-b border-divider-regular bg-background-default-subtle"
-          key={`${member.account_id}-detail`}
-        >
-          <td />
-          <td colSpan={3} className="px-3 py-2">
-            <div className="flex flex-col gap-1.5 py-1">
-              {member.memberships.map((m) => (
-                <div
-                  key={m.workspace_id}
-                  className="flex items-center gap-3 text-xs text-text-secondary"
-                >
-                  <span className="min-w-0 truncate font-medium text-text-primary">
-                    {m.workspace_name}
-                  </span>
-                  <span className="inline-flex items-center rounded-md border border-divider-subtle px-1.5 py-0.5">
-                    {m.role}
-                  </span>
-                  <span className="text-text-tertiary">
-                    {t(($) => $.members.joinedAt, { ns: 'admin' })}{' '}
-                    {m.joined_at ? formatTime(Number(m.joined_at), 'YYYY-MM-DD HH:mm') : '—'}
-                  </span>
-                </div>
-              ))}
+    <TableExpandableRow
+      detailColSpan={3}
+      toggleLabel={t(($) => $.members.expand, { ns: 'admin' })}
+      detail={
+        <div className="flex flex-col gap-1.5 py-1">
+          {member.memberships.map((m) => (
+            <div
+              key={m.workspace_id}
+              className="flex items-center gap-3 text-xs text-text-secondary"
+            >
+              <span className="min-w-0 truncate font-medium text-text-primary">
+                {m.workspace_name}
+              </span>
+              <span className="inline-flex items-center rounded-md border border-divider-subtle px-1.5 py-0.5">
+                {m.role}
+              </span>
+              <span className="text-text-tertiary">
+                {t(($) => $.members.joinedAt, { ns: 'admin' })}{' '}
+                {m.joined_at ? formatTime(Number(m.joined_at), 'YYYY-MM-DD HH:mm') : '—'}
+              </span>
             </div>
-          </td>
-        </tr>
-      )}
-    </>
+          ))}
+        </div>
+      }
+    >
+      <TableCell className="truncate font-medium text-text-primary">{member.name}</TableCell>
+      <TableCell className="truncate">{member.email}</TableCell>
+      <TableCell>
+        <MembershipBadges memberships={member.memberships} />
+      </TableCell>
+    </TableExpandableRow>
   )
 }
 
@@ -199,31 +179,25 @@ export default function AdminMembersPage() {
         </div>
       )}
       {!isPending && rows.length > 0 && (
-        <div className="min-h-0 overflow-auto rounded-xl border border-divider-subtle">
-          <table className="w-full table-fixed text-left system-sm-regular text-text-secondary">
-            <thead className="sticky top-0 bg-components-panel-bg system-xs-semibold-uppercase text-text-tertiary">
-              <tr className="border-b border-divider-regular">
-                <th className="w-10 px-3 py-2" scope="col">
-                  <span className="sr-only">{t(($) => $.members.expand, { ns: 'admin' })}</span>
-                </th>
-                <th className="w-48 px-3 py-2" scope="col">
-                  {t(($) => $.members.colName, { ns: 'admin' })}
-                </th>
-                <th className="w-64 px-3 py-2" scope="col">
-                  {t(($) => $.members.colEmail, { ns: 'admin' })}
-                </th>
-                <th className="px-3 py-2" scope="col">
-                  {t(($) => $.members.colWorkspaces, { ns: 'admin' })}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((member) => (
-                <MemberRow key={member.account_id} member={member} />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader sticky>
+            <TableRow>
+              <TableHead className="w-10">
+                <span className="sr-only">{t(($) => $.members.expand, { ns: 'admin' })}</span>
+              </TableHead>
+              <TableHead className="w-48">{t(($) => $.members.colName, { ns: 'admin' })}</TableHead>
+              <TableHead className="w-64">
+                {t(($) => $.members.colEmail, { ns: 'admin' })}
+              </TableHead>
+              <TableHead>{t(($) => $.members.colWorkspaces, { ns: 'admin' })}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((member) => (
+              <MemberRow key={member.account_id} member={member} />
+            ))}
+          </TableBody>
+        </Table>
       )}
 
       {total > PAGE_SIZE && (

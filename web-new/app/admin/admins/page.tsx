@@ -4,6 +4,7 @@ import type { AdminSystemAdminItemResponse } from '@dify/contracts/api/console/a
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@xsl/lomva-ui/button'
 import { cn } from '@xsl/lomva-ui/cn'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@xsl/lomva-ui/table'
 import { toast } from '@xsl/lomva-ui/toast'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -115,78 +116,70 @@ export default function AdminAdminsPage() {
         </div>
       )}
       {!isPending && admins.length > 0 && (
-        <div className="min-h-0 overflow-auto rounded-xl border border-divider-subtle">
-          <table className="w-full table-fixed text-left system-sm-regular text-text-secondary">
-            <thead className="sticky top-0 bg-components-panel-bg system-xs-semibold-uppercase text-text-tertiary">
-              <tr className="border-b border-divider-regular">
-                <th className="px-6 py-2" scope="col">
-                  {t(($) => $.admins.colName, { ns: 'admin' })}
-                </th>
-                <th className="w-64 px-3 py-2" scope="col">
-                  {t(($) => $.admins.colEmail, { ns: 'admin' })}
-                </th>
-                <th className="w-32 px-3 py-2" scope="col">
-                  {t(($) => $.admins.colSource, { ns: 'admin' })}
-                </th>
-                <th className="w-28 px-3 py-2" scope="col">
-                  {t(($) => $.admins.colStatus, { ns: 'admin' })}
-                </th>
-                <th className="w-44 px-3 py-2" scope="col">
-                  {t(($) => $.admins.colGrantedAt, { ns: 'admin' })}
-                </th>
-                {isFounder && (
-                  <th className="w-24 px-6 py-2" scope="col">
-                    {t(($) => $.admins.colActions, { ns: 'admin' })}
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {admins.map((admin) => {
-                const isFounderRow = admin.source === 'install'
-                const isEnvRow = admin.source === 'env'
-                return (
-                  <tr className="border-b border-divider-regular last:border-b-0" key={admin.id}>
-                    <td className="truncate px-6 py-2 font-medium text-text-primary">
-                      {admin.name}
-                    </td>
-                    <td className="truncate px-3 py-2">{admin.email}</td>
-                    <td className="px-3 py-2">
-                      <SourceBadge source={admin.source} />
-                    </td>
-                    <td className="px-3 py-2">
-                      <AdminStatusBadge pending={admin.pending} />
-                    </td>
-                    <td className="truncate px-3 py-2">
-                      {admin.created_at
-                        ? formatTime(Number(admin.created_at), 'YYYY-MM-DD HH:mm')
-                        : '—'}
-                    </td>
-                    {isFounder && (
-                      <td className="px-6 py-2">
-                        {!isFounderRow && (
-                          <Button
-                            variant="secondary"
-                            size="small"
-                            disabled={isEnvRow}
-                            title={
-                              isEnvRow
-                                ? t(($) => $.admins.revokeEnvHint, { ns: 'admin' })
-                                : undefined
-                            }
-                            onClick={() => setRevokeTarget(admin)}
-                          >
-                            {t(($) => $.admins.revoke, { ns: 'admin' })}
-                          </Button>
-                        )}
-                      </td>
-                    )}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader sticky>
+            <TableRow>
+              <TableHead className="px-6">{t(($) => $.admins.colName, { ns: 'admin' })}</TableHead>
+              <TableHead className="w-64">{t(($) => $.admins.colEmail, { ns: 'admin' })}</TableHead>
+              <TableHead className="w-32">
+                {t(($) => $.admins.colSource, { ns: 'admin' })}
+              </TableHead>
+              <TableHead className="w-28">
+                {t(($) => $.admins.colStatus, { ns: 'admin' })}
+              </TableHead>
+              <TableHead className="w-44">
+                {t(($) => $.admins.colGrantedAt, { ns: 'admin' })}
+              </TableHead>
+              {isFounder && (
+                <TableHead className="w-24 px-6">
+                  {t(($) => $.admins.colActions, { ns: 'admin' })}
+                </TableHead>
+              )}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {admins.map((admin) => {
+              const isFounderRow = admin.source === 'install'
+              const isEnvRow = admin.source === 'env'
+              return (
+                <TableRow key={admin.id}>
+                  <TableCell className="truncate px-6 font-medium text-text-primary">
+                    {admin.name}
+                  </TableCell>
+                  <TableCell className="truncate">{admin.email}</TableCell>
+                  <TableCell>
+                    <SourceBadge source={admin.source} />
+                  </TableCell>
+                  <TableCell>
+                    <AdminStatusBadge pending={admin.pending} />
+                  </TableCell>
+                  <TableCell className="truncate">
+                    {admin.created_at
+                      ? formatTime(Number(admin.created_at), 'YYYY-MM-DD HH:mm')
+                      : '—'}
+                  </TableCell>
+                  {isFounder && (
+                    <TableCell className="px-6">
+                      {!isFounderRow && (
+                        <Button
+                          variant="secondary"
+                          size="small"
+                          disabled={isEnvRow}
+                          title={
+                            isEnvRow ? t(($) => $.admins.revokeEnvHint, { ns: 'admin' }) : undefined
+                          }
+                          onClick={() => setRevokeTarget(admin)}
+                        >
+                          {t(($) => $.admins.revoke, { ns: 'admin' })}
+                        </Button>
+                      )}
+                    </TableCell>
+                  )}
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
       )}
 
       {isFounder && (
