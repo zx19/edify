@@ -1,7 +1,7 @@
 'use client'
 
 import type { Edge, Node } from 'reactflow'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
@@ -14,6 +14,7 @@ import ReactFlow, {
 } from 'reactflow'
 import { EditorConfigPanel } from '@/app/components/workflow-editor/config-panel'
 import { LlmSections } from '@/app/components/workflow-editor/config-panel/llm-sections'
+import { EditorDebugPanel } from '@/app/components/workflow-editor/debug-panel'
 import { EditorConnectionLine, EditorEdge } from '@/app/components/workflow-editor/edge'
 import { isValidEditorConnection } from '@/app/components/workflow-editor/edge/is-valid-connection'
 import { EditorTopbar } from '@/app/components/workflow-editor/editor-topbar'
@@ -118,6 +119,108 @@ function Canvas() {
 
   // C4:配置面板——点击节点开,点空白/关钮关;标题编辑回流画布(数据链路验证点)
   const [panelNodeId, setPanelNodeId] = useState<string | null>(null)
+
+  // C6:调试面板 + 假运行编排(状态系统全链演示:节点徽标/边流经渐变/面板记录)
+  const [debugOpen, setDebugOpen] = useState(false)
+  const [runStatus, setRunStatus] = useState<'idle' | 'running' | 'succeeded' | 'failed'>('idle')
+  const [records, setRecords] = useState<
+    {
+      nodeId: string
+      title: string
+      status: 'running' | 'succeeded' | 'failed'
+      duration?: string
+      tokens?: number
+    }[]
+  >([])
+  const [runOutput, setRunOutput] = useState<string | undefined>(undefined)
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  const startFakeRun = useCallback(() => {
+    timersRef.current.forEach(clearTimeout)
+    timersRef.current = []
+    setRunStatus('running')
+    setRecords([])
+    setRunOutput(undefined)
+    const order = ['start', 'llm', 'out']
+    order.forEach((nodeId, i) => {
+      timersRef.current.push(
+        setTimeout(() => {
+          setNodes((ns) =>
+            ns.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, status: 'running' } } : n)),
+          )
+          setEdges((es) =>
+            es.map((e) =>
+              e.source === nodeId || e.target === nodeId
+                ? {
+                    ...e,
+                    data: {
+                      ...e.data,
+                      sourceStatus: e.source === nodeId ? 'running' : undefined,
+                      targetStatus: e.target === nodeId ? 'running' : undefined,
+                    },
+                  }
+                : e,
+            ),
+          )
+          setRecords((rs) => [
+            ...rs.filter((r) => r.nodeId !== nodeId),
+            {
+              nodeId,
+              title: nodes.find((n) => n.id === nodeId)?.data.title ?? nodeId,
+              status: 'running',
+            },
+          ])
+        }, i * 900),
+      )
+      timersRef.current.push(
+        setTimeout(
+          () => {
+            setNodes((ns) =>
+              ns.map((n) =>
+                n.id === nodeId ? { ...n, data: { ...n.data, status: 'succeeded' } } : n,
+              ),
+            )
+            setEdges((es) =>
+              es.map((e) =>
+                e.source === nodeId || e.target === nodeId
+                  ? {
+                      ...e,
+                      data: {
+                        ...e.data,
+                        sourceStatus: e.source === nodeId ? 'succeeded' : e.data?.sourceStatus,
+                        targetStatus: e.target === nodeId ? 'succeeded' : e.data?.targetStatus,
+                      },
+                    }
+                  : e,
+              ),
+            )
+            setRecords((rs) =>
+              rs.map((r) =>
+                r.nodeId === nodeId
+                  ? {
+                      ...r,
+                      status: 'succeeded',
+                      duration: `${(0.7 + i * 0.5).toFixed(1)}s`,
+                      tokens: nodeId === 'llm' ? 214 : undefined,
+                    }
+                  : r,
+              ),
+            )
+          },
+          i * 900 + 700,
+        ),
+      )
+    })
+    timersRef.current.push(
+      setTimeout(
+        () => {
+          setRunStatus('succeeded')
+          setRunOutput('Did you mean to send a message? Let me know what you need help with.')
+        },
+        order.length * 900 + 400,
+      ),
+    )
+  }, [nodes])
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => setPanelNodeId(node.id), [])
   const onTitleChange = useCallback((id: string, title: string) => {
     setNodes((ns) => ns.map((n) => (n.id === id ? { ...n, data: { ...n.data, title } } : n)))
@@ -170,7 +273,7 @@ function Canvas() {
         breadcrumbs={[{ label: '工作室' }, { label: '测试1' }, { label: '编排' }]}
         statusText="已自动保存 17:13 · 已发布 22 天前"
         presenceUsers={[{ id: '1', name: '张玺' }]}
-        onTestRun={() => {}}
+        onTestRun={() => setDebugOpen(true)}
         onPublish={() => {}}
         onRunHistory={() => {}}
         onVersionHistory={() => {}}
@@ -224,6 +327,33 @@ function Canvas() {
           </span>
         ))}
       </div>
+      {debugOpen && (
+        <EditorDebugPanel
+          status={runStatus}
+          lastRunText={runStatus === 'succeeded' ? '上次成功 2.1s' : undefined}
+          inputFields={[
+            { name: 'var1', label: 'var1', required: true },
+            { name: 'var2', label: 'var2', required: true },
+          ]}
+          onStartRun={startFakeRun}
+          records={records}
+          output={runOutput}
+          rawJson={runOutput ? JSON.stringify({ text: runOutput }, null, 2) : undefined}
+          onClose={() => setDebugOpen(false)}
+          labels={{
+            title: 'Test Run',
+            input: 'INPUT',
+            result: 'RESULT',
+            detail: 'DETAIL',
+            tracing: 'TRACING',
+            startRun: '开始运行',
+            outputSection: '输出',
+            nodeRuns: '节点执行',
+            rawToggle: '原始数据(节点输入/输出 JSON)——默认折叠,作者需要时再展开',
+            close: '关闭',
+          }}
+        />
+      )}
       {panelNode && (
         <EditorConfigPanel
           node={{ ...panelNode.data, id: panelNode.id }}
@@ -236,6 +366,7 @@ function Canvas() {
             close: '关闭',
             editTitle: '标题',
           }}
+          className={debugOpen ? 'right-[396px]' : undefined}
           onClose={() => setPanelNodeId(null)}
           onTitleChange={onTitleChange}
           sections={<PanelSections type={panelNode.data.type} fields={panelNode.data.fields} />}

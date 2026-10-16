@@ -25,6 +25,8 @@ export type EditorConfigPanelProps = {
   onRunNode?: (id: string) => void
   /** LAST RUN tab 内容(可选,缺省为占位) */
   lastRun?: ReactNode
+  /** 追加类名(如调试双栏并行时的让位) */
+  className?: string
   labels: {
     settings: string
     lastRun: string
@@ -44,13 +46,17 @@ export function EditorConfigPanel({
   onRunNode,
   lastRun,
   labels,
+  className,
 }: EditorConfigPanelProps) {
   const [tab, setTab] = useState<PanelTab>('settings')
 
   return (
     <aside
       aria-label={node.title}
-      className="absolute top-3 right-3 bottom-3 z-10 flex w-[400px] flex-col overflow-hidden rounded-[14px] border border-[#E8E8EA] bg-white shadow-[0_10px_34px_rgb(10_10_11/.10)]"
+      className={cn(
+        'absolute top-3 right-3 bottom-3 z-10 flex w-[400px] flex-col overflow-hidden rounded-[14px] border border-[#E8E8EA] bg-white shadow-[0_10px_34px_rgb(10_10_11/.10)]',
+        className,
+      )}
     >
       <div className="flex items-center gap-2 border-b border-[#E8E8EA] px-3.5 py-3">
         <span
