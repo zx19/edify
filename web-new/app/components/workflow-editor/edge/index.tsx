@@ -1,7 +1,7 @@
 'use client'
 
 import type { EdgeProps } from 'reactflow'
-import { useId } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow'
 
 /**
@@ -54,6 +54,39 @@ export function EditorEdge(props: EdgeProps<EditorEdgeData>) {
   })
   const gradientId = useId().replace(/:/g, '')
 
+  // hover 显隐:DOM 事件挂边 <g>(React Flow 的边命中区 interactionWidth=20 在其上),
+  // 与「+」钮 hover 并集。关键:事件序是「先进钮(重叠)再离路径」,隐藏计时器在
+  // 触发时刻用 :hover 复查指针是否正压在钮上——压则不藏,从机制上灭掉振荡
+  // (旧轨 hover 触发的已知闪烁,QA 实测)。setState 只发生在 DOM 事件处理器。
+  const [hover, setHover] = useState(false)
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const gRef = useRef<SVGGElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const show = () => {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
+    setHover(true)
+  }
+  const scheduleHide = () => {
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
+    hideTimerRef.current = setTimeout(() => {
+      if (btnRef.current?.matches(':hover')) return
+      setHover(false)
+    }, 120)
+  }
+  useEffect(() => {
+    const g = gRef.current
+    if (!g) return
+    g.addEventListener('mouseenter', show)
+    g.addEventListener('mouseleave', scheduleHide)
+    return () => {
+      g.removeEventListener('mouseenter', show)
+      g.removeEventListener('mouseleave', scheduleHide)
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const triggerVisible = selected || hover
+
   const hasGradient = !!(data.sourceStatus || data.targetStatus)
   const stroke = selected ? '#FF8C00' : hasGradient ? `url(#${gradientId})` : '#C9C9CE'
 
@@ -74,26 +107,37 @@ export function EditorEdge(props: EdgeProps<EditorEdgeData>) {
           </linearGradient>
         </defs>
       )}
-      <BaseEdge
-        id={id}
-        path={path}
-        style={{
-          stroke,
-          strokeWidth: selected ? 2 : 1.5,
-          opacity: data.dimmed ? 0.3 : data.waitingRun ? 0.7 : 1,
-          strokeDasharray: data.isTemp ? '8 8' : undefined,
-        }}
-      />
+      <g ref={gRef}>
+        <BaseEdge
+          id={id}
+          path={path}
+          interactionWidth={20}
+          style={{
+            stroke,
+            strokeWidth: selected ? 2 : 1.5,
+            opacity: data.dimmed ? 0.3 : data.waitingRun ? 0.7 : 1,
+            strokeDasharray: data.isTemp ? '8 8' : undefined,
+          }}
+        />
+      </g>
       <EdgeLabelRenderer>
         <button
+          ref={btnRef}
           type="button"
           className="nodrag nopan absolute grid size-[18px] place-items-center rounded-full border-[1.5px] border-[#FF8C00] bg-white text-[11px] leading-none text-[#E67A00] transition-opacity hover:scale-125"
           style={{
             transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-            opacity: selected ? 1 : 0,
-            pointerEvents: selected ? 'auto' : 'none',
+            opacity: triggerVisible ? 1 : 0,
+            // visibility 延迟到淡出结束才翻 hidden:淡出窗口内钮仍可 hover/点击,
+            // 指针从路径移向钮的途中永不丢命中(振荡根因);显隐无需 pointerEvents 门控
+            visibility: triggerVisible ? 'visible' : 'hidden',
+            transition: triggerVisible
+              ? 'opacity .12s ease, visibility 0s 0s'
+              : 'opacity .15s ease, visibility 0s .27s',
           }}
           aria-label={`在边 ${id} 中点插入节点`}
+          onMouseEnter={show}
+          onMouseLeave={scheduleHide}
           onClick={() => data.onInsertEdge?.(id)}
         >
           +
