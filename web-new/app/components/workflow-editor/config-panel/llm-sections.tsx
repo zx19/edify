@@ -1,7 +1,9 @@
 'use client'
 
+import type { VariableGroup, VariableRef } from '../variable-picker'
 import { Switch } from '@xsl/lomva-ui/switch'
 import { useState } from 'react'
+import { VariablePicker } from '../variable-picker'
 import { PanelSectionLabel } from './index'
 
 /**
@@ -22,11 +24,18 @@ export type LlmSectionLabels = {
   retry: string
 }
 
-export function LlmSections({ labels }: { labels: LlmSectionLabels }) {
+export function LlmSections({
+  labels,
+  variableGroups = [],
+}: {
+  labels: LlmSectionLabels
+  variableGroups?: VariableGroup[]
+}) {
   const [vision, setVision] = useState(false)
   const [reasoning, setReasoning] = useState(false)
   const [retry, setRetry] = useState(false)
   const [system, setSystem] = useState('')
+  const [contextVar, setContextVar] = useState<VariableRef | null>(null)
 
   return (
     <>
@@ -46,12 +55,31 @@ export function LlmSections({ labels }: { labels: LlmSectionLabels }) {
 
       <div className="flex flex-col gap-2">
         <PanelSectionLabel>{labels.context}</PanelSectionLabel>
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-[10px] bg-[#F7F7F8] px-2.5 py-2 text-xs text-[#8A8A93] hover:text-[#E67A00]"
-        >
-          <span className="font-mono">{`{x}`}</span> {labels.setVariable}
-        </button>
+        {contextVar ? (
+          <span className="flex items-center gap-2 rounded-[10px] bg-[#F7F7F8] px-2.5 py-2 text-xs text-[#3D3D42]">
+            <span className="rounded-md bg-[#EFF6FF] px-1 font-mono text-[11px] text-[#175CD3]">{`{x}`}</span>
+            {contextVar.groupTitle}.{contextVar.name}
+            <button
+              type="button"
+              aria-label="清除"
+              className="ml-auto text-[#8A8A93] hover:text-[#E5484D]"
+              onClick={() => setContextVar(null)}
+            >
+              ✕
+            </button>
+          </span>
+        ) : (
+          <VariablePicker
+            groups={variableGroups}
+            onSelect={setContextVar}
+            labels={{ search: '搜索变量' }}
+            trigger={
+              <span className="flex items-center gap-2 rounded-[10px] bg-[#F7F7F8] px-2.5 py-2 text-xs text-[#8A8A93] hover:text-[#E67A00]">
+                <span className="font-mono">{`{x}`}</span> {labels.setVariable}
+              </span>
+            }
+          />
+        )}
       </div>
 
       <div className="flex flex-col gap-2">

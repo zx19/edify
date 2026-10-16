@@ -369,7 +369,13 @@ function Canvas() {
           className={debugOpen ? 'right-[396px]' : undefined}
           onClose={() => setPanelNodeId(null)}
           onTitleChange={onTitleChange}
-          sections={<PanelSections type={panelNode.data.type} fields={panelNode.data.fields} />}
+          sections={
+            <PanelSections
+              type={panelNode.data.type}
+              fields={panelNode.data.fields}
+              nodes={nodes}
+            />
+          }
         />
       )}
       <ZoomControl />
@@ -471,13 +477,34 @@ function NodeGallery() {
 function PanelSections({
   type,
   fields,
+  nodes,
 }: {
   type: string
   fields: { name: string; meta?: string }[]
+  nodes: Node[]
 }) {
   if (type === 'llm') {
     return (
       <LlmSections
+        variableGroups={[
+          {
+            id: 'start',
+            title: '用户输入',
+            icon: '⌨',
+            vars: (nodes.find((n) => n.data.type === 'start')?.data.fields ?? []).map(
+              (f: { name: string }) => ({ name: f.name, type: 'String' }),
+            ),
+          },
+          {
+            id: 'sys',
+            title: 'SYSTEM',
+            vars: [
+              { name: 'sys.user_id', type: 'String' },
+              { name: 'sys.app_id', type: 'String' },
+              { name: 'sys.workflow_id', type: 'String' },
+            ],
+          },
+        ]}
         labels={{
           model: 'MODEL',
           context: 'CONTEXT',
