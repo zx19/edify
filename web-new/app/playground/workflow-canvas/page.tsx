@@ -12,6 +12,8 @@ import ReactFlow, {
   ReactFlowProvider,
   useReactFlow,
 } from 'reactflow'
+import { EditorConfigPanel } from '@/app/components/workflow-editor/config-panel'
+import { LlmSections } from '@/app/components/workflow-editor/config-panel/llm-sections'
 import { EditorConnectionLine, EditorEdge } from '@/app/components/workflow-editor/edge'
 import { isValidEditorConnection } from '@/app/components/workflow-editor/edge/is-valid-connection'
 import { EditorNodeCard } from '@/app/components/workflow-editor/node-card'
@@ -113,6 +115,13 @@ function Canvas() {
   const [insertTarget, setInsertTarget] = useState<string | null>(null)
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number; edgeId: string } | null>(null)
 
+  // C4:配置面板——点击节点开,点空白/关钮关;标题编辑回流画布(数据链路验证点)
+  const [panelNodeId, setPanelNodeId] = useState<string | null>(null)
+  const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => setPanelNodeId(node.id), [])
+  const onTitleChange = useCallback((id: string, title: string) => {
+    setNodes((ns) => ns.map((n) => (n.id === id ? { ...n, data: { ...n.data, title } } : n)))
+  }, [])
+
   const handleInsert = useCallback(
     (nodeType: 'llm' | 'code' | 'if-else') => {
       const edgeId = insertTarget
@@ -147,6 +156,8 @@ function Canvas() {
     [insertTarget],
   )
 
+  const panelNode = panelNodeId ? (nodes.find((n) => n.id === panelNodeId) ?? null) : null
+
   const onEdgeContextMenu = useCallback((e: React.MouseEvent, edge: Edge) => {
     e.preventDefault()
     setCtxMenu({ x: e.clientX, y: e.clientY, edgeId: edge.id })
@@ -165,7 +176,11 @@ function Canvas() {
         connectionLineComponent={EditorConnectionLine}
         isValidConnection={(conn) => isValidEditorConnection(conn, edges)}
         onEdgeContextMenu={onEdgeContextMenu}
-        onPaneClick={() => setCtxMenu(null)}
+        onNodeClick={onNodeClick}
+        onPaneClick={() => {
+          setCtxMenu(null)
+          setPanelNodeId(null)
+        }}
         fitView
         proOptions={{ hideAttribution: false }}
       >
@@ -188,6 +203,23 @@ function Canvas() {
           </span>
         ))}
       </div>
+      {panelNode && (
+        <EditorConfigPanel
+          node={{ ...panelNode.data, id: panelNode.id }}
+          labels={{
+            settings: 'SETTINGS',
+            lastRun: 'LAST RUN',
+            runNode: '运行此节点',
+            docs: '文档',
+            more: '更多',
+            close: '关闭',
+            editTitle: '标题',
+          }}
+          onClose={() => setPanelNodeId(null)}
+          onTitleChange={onTitleChange}
+          sections={<PanelSections type={panelNode.data.type} fields={panelNode.data.fields} />}
+        />
+      )}
       <ZoomControl />
       {insertTarget && (
         <div className="absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl border border-[#E8E8EA] bg-white p-2 shadow-md">
@@ -280,6 +312,70 @@ function NodeGallery() {
         ))}
       </div>
     </ReactFlowProvider>
+  )
+}
+
+/** 各类型节点的段落内容(playground 最小实现;LLM 为代表全形态) */
+function PanelSections({
+  type,
+  fields,
+}: {
+  type: string
+  fields: { name: string; meta?: string }[]
+}) {
+  if (type === 'llm') {
+    return (
+      <LlmSections
+        labels={{
+          model: 'MODEL',
+          context: 'CONTEXT',
+          setVariable: '设置变量',
+          system: 'SYSTEM',
+          addMessage: '添加消息',
+          vision: 'VISION',
+          reasoningTag: 'ENABLE REASONING TAG SEPARATION',
+          outputVars: 'OUTPUT VARIABLES',
+          retry: 'RETRY ON FAILURE',
+        }}
+      />
+    )
+  }
+  if (type === 'start') {
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="text-[11px] font-semibold tracking-wider text-[#3D3D42] uppercase">
+          Input Field
+        </div>
+        {fields.map((f) => (
+          <div
+            key={f.name}
+            className="flex items-center gap-2 rounded-[10px] bg-[#F7F7F8] px-2.5 py-2 text-xs text-[#3D3D42]"
+          >
+            <span className="font-mono">{`{x}`}</span> {f.name}
+            <span className="ml-auto text-[10px] text-[#8A8A93] uppercase">{f.meta}</span>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="rounded-[10px] border border-dashed border-[#D9D9DC] py-2 text-xs text-[#8A8A93]"
+        >
+          + 添加字段
+        </button>
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-col gap-2">
+      {fields.map((f) => (
+        <div
+          key={f.name}
+          className="flex items-center gap-2 rounded-[10px] bg-[#F7F7F8] px-2.5 py-2 text-xs text-[#3D3D42]"
+        >
+          <span className="font-mono">{`{ }`}</span> {f.name}
+          <span className="ml-auto text-[10px] text-[#8A8A93] uppercase">{f.meta}</span>
+        </div>
+      ))}
+    </div>
   )
 }
 

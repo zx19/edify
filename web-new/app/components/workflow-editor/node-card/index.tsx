@@ -3,6 +3,7 @@
 import type { NodeProps } from 'reactflow'
 import { cn } from '@xsl/lomva-ui/cn'
 import { Handle, Position } from 'reactflow'
+import { TYPE_STYLE } from './type-style'
 
 /**
  * C2 编辑器节点卡片(设计稿 2026-10-14-workflow-editor-mockup-round1.html 视图 2/3)。
@@ -44,18 +45,6 @@ export type EditorNodeCardData = {
   status?: EditorNodeStatus
   /** 状态徽标的可访问名/title(i18n 由消费方注入) */
   statusLabel?: string
-}
-
-/** 类型色板:语义照抄旧轨 block-icon 映射,软色对为新语言 pill 系 */
-const TYPE_STYLE: Record<EditorNodeType, { icon: string; chip: string }> = {
-  start: { icon: 'i-ri-home-5-line', chip: 'bg-[#EFF6FF] text-[#175CD3]' },
-  llm: { icon: 'i-ri-sparkling-line', chip: 'bg-[#F4F3FF] text-[#6938EF]' },
-  answer: { icon: 'i-ri-chat-quote-line', chip: 'bg-[#FFF6E8] text-[#B76400]' },
-  end: { icon: 'i-ri-stop-circle-line', chip: 'bg-[#FFF6E8] text-[#B76400]' },
-  code: { icon: 'i-ri-code-s-slash-line', chip: 'bg-[#EFF6FF] text-[#175CD3]' },
-  'if-else': { icon: 'i-ri-git-fork-line', chip: 'bg-[#ECFEFF] text-[#0E7490]' },
-  http: { icon: 'i-ri-global-line', chip: 'bg-[#F4F3FF] text-[#6938EF]' },
-  knowledge: { icon: 'i-ri-book-2-line', chip: 'bg-[#E9F9EF] text-[#12A150]' },
 }
 
 const STATUS_BADGE: Record<
