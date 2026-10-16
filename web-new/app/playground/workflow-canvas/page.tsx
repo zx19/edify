@@ -16,6 +16,7 @@ import { EditorConfigPanel } from '@/app/components/workflow-editor/config-panel
 import { LlmSections } from '@/app/components/workflow-editor/config-panel/llm-sections'
 import { EditorConnectionLine, EditorEdge } from '@/app/components/workflow-editor/edge'
 import { isValidEditorConnection } from '@/app/components/workflow-editor/edge/is-valid-connection'
+import { EditorTopbar } from '@/app/components/workflow-editor/editor-topbar'
 import { EditorNodeCard } from '@/app/components/workflow-editor/node-card'
 import 'reactflow/dist/style.css'
 
@@ -164,37 +165,57 @@ function Canvas() {
   }, [])
 
   return (
-    <div className="relative h-[70vh] w-full bg-[#FAFAFB]">
-      <ReactFlow
-        nodes={nodes}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        edges={edges.map((e) => ({ ...e, data: { ...e.data, onInsertEdge: setInsertTarget } }))}
-        connectionLineComponent={EditorConnectionLine}
-        isValidConnection={(conn) => isValidEditorConnection(conn, edges)}
-        onEdgeContextMenu={onEdgeContextMenu}
-        onNodeClick={onNodeClick}
-        onPaneClick={() => {
-          setCtxMenu(null)
-          setPanelNodeId(null)
+    <div className="relative flex h-[70vh] w-full flex-col bg-[#FAFAFB]">
+      <EditorTopbar
+        breadcrumbs={[{ label: '工作室' }, { label: '测试1' }, { label: '编排' }]}
+        statusText="已自动保存 17:13 · 已发布 22 天前"
+        presenceUsers={[{ id: '1', name: '张玺' }]}
+        onTestRun={() => {}}
+        onPublish={() => {}}
+        onRunHistory={() => {}}
+        onVersionHistory={() => {}}
+        labels={{
+          back: '返回',
+          testRun: '测试运行',
+          publish: '发布',
+          runHistory: '运行历史',
+          checklist: '检查清单',
+          envVars: '环境变量',
+          versionHistory: '版本历史',
         }}
-        fitView
-        proOptions={{ hideAttribution: false }}
-      >
-        <Background variant={BackgroundVariant.Dots} gap={18} size={1} color="#D9D9DC" />
-        <MiniMap
-          className="!rounded-xl !border !border-[#E8E8EA] !shadow-xs"
-          nodeColor="#D9D9DC"
-          maskColor="rgb(255 140 0 / .06)"
-          style={{ width: 140, height: 88 }}
-          position="bottom-right"
-          pannable
-          zoomable
-        />
-      </ReactFlow>
+      />
+      <div className="relative grow">
+        <ReactFlow
+          nodes={nodes}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          edges={edges.map((e) => ({ ...e, data: { ...e.data, onInsertEdge: setInsertTarget } }))}
+          connectionLineComponent={EditorConnectionLine}
+          isValidConnection={(conn) => isValidEditorConnection(conn, edges)}
+          onEdgeContextMenu={onEdgeContextMenu}
+          onNodeClick={onNodeClick}
+          onPaneClick={() => {
+            setCtxMenu(null)
+            setPanelNodeId(null)
+          }}
+          fitView
+          proOptions={{ hideAttribution: false }}
+        >
+          <Background variant={BackgroundVariant.Dots} gap={18} size={1} color="#D9D9DC" />
+          <MiniMap
+            className="!rounded-xl !border !border-[#E8E8EA] !shadow-xs"
+            nodeColor="#D9D9DC"
+            maskColor="rgb(255 140 0 / .06)"
+            style={{ width: 140, height: 88 }}
+            position="bottom-right"
+            pannable
+            zoomable
+          />
+        </ReactFlow>
+      </div>
       {/* 工具轨占位(交互不在 spike 范围) */}
       <div className="absolute top-1/2 left-3.5 flex -translate-y-1/2 flex-col gap-0.5 rounded-xl border border-[#E8E8EA] bg-white p-1.5 shadow-xs">
         {['⊕', '➤', '✋', '▭', '▦', '⋯'].map((i) => (
